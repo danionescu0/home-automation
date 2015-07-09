@@ -1,0 +1,42 @@
+{%extends "base.html" %}
+
+{% block body %}
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="/actuators/cici/off">Home</a></li>
+            <li role="presentation"><a href="/login">Login</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Project name</h3>
+      </div>
+
+      <div class="jumbotron">
+        <h2>Management page</h2>
+        <p class="lead">
+            Sensors:
+            {% for sensor in sensors %}
+                {{sensor}} = {{ sensors[sensor] }}
+            {% end %}
+        </p>
+      </div>
+
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h4>Actuators</h4>
+            {% for actuator in actuators %}
+            <p>
+                <a href="/actuator/{{ actuator }}/on">{{ actuator }} {% if actuators[actuator] %}<b>ON</b>{% else %}on{% end %}</a> |
+                <a href="/actuator/{{ actuator }}/off">{{ actuator }} {% if not actuators[actuator] %}<b>OFF</b>{% else %}off{% end %}</a>
+            {% end %}
+            </p>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p>Smecherie</p>
+      </footer>
+
+    </div> <!-- /container -->
+{% end %}

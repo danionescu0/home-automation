@@ -1,6 +1,6 @@
 from datetime import datetime
 from tornado.ioloop import IOLoop
-from tornado.web import RequestHandler, Application, url, authenticated
+from tornado.web import RequestHandler, Application, url, authenticated, StaticFileHandler
 import serial
 import threading
 import time
@@ -17,6 +17,7 @@ courtainsTime = datetime.now()
 actuators = {'door' : False, 'window' :False, 'livingLight' : False, 'bedroomLight' : False}
 credentials = {'username' : 'dan', 'password' : 'cicibici07'}
 sensorsData = {'humidity' : 0, 'temperature' : 0, 'light' : 0}
+staticPath = '/home/pi/home-automation/python-server/public'
 
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(levelname)s] (%(threadName)-10s) %(message)s',
@@ -78,7 +79,7 @@ class ActuatorsHandler(BaseHandler):
             else:
                btComm['bedroom'].send("0")
 
-        self.render("html/actuators.html", actuators = actuators, sensors = sensorsData)
+        self.render("html/main.html", actuators = actuators, sensors = sensorsData)
 
 def make_app():
     settings = {
@@ -90,6 +91,7 @@ def make_app():
             url(r"/set-courtain/(on|off)/([0-9\-]+)/([0-9:]+)", CourtainHandler, name="courtains-setter"),
             url(r"/actuator/([a-zA-Z]+)/(on|off)", ActuatorsHandler, name="actuator-states"),
             url(r"/login", LoginHandler, name="login"),
+            url(r'/public/(.*)', StaticFileHandler, {'path': staticPath}),
         ], **settings)
 
 def httpListener():
