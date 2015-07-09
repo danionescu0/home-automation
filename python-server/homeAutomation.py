@@ -21,7 +21,6 @@ sensorsData = {'humidity' : 0, 'temperature' : 0, 'light' : 0}
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(levelname)s] (%(threadName)-10s) %(message)s',
                     )
-
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
 
 btComm = homeAutomationBt.connectAllBt()
