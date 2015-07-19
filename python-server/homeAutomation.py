@@ -8,15 +8,15 @@ import logging
 
 import homeAutomationBt
 import homeAutomationCommParser
+from brain import brain
 
 btSeparator = '|'
-bt1SensorMessage = ''
-bt2SensorMessage = ''
+btBuffer1 = btBuffer2 = "";
 courtainsMode = 'none'
 courtainsTime = datetime.now()
 actuators = {'door' : False, 'window' :False, 'livingLight' : False, 'bedroomLight' : False}
+sensorsData = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0}
 credentials = {'username' : 'dan', 'password' : 'cicibici07'}
-sensorsData = {'humidity' : 0, 'temperature' : 0, 'light' : 0}
 staticPath = '/home/pi/home-automation/python-server/public'
 
 logging.basicConfig(level=logging.DEBUG,
@@ -27,15 +27,12 @@ port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
 btComm = homeAutomationBt.connectAllBt()
 logging.debug('Finished connectiong to BT devices')
 
-# refreshes bluetooth connection each 4 seconds  (sends something)
-def btRefresher():
-    while True:
-        time.sleep(4)
-        btComm['bedroom'].send("D")
+homeBrain = brain(btComm, port)
 
 class BaseHandler(RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("user")
+
 
 class LoginHandler(BaseHandler):
     def get(self):
@@ -51,7 +48,6 @@ class LoginHandler(BaseHandler):
 
         self.redirect("/login")
 
-
 class CourtainHandler(BaseHandler):
     @authenticated
     def get(self, mode, date, time):
@@ -62,22 +58,13 @@ class CourtainHandler(BaseHandler):
         print(courtainsTime)
 
 class ActuatorsHandler(BaseHandler):
+    global actuators
     @authenticated
     def get(self, actuator, state):
         global btComm
         if actuator in actuators and state in ['on', 'off']:
             actuators[actuator] = (False, True)[state == 'on']
-        if actuator == 'door':
-            port.write("3")
-        if actuator == 'livingLight':
-            port.write("1")
-        if actuator == 'bedroomLight':
-            port.write("2")
-        if actuator == 'window':
-            if state == 'on':
-               btComm['bedroom'].send("1")
-            else:
-               btComm['bedroom'].send("0")
+            homeBrain.changeActuator(actuator, state)
 
         self.render("html/main.html", actuators = actuators, sensors = sensorsData)
 
@@ -110,25 +97,42 @@ def timerCourtainsCheck():
             btComm['bedroom'].send("3")
 
 def bt1SensorsPolling():
-    global btSeparator, bt1SensorMessage, sensorsData
+    global btSeparator, btBuffer1, sensorsData, actuators
     while True:
         data = btComm['sensors'].recv(10)
-        bt1SensorMessage += data
-        if bt1SensorMessage.endswith(btSeparator):
-            bt1SensorMessage = bt1SensorMessage[:-1]
-            logging.debug("bt1 received : " + bt1SensorMessage)
-            data = homeAutomationCommParser.parseSensorsString(bt1SensorMessage)
-            for key, value in data.iteritems(): 
+        btBuffer1 += data
+        if btBuffer1.endswith(btSeparator):
+            btBuffer1 = btBuffer1[:-1]
+            logging.debug("btLiving received : " + btBuffer1)
+            data = homeAutomationCommParser.parseSensorsString(btBuffer1)
+            for key, value in data.iteritems():
                 sensorsData[key] = value
+                actuators = homeBrain.sensorsUpdate(sensorsData, actuators, key)
             logging.debug(sensorsData)
-            bt1SensorMessage = ''
+            btBuffer1 = ''
+
+def btBedroomSensorsPolling():
+    global btSeparator, btBuffer2, sensorsData, actuators
+    while True:
+        data = btComm['bedroom'].recv(10)
+        btBuffer2 += data
+        if btBuffer2.endswith(btSeparator):
+            btBuffer2 = btBuffer2[:-1]
+            logging.debug("btBedroom received : " + btBuffer2)
+            data = homeAutomationCommParser.parseSensorsString(btBuffer2)
+            for key, value in data.iteritems():
+                sensorsData[key] = value
+                actuators = homeBrain.sensorsUpdate(sensorsData, actuators, key)
+            logging.debug(actuators)
+            logging.debug(sensorsData)
+            btBuffer2 = ''
 
 
 thr0 = threading.Thread(name='httpListener', target=httpListener)
-thr1 = threading.Thread(name='btRefresher', target=btRefresher)
+thr1 = threading.Thread(name='btBedroomSensorsPolling', target=btBedroomSensorsPolling)
 thr2 = threading.Thread(name='bt1SensorsPolling', target=bt1SensorsPolling)
 thr4 = threading.Thread(name='timerCourtainsCheck', target=timerCourtainsCheck)
 for thread in [thr0, thr1, thr2, thr4]:
-# for thread in [thr0,  thr4]:
+# for thread in [thr0,  thr1]:
     thread.start()
 
