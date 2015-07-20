@@ -1,7 +1,9 @@
+
 class brain:
-    def __init__(self, btComm, serial):
+    def __init__(self, btComm, serial, dataContainer):
         self.btComm = btComm
         self.serial = serial
+        self.dataContainer = dataContainer
 
     def changeActuator(self, actuator, state):
         if actuator == 'door':
@@ -16,8 +18,10 @@ class brain:
             else:
                self.btComm['bedroom'].send("0")
 
-    def sensorsUpdate(self, sensors, actuators, name):
+    def sensorsUpdate(self, name):
+        sensors = self.dataContainer.getSensors()
+        actuators = self.dataContainer.getActuators()
         if name == 'rain' and sensors['rain'] > 30 and actuators['window'] == False:
             self.btComm['bedroom'].send("1")
             actuators['window'] = True
-        return actuators
+            self.dataContainer.setActuator('window', True)

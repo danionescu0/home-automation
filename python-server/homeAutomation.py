@@ -9,13 +9,12 @@ import logging
 import homeAutomationBt
 import homeAutomationCommParser
 from brain import brain
+from dataContainer import dataContainer
 
 btSeparator = '|'
 btBuffer1 = btBuffer2 = "";
 courtainsMode = 'none'
 courtainsTime = datetime.now()
-actuators = {'door' : False, 'window' :False, 'livingLight' : False, 'bedroomLight' : False}
-sensorsData = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0}
 credentials = {'username' : 'dan', 'password' : 'cicibici07'}
 staticPath = '/home/pi/home-automation/python-server/public'
 
@@ -23,11 +22,11 @@ logging.basicConfig(level=logging.DEBUG,
                     format='[%(levelname)s] (%(threadName)-10s) %(message)s',
                     )
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
-
 btComm = homeAutomationBt.connectAllBt()
 logging.debug('Finished connectiong to BT devices')
 
-homeBrain = brain(btComm, port)
+dataContainer = dataContainer('127.0.0.1:11211')
+homeBrain = brain(btComm, port, dataContainer)
 
 class BaseHandler(RequestHandler):
     def get_current_user(self):
@@ -58,15 +57,16 @@ class CourtainHandler(BaseHandler):
         print(courtainsTime)
 
 class ActuatorsHandler(BaseHandler):
-    global actuators
+    global dataContainer
     @authenticated
     def get(self, actuator, state):
         global btComm
+        actuators = dataContainer.getActuators()
         if actuator in actuators and state in ['on', 'off']:
-            actuators[actuator] = (False, True)[state == 'on']
+            dataContainer.setActuator(actuator, (False, True)[state == 'on'])
             homeBrain.changeActuator(actuator, state)
 
-        self.render("html/main.html", actuators = actuators, sensors = sensorsData)
+        self.render("html/main.html", actuators = actuators, sensors = dataContainer.getSensors())
 
 def make_app():
     settings = {
@@ -97,7 +97,7 @@ def timerCourtainsCheck():
             btComm['bedroom'].send("3")
 
 def bt1SensorsPolling():
-    global btSeparator, btBuffer1, sensorsData, actuators
+    global btSeparator, btBuffer1, dataContainer
     while True:
         data = btComm['sensors'].recv(10)
         btBuffer1 += data
@@ -106,13 +106,13 @@ def bt1SensorsPolling():
             logging.debug("btLiving received : " + btBuffer1)
             data = homeAutomationCommParser.parseSensorsString(btBuffer1)
             for key, value in data.iteritems():
-                sensorsData[key] = value
-                actuators = homeBrain.sensorsUpdate(sensorsData, actuators, key)
-            logging.debug(sensorsData)
+                dataContainer.setSensor(key, value)
+                homeBrain.sensorsUpdate(key)
+            logging.debug(dataContainer.getSensors())
             btBuffer1 = ''
 
 def btBedroomSensorsPolling():
-    global btSeparator, btBuffer2, sensorsData, actuators
+    global btSeparator, btBuffer2, dataContainer
     while True:
         data = btComm['bedroom'].recv(10)
         btBuffer2 += data
@@ -121,10 +121,9 @@ def btBedroomSensorsPolling():
             logging.debug("btBedroom received : " + btBuffer2)
             data = homeAutomationCommParser.parseSensorsString(btBuffer2)
             for key, value in data.iteritems():
-                sensorsData[key] = value
-                actuators = homeBrain.sensorsUpdate(sensorsData, actuators, key)
-            logging.debug(actuators)
-            logging.debug(sensorsData)
+                dataContainer.setSensor(key, value)
+                homeBrain.sensorsUpdate(key)
+            logging.debug(dataContainer.getSensors())
             btBuffer2 = ''
 
 
