@@ -96,42 +96,34 @@ def timerCourtainsCheck():
             logging.debug("time reached")
             btComm['bedroom'].send("3")
 
-def bt1SensorsPolling():
-    global btSeparator, btBuffer1, dataContainer
+def btSensorsPolling(btSeparator, btBuffer, dataContainer, btComm):
+    # global btSeparator, btBuffer, dataContainer
     while True:
-        data = btComm['sensors'].recv(10)
-        btBuffer1 += data
-        if btBuffer1.endswith(btSeparator):
-            btBuffer1 = btBuffer1[:-1]
-            logging.debug("btLiving received : " + btBuffer1)
-            data = homeAutomationCommParser.parseSensorsString(btBuffer1)
+        data = btComm.recv(10)
+        btBuffer += data
+        if btBuffer.endswith(btSeparator):
+            btBuffer = btBuffer[:-1]
+            logging.debug("senzors received : " + btBuffer)
+            data = homeAutomationCommParser.parseSensorsString(btBuffer)
             for key, value in data.iteritems():
                 dataContainer.setSensor(key, value)
                 homeBrain.sensorsUpdate(key)
             logging.debug(dataContainer.getSensors())
-            btBuffer1 = ''
-
-def btBedroomSensorsPolling():
-    global btSeparator, btBuffer2, dataContainer
-    while True:
-        data = btComm['bedroom'].recv(10)
-        btBuffer2 += data
-        if btBuffer2.endswith(btSeparator):
-            btBuffer2 = btBuffer2[:-1]
-            logging.debug("btBedroom received : " + btBuffer2)
-            data = homeAutomationCommParser.parseSensorsString(btBuffer2)
-            for key, value in data.iteritems():
-                dataContainer.setSensor(key, value)
-                homeBrain.sensorsUpdate(key)
-            logging.debug(dataContainer.getSensors())
-            btBuffer2 = ''
-
+            btBuffer = ''
 
 thr0 = threading.Thread(name='httpListener', target=httpListener)
-thr1 = threading.Thread(name='btBedroomSensorsPolling', target=btBedroomSensorsPolling)
-thr2 = threading.Thread(name='bt1SensorsPolling', target=bt1SensorsPolling)
+thr1 = threading.Thread(
+    name='bedroomSenzorPooling',
+    target=btSensorsPolling,
+    args=(btSeparator, btBuffer1, dataContainer, btComm['bedroom'])
+)
+thr2 = threading.Thread(
+    name='livingSenzorPooling',
+    target=btSensorsPolling,
+    args=(btSeparator, btBuffer2, dataContainer, btComm['sensors'])
+)
 thr4 = threading.Thread(name='timerCourtainsCheck', target=timerCourtainsCheck)
 for thread in [thr0, thr1, thr2, thr4]:
-# for thread in [thr0,  thr1]:
+# for thread in [thr0,  thr2]:
     thread.start()
 
