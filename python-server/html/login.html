@@ -1,0 +1,28 @@
+{%extends "base.html" %}
+
+{% block body %}
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="/actuators/cici/off">Home</a></li>
+            <li role="presentation"><a href="/login">Login</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Welcome to Dan's home login!</h3>
+      </div>
+
+        <form action="/login" method="post">
+          <div class="jumbotron">
+            <h2>Management page</h2>
+            <p class="lead">
+
+                Username: <input type="text" name="username" /></br>
+                Password: <input type="text" name="password" /></br></br>
+                <input type="submit" value="Sign in">
+            </p>
+          </div>
+        </form>
+
+    </div> <!-- /container -->
+{% end %}
