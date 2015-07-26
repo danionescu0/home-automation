@@ -21,7 +21,7 @@ class brain:
             self.serial.write("4")
             self.__writeActuatorState(state)
         if actuator == 'window':
-            if state == 'on':
+            if state:
                self.btComm['bedroom'].send("1")
             else:
                self.btComm['bedroom'].send("0")
