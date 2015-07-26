@@ -1,31 +1,27 @@
-from datetime import datetime
 from tornado.ioloop import IOLoop
 from tornado.web import RequestHandler, Application, url, authenticated, StaticFileHandler
 import serial
 import threading
-import time
 import logging
 
 import homeAutomationBt
 import homeAutomationCommParser
 from brain import brain
 from dataContainer import dataContainer
+from homeAutomationBt import btConnections
 
 btSeparator = '|'
 btBuffer1 = btBuffer2 = "";
-courtainsMode = 'none'
-courtainsTime = datetime.now()
 credentials = {'username' : 'dan', 'password' : 'cicibici07'}
 staticPath = '/home/pi/home-automation/python-server/public'
+btConns = {'bedroom' : '00:14:01:13:16:44', 'living' : '20:14:12:08:20:45'}
 
-logging.basicConfig(level=logging.DEBUG,
-                    format='[%(levelname)s] (%(threadName)-10s) %(message)s',
-                    )
-port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
-btComm = homeAutomationBt.connectAllBt()
+logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
+serialPort = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
+btComm = btConnections(btConns['bedroom'], btConns['living']).connectAllBt()
 logging.debug('Finished connectiong to BT devices')
 dataContainer = dataContainer('127.0.0.1:11211')
-homeBrain = brain(btComm, port, dataContainer)
+homeBrain = brain(btComm, serialPort, dataContainer)
 
 class BaseHandler(RequestHandler):
     def get_current_user(self):
@@ -44,15 +40,6 @@ class LoginHandler(BaseHandler):
             return
 
         self.redirect("/login")
-
-class CourtainHandler(BaseHandler):
-    @authenticated
-    def get(self, mode, date, time):
-        global courtainsTime, courtainsMode;
-        self.write("Timer set!")
-        courtainsMode = mode
-        courtainsTime = datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M')
-        print(courtainsTime)
 
 class ActuatorsHandler(BaseHandler):
     global dataContainer
@@ -74,7 +61,6 @@ def make_app():
     }
 
     return Application([
-            url(r"/set-courtain/(on|off)/([0-9\-]+)/([0-9:]+)", CourtainHandler, name="courtains-setter"),
             url(r"/actuator/([a-zA-Z]+)/(on|off)", ActuatorsHandler, name="actuator-states"),
             url(r"/login", LoginHandler, name="login"),
             url(r'/public/(.*)', StaticFileHandler, {'path': staticPath}),
@@ -84,16 +70,6 @@ def httpListener():
     app = make_app()
     app.listen(8080)
     IOLoop.current().start()
-
-def timerCourtainsCheck():
-    global courtainsTime, courtainsMode
-    while True:
-        time.sleep(60)
-        now = datetime.now()
-        if courtainsMode == 'on' and now.month == courtainsTime.month and now.day == courtainsTime.day\
-                and now.hour == courtainsTime.hour and now.minute == courtainsTime.minute:
-            logging.debug("time reached")
-            btComm['bedroom'].send("3")
 
 def btSensorsPolling(btSeparator, btBuffer, dataContainer, btComm):
     while True:
@@ -119,9 +95,8 @@ thr1 = threading.Thread(
 thr2 = threading.Thread(
     name='livingSenzorPooling',
     target=btSensorsPolling,
-    args=(btSeparator, btBuffer2, dataContainer, btComm['sensors'])
+    args=(btSeparator, btBuffer2, dataContainer, btComm['living'])
 )
-thr4 = threading.Thread(name='timerCourtainsCheck', target=timerCourtainsCheck)
-for thread in [thr0, thr1, thr2, thr4]:
+for thread in [thr0, thr1, thr2]:
     thread.start()
 

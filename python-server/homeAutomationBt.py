@@ -1,18 +1,19 @@
 import bluetooth
 
-bt2 = "20:14:12:08:20:45"
-bt1 = "00:14:01:13:16:44"
+class btConnections:
+    def __init__(self, bedroomBtString, livingBtString):
+        self.bedroomBtString = bedroomBtString
+        self.livingBtString = livingBtString
 
-def connnectToBluetooth(id, ch):
-    bt = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-    bt.settimeout(None)
-    bt.connect((id, ch))
+    def connnectToBluetooth(self, id, ch):
+        bt = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        bt.settimeout(None)
+        bt.connect((id, ch))
 
-    return bt
+        return bt
 
-def connectAllBt():
-
-    return {
-        'bedroom': connnectToBluetooth(bt1, 1),
-        'sensors': connnectToBluetooth(bt2, 1)
-    }
+    def connectAllBt(self):
+        return {
+            'bedroom': self.connnectToBluetooth(self.bedroomBtString, 1),
+            'living': self.connnectToBluetooth(self.livingBtString, 1)
+        }
