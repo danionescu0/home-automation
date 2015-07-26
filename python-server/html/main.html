@@ -15,9 +15,9 @@
       <div class="jumbotron">
         <h2>Management page</h2>
         <p class="lead">
-            Sensors:
+            <b>Sensors:</b>
             {% for sensor in sensors %}
-                {{sensor}} = {{ sensors[sensor] }}
+                {{sensor.capitalize()}} = {{ sensors[sensor] }}
             {% end %}
         </p>
       </div>

@@ -4,7 +4,6 @@ import serial
 import threading
 import logging
 
-import homeAutomationBt
 import homeAutomationCommParser
 from brain import brain
 from dataContainer import dataContainer
