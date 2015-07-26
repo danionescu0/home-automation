@@ -24,14 +24,12 @@ logging.basicConfig(level=logging.DEBUG,
 port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
 btComm = homeAutomationBt.connectAllBt()
 logging.debug('Finished connectiong to BT devices')
-
 dataContainer = dataContainer('127.0.0.1:11211')
 homeBrain = brain(btComm, port, dataContainer)
 
 class BaseHandler(RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("user")
-
 
 class LoginHandler(BaseHandler):
     def get(self):
@@ -60,12 +58,13 @@ class ActuatorsHandler(BaseHandler):
     global dataContainer
     @authenticated
     def get(self, actuator, state):
-        global btComm
         actuators = dataContainer.getActuators()
         if actuator in actuators and state in ['on', 'off']:
-            dataContainer.setActuator(actuator, (False, True)[state == 'on'])
+            state = (False, True)[state == 'on']
+            dataContainer.setActuator(actuator, state)
             homeBrain.changeActuator(actuator, state)
 
+        actuators = dataContainer.getActuators()
         self.render("html/main.html", actuators = actuators, sensors = dataContainer.getSensors())
 
 def make_app():
@@ -97,7 +96,6 @@ def timerCourtainsCheck():
             btComm['bedroom'].send("3")
 
 def btSensorsPolling(btSeparator, btBuffer, dataContainer, btComm):
-    # global btSeparator, btBuffer, dataContainer
     while True:
         data = btComm.recv(10)
         btBuffer += data
@@ -111,6 +109,7 @@ def btSensorsPolling(btSeparator, btBuffer, dataContainer, btComm):
             logging.debug(dataContainer.getSensors())
             btBuffer = ''
 
+# initiating all threads
 thr0 = threading.Thread(name='httpListener', target=httpListener)
 thr1 = threading.Thread(
     name='bedroomSenzorPooling',
@@ -124,6 +123,5 @@ thr2 = threading.Thread(
 )
 thr4 = threading.Thread(name='timerCourtainsCheck', target=timerCourtainsCheck)
 for thread in [thr0, thr1, thr2, thr4]:
-# for thread in [thr0,  thr2]:
     thread.start()
 

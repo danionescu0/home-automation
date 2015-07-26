@@ -9,7 +9,7 @@
             <li role="presentation"><a href="/login">Login</a></li>
           </ul>
         </nav>
-        <h3 class="text-muted">Project name</h3>
+        <h3 class="text-muted">Dan's home</h3>
       </div>
 
       <div class="jumbotron">
@@ -27,10 +27,14 @@
           <h4>Actuators</h4>
             {% for actuator in actuators %}
             <p>
-                <a href="/actuator/{{ actuator }}/on">{{ actuator }} {% if actuators[actuator] %}<b>ON</b>{% else %}on{% end %}</a> |
-                <a href="/actuator/{{ actuator }}/off">{{ actuator }} {% if not actuators[actuator] %}<b>OFF</b>{% else %}off{% end %}</a>
-            {% end %}
+                {% if actuators[actuator]['type'] == 'bi' %}
+                <a href="/actuator/{{ actuator }}/on">{{ actuator }} {% if actuators[actuator]['state'] %}<b>ON</b>{% else %}on{% end %}</a> |
+                <a href="/actuator/{{ actuator }}/off">{{ actuator }} {% if not actuators[actuator]['state'] %}<b>OFF</b>{% else %}off{% end %}</a>
+                {% else %}
+                <a href="/actuator/{{ actuator }}/on">{{ actuator }}</a>
+                {% end %}
             </p>
+            {% end %}
         </div>
       </div>
 

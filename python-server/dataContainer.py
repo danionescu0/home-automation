@@ -4,7 +4,14 @@ import json
 class dataContainer:
     def __init__(self, clientString):
         self.client = memcache.Client([clientString])
-        actuators = {'door' : False, 'window' :False, 'livingLight' : False, 'bedroomLight' : False}
+        actuators = {
+            'door' : {'state' : False, 'type': 'single'},
+            'window' : {'state' : False, 'type': 'bi'},
+            'livingLight' : {'state' : False, 'type': 'bi'},
+            'bedroomLight' : {'state' : False, 'type': 'bi'},
+            'kitchenLight' : {'state' : False, 'type': 'bi'},
+            'holwayLight' : {'state' : False, 'type': 'bi'},
+        }
         sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0}
         self.keys = {'actuators' : actuators, 'sensors' : sensors}
 
@@ -16,9 +23,12 @@ class dataContainer:
         return json.loads(result)
 
     def __set(self, key, name, value):
-        actuators = self.__get(key)
-        actuators[name] = value
-        self.client.set(key, json.dumps(actuators))
+        data = self.__get(key)
+        if (key == 'sensors'):
+            data[name] = value
+        else:
+            data[name]['state'] = value
+        self.client.set(key, json.dumps(data))
 
     def getActuators(self):
         return self.__get('actuators')
