@@ -1,9 +1,9 @@
-import memcache
 import json
+import redis
 
 class dataContainer:
-    def __init__(self, clientString):
-        self.client = memcache.Client([clientString])
+    def __init__(self, config):
+        self.client = redis.StrictRedis(**config)
         actuators = {
             'door' : {'state' : False, 'type': 'single'},
             'window' : {'state' : False, 'type': 'bi'},
