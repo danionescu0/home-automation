@@ -6,6 +6,7 @@ class brain:
         self.dataContainer = dataContainer
 
     def changeActuator(self, actuator, state):
+        self.dataContainer.setActuator(actuator, state)
         if actuator == 'door':
             self.serial.write("0")
         if actuator == 'livingLight':
