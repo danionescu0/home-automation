@@ -4,11 +4,16 @@ from tornado.web import RequestHandler, Application, url, authenticated, StaticF
 import config
 from dataContainer import dataContainer
 from jobControl import jobControll
+from datetime import datetime, timedelta
 
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
 
 class BaseHandler(RequestHandler):
+    def render(self, template, **kwargs):
+        kwargs['username'] = self.get_secure_cookie("user")
+        super(BaseHandler, self).render(template, **kwargs)
+
     def get_current_user(self):
         return self.get_secure_cookie("user")
 
@@ -41,7 +46,20 @@ class ActuatorsHandler(BaseHandler):
             state = (False, True)[state == 'on']
             self.jobControll.addJob(json.dumps({"job_name": "actuators", "actuator": actuator, "state" : state}))
         actuators = self.dataContainer.getActuators()
+
         self.render("html/main.html", actuators = actuators, sensors = dataContainer.getSensors())
+
+class GraphsBuilderHandler(BaseHandler):
+    def initialize(self, dataContainer):
+        self.dataContainer = dataContainer
+
+    @authenticated
+    def get(self):
+        startDate = datetime.today() - timedelta(days=1)
+        endDate = datetime.today()
+        data = self.dataContainer.getSensorValuesInInterval(startDate, endDate)
+
+        self.render("html/graphs.html", sensorsData = data)
 
 def make_app():
     global config, dataContainer, jobControll
@@ -60,6 +78,7 @@ def make_app():
             ),
             url(r"/login", LoginHandler, dict(credentials=config.credentials), name="login"),
             url(r'/public/(.*)', StaticFileHandler, {'path': config.staticPath}),
+            url(r'/graphs', GraphsBuilderHandler, dict(dataContainer=dataContainer), name="graphs"),
         ], **settings)
 
 app = make_app()

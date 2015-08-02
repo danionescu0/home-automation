@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+    <script type="text/javascript">
+    var  datapointDates = [];
+    var  lightGraph = [];
+    {% for datapoint in sensorsData %}
+        datapointDates.push({{ datapoint["timestamp"] }});
+        lightGraph.push({{ datapoint["light"] }});
+    {% end %}
+    </script>
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="/public/js/highcharts.js"></script>
+{% end %}
+
+{% block body %}
+    <div class="container">
+      {% include "menu.html" %}
+
+      <div class="jumbotron">
+        <h2>Sensors timeline</h2>
+      </div>
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+      <footer class="footer">
+        <p>Smecherie</p>
+      </footer>
+
+    </div> <!-- /container -->
+{% end %}
