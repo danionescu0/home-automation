@@ -1,23 +1,15 @@
-{%extends "base.html" %}
+{% extends "base.html" %}
 
 {% block body %}
     <div class="container">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="/actuators/cici/off">Home</a></li>
-            <li role="presentation"><a href="/login">Login</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted">Dan's home</h3>
-      </div>
+     {% include "menu.html" %}
 
       <div class="jumbotron">
         <h2>Management page</h2>
         <p class="lead">
             <b>Sensors:</b>
             {% for sensor in sensors %}
-                {{sensor.capitalize()}} = {{ sensors[sensor] }}
+                {{ sensor.capitalize()}} = {{ sensors[sensor] }}
             {% end %}
         </p>
       </div>

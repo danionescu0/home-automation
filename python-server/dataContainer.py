@@ -1,5 +1,8 @@
 import json
 import redis
+from datetime import datetime
+import calendar
+import random
 
 class dataContainer:
     def __init__(self, config):
@@ -13,7 +16,11 @@ class dataContainer:
             'holwayLight' : {'state' : False, 'type': 'bi'},
         }
         sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0}
+        self.sensorsLastUpdated = 0
         self.keys = {'actuators' : actuators, 'sensors' : sensors}
+        self.updateThresholdSeconds = 60
+        self.sensorsHistoryKey = 'sensors_history_key'
+        self.sensorsKey = 'sensors'
 
     def __get(self, key):
         result = self.client.get(key)
@@ -24,7 +31,7 @@ class dataContainer:
 
     def __set(self, key, name, value):
         data = self.__get(key)
-        if (key == 'sensors'):
+        if (key == self.sensorsKey):
             data[name] = value
         else:
             data[name]['state'] = value
@@ -37,8 +44,30 @@ class dataContainer:
         return self.__set('actuators', name, value)
 
     def getSensors(self):
-        return self.__get('sensors')
+        return self.__get(self.sensorsKey)
 
     def setSensor(self, name, value):
-        return self.__set('sensors', name, value)
+        self.__set(self.sensorsKey, name, value)
+        self.__addSensorsInHistory()
+
+    def __addSensorsInHistory(self):
+        currentTimestamp = calendar.timegm(datetime.now().timetuple())
+        if (currentTimestamp - self.sensorsLastUpdated < self.updateThresholdSeconds):
+            return
+
+        self.sensorsLastUpdated = currentTimestamp
+        sensorsData = self.__get(self.sensorsKey)
+        sensorsData["randomize"] = random.randint(0, 999999999)
+        self.client.zadd(self.sensorsHistoryKey, currentTimestamp, json.dumps(sensorsData))
+
+    def getSensorValuesInInterval(self, startDate, endDate):
+        startTimestamp = calendar.timegm(startDate.timetuple())
+        endTimestamp = calendar.timegm(endDate.timetuple())
+        range = self.client.zrangebyscore(self.sensorsHistoryKey, startTimestamp, endTimestamp, withscores=True)
+        for index, element in enumerate(range):
+            timestamp = range[index][1]
+            range[index] = json.loads(range[index][0])
+            range[index]['timestamp'] = timestamp
+
+        return range
 
