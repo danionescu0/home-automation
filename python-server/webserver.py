@@ -1,4 +1,5 @@
 import json
+import logging
 from tornado.ioloop import IOLoop
 from tornado.web import RequestHandler, Application, url, authenticated, StaticFileHandler
 import config
@@ -8,6 +9,7 @@ from datetime import datetime, timedelta
 
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
+logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 
 class BaseHandler(RequestHandler):
     def render(self, template, **kwargs):
@@ -55,11 +57,30 @@ class GraphsBuilderHandler(BaseHandler):
 
     @authenticated
     def get(self):
+        self.__displayPage('light')
+
+    @authenticated
+    def post(self, *args, **kwargs):
+        logging.debug(self.get_argument('type', 'light'))
+        type = self.get_argument('type', 'light')
+        self.__displayPage(type)
+
+    def __displayPage(self, type):
         startDate = datetime.today() - timedelta(days=1)
         endDate = datetime.today()
         data = self.dataContainer.getSensorValuesInInterval(startDate, endDate)
+        datetimeList = []
+        datapointValues = []
+        for datapoint in data:
+            datetimeAsString = datetime.fromtimestamp(int(datapoint['timestamp'])).strftime('%Y-%m-%d %H:%M:%S')
+            datetimeList.append(datetimeAsString)
+            datapointValues.append(datapoint[type])
 
-        self.render("html/graphs.html", sensorsData = data)
+        self.render("html/graphs.html",
+                    datetimeList = json.dumps(datetimeList),
+                    datapointValues = json.dumps(datapointValues),
+                    selectedType = type
+                    )
 
 def make_app():
     global config, dataContainer, jobControll
