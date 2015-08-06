@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block scripts %}
+    {% autoescape None %}
     <script type="text/javascript">
-    var  datapointDates = [];
-    var  lightGraph = [];
-    {% for datapoint in sensorsData %}
-        datapointDates.push({{ datapoint["timestamp"] }});
-        lightGraph.push({{ datapoint["light"] }});
-    {% end %}
+    var graphLeftText = 'Light';
+    var graphRightText = 'default';
+    var  datapointDates = {{ datetimeList }};
+    var  datapointValues = {{ datapointValues }};
+
     </script>
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
@@ -21,6 +21,16 @@
 
       <div class="jumbotron">
         <h2>Sensors timeline</h2>
+        <form action="/graphs" method="post">
+            Senzor type:
+            <select name="type">
+                  <option value="light"{% if selectedType == 'light' %}selected="selected"{% end %}>Light</option>
+                  <option value="temperature"{% if selectedType == 'temperature' %}selected="selected"{% end %}>Temperature</option>
+                  <option value="humidity"{% if selectedType == 'humidity' %}selected="selected"{% end %}>Humidity</option>
+                  <option value="rain"{% if selectedType == 'rain' %}selected="selected"{% end %}>Rain</option>
+            </select>
+            <input type="submit" value="Show">
+        </form>
       </div>
         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 

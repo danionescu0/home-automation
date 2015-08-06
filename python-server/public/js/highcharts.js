@@ -9,16 +9,13 @@ $(function () {
         },
         yAxis: {
             title: {
-                text: 'Temperature (°C)'
+                text: graphLeftText
             },
             plotLines: [{
                 value: 0,
                 width: 1,
                 color: '#808080'
             }]
-        },
-        tooltip: {
-            valueSuffix: '°C'
         },
         legend: {
             layout: 'vertical',
@@ -27,8 +24,8 @@ $(function () {
             borderWidth: 0
         },
         series: [{
-            name: 'Tokyo',
-            data: lightGraph
+            name: graphRightText,
+            data: datapointValues
         }]
     });
 });
