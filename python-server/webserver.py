@@ -74,13 +74,26 @@ class GraphsBuilderHandler(BaseHandler):
         for datapoint in data:
             datetimeAsString = datetime.fromtimestamp(int(datapoint['timestamp'])).strftime('%Y-%m-%d %H:%M:%S')
             datetimeList.append(datetimeAsString)
-            datapointValues.append(datapoint[type])
+            if type in datapoint.keys():
+                datapointValues.append(datapoint[type])
+            else:
+                datapointValues.append(0)
 
         self.render("html/graphs.html",
                     datetimeList = json.dumps(datetimeList),
                     datapointValues = json.dumps(datapointValues),
                     selectedType = type
                     )
+class TimeRulesHandler(BaseHandler):
+    def initialize(self, dataContainer):
+        self.dataContainer = dataContainer
+
+    @authenticated
+    def get(self):
+        self.render("html/timeRules.html",
+                    rules = self.dataContainer.getTimeRules()
+                    )
+
 
 def make_app():
     global config, dataContainer, jobControll
@@ -100,6 +113,7 @@ def make_app():
             url(r"/login", LoginHandler, dict(credentials=config.credentials), name="login"),
             url(r'/public/(.*)', StaticFileHandler, {'path': config.staticPath}),
             url(r'/graphs', GraphsBuilderHandler, dict(dataContainer=dataContainer), name="graphs"),
+            url(r'/time-rules', TimeRulesHandler, dict(dataContainer=dataContainer), name="timeRules"),
         ], **settings)
 
 app = make_app()

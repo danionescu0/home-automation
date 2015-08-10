@@ -1,9 +1,10 @@
 
 class brain:
-    def __init__(self, btComm, serial, dataContainer):
+    def __init__(self, btComm, serial, dataContainer, emailNotificator):
         self.btComm = btComm
         self.serial = serial
         self.dataContainer = dataContainer
+        self.emailNotificator = emailNotificator
 
     def changeActuator(self, actuator, state):
         self.dataContainer.setActuator(actuator, state)
@@ -41,3 +42,5 @@ class brain:
             self.btComm['bedroom'].send("1")
             actuators['window']['state'] = True
             self.dataContainer.setActuator('window', True)
+        if name == 'presence' and sensors['presence'] == 1:
+            self.emailNotificator.sendAlert("Cineva a intrat", "Nere")
