@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="container">
+     {% include "menu.html" %}
+
+      <div class="jumbotron">
+        <h2>Time rules management</h2>
+      </div>
+
+      <div class="row marketing">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Rule name</th>
+                    <th>Actuator name</th>
+                    <th>Actuator state</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for rule in rules %}
+            <tr>
+                <td>{{ rule }}</td>
+                <td>{{ rules[rule]['actuator'] }}</td>
+                <td>{{ rules[rule]['actuator'] }}</td>
+                <td>{{ rules[rule]['stringTime'] }}</td>
+            </tr>
+            {% end %}
+            </tbody>
+        </table>
+        </div>
+
+      </div>
+
+      <footer class="footer">
+        <p>Smecherie</p>
+      </footer>
+
+    </div> <!-- /container -->
+{% end %}

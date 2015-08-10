@@ -15,12 +15,13 @@ class dataContainer:
             'kitchenLight' : {'state' : False, 'type': 'bi'},
             'holwayLight' : {'state' : False, 'type': 'bi'},
         }
-        sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0}
+        sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0}
         self.sensorsLastUpdated = 0
-        self.keys = {'actuators' : actuators, 'sensors' : sensors}
-        self.updateThresholdSeconds = 60
+        self.keys = {'actuators' : actuators, 'sensors' : sensors, 'time_rules': {}}
+        self.updateThresholdSeconds = 300
         self.sensorsHistoryKey = 'sensors_history_key'
         self.sensorsKey = 'sensors'
+        self.timeRules = 'time_rules'
 
     def __get(self, key):
         result = self.client.get(key)
@@ -49,6 +50,24 @@ class dataContainer:
     def setSensor(self, name, value):
         self.__set(self.sensorsKey, name, value)
         self.__addSensorsInHistory()
+
+    def upsertTimeRule(self, name, actuator, state, time):
+        rules = self.__get(self.timeRules)
+        rules[name] = {
+            'actuator' : actuator,
+            'state' : state,
+            'time' : time.isoformat()
+        }
+
+        return  self.client.set(self.timeRules, json.dumps(rules))
+
+    def getTimeRules(self):
+        rules = self.__get(self.timeRules)
+        for rule in rules:
+            rules[rule]['stringTime'] = rules[rule]['time']
+            rules[rule]['time'] = datetime.strptime(rules[rule]['time'], "%H:%M:%S").time()
+
+        return rules
 
     def __addSensorsInHistory(self):
         currentTimestamp = calendar.timegm(datetime.now().timetuple())

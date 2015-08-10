@@ -10,5 +10,7 @@ def parseSensorsString(data):
             sensors['light'] = int(elements[1])
         if elements[0] == 'R':
             sensors['rain'] = int(elements[1])
+        if elements[0] == 'P':
+            sensors['presence'] = int(elements[1])
 
     return sensors

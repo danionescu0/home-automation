@@ -8,6 +8,7 @@ from brain import brain
 from dataContainer import dataContainer
 from homeAutomationBt import btConnections
 from jobControl import jobControll
+from emailNotifier import emailNotifier
 import config
 
 btSeparator = '|'
@@ -19,7 +20,8 @@ logging.debug('Finished connectiong to BT devices')
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
 serialPort = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
-homeBrain = brain(btComm, serialPort, dataContainer)
+emailNotif = emailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
+homeBrain = brain(btComm, serialPort, dataContainer, emailNotif)
 
 # listens to a bluetooth connection until some data appears
 # the format in which data arives is senzorName:senzorData with pipe separators between
