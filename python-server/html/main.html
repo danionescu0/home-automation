@@ -15,19 +15,28 @@
       </div>
 
       <div class="row marketing">
-        <div class="col-lg-6">
+         <table class="table">
+            <thead>
+                <tr>
+                    <th>ON</th>
+                    <th>OFF</th>
+                </tr>
+            </thead>
+            <tbody>
           <h4>Actuators</h4>
             {% for actuator in actuators %}
-            <p>
+                <tr>
                 {% if actuators[actuator]['type'] == 'bi' %}
-                <a href="/actuator/{{ actuator }}/on">{{ actuator }} {% if actuators[actuator]['state'] %}<b>ON</b>{% else %}on{% end %}</a> |
-                <a href="/actuator/{{ actuator }}/off">{{ actuator }} {% if not actuators[actuator]['state'] %}<b>OFF</b>{% else %}off{% end %}</a>
+                    <td><a href="/actuator/{{ actuator }}/on">{{ actuator }} {% if actuators[actuator]['state'] %}<b>ON</b>{% else %}on{% end %}</a>
+                    <td><a href="/actuator/{{ actuator }}/off">{{ actuator }} {% if not actuators[actuator]['state'] %}<b>OFF</b>{% else %}off{% end %}</a></td>
                 {% else %}
-                <a href="/actuator/{{ actuator }}/on">{{ actuator }}</a>
+                    <td><a href="/actuator/{{ actuator }}/on">{{ actuator }}</a></td>
+                    <td>&nbsp</td>
                 {% end %}
-            </p>
+                </tr>
             {% end %}
-        </div>
+            </tbody>
+        </table>
       </div>
 
       <footer class="footer">
