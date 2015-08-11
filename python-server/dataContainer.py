@@ -9,6 +9,7 @@ class dataContainer:
         self.client = redis.StrictRedis(**config)
         actuators = {
             'door' : {'state' : False, 'type': 'single'},
+            'homeAlarm' : {'state' : False, 'type': 'bi'},
             'window' : {'state' : False, 'type': 'bi'},
             'livingLight' : {'state' : False, 'type': 'bi'},
             'bedroomLight' : {'state' : False, 'type': 'bi'},

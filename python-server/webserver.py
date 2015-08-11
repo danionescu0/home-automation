@@ -6,6 +6,7 @@ import config
 from dataContainer import dataContainer
 from jobControl import jobControll
 from datetime import datetime, timedelta
+import time
 
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
@@ -47,9 +48,10 @@ class ActuatorsHandler(BaseHandler):
         if actuator in actuators and state in ['on', 'off']:
             state = (False, True)[state == 'on']
             self.jobControll.addJob(json.dumps({"job_name": "actuators", "actuator": actuator, "state" : state}))
+            time.sleep(0.3)
         actuators = self.dataContainer.getActuators()
 
-        self.render("html/main.html", actuators = actuators, sensors = dataContainer.getSensors())
+        self.render("html/main.html", actuators = actuators, sensors = self.dataContainer.getSensors())
 
 class GraphsBuilderHandler(BaseHandler):
     def initialize(self, dataContainer):

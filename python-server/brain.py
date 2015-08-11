@@ -42,5 +42,5 @@ class brain:
             self.btComm['bedroom'].send("1")
             actuators['window']['state'] = True
             self.dataContainer.setActuator('window', True)
-        if name == 'presence' and sensors['presence'] == 1:
+        if actuators['homeAlarm']['state'] == True and name == 'presence' and sensors['presence'] == 1:
             self.emailNotificator.sendAlert("Cineva a intrat", "Nere")

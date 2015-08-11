@@ -7,7 +7,6 @@ class emailNotifier:
         self.notifiedAddress = notifiedAddress
 
     def sendAlert(self, subject, body):
-        return;
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(self.address, self.password)
