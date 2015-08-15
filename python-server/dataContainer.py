@@ -3,6 +3,7 @@ import redis
 from datetime import datetime
 import calendar
 import random
+import math
 
 class dataContainer:
     def __init__(self, config):
@@ -23,6 +24,7 @@ class dataContainer:
         self.sensorsHistoryKey = 'sensors_history_key'
         self.sensorsKey = 'sensors'
         self.timeRules = 'time_rules'
+        self.lastAverages = {}
 
     def __get(self, key):
         result = self.client.get(key)
@@ -50,7 +52,7 @@ class dataContainer:
 
     def setSensor(self, name, value):
         self.__set(self.sensorsKey, name, value)
-        self.__addSensorsInHistory()
+        self.__addSensorsInHistory(name, value)
 
     def upsertTimeRule(self, name, actuator, state, time):
         rules = self.__get(self.timeRules)
@@ -70,15 +72,21 @@ class dataContainer:
 
         return rules
 
-    def __addSensorsInHistory(self):
+    def __addSensorsInHistory(self, name, value):
+        if name not in self.lastAverages.keys():
+            self.lastAverages[name] = []
+        self.lastAverages[name].append(value)
         currentTimestamp = calendar.timegm(datetime.now().timetuple())
         if (currentTimestamp - self.sensorsLastUpdated < self.updateThresholdSeconds):
             return
 
         self.sensorsLastUpdated = currentTimestamp
-        sensorsData = self.__get(self.sensorsKey)
+        sensorsData = {}
+        for key, list in self.lastAverages.iteritems():
+            sensorsData[key] = int(math.ceil(float(sum(list)) / len(list)))
         sensorsData["randomize"] = random.randint(0, 999999999)
         self.client.zadd(self.sensorsHistoryKey, currentTimestamp, json.dumps(sensorsData))
+        self.lastAverages = {}
 
     def getSensorValuesInInterval(self, startDate, endDate):
         startTimestamp = calendar.timegm(startDate.timetuple())
