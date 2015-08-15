@@ -1,11 +1,11 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="/actuator/cici/off">Home</a></li>
-            <li role="presentation"><a href="/graphs">Graphs</a></li>
-            <li role="presentation"><a href="/time-rules">Time Based Rules</a></li>
+            <li role="presentation" {% if menuSelected == 'home' %}class="active"{% end %}><a href="/actuator/cici/off">Home</a></li>
+            <li role="presentation" {% if menuSelected == 'graphs' %}class="active"{% end %} ><a href="/graphs">Graphs</a></li>
+            <li role="presentation" {% if menuSelected == 'rules' %}class="active"{% end %} ><a href="/time-rules">Time Based Rules</a></li>
             {% if not username %}
-            <li role="presentation"><a href="/login">Login</a></li>
+            <li role="presentation" {% if menuSelected == 'login' %}class="active"{% end %}><a href="/login">Login</a></li>
             {% end %}
           </ul>
         </nav>

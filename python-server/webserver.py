@@ -7,6 +7,7 @@ from dataContainer import dataContainer
 from jobControl import jobControll
 from datetime import datetime, timedelta
 import time
+from dateutil import tz
 
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
@@ -25,7 +26,7 @@ class LoginHandler(BaseHandler):
         self.credentials = credentials
 
     def get(self):
-        self.render("html/login.html")
+        self.render("html/login.html", menuSelected="login")
 
     def post(self):
         username = self.get_argument("username", default=None, strip=False)
@@ -51,7 +52,7 @@ class ActuatorsHandler(BaseHandler):
             time.sleep(0.3)
         actuators = self.dataContainer.getActuators()
 
-        self.render("html/main.html", actuators = actuators, sensors = self.dataContainer.getSensors())
+        self.render("html/main.html", actuators = actuators, sensors = self.dataContainer.getSensors(), menuSelected="home")
 
 class GraphsBuilderHandler(BaseHandler):
     def initialize(self, dataContainer):
@@ -73,8 +74,12 @@ class GraphsBuilderHandler(BaseHandler):
         data = self.dataContainer.getSensorValuesInInterval(startDate, endDate)
         datetimeList = []
         datapointValues = []
+        from_zone = tz.gettz('UTC')
+        to_zone = tz.gettz('Europe/Bucharest')
         for datapoint in data:
-            datetimeAsString = datetime.fromtimestamp(int(datapoint['timestamp'])).strftime('%Y-%m-%d %H:%M:%S')
+            initialDate = datetime.fromtimestamp(int(datapoint['timestamp'])).replace(tzinfo=from_zone)
+            bucharestDate = initialDate.astimezone(to_zone)
+            datetimeAsString = bucharestDate.strftime('%Y-%m-%d %H:%M:%S')
             datetimeList.append(datetimeAsString)
             if type in datapoint.keys():
                 datapointValues.append(datapoint[type])
@@ -84,7 +89,8 @@ class GraphsBuilderHandler(BaseHandler):
         self.render("html/graphs.html",
                     datetimeList = json.dumps(datetimeList),
                     datapointValues = json.dumps(datapointValues),
-                    selectedType = type
+                    selectedType = type,
+                    menuSelected="graphs"
                     )
 class TimeRulesHandler(BaseHandler):
     def initialize(self, dataContainer):
@@ -93,7 +99,8 @@ class TimeRulesHandler(BaseHandler):
     @authenticated
     def get(self):
         self.render("html/timeRules.html",
-                    rules = self.dataContainer.getTimeRules()
+                    rules = self.dataContainer.getTimeRules(),
+                    menuSelected="rules"
                     )
 
 

@@ -1,4 +1,6 @@
 import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
 
 class emailNotifier:
     def __init__(self, address, password, notifiedAddress):
@@ -7,10 +9,15 @@ class emailNotifier:
         self.notifiedAddress = notifiedAddress
 
     def sendAlert(self, subject, body):
+        msg = MIMEMultipart()
+        msg['From'] = self.address
+        msg['To'] = self.notifiedAddress
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(self.address, self.password)
-
-        msg = subject
-        server.sendmail(self.address, self.notifiedAddress, msg)
+        text = msg.as_string()
+        server.sendmail(self.address, self.notifiedAddress, text)
         server.quit()
