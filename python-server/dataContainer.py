@@ -41,8 +41,16 @@ class dataContainer:
             data[name]['state'] = value
         self.client.set(key, json.dumps(data))
 
-    def getActuators(self):
-        return self.__get('actuators')
+    def getActuators(self, justNames = False):
+        if not justNames:
+            return self.__get('actuators')
+
+        actuators = self.__get('actuators')
+        actuatorNames = []
+        for name, data in actuators.iteritems():
+            actuatorNames.append(name)
+
+        return actuatorNames
 
     def setActuator(self, name, value):
         return self.__set('actuators', name, value)

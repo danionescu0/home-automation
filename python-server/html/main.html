@@ -1,12 +1,10 @@
-{% extends "base.html" %}
+{% extends "../html/base.html" %}
 
 {% block body %}
     <div class="container">
-
-     {% include "menu.html" %}
+     {% include "../html/menu.html" %}
 
       <div class="jumbotron">
-        <h3>Management page</h3>
         <p class="lead">
             <b>Sensors:</b>
             {% for sensor in sensors %}

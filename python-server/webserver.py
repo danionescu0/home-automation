@@ -1,32 +1,26 @@
 import json
 import logging
 from tornado.ioloop import IOLoop
-from tornado.web import RequestHandler, Application, url, authenticated, StaticFileHandler
+from tornado.web import Application, url, authenticated, StaticFileHandler
 import config
 from dataContainer import dataContainer
 from jobControl import jobControll
 from datetime import datetime, timedelta
 import time
 from dateutil import tz
+from web.baseHandler import baseHandler
+from web.timeRulesHandler import timeRulesHandler
 
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 
-class BaseHandler(RequestHandler):
-    def render(self, template, **kwargs):
-        kwargs['username'] = self.get_secure_cookie("user")
-        super(BaseHandler, self).render(template, **kwargs)
-
-    def get_current_user(self):
-        return self.get_secure_cookie("user")
-
-class LoginHandler(BaseHandler):
+class LoginHandler(baseHandler):
     def initialize(self, credentials):
         self.credentials = credentials
 
     def get(self):
-        self.render("html/login.html", menuSelected="login")
+        self.render("../html/login.html", menuSelected="login")
 
     def post(self):
         username = self.get_argument("username", default=None, strip=False)
@@ -38,7 +32,7 @@ class LoginHandler(BaseHandler):
 
         self.redirect("/login")
 
-class ActuatorsHandler(BaseHandler):
+class ActuatorsHandler(baseHandler):
     def initialize(self, dataContainer, jobControll):
         self.dataContainer = dataContainer
         self.jobControll = jobControll
@@ -52,9 +46,9 @@ class ActuatorsHandler(BaseHandler):
             time.sleep(0.3)
         actuators = self.dataContainer.getActuators()
 
-        self.render("html/main.html", actuators = actuators, sensors = self.dataContainer.getSensors(), menuSelected="home")
+        self.render("../html/main.html", actuators = actuators, sensors = self.dataContainer.getSensors(), menuSelected="home")
 
-class GraphsBuilderHandler(BaseHandler):
+class GraphsBuilderHandler(baseHandler):
     def initialize(self, dataContainer):
         self.dataContainer = dataContainer
 
@@ -86,23 +80,12 @@ class GraphsBuilderHandler(BaseHandler):
             else:
                 datapointValues.append(0)
 
-        self.render("html/graphs.html",
+        self.render("../html/graphs.html",
                     datetimeList = json.dumps(datetimeList),
                     datapointValues = json.dumps(datapointValues),
                     selectedType = type,
                     menuSelected="graphs"
                     )
-class TimeRulesHandler(BaseHandler):
-    def initialize(self, dataContainer):
-        self.dataContainer = dataContainer
-
-    @authenticated
-    def get(self):
-        self.render("html/timeRules.html",
-                    rules = self.dataContainer.getTimeRules(),
-                    menuSelected="rules"
-                    )
-
 
 def make_app():
     global config, dataContainer, jobControll
@@ -122,7 +105,7 @@ def make_app():
             url(r"/login", LoginHandler, dict(credentials=config.credentials), name="login"),
             url(r'/public/(.*)', StaticFileHandler, {'path': config.staticPath}),
             url(r'/graphs', GraphsBuilderHandler, dict(dataContainer=dataContainer), name="graphs"),
-            url(r'/time-rules', TimeRulesHandler, dict(dataContainer=dataContainer), name="timeRules"),
+            url(r'/time-rules', timeRulesHandler, dict(dataContainer=dataContainer), name="timeRules"),
         ], **settings)
 
 app = make_app()
