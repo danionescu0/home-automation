@@ -2,6 +2,9 @@ import serial
 import threading
 import logging
 import json
+import time
+from dateutil import tz
+from datetime import datetime
 
 import homeAutomationCommParser
 from brain import brain
@@ -45,10 +48,28 @@ def jobManager(dataContainer, jobControll, homeBrain):
         for job in jobControll.listen():
             if job["data"] == 1:
                 continue
-            print job["data"]
+            logging.debug(job["data"])
             jobData = json.loads(job["data"])
             if jobData["job_name"] == "actuators":
                 homeBrain.changeActuator(jobData["actuator"], jobData["state"])
+
+def timeRulesControl(dataContainer, homeBrain):
+    from_zone = tz.gettz('UTC')
+    to_zone = tz.gettz('Europe/Bucharest')
+
+    while True:
+        time.sleep(60)
+        rules = dataContainer.getTimeRules()
+        initialDate = datetime.now().replace(tzinfo=from_zone)
+        bucharestDate = initialDate.astimezone(to_zone)
+        currentTime = bucharestDate.strftime('%H:%M:00')
+        for key, rule in rules.iteritems():
+            if rule['stringTime'] != currentTime:
+                continue
+            logging.debug("Changing actuator:", rule)
+            homeBrain.changeActuator(rule["actuator"], rule["state"])
+
+
 
 # initiating all threads
 thr1 = threading.Thread(
@@ -66,6 +87,12 @@ thr3 = threading.Thread(
     target=jobManager,
     args=(dataContainer, jobControll, homeBrain)
 )
-for thread in [thr1, thr2, thr3]:
+thr4 = threading.Thread(
+    name='timeRulesControl',
+    target=timeRulesControl,
+    args=(dataContainer, homeBrain)
+)
+
+for thread in [thr1,  thr2, thr3, thr4]:
     thread.start()
 

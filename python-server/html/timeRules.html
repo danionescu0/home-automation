@@ -1,8 +1,18 @@
-{% extends "base.html" %}
+{% extends "../html/base.html" %}
+{% block scripts %}
+    {% autoescape None %}
+    <link href="/public/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+    <script src="/public/js/jquery-ui-timepicker-addon.js"></script>
+    <script src="/public/js/timepicker.js"></script>
+
+{% end %}
 {% block body %}
     <div class="container">
-     {% include "menu.html" %}
+     {% include "../html/menu.html" %}
 
       <div class="jumbotron">
         <h2>Time rules management</h2>
@@ -16,17 +26,32 @@
                     <th>Actuator name</th>
                     <th>Actuator state</th>
                     <th>Time</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+            <form name="allrules" method="POST">
             {% for rule in rules %}
             <tr>
-                <td>{{ rule }}</td>
-                <td>{{ rules[rule]['actuator'] }}</td>
-                <td>{{ rules[rule]['actuator'] }}</td>
-                <td>{{ rules[rule]['stringTime'] }}</td>
+                <td><input type="text" name="rule_name" value="{{ rule }}"></td>
+                <td>
+                    <select name="actuator[{{ rule }}]">
+                    {% for actuator in actuators %}
+                        <option value="{{ actuator }}" {% if rules[rule]['actuator'] == actuator %}SELECTED=SELECTED{% end %}>{{ actuator }}</option>
+                    {% end %}
+                    </select>
+                </td>
+                <td>
+                    <select name="state[{{ rule }}]">
+                        <option value="True" {% if rules[rule]['state'] == True %}SELECTED=SELECTED{% end %}>True</option>
+                        <option value="False" {% if rules[rule]['state'] == False %}SELECTED=SELECTED{% end %}>False</option>
+                    </select>
+                </td>
+                <td><input id="basic_example_{{ rule }}" type="text" class="datepick" name="date[{{ rule }}" value="{{ rules[rule]['stringTime'] }}"></td>
+                <td><a href="javascript:">Delete</a></td>
             </tr>
             {% end %}
+            </form>
             </tbody>
         </table>
         </div>
