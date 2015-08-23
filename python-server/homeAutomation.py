@@ -37,8 +37,7 @@ def btSensorsPolling(btSeparator, btBuffer, dataContainer, btComm):
             logging.debug("senzors received : " + btBuffer)
             data = homeAutomationCommParser.parseSensorsString(btBuffer)
             for key, value in data.iteritems():
-                dataContainer.setSensor(key, value)
-                homeBrain.sensorsUpdate(key)
+                homeBrain.sensorUpdate(key, value)
             logging.debug(dataContainer.getSensors())
             btBuffer = ''
 
