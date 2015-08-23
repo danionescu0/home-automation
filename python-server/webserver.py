@@ -70,6 +70,7 @@ class GraphsBuilderHandler(baseHandler):
         datapointValues = []
         from_zone = tz.gettz('UTC')
         to_zone = tz.gettz('Europe/Bucharest')
+        lastValueBySenzorType = {}
         for datapoint in data:
             initialDate = datetime.fromtimestamp(int(datapoint['timestamp'])).replace(tzinfo=from_zone)
             bucharestDate = initialDate.astimezone(to_zone)
@@ -77,6 +78,9 @@ class GraphsBuilderHandler(baseHandler):
             datetimeList.append(datetimeAsString)
             if type in datapoint.keys():
                 datapointValues.append(datapoint[type])
+                lastValueBySenzorType[type] = datapoint[type]
+            elif type in lastValueBySenzorType.keys():
+                datapointValues.append(lastValueBySenzorType[type])
             else:
                 datapointValues.append(0)
 

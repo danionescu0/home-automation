@@ -35,10 +35,13 @@ class brain:
             self.serial.write("C")
         self.serial.write("|");
 
-    def sensorsUpdate(self, name):
+    def sensorUpdate(self, name, value):
+        # this is a filter for unwanted low values sorth o hack :)
+        if value > 10 or name == 'rain' or name == 'presence':
+            self.dataContainer.setSensor(name, value)
         sensors = self.dataContainer.getSensors()
         actuators = self.dataContainer.getActuators()
-        if name == 'rain' and sensors['rain'] > 30 and actuators['window']['state'] == False:
+        if name == 'rain' and sensors['rain'] > 40 and actuators['window']['state'] == False:
             self.btComm['bedroom'].send("1")
             actuators['window']['state'] = True
             self.dataContainer.setActuator('window', True)
