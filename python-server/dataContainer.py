@@ -62,11 +62,12 @@ class dataContainer:
         self.__set(self.sensorsKey, name, value)
         self.__addSensorsInHistory(name, value)
 
-    def upsertTimeRule(self, name, actuator, state, time):
+    def upsertTimeRule(self, name, actuator, state, time, active):
         rules = self.__get(self.timeRules)
         rules[name] = {
             'actuator' : actuator,
             'state' : state,
+            'active': active,
             'time' : time.isoformat()
         }
 
