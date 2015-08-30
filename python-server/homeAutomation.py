@@ -18,8 +18,13 @@ btSeparator = '|'
 btBuffer1 = btBuffer2 = "";
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
-btComm = btConnections(config.btConns['bedroom'], config.btConns['living']).connectAllBt()
+btComm = btConnections(
+    config.btConns['bedroom'],
+    config.btConns['living'],
+    config.btConns['holway'])\
+    .connectAllBt()
 logging.debug('Finished connectiong to BT devices')
+
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
 serialPort = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
