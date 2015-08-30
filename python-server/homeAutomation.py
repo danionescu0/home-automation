@@ -68,7 +68,7 @@ def timeRulesControl(dataContainer, homeBrain):
         bucharestDate = initialDate.astimezone(to_zone)
         currentTime = bucharestDate.strftime('%H:%M:00')
         for key, rule in rules.iteritems():
-            if rule['stringTime'] != currentTime:
+            if rule['stringTime'] != currentTime or rule['active'] != True:
                 continue
             logging.debug("Changing actuator:", rule)
             homeBrain.changeActuator(rule["actuator"], rule["state"])

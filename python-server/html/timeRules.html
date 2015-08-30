@@ -7,7 +7,7 @@
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
     <script src="/public/js/jquery-ui-timepicker-addon.js"></script>
-    <script src="/public/js/timepicker.js"></script>
+    <script src="/public/js/timeRules.js"></script>
 
 {% end %}
 {% block body %}
@@ -18,11 +18,12 @@
         <h2>Time rules management</h2>
       </div>
 
-      <div class="row marketing">
+      <div id="main-div" class="row marketing">
         <table class="table">
             <thead>
                 <tr>
                     <th>Rule name</th>
+                    <th>Active</th>
                     <th>Actuator name</th>
                     <th>Actuator state</th>
                     <th>Time</th>
@@ -32,23 +33,29 @@
             <tbody>
             <form name="allrules" method="POST">
             {% for rule in rules %}
-            <tr>
+            <tr class="main-tr">
                 <td><input type="text" name="rule_name" value="{{ rule }}"></td>
                 <td>
-                    <select name="actuator[{{ rule }}]">
+                    <select name="active">
+                        <option value="True" {% if rules[rule]['active'] == True %}SELECTED=SELECTED{% end %}>True</option>
+                        <option value="False" {% if rules[rule]['active'] == False %}SELECTED=SELECTED{% end %}>False</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="actuator">
                     {% for actuator in actuators %}
                         <option value="{{ actuator }}" {% if rules[rule]['actuator'] == actuator %}SELECTED=SELECTED{% end %}>{{ actuator }}</option>
                     {% end %}
                     </select>
                 </td>
                 <td>
-                    <select name="state[{{ rule }}]">
+                    <select name="state">
                         <option value="True" {% if rules[rule]['state'] == True %}SELECTED=SELECTED{% end %}>True</option>
                         <option value="False" {% if rules[rule]['state'] == False %}SELECTED=SELECTED{% end %}>False</option>
                     </select>
                 </td>
-                <td><input id="basic_example_{{ rule }}" type="text" class="datepick" name="date[{{ rule }}" value="{{ rules[rule]['stringTime'] }}"></td>
-                <td><a href="javascript:">Delete</a></td>
+                <td><input name="time" id="basic_example_{{ rule }}" type="text" class="datepick" name="date[{{ rule }}]" value="{{ rules[rule]['stringTime'] }}"></td>
+                <td><a class="action-update" href="javascript://">Update</a></td>
             </tr>
             {% end %}
             </form>

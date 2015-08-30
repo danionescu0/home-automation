@@ -109,7 +109,7 @@ def make_app():
             url(r"/login", LoginHandler, dict(credentials=config.credentials), name="login"),
             url(r'/public/(.*)', StaticFileHandler, {'path': config.staticPath}),
             url(r'/graphs', GraphsBuilderHandler, dict(dataContainer=dataContainer), name="graphs"),
-            url(r'/time-rules', timeRulesHandler, dict(dataContainer=dataContainer), name="timeRules"),
+            url(r'/time-rules', timeRulesHandler, dict(dataContainer=dataContainer, logging=logging), name="timeRules"),
         ], **settings)
 
 app = make_app()
