@@ -9,7 +9,7 @@ class brain:
     def changeActuator(self, actuator, state):
         self.dataContainer.setActuator(actuator, state)
         if actuator == 'door':
-            self.serial.write("0")
+            self.btComm['holway'].send("O")
         if actuator == 'livingLight':
             self.serial.write("1")
             self.__writeActuatorState(state)
@@ -36,9 +36,7 @@ class brain:
         self.serial.write("|");
 
     def sensorUpdate(self, name, value):
-        # this is a filter for unwanted low values sorth o hack :)
-        if value > 10 or name == 'rain' or name == 'presence':
-            self.dataContainer.setSensor(name, value)
+        self.dataContainer.setSensor(name, value)
         sensors = self.dataContainer.getSensors()
         actuators = self.dataContainer.getActuators()
         if name == 'rain' and sensors['rain'] > 40 and actuators['window']['state'] == False:
