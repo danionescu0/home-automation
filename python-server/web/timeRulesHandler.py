@@ -10,17 +10,26 @@ class timeRulesHandler(baseHandler):
     @authenticated
     def get(self):
         actuatorsList = self.dataContainer.getActuators(True)
+        theRules = self.dataContainer.getTimeRules()
+        theRules['test'] =\
+            {
+                "active" : True, "actuator": "livingLight",
+                "state"  : True, "stringTime": "12:00:00",
+                "template": True
+            }
 
         self.render("../html/timeRules.html",
-                    rules = self.dataContainer.getTimeRules(),
+                    rules = theRules,
                     menuSelected="rules",
                     actuators = actuatorsList
                     )
 
     @authenticated
     def post(self, *args, **kwargs):
-        actuatorsList = self.dataContainer.getActuators(True)
         ruleName = self.get_argument("rule", None, True)
+        if (self.get_argument("type", None, True) == 'delete'):
+            self.dataContainer.deleteTimeRule(ruleName)
+
         actuatorName = self.get_argument("actuator", None, True)
         active = (False, True)[self.get_argument("active", None, True) == 'True']
         actuatorState = (False, True)[self.get_argument("state", None, True) == 'True']
@@ -28,8 +37,4 @@ class timeRulesHandler(baseHandler):
         if (self.get_argument("type", None, True) == 'update'):
             self.dataContainer.upsertTimeRule(ruleName, actuatorName, actuatorState, time, active)
 
-        self.render("../html/timeRules.html",
-                    rules = self.dataContainer.getTimeRules(),
-                    menuSelected="rules",
-                    actuators = actuatorsList
-                    )
+        self.set_status(200, 'OK')

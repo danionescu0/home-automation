@@ -71,7 +71,14 @@ class dataContainer:
             'time' : time.isoformat()
         }
 
-        return  self.client.set(self.timeRules, json.dumps(rules))
+        return self.client.set(self.timeRules, json.dumps(rules))
+
+    def deleteTimeRule(self, name):
+        rules = self.__get(self.timeRules)
+        rules.pop(name, None)
+
+        return self.client.set(self.timeRules, json.dumps(rules))
+
 
     def getTimeRules(self):
         rules = self.__get(self.timeRules)
