@@ -7,6 +7,7 @@ class jobControll:
         self.client = redis.StrictRedis(**config)
         self.pubsub = self.client.pubsub()
         self.pubsub.subscribe(self.CHANNEL_NAME)
+
     def listen(self):
         return self.pubsub.listen()
 
