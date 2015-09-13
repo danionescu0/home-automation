@@ -47,7 +47,7 @@ def btSensorsPolling(btSeparator, btBuffer, dataContainer, btComm):
             btBuffer = ''
 
 # the jobManager thread listenes to a redis pub sub server for incoming jobs
-def jobManager(dataContainer, jobControll, homeBrain):
+def jobManager(jobControll, homeBrain):
     while True:
         for job in jobControll.listen():
             if job["data"] == 1:
@@ -73,7 +73,10 @@ def timeRulesControl(dataContainer, homeBrain):
             logging.debug("Changing actuator:", rule)
             homeBrain.changeActuator(rule["actuator"], rule["state"])
 
-
+def burglerMode(homeBrain):
+    while True:
+        time.sleep(60)
+        homeBrain.iterateBurglerMode()
 
 # initiating all threads
 thr1 = threading.Thread(
@@ -89,14 +92,19 @@ thr2 = threading.Thread(
 thr3 = threading.Thread(
     name='jobManager',
     target=jobManager,
-    args=(dataContainer, jobControll, homeBrain)
+    args=(jobControll, homeBrain)
 )
 thr4 = threading.Thread(
     name='timeRulesControl',
     target=timeRulesControl,
     args=(dataContainer, homeBrain)
 )
+thr5 = threading.Thread(
+    name='burglerMode',
+    target=burglerMode,
+    args=(homeBrain,)
+)
 
-for thread in [thr1,  thr2, thr3, thr4]:
+for thread in [thr1,  thr2, thr3, thr4, thr5]:
     thread.start()
 

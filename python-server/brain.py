@@ -1,3 +1,5 @@
+import random
+import datetime
 
 class brain:
     def __init__(self, btComm, serial, dataContainer, emailNotificator):
@@ -5,6 +7,9 @@ class brain:
         self.serial = serial
         self.dataContainer = dataContainer
         self.emailNotificator = emailNotificator
+        self.lastBurglerLight = None
+        self.burglerLights = ['livingLight', 'kitchenLight', 'bedroomLight']
+        self.burglerMaxWaitBetweenActions = 3
 
     def changeActuator(self, actuator, state):
         self.dataContainer.setActuator(actuator, state)
@@ -44,4 +49,29 @@ class brain:
             actuators['window']['state'] = True
             self.dataContainer.setActuator('window', True)
         if actuators['homeAlarm']['state'] == True and name == 'presence' and sensors['presence'] == 1:
-            self.emailNotificator.sendAlert("Cineva a intrat in casa", "Nasol naspa")
+            self.emailNotificator.sendAlert("Cineva a intrat in casa!", "Nasol naspa")
+
+    def iterateBurglerMode(self):
+        actuators = self.dataContainer.getActuators()
+        currentTime = datetime.datetime.now().time()
+        if (currentTime.hour < 16 or currentTime.hour > 22):
+            return
+        if actuators['homeAlarm']['state'] == False:
+            return
+
+        act = random.randint(0, self.burglerMaxWaitBetweenActions)
+        print(act)
+        if act != self.burglerMaxWaitBetweenActions:
+            return
+
+        if self.lastBurglerLight is not None:
+            self.changeActuator(self.lastBurglerLight, False)
+            print("Changing to false")
+            print(self.lastBurglerLight)
+            self.lastBurglerLight = None
+        else:
+            self.lastBurglerLight = self.burglerLights[random.randint(0, 2)]
+            self.changeActuator(self.lastBurglerLight, True)
+            print("Changing to true")
+            print(self.lastBurglerLight)
+
