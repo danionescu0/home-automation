@@ -1,25 +1,27 @@
 
 timeRules = {
-    updateURL: '/time-rules',
+    actionsURL: '/time-rules',
 
     init: function() {
-        this.self = this;
         $( document ).ready(function() {
             $('.datepick').each(function(){
                 $(this).timepicker({timeFormat: 'HH:mm:ss'});
             });
         });
         $( ".action-update" ).click(function() {
-            console.log($(this).closest('tr'));
-            console.log(timeRules);
             timeRules.update($(this).closest('tr'));
+        });
+        $( ".action-delete" ).click(function() {
+            timeRules.delete($(this).closest('tr'));
+        });
+        $( ".new-rule" ).click(function() {
+            $(".add-nwl-rule").show();
         });
     },
 
     update: function(trElem) {
-        //console.log(trElem.find("input[class='rule_name']").val());
         $.ajax({
-            url: this.updateURL,
+            url: this.actionsURL,
             data: {
                 type: 'update',
                 rule: trElem.find("input[name='rule_name']").val(),
@@ -28,7 +30,28 @@ timeRules = {
                 state: trElem.find("select[name='state'] option:selected").val(),
                 time: trElem.find("input[name='time']").val()
             },
-            method: 'POST'
+            method: 'POST',
+            complete: function() {
+                console.log('complete');
+                var tr = trElem.find("input[name='rule_name']").parent().parent();
+                console.log(tr);
+                tr.css({backgroundColor: '#E3AF7B'});
+                tr.animate({backgroundColor:'white'}, 1200);
+            }
+        })
+    },
+
+    delete: function(trElem) {
+        $.ajax({
+            url: this.actionsURL,
+            data: {
+                type: 'delete',
+                rule: trElem.find("input[name='rule_name']").val()
+            },
+            method: 'POST',
+            complete: function() {
+                trElem.find("input[name='rule_name']").parent().parent().remove();
+            }
         })
     }
 };

@@ -33,8 +33,9 @@
             <tbody>
             <form name="allrules" method="POST">
             {% for rule in rules %}
-            <tr class="main-tr">
-                <td><input type="text" name="rule_name" value="{{ rule }}"></td>
+
+            <tr {% if 'template' in rules[rule].keys() %}class="main-tr add-nwl-rule" style="display:none"{% else %} class="main-tr" {% end %}>
+                <td><input type="text" name="rule_name" value="{{ rule }}" {% if 'template' not in rules[rule].keys() %}readonly="true"{% end %}></td>
                 <td>
                     <select name="active">
                         <option value="True" {% if rules[rule]['active'] == True %}SELECTED=SELECTED{% end %}>True</option>
@@ -55,9 +56,18 @@
                     </select>
                 </td>
                 <td><input name="time" id="basic_example_{{ rule }}" type="text" class="datepick" name="date[{{ rule }}]" value="{{ rules[rule]['stringTime'] }}"></td>
-                <td><a class="action-update" href="javascript://">Update</a></td>
+                <td>
+                    {% if 'template' in rules[rule].keys() %}
+                    <a class="action-update" href="javascript://">Add</a>
+                    {% else %}
+                    <a class="action-update" href="javascript://">Upd</a>|<a class="action-delete" href="javascript://">Del</a>
+                    {% end %}
+                </td>
             </tr>
             {% end %}
+            <tr class="main-tr" >
+                <td colspan="6"><a href="javascript://" class="new-rule">Add new rule</a></td>
+            </tr>
             </form>
             </tbody>
         </table>
