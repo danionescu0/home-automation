@@ -6,16 +6,16 @@ import time
 from dateutil import tz
 from datetime import datetime
 
-import homeAutomationCommParser
+import communication
 from brain import brain
 from dataContainer import dataContainer
 from homeAutomationBt import btConnections
 from jobControl import jobControll
+from communication import communication
 from emailNotifier import emailNotifier
 import config
 
-btSeparator = '|'
-btBuffer1 = btBuffer2 = "";
+btBuffer1 = btBuffer2 = ""
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 btComm = btConnections(
@@ -30,17 +30,17 @@ jobControll = jobControll(config.redisConfig)
 serialPort = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
 emailNotif = emailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
 homeBrain = brain(btComm, serialPort, dataContainer, emailNotif)
+communication = communication()
 
 # listens to a bluetooth connection until some data appears
 # the format in which data arives is senzorName:senzorData with pipe separators between
-def btSensorsPolling(btSeparator, btBuffer, dataContainer, btComm):
+def btSensorsPolling(communication, btBuffer, dataContainer, btComm):
     while True:
         data = btComm.recv(10)
         btBuffer += data
-        if btBuffer.endswith(btSeparator):
-            btBuffer = btBuffer[:-1]
+        if communication.isBufferParsable(btBuffer):
             logging.debug("senzors received : " + btBuffer)
-            data = homeAutomationCommParser.parseSensorsString(btBuffer)
+            data = communication.parseSensorsString(btBuffer)
             for key, value in data.iteritems():
                 homeBrain.sensorUpdate(key, value)
             logging.debug(dataContainer.getSensors())
@@ -78,16 +78,27 @@ def burglerMode(homeBrain):
         time.sleep(60)
         homeBrain.iterateBurglerMode()
 
+# Sends an email alert once if a device is desconected
+def radioCommAlert(btComm, emailNotif):
+    while True:
+        time.sleep(30)
+        for btConnection in btComm:
+            try:
+                btComm[btConnection].send('t')
+            except:
+                emailNotif.sendAlert('Device down!', btConnection)
+                raise
+
 # initiating all threads
 thr1 = threading.Thread(
     name='bedroomSenzorPooling',
     target=btSensorsPolling,
-    args=(btSeparator, btBuffer1, dataContainer, btComm['bedroom'])
+    args=(communication, btBuffer1, dataContainer, btComm['bedroom'])
 )
 thr2 = threading.Thread(
     name='livingSenzorPooling',
     target=btSensorsPolling,
-    args=(btSeparator, btBuffer2, dataContainer, btComm['living'])
+    args=(communication, btBuffer2, dataContainer, btComm['living'])
 )
 thr3 = threading.Thread(
     name='jobManager',
@@ -104,7 +115,12 @@ thr5 = threading.Thread(
     target=burglerMode,
     args=(homeBrain,)
 )
+thr6 = threading.Thread(
+    name='radioCommAlert',
+    target=radioCommAlert,
+    args=(btComm, emailNotif)
+)
 
-for thread in [thr1,  thr2, thr3, thr4, thr5]:
+for thread in [thr1,  thr2, thr3, thr4, thr5, thr6]:
     thread.start()
 
