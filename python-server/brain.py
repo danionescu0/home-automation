@@ -1,5 +1,6 @@
 import random
 import datetime
+import subprocess
 
 class brain:
     def __init__(self, btComm, serial, dataContainer, emailNotificator):
@@ -10,6 +11,7 @@ class brain:
         self.lastBurglerLight = None
         self.burglerLights = ['livingLight', 'kitchenLight', 'bedroomLight']
         self.burglerMaxWaitBetweenActions = 3
+        self.burglerSounds = 1
 
     def changeActuator(self, actuator, state):
         self.dataContainer.setActuator(actuator, state)
@@ -63,7 +65,8 @@ class brain:
         print(act)
         if act != self.burglerMaxWaitBetweenActions:
             return
-
+        p = subprocess.Popen(["mpg321", "-a", "bluetooth", "-g", "75", self.__getBurglerSound()], stdout=subprocess.PIPE)
+        p.communicate()
         if self.lastBurglerLight is not None:
             self.changeActuator(self.lastBurglerLight, False)
             print("Changing to false")
@@ -74,4 +77,9 @@ class brain:
             self.changeActuator(self.lastBurglerLight, True)
             print("Changing to true")
             print(self.lastBurglerLight)
+
+    def __getBurglerSound(self):
+        path = "/home/pi/Downloads/p1.mp3"
+
+        return path
 
