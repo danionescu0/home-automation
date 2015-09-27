@@ -6,10 +6,9 @@ import time
 from dateutil import tz
 from datetime import datetime
 
-import communication
 from brain import brain
 from dataContainer import dataContainer
-from homeAutomationBt import btConnections
+from btConnections import btConnections
 from jobControl import jobControll
 from communication import communication
 from emailNotifier import emailNotifier

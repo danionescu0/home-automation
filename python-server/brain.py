@@ -11,7 +11,7 @@ class brain:
         self.lastBurglerLight = None
         self.burglerLights = ['livingLight', 'kitchenLight', 'bedroomLight']
         self.burglerMaxWaitBetweenActions = 3
-        self.burglerSounds = 1
+        self.burglerSounds = 2
 
     def changeActuator(self, actuator, state):
         self.dataContainer.setActuator(actuator, state)
@@ -56,8 +56,6 @@ class brain:
     def iterateBurglerMode(self):
         actuators = self.dataContainer.getActuators()
         currentTime = datetime.datetime.now().time()
-        if (currentTime.hour < 16 or currentTime.hour > 22):
-            return
         if actuators['homeAlarm']['state'] == False:
             return
 
@@ -65,8 +63,11 @@ class brain:
         print(act)
         if act != self.burglerMaxWaitBetweenActions:
             return
-        p = subprocess.Popen(["mpg321", "-a", "bluetooth", "-g", "75", self.__getBurglerSound()], stdout=subprocess.PIPE)
+        p = subprocess.Popen(["mpg321", "-a", "bluetooth", "-g", "80", self.__getBurglerSound()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         p.communicate()
+        if (currentTime.hour < 16 or currentTime.hour > 22):
+            return
+
         if self.lastBurglerLight is not None:
             self.changeActuator(self.lastBurglerLight, False)
             print("Changing to false")
@@ -79,7 +80,8 @@ class brain:
             print(self.lastBurglerLight)
 
     def __getBurglerSound(self):
-        path = "/home/pi/Downloads/p1.mp3"
+        sound = random.randint(1, self.burglerSounds)
+        path = "/home/pi/Downloads/p{}.mp3".format(sound)
 
         return path
 
