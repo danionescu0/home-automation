@@ -1,6 +1,8 @@
 import random
 import datetime
 import subprocess
+from pytz import timezone
+from astral import Astral
 
 class brain:
     def __init__(self, btComm, serial, dataContainer, emailNotificator):
@@ -29,6 +31,9 @@ class brain:
         if actuator == 'kitchenLight':
             self.serial.write("4")
             self.__writeActuatorState(state)
+        if actuator == 'powerSocket1':
+            self.serial.write("8")
+            self.__writeActuatorState(state)
         if actuator == 'window':
             if state:
                self.btComm['bedroom'].send("1")
@@ -55,7 +60,7 @@ class brain:
 
     def iterateBurglerMode(self):
         actuators = self.dataContainer.getActuators()
-        currentTime = datetime.datetime.now().time()
+        currentTime = datetime.datetime.now(timezone('Europe/Bucharest')).time()
         if actuators['homeAlarm']['state'] == False:
             return
 
@@ -63,11 +68,14 @@ class brain:
         print(act)
         if act != self.burglerMaxWaitBetweenActions:
             return
-        p = subprocess.Popen(["mpg321", "-a", "bluetooth", "-g", "80", self.__getBurglerSound()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.communicate()
-        if (currentTime.hour < 16 or currentTime.hour > 22):
-            return
+        astral = Astral()
+        astral.solar_depression = 'civil'
+        sun = astral['Bucharest'].sun(date=datetime.datetime.now(), local=True)
 
+        if currentTime < sun['sunset'].time() or currentTime > datetime.time(22, 30, 00):
+            return
+        p = subprocess.Popen(["mpg321", "-a", "bluetooth", "-g", "150", self.__getBurglerSound()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p.communicate()
         if self.lastBurglerLight is not None:
             self.changeActuator(self.lastBurglerLight, False)
             print("Changing to false")

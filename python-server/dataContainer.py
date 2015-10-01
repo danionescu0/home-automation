@@ -16,6 +16,7 @@ class dataContainer:
             'bedroomLight' : {'state' : False, 'type': 'bi'},
             'kitchenLight' : {'state' : False, 'type': 'bi'},
             'holwayLight' : {'state' : False, 'type': 'bi'},
+            'powerSocket1' : {'state' : False, 'type': 'bi'},
         }
         sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0}
         self.sensorsLastUpdated = 0
