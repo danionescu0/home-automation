@@ -101,7 +101,7 @@ def make_app():
 
     return Application([
             url(
-                r"/actuator/([a-zA-Z]+)/(on|off)",
+                r"/actuator/([a-zA-Z1-9]+)/(on|off)",
                 ActuatorsHandler,
                 dict(dataContainer=dataContainer, jobControll=jobControll),
                 name="actuator-states"
