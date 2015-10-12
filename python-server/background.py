@@ -120,6 +120,6 @@ thr6 = threading.Thread(
     args=(btComm, emailNotif)
 )
 
-for thread in [thr1,  thr2, thr3, thr4, thr5, thr6]:
+for thread in [thr1,  thr2, thr3, thr4, thr5]:
     thread.start()
 
