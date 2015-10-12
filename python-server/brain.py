@@ -1,6 +1,7 @@
 import random
 import datetime
 import subprocess
+import time
 from pytz import timezone
 from astral import Astral
 
@@ -17,6 +18,19 @@ class brain:
 
     def changeActuator(self, actuator, state):
         self.dataContainer.setActuator(actuator, state)
+        if actuator != 'closeAllLights':
+            self.__doChangeActuator(actuator, state)
+            return
+
+        allActuators = self.dataContainer.getActuators()
+        if propreties['device'] == 'light':
+            self.dataContainer.setActuator(name, False)
+            self.__doChangeActuator(name, False)
+            time.sleep(3)
+        for name, propreties in allActuators.iteritems():
+            pass
+
+    def __doChangeActuator(self, actuator, state):
         if actuator == 'door':
             self.btComm['holway'].send("O")
         if actuator == 'livingLight':
@@ -74,7 +88,8 @@ class brain:
 
         if currentTime < sun['sunset'].time() or currentTime > datetime.time(22, 30, 00):
             return
-        p = subprocess.Popen(["mpg321", "-a", "bluetooth", "-g", "150", self.__getBurglerSound()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(["mpg321", "-a", "bluetooth", "-g", "150:D"
+                                                                 "", self.__getBurglerSound()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         p.communicate()
         if self.lastBurglerLight is not None:
             self.changeActuator(self.lastBurglerLight, False)

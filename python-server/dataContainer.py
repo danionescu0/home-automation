@@ -9,14 +9,15 @@ class dataContainer:
     def __init__(self, config):
         self.client = redis.StrictRedis(**config)
         actuators = {
-            'door' : {'state' : False, 'type': 'single'},
-            'homeAlarm' : {'state' : False, 'type': 'bi'},
-            'window' : {'state' : False, 'type': 'bi'},
-            'livingLight' : {'state' : False, 'type': 'bi'},
-            'bedroomLight' : {'state' : False, 'type': 'bi'},
-            'kitchenLight' : {'state' : False, 'type': 'bi'},
-            'holwayLight' : {'state' : False, 'type': 'bi'},
-            'powerSocket1' : {'state' : False, 'type': 'bi'},
+            'door' : {'state' : False, 'type': 'single', 'device': 'door'},
+            'homeAlarm' : {'state' : False, 'type': 'bi', 'device': 'action'},
+            'window' : {'state' : False, 'type': 'bi', 'device' : 'window'},
+            'closeAllLights' : {'state' : False, 'type': 'single', 'device': 'action'},
+            'livingLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
+            'bedroomLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
+            'kitchenLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
+            'holwayLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
+            'powerSocket1' : {'state' : False, 'type': 'bi', 'device' : 'powerSocket'},
         }
         sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0}
         self.sensorsLastUpdated = 0
