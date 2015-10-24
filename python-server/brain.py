@@ -23,12 +23,12 @@ class brain:
             return
 
         allActuators = self.dataContainer.getActuators()
-        if propreties['device'] == 'light':
-            self.dataContainer.setActuator(name, False)
-            self.__doChangeActuator(name, False)
-            time.sleep(3)
+
         for name, propreties in allActuators.iteritems():
-            pass
+            if propreties['device'] == 'light':
+                self.dataContainer.setActuator(name, False)
+                self.__doChangeActuator(name, False)
+                time.sleep(3)
 
     def __doChangeActuator(self, actuator, state):
         if actuator == 'door':
