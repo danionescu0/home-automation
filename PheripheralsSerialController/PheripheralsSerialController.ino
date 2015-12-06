@@ -43,11 +43,10 @@ void loop()
     }
     uint8_t buf[VW_MAX_MESSAGE_LEN];
     uint8_t buflen = VW_MAX_MESSAGE_LEN;
-    if (vw_get_message(buf, &buflen))
-    {
-	if(buf[0] == 's') {
-            printBuf(buf);
-        }
+    if (vw_get_message(buf, &buflen)) {
+  	  if(buf[0] == 's') {
+              printBuf(buf);
+          }
     }  
 }
 
