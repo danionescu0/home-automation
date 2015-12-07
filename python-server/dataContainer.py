@@ -12,6 +12,7 @@ class dataContainer:
             'door' : {'state' : False, 'type': 'single', 'device': 'door'},
             'homeAlarm' : {'state' : False, 'type': 'bi', 'device': 'action'},
             'window' : {'state' : False, 'type': 'bi', 'device' : 'window'},
+            'windowNodgeDown' : {'state' : False, 'type': 'single', 'device' : 'window'},
             'closeAllLights' : {'state' : False, 'type': 'single', 'device': 'action'},
             'livingLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
             'bedroomLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
