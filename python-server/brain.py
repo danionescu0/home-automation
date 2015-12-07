@@ -23,12 +23,12 @@ class brain:
             return
 
         allActuators = self.dataContainer.getActuators()
-        if propreties['device'] == 'light':
-            self.dataContainer.setActuator(name, False)
-            self.__doChangeActuator(name, False)
-            time.sleep(3)
+
         for name, propreties in allActuators.iteritems():
-            pass
+            if propreties['device'] == 'light':
+                self.dataContainer.setActuator(name, False)
+                self.__doChangeActuator(name, False)
+                time.sleep(3)
 
     def __doChangeActuator(self, actuator, state):
         if actuator == 'door':
@@ -48,6 +48,8 @@ class brain:
         if actuator == 'powerSocket1':
             self.serial.write("8")
             self.__writeActuatorState(state)
+        if actuator == 'windowNodgeDown':
+            self.btComm['bedroom'].send("2")
         if actuator == 'window':
             if state:
                self.btComm['bedroom'].send("1")
