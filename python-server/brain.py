@@ -48,13 +48,16 @@ class brain:
         if actuator == 'powerSocket1':
             self.serial.write("8")
             self.__writeActuatorState(state)
+        if actuator == 'livingCourtains':
+            self.serial.write("9")
+            self.__writeActuatorState(state)
         if actuator == 'windowNodgeDown':
             self.btComm['bedroom'].send("2")
         if actuator == 'window':
             if state:
-               self.btComm['bedroom'].send("1")
+                self.btComm['bedroom'].send("1")
             else:
-               self.btComm['bedroom'].send("0")
+                self.btComm['bedroom'].send("0")
 
     def __writeActuatorState(self, state):
         if (state):
