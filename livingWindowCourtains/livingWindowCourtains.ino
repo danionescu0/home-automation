@@ -7,11 +7,13 @@ const int courtain1dirPin2 = 6;
 const int courtain2dirPin1 = 7;
 const int courtain2dirPin2 = 8;
 const int courtain1EnablePin = 3;
-const int courtain2EnablePin = 4;
+const int courtain2EnablePin = 9;
 const unsigned long openRcState = 1397845;
 const unsigned long closedRcState = 1397844;
-const unsigned int onStateMillis = 34000;
+const unsigned int onStateMillis = 36000;
 const unsigned int offStateMillis = 38000;
+const int courtain1PWM = 210;
+const int courtain2PWM = 252;
 
 void setup() 
 {
@@ -50,8 +52,8 @@ void toggleState(unsigned long rcCode)
         digitalWrite(courtain1dirPin2, LOW);   
         digitalWrite(courtain2dirPin1, HIGH);
         digitalWrite(courtain2dirPin2, LOW);
-        digitalWrite(courtain1EnablePin, HIGH);    
-        digitalWrite(courtain2EnablePin, HIGH);
+        analogWrite(courtain1EnablePin, courtain1PWM);
+        analogWrite(courtain2EnablePin, courtain2PWM);
         delay(onStateMillis);                    
     } else if (rcCode == closedRcState) {
          Serial.println("off");
@@ -59,8 +61,8 @@ void toggleState(unsigned long rcCode)
         digitalWrite(courtain1dirPin2, HIGH);   
         digitalWrite(courtain2dirPin1, LOW);
         digitalWrite(courtain2dirPin2, HIGH);
-        digitalWrite(courtain1EnablePin, HIGH);    
-        digitalWrite(courtain2EnablePin, HIGH);
+        analogWrite(courtain1EnablePin, courtain1PWM);
+        analogWrite(courtain2EnablePin, courtain2PWM);        
         delay(offStateMillis);                    
     } 
     digitalWrite(courtain1EnablePin, LOW);    
