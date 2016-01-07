@@ -1,6 +1,4 @@
-#include <RCSwitch.h>
-
-RCSwitch mySwitch = RCSwitch();
+#include <SoftwareSerial.h>
 
 const int courtain1dirPin1 = 5;
 const int courtain1dirPin2 = 6;
@@ -8,16 +6,18 @@ const int courtain2dirPin1 = 7;
 const int courtain2dirPin2 = 8;
 const int courtain1EnablePin = 3;
 const int courtain2EnablePin = 9;
-const unsigned long openRcState = 1397845;
-const unsigned long closedRcState = 1397844;
-const unsigned int onStateMillis = 36000;
-const unsigned int offStateMillis = 38000;
+const unsigned long onState = 1;
+const unsigned long offState = 0;
+const unsigned int changeStateMillis = 40000;
 const int courtain1PWM = 210;
 const int courtain2PWM = 252;
+
+SoftwareSerial bluetooth(10, 11); // RX, TX
 
 void setup() 
 {
     Serial.begin(9600);
+    bluetooth.begin(9600);
     pinMode(courtain1dirPin1, OUTPUT);
     pinMode(courtain1dirPin2 , OUTPUT);
     pinMode(courtain1EnablePin, OUTPUT);
@@ -29,42 +29,41 @@ void setup()
     pinMode(courtain2EnablePin, OUTPUT);
     digitalWrite(courtain2dirPin1, HIGH);
     digitalWrite(courtain2dirPin2, LOW);
-    digitalWrite(courtain2EnablePin, LOW);    
-    mySwitch.enableReceive(0);
+    digitalWrite(courtain2EnablePin, LOW);   
+    Serial.println("done with init");
+    bluetooth.println("test");
 }
 
 void loop() 
 {
-  if (mySwitch.available()) {    
-      unsigned long value = mySwitch.getReceivedValue();
-      Serial.println(value);
+  if (bluetooth.available() > 0) {   
+      int received = bluetooth.read() - 48;
+      Serial.println(received);   
       delay(100);
-      toggleState(value);
-      mySwitch.resetAvailable();    
+      toggleState(received);  
   } 
 }
 
-void toggleState(unsigned long rcCode)
+void toggleState(int received)
 {
-    if (rcCode == openRcState) {
+    if (received == onState) {
         Serial.println("on");
         digitalWrite(courtain1dirPin1, HIGH);
         digitalWrite(courtain1dirPin2, LOW);   
         digitalWrite(courtain2dirPin1, HIGH);
         digitalWrite(courtain2dirPin2, LOW);
         analogWrite(courtain1EnablePin, courtain1PWM);
-        analogWrite(courtain2EnablePin, courtain2PWM);
-        delay(onStateMillis);                    
-    } else if (rcCode == closedRcState) {
-         Serial.println("off");
+        analogWrite(courtain2EnablePin, courtain2PWM);                  
+    } else if (received == offState) {
+        Serial.println("off");
         digitalWrite(courtain1dirPin1, LOW);
         digitalWrite(courtain1dirPin2, HIGH);   
         digitalWrite(courtain2dirPin1, LOW);
         digitalWrite(courtain2dirPin2, HIGH);
         analogWrite(courtain1EnablePin, courtain1PWM);
-        analogWrite(courtain2EnablePin, courtain2PWM);        
-        delay(offStateMillis);                    
+        analogWrite(courtain2EnablePin, courtain2PWM);                            
     } 
+    delay(changeStateMillis);    
     digitalWrite(courtain1EnablePin, LOW);    
     digitalWrite(courtain2EnablePin, LOW);    
 }
