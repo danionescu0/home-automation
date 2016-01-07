@@ -31,12 +31,12 @@ void setup()
 void loop() 
 {
   if (mySerial.available() > 0) {
-    int received = mySerial.read() - 48;
-    Serial.println(received);    
-    if (received >= 0 && received <= 4) {
-        Serial.println("Mooving");
-        moveWindow(received);
-    }  
+      int received = mySerial.read() - 48;
+      Serial.println(received);    
+      if (received >= 0 && received <= 4) {
+          Serial.println("Mooving");
+          moveWindow(received);
+      }  
   }  
   if (millis() - timeLastReadRainSenzor >= checkRainInterval) {
       sendRainInfo();
