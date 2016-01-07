@@ -14,12 +14,13 @@ from communication import communication
 from emailNotifier import emailNotifier
 import config
 
-btBuffer1 = btBuffer2 = ""
+btBuffer1 = btBuffer2 = btBuffer3 = ""
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 btComm = btConnections(
     config.btConns['bedroom'],
     config.btConns['living'],
+    config.btConns['balcony'],
     config.btConns['holway'])\
     .connectAllBt()
 logging.debug('Finished connectiong to BT devices')
@@ -114,12 +115,16 @@ thr5 = threading.Thread(
     target=burglerMode,
     args=(homeBrain,)
 )
+# thr6 = threading.Thread(
+#     name='radioCommAlert',
+#     target=radioCommAlert,
+#     args=(btComm, emailNotif)
+# )
 thr6 = threading.Thread(
-    name='radioCommAlert',
-    target=radioCommAlert,
-    args=(btComm, emailNotif)
+    name='balconySenzorPooling',
+    target=btSensorsPolling,
+    args=(communication, btBuffer3, dataContainer, btComm['balcony'])
 )
-
-for thread in [thr1,  thr2, thr3, thr4, thr5]:
+for thread in [thr1,  thr2, thr3, thr4, thr5, thr6]:
     thread.start()
 
