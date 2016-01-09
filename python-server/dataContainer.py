@@ -4,6 +4,7 @@ from datetime import datetime
 import calendar
 import random
 import math
+import collections
 
 class dataContainer:
     def __init__(self, config):
@@ -47,7 +48,9 @@ class dataContainer:
 
     def getActuators(self, justNames = False):
         if not justNames:
-            return self.__get('actuators')
+            actuators = self.__get('actuators')
+            return collections.OrderedDict(sorted(actuators.items()))
+            # return self.__get('actuators')
 
         actuators = self.__get('actuators')
         actuatorNames = []
