@@ -6,18 +6,49 @@ class btConnections:
         self.livingBtString = livingBtString
         self.balconyString = balconyString
         self.holwayBtString = holwayBtString
+        self.connectionMapping = {
+            'bedroom':   self.bedroomBtString,
+            'living':    self.livingBtString,
+            'balcony':   self.balconyString,
+            'holway':    self.holwayBtString,
+        }
 
-    def connnectToBluetooth(self, id, ch):
+    def sendToBluetooth(self, which, value):
+        try:
+            self.btConnections[which].send(value)
+        except bluetooth.btcommon.BluetoothError as error:
+            return self.__reconnectBluetooth(which)
+
+        return True
+
+    def reciveFromBluetooth(self, which, howMuch):
+        try:
+            return self.btConnections[which].recv(howMuch)
+        except bluetooth.btcommon.BluetoothError as error:
+            self.__reconnectBluetooth(which)
+
+        return False
+
+
+    def connectAllBt(self):
+        self.btConnections = {
+            'bedroom':   self.__connnectToBluetooth(self.bedroomBtString, 1),
+            'living':    self.__connnectToBluetooth(self.livingBtString, 1),
+            'balcony':   self.__connnectToBluetooth(self.balconyString, 1),
+            'holway':     self.__connnectToBluetooth(self.holwayBtString, 1)
+        }
+
+    def __reconnectBluetooth(self, which):
+        try:
+            self.btConnections[which] = self.__connnectToBluetooth(self.connectionMapping[which], 1)
+        except bluetooth.btcommon.BluetoothError as error:
+            return False
+
+        return True
+
+    def __connnectToBluetooth(self, id, ch):
         bt = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         bt.settimeout(None)
         bt.connect((id, ch))
 
         return bt
-
-    def connectAllBt(self):
-        return {
-            'bedroom':   self.connnectToBluetooth(self.bedroomBtString, 1),
-            'living':    self.connnectToBluetooth(self.livingBtString, 1),
-            'balcony':   self.connnectToBluetooth(self.balconyString, 1),
-            'holway':     self.connnectToBluetooth(self.holwayBtString, 1)
-        }
