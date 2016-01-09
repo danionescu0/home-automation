@@ -32,7 +32,7 @@ class brain:
 
     def __doChangeActuator(self, actuator, state):
         if actuator == 'door':
-            self.btComm['holway'].send("O")
+            self.btComm.sendToBluetooth('holway', 'O')
         if actuator == 'livingLight':
             self.serial.write("1")
             self.__writeActuatorState(state)
@@ -50,16 +50,16 @@ class brain:
             self.__writeActuatorState(state)
         if actuator == 'livingCourtains':
             if state:
-                self.btComm['balcony'].send("1")
+                self.btComm.sendToBluetooth('balcony', '1')
             else:
-                self.btComm['balcony'].send("0")
+                self.btComm.sendToBluetooth('balcony', '0')
         if actuator == 'windowNodgeDown':
-            self.btComm['bedroom'].send("2")
+            self.btComm.sendToBluetooth('bedroom', '2')
         if actuator == 'window':
             if state:
-                self.btComm['bedroom'].send("1")
+                self.btComm.sendToBluetooth('bedroom', '1')
             else:
-                self.btComm['bedroom'].send("0")
+                self.btComm.sendToBluetooth('bedroom', '0')
 
     def __writeActuatorState(self, state):
         if (state):
@@ -73,7 +73,7 @@ class brain:
         sensors = self.dataContainer.getSensors()
         actuators = self.dataContainer.getActuators()
         if name == 'rain' and sensors['rain'] > 40 and actuators['window']['state'] == False:
-            self.btComm['bedroom'].send("1")
+            self.btComm.sendToBluetooth('bedroom', '1')
             actuators['window']['state'] = True
             self.dataContainer.setActuator('window', True)
         if actuators['homeAlarm']['state'] == True and name == 'presence' and sensors['presence'] == 1:
