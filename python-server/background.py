@@ -109,9 +109,9 @@ thr5 = threading.Thread(
     args=(homeBrain,)
 )
 thr6 = threading.Thread(
-    name='balconySenzorPooling',
+    name='holwaySenzorPooling',
     target=btSensorsPolling,
-    args=(communication, btBuffer3, dataContainer, btComm, 'balcony')
+    args=(communication, btBuffer3, dataContainer, btComm, 'holway')
 )
 for thread in [thr1,  thr2, thr3, thr4, thr5, thr6]:
     thread.start()
