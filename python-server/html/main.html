@@ -16,15 +16,14 @@
       <div class="row marketing">
         <h4>Buttons</h4>
          <table class="table">
-
             <tbody>
                 <tr>
-                    {% for actuator in actuators %}
-                    <td>
-                        {% if actuators[actuator]['type'] != 'bi' %}
-                            <a href="/actuator/{{ actuator }}/on">{{ actuator }}</a>
-                        {% end %}
-                    </td>
+                {% for actuator in actuators %}
+                    {% if actuators[actuator]['type'] != 'bi' %}
+                        <td>
+                                <a href="/actuator/{{ actuator }}/on">{{ actuator }}</a>
+                        </td>
+                    {% end %}
                     {% end %}
                 </tr>
             </tbody>
