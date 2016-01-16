@@ -50,7 +50,6 @@ class dataContainer:
         if not justNames:
             actuators = self.__get('actuators')
             return collections.OrderedDict(sorted(actuators.items()))
-            # return self.__get('actuators')
 
         actuators = self.__get('actuators')
         actuatorNames = []
