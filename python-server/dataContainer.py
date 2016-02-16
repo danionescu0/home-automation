@@ -22,7 +22,7 @@ class dataContainer:
             'powerSocket1' : {'state' : False, 'type': 'bi', 'device' : 'powerSocket'},
             'livingCourtains' : {'state' : False, 'type': 'bi', 'device' : 'livingCourtains'},
         }
-        sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0}
+        sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0, 'airQuality' : 0}
         self.sensorsLastUpdated = 0
         self.keys = {'actuators' : actuators, 'sensors' : sensors, 'time_rules': {}}
         self.updateThresholdSeconds = 300
