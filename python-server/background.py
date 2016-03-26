@@ -29,7 +29,7 @@ dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
 serialPort = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
 emailNotif = emailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
-homeBrain = brain(btComm, serialPort, dataContainer, emailNotif)
+homeBrain = brain(btComm, config.burglerSoundsFolder, dataContainer, emailNotif)
 communication = communication()
 
 # listens to a bluetooth connection until some data appears
@@ -71,7 +71,10 @@ def timeRulesControl(dataContainer, homeBrain):
         initialDate = datetime.now().replace(tzinfo=from_zone)
         bucharestDate = initialDate.astimezone(to_zone)
         currentTime = bucharestDate.strftime('%H:%M:00')
+
         for key, rule in rules.iteritems():
+            logging.debug(rule['stringTime'])
+            logging.debug(currentTime)
             if rule['stringTime'] != currentTime or rule['active'] != True:
                 continue
             logging.debug("Changing actuator:", rule)

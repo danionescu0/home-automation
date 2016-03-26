@@ -6,9 +6,9 @@ from pytz import timezone
 from astral import Astral
 
 class brain:
-    def __init__(self, btComm, serial, dataContainer, emailNotificator):
+    def __init__(self, btComm, burglerSoundsFolder, dataContainer, emailNotificator):
         self.btComm = btComm
-        self.serial = serial
+        self.burglerSoundsFolder = burglerSoundsFolder
         self.dataContainer = dataContainer
         self.emailNotificator = emailNotificator
         self.lastBurglerLight = None
@@ -34,19 +34,19 @@ class brain:
         if actuator == 'door':
             self.btComm.sendToBluetooth('holway', 'O')
         if actuator == 'livingLight':
-            self.serial.write("1")
+            self.btComm.sendToBluetooth('living', '1')
             self.__writeActuatorState(state)
         if actuator == 'bedroomLight':
-            self.serial.write("2")
+            self.btComm.sendToBluetooth('living', '2')
             self.__writeActuatorState(state)
         if actuator == 'holwayLight':
-            self.serial.write("3")
+            self.btComm.sendToBluetooth('living', '3')
             self.__writeActuatorState(state)
         if actuator == 'kitchenLight':
-            self.serial.write("4")
+            self.btComm.sendToBluetooth('living', '4')
             self.__writeActuatorState(state)
         if actuator == 'powerSocket1':
-            self.serial.write("8")
+            self.btComm.sendToBluetooth('living', '8')
             self.__writeActuatorState(state)
         if actuator == 'livingCourtains':
             if state:
@@ -63,10 +63,10 @@ class brain:
 
     def __writeActuatorState(self, state):
         if (state):
-            self.serial.write("O")
+            self.btComm.sendToBluetooth('living', 'O')
         else:
-            self.serial.write("C")
-        self.serial.write("|");
+            self.btComm.sendToBluetooth('living', 'C')
+        self.btComm.sendToBluetooth('living', '|')
 
     def sensorUpdate(self, name, value):
         self.dataContainer.setSensor(name, value)
@@ -111,7 +111,7 @@ class brain:
 
     def __getBurglerSound(self):
         sound = random.randint(1, self.burglerSounds)
-        path = "/home/pi/Downloads/p{}.mp3".format(sound)
+        path = "{}/p{}.mp3".format(self.burglerSoundsFolder, sound)
 
         return path
 

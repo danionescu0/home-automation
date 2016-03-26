@@ -1,36 +1,45 @@
 #include <Livolo.h>
 #include <RCSwitch.h>
+#include <SoftwareSerial.h>
 
 Livolo livolo(8); // transmitter connected to pin #8
 RCSwitch mySwitch = RCSwitch();
+SoftwareSerial mySerial(9, 10); // RX, TX
 
+const int transmitterPowerPin = 7;
+const int rcSwitchPin = 8;
 const int lightsOffCode = 106;
 const int lightsToggleCode = 120;
 char *controller;
 char buffer[] = {' ',' ',' ',' ',' ',' ',' '};
 
-int switches[5] =
+int switches[7] =
           {
-            0, 6400, 6410, 6420, 6430
+            0, 6400, 6410, 6420, 6430, 6440, 6450
           };
+          
 void setup() 
 {
     Serial.begin(9600);
-    Serial.setTimeout(200);
-    mySwitch.enableTransmit(8);
+    mySerial.begin(9600);
+    mySerial.setTimeout(70);    
+    mySwitch.enableTransmit(rcSwitchPin);
+    pinMode(transmitterPowerPin, OUTPUT);
+    digitalWrite(transmitterPowerPin, HIGH);
+    Serial.println("Init done");
 }
 
 void loop() 
 {
-    if (Serial.available()) {
-      while (!Serial.available()); // Wait for characters
-      Serial.readBytesUntil('|', buffer, 7);  
+    if (mySerial.available()) {
+      while (!mySerial.available()); // Wait for characters
+      mySerial.readBytesUntil('|', buffer, 7);  
       Serial.write((int) buffer[0]);
       if (buffer[0] <= 57 && buffer[0] >= 56) {
           //power sockets begining with digit 8 ending with 9
           powerSocket(buffer);
-      } else if (buffer[0] <= 52 && buffer[0] >= 49) {
-          // light switch beinging with digit 1 ending with 4
+      } else if (buffer[0] <= 54 && buffer[0] >= 49) {
+          // light switch beinging with digit 1 ending with 6
           lightSwitch(buffer);
       }
       delay(10);  
@@ -40,6 +49,7 @@ void loop()
 void powerSocket(char buffer[]) 
 {
     Serial.println("Computing power socker, and anything with rc switch lib");
+    //digitalWrite(transmitterPowerPin, HIGH);
     switch (buffer[0]) {
         case '8':
             if (buffer[1] == 'O') {
@@ -56,10 +66,12 @@ void powerSocket(char buffer[])
             }
             break;            
     }
+    //digitalWrite(transmitterPowerPin, LOW);
 }
 
 void lightSwitch(char buffer[])
 {
+    //digitalWrite(transmitterPowerPin, HIGH);
     Serial.println("computing light switch");
     String convert;
     convert = convert + buffer[0];
@@ -74,14 +86,5 @@ void lightSwitch(char buffer[])
         livolo.sendButton(remoteCode, lightsToggleCode);
     }     
     delay(100);
-}
-
-void printBuf(uint8_t *buf) 
-{
-    for (byte i = 0; i < 3; i++) {
-        Serial.print(buf[i]);
-        Serial.print(",");
-    }
-    Serial.println();
-    delay(30);
+    //digitalWrite(transmitterPowerPin, LOW);
 }
