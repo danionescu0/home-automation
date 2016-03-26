@@ -1,0 +1,83 @@
+{% extends "../html/base.html" %}
+{% block scripts %}
+    {% autoescape None %}
+    <link href="/public/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+    <script src="/public/js/jquery-ui-timepicker-addon.js"></script>
+    <script src="/public/js/timeRules.js"></script>
+
+{% end %}
+{% block body %}
+    <div class="container">
+     {% include "../html/menu.html" %}
+
+      <div class="jumbotron">
+        <h2>Time rules management</h2>
+      </div>
+
+      <div id="main-div" class="row marketing">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Rule name</th>
+                    <th>Active</th>
+                    <th>Actuator name</th>
+                    <th>Actuator state</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <form name="allrules" method="POST">
+            {% for rule in rules %}
+
+            <tr {% if 'template' in rules[rule].keys() %}class="main-tr add-nwl-rule" style="display:none"{% else %} class="main-tr" {% end %}>
+                <td><input type="text" name="rule_name" value="{{ rule }}" {% if 'template' not in rules[rule].keys() %}readonly="true"{% end %}></td>
+                <td>
+                    <select name="active">
+                        <option value="True" {% if rules[rule]['active'] == True %}SELECTED=SELECTED{% end %}>True</option>
+                        <option value="False" {% if rules[rule]['active'] == False %}SELECTED=SELECTED{% end %}>False</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="actuator">
+                    {% for actuator in actuators %}
+                        <option value="{{ actuator }}" {% if rules[rule]['actuator'] == actuator %}SELECTED=SELECTED{% end %}>{{ actuator }}</option>
+                    {% end %}
+                    </select>
+                </td>
+                <td>
+                    <select name="state">
+                        <option value="True" {% if rules[rule]['state'] == True %}SELECTED=SELECTED{% end %}>True</option>
+                        <option value="False" {% if rules[rule]['state'] == False %}SELECTED=SELECTED{% end %}>False</option>
+                    </select>
+                </td>
+                <td><input name="time" id="basic_example_{{ rule }}" type="text" class="datepick" name="date[{{ rule }}]" value="{{ rules[rule]['stringTime'] }}"></td>
+                <td>
+                    {% if 'template' in rules[rule].keys() %}
+                    <a class="action-update" href="javascript://">Add</a>
+                    {% else %}
+                    <a class="action-update" href="javascript://">Upd</a>|<a class="action-delete" href="javascript://">Del</a>
+                    {% end %}
+                </td>
+            </tr>
+            {% end %}
+            <tr class="main-tr" >
+                <td colspan="6"><a href="javascript://" class="new-rule">Add new rule</a></td>
+            </tr>
+            </form>
+            </tbody>
+        </table>
+        </div>
+
+      </div>
+
+      <footer class="footer">
+        <p>Smecherie</p>
+      </footer>
+
+    </div> <!-- /container -->
+{% end %}
