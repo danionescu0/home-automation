@@ -9,6 +9,7 @@
 * bluetooth connection strings for the three devices
 * redis port, host and default database nr
 * email address and password for notifications
+* path for burgler alarm sounds
 
 # configure bluetooth
 ### serial: http://www.uugear.com/portfolio/bluetooth-communication-between-raspberry-pi-and-arduino/

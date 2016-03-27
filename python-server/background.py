@@ -14,14 +14,16 @@ from communication import communication
 from emailNotifier import emailNotifier
 import config
 
-btBuffer1 = btBuffer2 = btBuffer3 = ""
+btBuffer1 = btBuffer2 = btBuffer3 = btBuffer4 = ""
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 btComm = btConnections(
     config.btConns['bedroom'],
     config.btConns['living'],
     config.btConns['balcony'],
-    config.btConns['holway'])
+    config.btConns['holway'],
+    config.btConns['fingerprint']
+)
 btComm.connectAllBt()
 logging.debug('Finished connectiong to BT devices')
 
@@ -116,6 +118,11 @@ thr6 = threading.Thread(
     target=btSensorsPolling,
     args=(communication, btBuffer3, dataContainer, btComm, 'holway')
 )
-for thread in [thr1,  thr2, thr3, thr4, thr5, thr6]:
+thr7 = threading.Thread(
+    name='fingerprintPooling',
+    target=btSensorsPolling,
+    args=(communication, btBuffer4, dataContainer, btComm, 'fingerprint')
+)
+for thread in [thr1,  thr2, thr3, thr4, thr5, thr6, thr7]:
     thread.start()
 

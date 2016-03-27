@@ -1,16 +1,18 @@
 import bluetooth
 
 class btConnections:
-    def __init__(self, bedroomBtString, livingBtString, balconyString, holwayBtString):
+    def __init__(self, bedroomBtString, livingBtString, balconyString, holwayBtString, fingerprintBtString):
         self.bedroomBtString = bedroomBtString
         self.livingBtString = livingBtString
         self.balconyString = balconyString
         self.holwayBtString = holwayBtString
+        self.fingerprintBtString = fingerprintBtString
         self.connectionMapping = {
-            'bedroom':   self.bedroomBtString,
-            'living':    self.livingBtString,
-            'balcony':   self.balconyString,
-            'holway':    self.holwayBtString,
+            'bedroom':      self.bedroomBtString,
+            'living':       self.livingBtString,
+            'balcony':      self.balconyString,
+            'holway':       self.holwayBtString,
+            'fingerprint':  self.fingerprintBtString
         }
 
     def sendToBluetooth(self, which, value):
@@ -32,10 +34,11 @@ class btConnections:
 
     def connectAllBt(self):
         self.btConnections = {
-            'bedroom':   self.__connnectToBluetooth(self.bedroomBtString, 1),
-            'living':    self.__connnectToBluetooth(self.livingBtString, 1),
-            'balcony':   self.__connnectToBluetooth(self.balconyString, 1),
-            'holway':     self.__connnectToBluetooth(self.holwayBtString, 1)
+            'bedroom':      self.__connnectToBluetooth(self.bedroomBtString, 1),
+            'living':       self.__connnectToBluetooth(self.livingBtString, 1),
+            'balcony':      self.__connnectToBluetooth(self.balconyString, 1),
+            'holway':       self.__connnectToBluetooth(self.holwayBtString, 1),
+            'fingerprint':  self.__connnectToBluetooth(self.fingerprintBtString, 1)
         }
 
     def __reconnectBluetooth(self, which):
