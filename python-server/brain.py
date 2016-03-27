@@ -45,6 +45,12 @@ class brain:
         if actuator == 'kitchenLight':
             self.btComm.sendToBluetooth('living', '4')
             self.__writeActuatorState(state)
+        if actuator == 'closetLight':
+            self.btComm.sendToBluetooth('living', '5')
+            self.__writeActuatorState(state)
+        if actuator == 'balconyLight':
+            self.btComm.sendToBluetooth('living', '6')
+            self.__writeActuatorState(state)
         if actuator == 'powerSocket1':
             self.btComm.sendToBluetooth('living', '8')
             self.__writeActuatorState(state)
@@ -68,6 +74,7 @@ class brain:
             self.btComm.sendToBluetooth('living', 'C')
         self.btComm.sendToBluetooth('living', '|')
 
+    # Contains sensors triggers, when values changes
     def sensorUpdate(self, name, value):
         self.dataContainer.setSensor(name, value)
         sensors = self.dataContainer.getSensors()
@@ -78,6 +85,8 @@ class brain:
             self.dataContainer.setActuator('window', True)
         if actuators['homeAlarm']['state'] == True and name == 'presence' and sensors['presence'] == 1:
             self.emailNotificator.sendAlert("Cineva a intrat in casa!", "Nasol naspa")
+        if name == 'fingerprint' and sensors['fingerprint'] > -1:
+            self.btComm.sendToBluetooth('holway', 'O')
 
     def iterateBurglerMode(self):
         actuators = self.dataContainer.getActuators()

@@ -19,10 +19,13 @@ class dataContainer:
             'bedroomLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
             'kitchenLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
             'holwayLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
+            'closetLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
+            'balconyLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
             'powerSocket1' : {'state' : False, 'type': 'bi', 'device' : 'powerSocket'},
             'livingCourtains' : {'state' : False, 'type': 'bi', 'device' : 'livingCourtains'},
         }
-        sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0, 'airQuality' : 0}
+        sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0, 'airQuality' : 0,
+                    'fingerprint' : -1}
         self.sensorsLastUpdated = 0
         self.keys = {'actuators' : actuators, 'sensors' : sensors, 'time_rules': {}}
         self.updateThresholdSeconds = 300
