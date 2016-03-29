@@ -3,6 +3,7 @@ import threading
 import logging
 import json
 import time
+import sys
 from dateutil import tz
 from datetime import datetime
 
@@ -14,7 +15,8 @@ from communication import communication
 from emailNotifier import emailNotifier
 import config
 
-btBuffer1 = btBuffer2 = btBuffer3 = btBuffer4 = ""
+bluetoothBuffers = ['' for x in range(4)]
+
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 btComm = btConnections(
@@ -75,8 +77,6 @@ def timeRulesControl(dataContainer, homeBrain):
         currentTime = bucharestDate.strftime('%H:%M:00')
 
         for key, rule in rules.iteritems():
-            logging.debug(rule['stringTime'])
-            logging.debug(currentTime)
             if rule['stringTime'] != currentTime or rule['active'] != True:
                 continue
             logging.debug("Changing actuator:", rule)
@@ -88,42 +88,36 @@ def burglerMode(homeBrain):
         homeBrain.iterateBurglerMode()
 
 # initiating all threads
-thr1 = threading.Thread(
-    name='bedroomSenzorPooling',
-    target=btSensorsPolling,
-    args=(communication, btBuffer1, dataContainer, btComm, 'bedroom')
-)
-thr2 = threading.Thread(
-    name='livingSenzorPooling',
-    target=btSensorsPolling,
-    args=(communication, btBuffer2, dataContainer, btComm, 'living')
-)
-thr3 = threading.Thread(
+poolingThreads = [
+    {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom', 'buffer': bluetoothBuffers[1]},
+    {'name' : 'livingSenzorPooling', 'deviceName' : 'living', 'buffer': bluetoothBuffers[2]},
+    {'name' : 'holwaySenzorPooling', 'deviceName' : 'holway', 'buffer': bluetoothBuffers[3]},
+    # {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom'},
+]
+
+for threadData in poolingThreads:
+    threading.Thread(
+        name=threadData['name'],
+        target=btSensorsPolling,
+        args=(communication, threadData['buffer'], dataContainer, btComm, threadData['deviceName'])
+    ).start()
+
+threading.Thread(
     name='jobManager',
     target=jobManager,
     args=(jobControll, homeBrain)
-)
-thr4 = threading.Thread(
+).start()
+
+threading.Thread(
     name='timeRulesControl',
     target=timeRulesControl,
     args=(dataContainer, homeBrain)
-)
+).start()
+
 thr5 = threading.Thread(
     name='burglerMode',
     target=burglerMode,
     args=(homeBrain,)
-)
-thr6 = threading.Thread(
-    name='holwaySenzorPooling',
-    target=btSensorsPolling,
-    args=(communication, btBuffer3, dataContainer, btComm, 'holway')
-)
-thr7 = threading.Thread(
-    name='fingerprintPooling',
-    target=btSensorsPolling,
-    args=(communication, btBuffer4, dataContainer, btComm, 'fingerprint')
-)
-for thread in [thr1,  thr2, thr3, thr4, thr5, thr6]:
-# for thread in [thr1,  thr2, thr3, thr4, thr5, thr6, thr7]:
-    thread.start()
+).start()
+
 

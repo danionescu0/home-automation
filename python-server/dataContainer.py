@@ -91,7 +91,6 @@ class dataContainer:
 
     def getTimeRules(self):
         rules = self.__get(self.timeRules)
-        print rules
         for rule in rules:
             rules[rule]['stringTime'] = rules[rule]['time']
             rules[rule]['time'] = datetime.strptime(rules[rule]['time'], "%H:%M:%S").time()
