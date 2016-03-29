@@ -96,12 +96,10 @@ class brain:
         p.communicate()
         if self.lastBurglerLight is not None:
             self.changeActuator(self.lastBurglerLight, False)
-            print(self.lastBurglerLight)
             self.lastBurglerLight = None
         else:
             self.lastBurglerLight = self.burglerLights[random.randint(0, 2)]
             self.changeActuator(self.lastBurglerLight, True)
-            print(self.lastBurglerLight)
 
     def __getBurglerSound(self):
         sound = random.randint(1, self.burglerSounds)
