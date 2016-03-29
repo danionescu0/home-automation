@@ -22,7 +22,7 @@ btComm = btConnections(
     config.btConns['living'],
     config.btConns['balcony'],
     config.btConns['holway'],
-    config.btConns['fingerprint']
+    # config.btConns['fingerprint']
 )
 btComm.connectAllBt()
 logging.debug('Finished connectiong to BT devices')
@@ -123,6 +123,7 @@ thr7 = threading.Thread(
     target=btSensorsPolling,
     args=(communication, btBuffer4, dataContainer, btComm, 'fingerprint')
 )
-for thread in [thr1,  thr2, thr3, thr4, thr5, thr6, thr7]:
+for thread in [thr1,  thr2, thr3, thr4, thr5, thr6]:
+# for thread in [thr1,  thr2, thr3, thr4, thr5, thr6, thr7]:
     thread.start()
 

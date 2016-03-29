@@ -31,25 +31,12 @@ class brain:
                 time.sleep(3)
 
     def __doChangeActuator(self, actuator, state):
+        lights = {'livingLight' : '1', 'bedroomLight' : '2', 'holwayLight' : '3', 'kitchenLight' : '4',
+                  'closetLight' : '5', 'balconyLight' : '6'}
         if actuator == 'door':
             self.btComm.sendToBluetooth('holway', 'O')
-        if actuator == 'livingLight':
-            self.btComm.sendToBluetooth('living', '1')
-            self.__writeActuatorState(state)
-        if actuator == 'bedroomLight':
-            self.btComm.sendToBluetooth('living', '2')
-            self.__writeActuatorState(state)
-        if actuator == 'holwayLight':
-            self.btComm.sendToBluetooth('living', '3')
-            self.__writeActuatorState(state)
-        if actuator == 'kitchenLight':
-            self.btComm.sendToBluetooth('living', '4')
-            self.__writeActuatorState(state)
-        if actuator == 'closetLight':
-            self.btComm.sendToBluetooth('living', '5')
-            self.__writeActuatorState(state)
-        if actuator == 'balconyLight':
-            self.btComm.sendToBluetooth('living', '6')
+        if actuator in lights:
+            self.btComm.sendToBluetooth('living', lights[actuator])
             self.__writeActuatorState(state)
         if actuator == 'powerSocket1':
             self.btComm.sendToBluetooth('living', '8')
@@ -109,13 +96,11 @@ class brain:
         p.communicate()
         if self.lastBurglerLight is not None:
             self.changeActuator(self.lastBurglerLight, False)
-            print("Changing to false")
             print(self.lastBurglerLight)
             self.lastBurglerLight = None
         else:
             self.lastBurglerLight = self.burglerLights[random.randint(0, 2)]
             self.changeActuator(self.lastBurglerLight, True)
-            print("Changing to true")
             print(self.lastBurglerLight)
 
     def __getBurglerSound(self):
