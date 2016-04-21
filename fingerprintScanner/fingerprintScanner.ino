@@ -12,6 +12,7 @@ void setup()
   	delay(100);
   	fps.Open();
   	fps.SetLED(true);
+    Serial.println("ok");
 }
 
 void loop()
