@@ -1,6 +1,6 @@
 import json
 import logging
-from tornado.web import Application, url, authenticated, StaticFileHandler
+from tornado.web import  authenticated
 from datetime import datetime, timedelta
 from dateutil import tz
 from web.baseHandler import baseHandler
@@ -11,23 +11,46 @@ class graphsBuilderHandler(baseHandler):
 
     @authenticated
     def get(self):
-        self.__displayPage('light')
+        data = self.__getDataFromDb('light', 1, None)
+        self.render("../html/graphs.html",
+                    datetimeList = json.dumps(data["datetimeList"]),
+                    datapointValues = json.dumps(data["datapointValues"]),
+                    selectedType = type,
+                    menuSelected ="graphs",
+                    selectedDaysBehind =  1,
+                    selectedGroupedByHours =  0
+                    )
 
     @authenticated
     def post(self, *args, **kwargs):
         logging.debug(self.get_argument('type', 'light'))
         type = self.get_argument('type', 'light')
-        self.__displayPage(type)
+        groupByHours = int(self.get_argument("group_by_hours", None, True))
+        nrDaysBehind = int(self.get_argument("nr_days_behind", None, True))
+        if groupByHours == 0:
+            data = self.__getDataFromDb(type, nrDaysBehind, None)
+        else:
+            data = self.__getDataFromDb(type, nrDaysBehind, groupByHours)
 
-    def __displayPage(self, type):
-        startDate = datetime.today() - timedelta(days=1)
+        self.render("../html/graphs.html",
+                    datetimeList = json.dumps(data["datetimeList"]),
+                    datapointValues = json.dumps(data["datapointValues"]),
+                    selectedType = type,
+                    menuSelected ="graphs",
+                    selectedDaysBehind =  nrDaysBehind,
+                    selectedGroupedByHours =  groupByHours
+                    )
+
+    def __getDataFromDb(self, type, nrDaysBehind, groupByHours):
+        startDate = datetime.today() - timedelta(days=nrDaysBehind)
         endDate = datetime.today()
-        data = self.dataContainer.getSensorValuesInInterval(startDate, endDate)
+        data = self.dataContainer.getSensorValuesInInterval(startDate, endDate, groupByHours)
         datetimeList = []
         datapointValues = []
         from_zone = tz.gettz('UTC')
         to_zone = tz.gettz('Europe/Bucharest')
         lastValueBySenzorType = {}
+
         for datapoint in data:
             initialDate = datetime.fromtimestamp(int(datapoint['timestamp'])).replace(tzinfo=from_zone)
             bucharestDate = initialDate.astimezone(to_zone)
@@ -41,9 +64,4 @@ class graphsBuilderHandler(baseHandler):
             else:
                 datapointValues.append(0)
 
-        self.render("../html/graphs.html",
-                    datetimeList = json.dumps(datetimeList),
-                    datapointValues = json.dumps(datapointValues),
-                    selectedType = type,
-                    menuSelected="graphs"
-                    )
+        return {"datapointValues": datapointValues, "datetimeList" : datetimeList}
