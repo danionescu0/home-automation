@@ -5,6 +5,7 @@ import calendar
 import random
 import math
 import collections
+from collections import Counter
 
 class dataContainer:
     def __init__(self, config):
@@ -113,7 +114,7 @@ class dataContainer:
         self.client.zadd(self.sensorsHistoryKey, currentTimestamp, json.dumps(sensorsData))
         self.lastAverages = {}
 
-    def getSensorValuesInInterval(self, startDate, endDate):
+    def getSensorValuesInInterval(self, startDate, endDate, groupByHours = None):
         startTimestamp = calendar.timegm(startDate.timetuple())
         endTimestamp = calendar.timegm(endDate.timetuple())
         range = self.client.zrangebyscore(self.sensorsHistoryKey, startTimestamp, endTimestamp, withscores=True)
@@ -121,6 +122,21 @@ class dataContainer:
             timestamp = range[index][1]
             range[index] = json.loads(range[index][0])
             range[index]['timestamp'] = timestamp
+        if groupByHours is None:
+            return range
+        lastHour = datetime.fromtimestamp(int(range[0]['timestamp'])).hour
+        counter = 0
+        averageData = range[0]
+        groupedRange = []
+        for datapoint in range:
+            extractedHour = datetime.fromtimestamp(int(datapoint['timestamp'])).hour
+            counter += 1
+            if extractedHour != lastHour:
+                lastHour = extractedHour
+                averageData.update((x, y/counter) for x, y in averageData.items())
+                groupedRange.append(averageData)
+                counter = 0
+            else:
+                averageData = dict(Counter(averageData) + Counter(datapoint))
 
-        return range
-
+        return groupedRange
