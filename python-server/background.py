@@ -17,16 +17,8 @@ import config
 
 bluetoothBuffers = ['' for x in range(4)]
 
-
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
-btComm = btConnections(
-    config.btConns['bedroom'],
-    config.btConns['living'],
-    config.btConns['balcony'],
-    config.btConns['holway'],
-    # config.btConns['fingerprint']
-)
-btComm.connectAllBt()
+btComm = btConnections(config.btConnections).connect()
 logging.debug('Finished connectiong to BT devices')
 
 dataContainer = dataContainer(config.redisConfig)

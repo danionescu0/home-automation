@@ -112,7 +112,7 @@ class dataContainer(abstractRedis):
         sensorsData = {}
         for key, list in self.lastAverages.iteritems():
             sensorsData[key] = int(math.ceil(float(sum(list)) / len(list)))
-        self.addToList(self.sensorsHistoryKey, sensorsData)
+        self.addToList(self.sensorsHistoryKey, sensorsData, None)
         self.lastAverages = {}
 
     def getSensorValuesInInterval(self, startDate, endDate, groupByHours = None):
