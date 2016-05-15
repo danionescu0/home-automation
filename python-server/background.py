@@ -1,9 +1,7 @@
-import serial
 import threading
 import logging
 import json
 import time
-import sys
 from dateutil import tz
 from datetime import datetime
 
@@ -23,7 +21,6 @@ logging.debug('Finished connectiong to BT devices')
 
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
-serialPort = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=3.0)
 emailNotif = emailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
 homeBrain = brain(btComm, config.burglerSoundsFolder, dataContainer, emailNotif)
 communication = communication()
@@ -84,7 +81,6 @@ poolingThreads = [
     {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom', 'buffer': bluetoothBuffers[1]},
     {'name' : 'livingSenzorPooling', 'deviceName' : 'living', 'buffer': bluetoothBuffers[2]},
     {'name' : 'holwaySenzorPooling', 'deviceName' : 'holway', 'buffer': bluetoothBuffers[3]},
-    # {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom'},
 ]
 
 for threadData in poolingThreads:
