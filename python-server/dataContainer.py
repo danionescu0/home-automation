@@ -1,15 +1,15 @@
 import json
-import redis
 from datetime import datetime
 import calendar
 import random
 import math
 import collections
 from collections import Counter
+from abstractRedis import abstractRedis
 
-class dataContainer:
+class dataContainer(abstractRedis):
     def __init__(self, config):
-        self.client = redis.StrictRedis(**config)
+        abstractRedis.__init__(self, config)
         actuators = {
             'door' : {'state' : False, 'type': 'single', 'device': 'door'},
             'homeAlarm' : {'state' : False, 'type': 'bi', 'device': 'action'},
@@ -27,23 +27,26 @@ class dataContainer:
         }
         sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0, 'airQuality' : 0,
                     'fingerprint' : -1}
-        self.sensorsLastUpdated = 0
         self.keys = {'actuators' : actuators, 'sensors' : sensors, 'time_rules': {}}
+
+        self.sensorsLastUpdated = 0
         self.updateThresholdSeconds = 300
         self.sensorsHistoryKey = 'sensors_history_key'
         self.sensorsKey = 'sensors'
         self.timeRules = 'time_rules'
+        self.locationKey = 'location'
+        self.actuatorsKey = 'actuators'
         self.lastAverages = {}
 
-    def __get(self, key):
+    def get(self, key):
         result = self.client.get(key)
         if (not result):
             return self.keys[key]
 
         return json.loads(result)
 
-    def __set(self, key, name, value):
-        data = self.__get(key)
+    def set(self, key, name, value):
+        data = self.get(key)
         if (key == self.sensorsKey):
             data[name] = value
         else:
@@ -52,10 +55,10 @@ class dataContainer:
 
     def getActuators(self, justNames = False):
         if not justNames:
-            actuators = self.__get('actuators')
+            actuators = self.get(self.actuatorsKey)
             return collections.OrderedDict(sorted(actuators.items()))
 
-        actuators = self.__get('actuators')
+        actuators = self.get(self.actuatorsKey)
         actuatorNames = []
         for name, data in actuators.iteritems():
             actuatorNames.append(name)
@@ -63,17 +66,17 @@ class dataContainer:
         return actuatorNames
 
     def setActuator(self, name, value):
-        return self.__set('actuators', name, value)
+        return self.set(self.actuatorsKey, name, value)
 
     def getSensors(self):
-        return self.__get(self.sensorsKey)
+        return self.get(self.sensorsKey)
 
     def setSensor(self, name, value):
-        self.__set(self.sensorsKey, name, value)
+        self.set(self.sensorsKey, name, value)
         self.__addSensorsInHistory(name, value)
 
     def upsertTimeRule(self, name, actuator, state, time, active):
-        rules = self.__get(self.timeRules)
+        rules = self.get(self.timeRules)
         rules[name] = {
             'actuator' : actuator,
             'state' : state,
@@ -84,14 +87,13 @@ class dataContainer:
         return self.client.set(self.timeRules, json.dumps(rules))
 
     def deleteTimeRule(self, name):
-        rules = self.__get(self.timeRules)
+        rules = self.get(self.timeRules)
         rules.pop(name, None)
 
         return self.client.set(self.timeRules, json.dumps(rules))
 
-
     def getTimeRules(self):
-        rules = self.__get(self.timeRules)
+        rules = self.get(self.timeRules)
         for rule in rules:
             rules[rule]['stringTime'] = rules[rule]['time']
             rules[rule]['time'] = datetime.strptime(rules[rule]['time'], "%H:%M:%S").time()
@@ -110,8 +112,7 @@ class dataContainer:
         sensorsData = {}
         for key, list in self.lastAverages.iteritems():
             sensorsData[key] = int(math.ceil(float(sum(list)) / len(list)))
-        sensorsData["randomize"] = random.randint(0, 999999999)
-        self.client.zadd(self.sensorsHistoryKey, currentTimestamp, json.dumps(sensorsData))
+        self.addToList(self.sensorsHistoryKey, sensorsData)
         self.lastAverages = {}
 
     def getSensorValuesInInterval(self, startDate, endDate, groupByHours = None):
