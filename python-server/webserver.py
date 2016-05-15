@@ -1,15 +1,18 @@
 import logging
-from tornado.ioloop import IOLoop
-from tornado.web import Application, url, authenticated, StaticFileHandler
 import config
+from tornado.ioloop import IOLoop
+from tornado.web import Application, url, StaticFileHandler
 from dataContainer import dataContainer
+from locationTracker import locationTracker
 from jobControl import jobControll
 from web.timeRulesHandler import timeRulesHandler
 from web.graphsBuilderHandler import graphsBuilderHandler
 from web.loginHandler import loginHandler
 from web.actuatorsHandler import actuatorsHandler
+from web.apiHandler import apiHandler
 
 dataContainer = dataContainer(config.redisConfig)
+locationTracker = locationTracker(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 
@@ -28,10 +31,16 @@ def make_app():
                 dict(dataContainer=dataContainer, jobControll=jobControll),
                 name="actuator-states"
             ),
-            url(r"/login", loginHandler, dict(credentials=config.credentials), name="login"),
+            url(r'/login', loginHandler, dict(credentials=config.credentials), name='login'),
             url(r'/public/(.*)', StaticFileHandler, {'path': config.staticPath}),
-            url(r'/graphs', graphsBuilderHandler, dict(dataContainer=dataContainer), name="graphs"),
-            url(r'/time-rules', timeRulesHandler, dict(dataContainer=dataContainer, logging=logging), name="timeRules"),
+            url(r'/graphs', graphsBuilderHandler, dict(dataContainer=dataContainer), name='graphs'),
+            url(r'/time-rules', timeRulesHandler, dict(dataContainer=dataContainer, logging=logging), name='timeRules'),
+            url(
+                r'/api/(.*)',
+                apiHandler,
+                dict(dataContainer=dataContainer, credentials=config.credentials, locationTracker=locationTracker, logging=logging),
+                name='api'
+            ),
         ], **settings)
 
 app = make_app()
