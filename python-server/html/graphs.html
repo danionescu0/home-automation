@@ -1,0 +1,67 @@
+{% extends "../html/base.html" %}
+
+{% block scripts %}
+    {% autoescape None %}
+    <script type="text/javascript">
+        var graphLeftText = 'Light';
+        var graphRightText = 'default';
+        var datapointDates = {{ datetimeList }};
+        var datapointValues = {{ datapointValues }};
+    </script>
+
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="/public/js/highcharts.js"></script>
+{% end %}
+
+{% block body %}
+    <div class="container">
+      {% include "../html/menu.html" %}
+      <div class="jumbotron">
+        <form action="/graphs" method="post">
+        <h2>Sensors timeline</h2>
+            Senzor type:
+            <select name="type">
+                  <option value="light"{% if selectedType == 'light' %}selected="selected"{% end %}>Light</option>
+                  <option value="temperature"{% if selectedType == 'temperature' %}selected="selected"{% end %}>Temperature</option>
+                  <option value="humidity"{% if selectedType == 'humidity' %}selected="selected"{% end %}>Humidity</option>
+                  <option value="rain"{% if selectedType == 'rain' %}selected="selected"{% end %}>Rain</option>
+                  <option value="presence"{% if selectedType == 'presence' %}selected="selected"{% end %}>Humain presence</option>
+                  <option value="airQuality"{% if selectedType == 'airQuality' %}selected="selected"{% end %}>Air quality</option>
+            </select>
+        <div class="row">
+            Days behind:
+            <select name="nr_days_behind">
+                {% for i in range(1, 30) %}
+                    {% if i == selectedDaysBehind %}
+                    <option value="{{ i }}" selected="selected">{{ i }}</option>
+                    {% else %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% end %}
+                {% end %}
+            </select>
+        </div>
+        <div class="row">
+            Grouped by nr hours:
+            <select name="group_by_hours">
+                {% for i in range(0, 60) %}
+                    {% if i == selectedGroupedByHours %}
+                    <option value="{{ i }}" selected="selected">{{ i }}</option>
+                    {% else %}
+                    <option value="{{ i }}">{{ i }}</option>
+                    {% end %}
+                {% end %}
+            </select>
+            <input type="submit" value="Show">
+        </div>
+        </form>
+      </div>
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+        </div>
+      <footer class="footer">
+        <p>Smecherie</p>
+      </footer>
+
+    </div> <!-- /container -->
+{% end %}
