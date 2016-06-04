@@ -1,10 +1,11 @@
 import json
-from tornado.web import Application, url, authenticated, StaticFileHandler
+from tornado.web import  authenticated
 import time
 from web.baseHandler import baseHandler
 
 class actuatorsHandler(baseHandler):
     def initialize(self, dataContainer, jobControll):
+        super(baseHandler, self).initialize()
         self.dataContainer = dataContainer
         self.jobControll = jobControll
 
