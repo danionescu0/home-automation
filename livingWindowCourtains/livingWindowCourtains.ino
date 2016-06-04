@@ -9,7 +9,7 @@ const int courtain2EnablePin = 9;
 const unsigned long onState = 1;
 const unsigned long offState = 0;
 const unsigned int changeStateMillis = 40000;
-const int courtain1PWM = 210;
+const int courtain1PWM = 253;
 const int courtain2PWM = 252;
 
 SoftwareSerial bluetooth(10, 11); // RX, TX
@@ -46,7 +46,7 @@ void loop()
 
 void toggleState(int received)
 {
-    if (received == onState) {
+    if (received == offState) {
         Serial.println("on");
         digitalWrite(courtain1dirPin1, HIGH);
         digitalWrite(courtain1dirPin2, LOW);   
@@ -54,7 +54,7 @@ void toggleState(int received)
         digitalWrite(courtain2dirPin2, LOW);
         analogWrite(courtain1EnablePin, courtain1PWM);
         analogWrite(courtain2EnablePin, courtain2PWM);                  
-    } else if (received == offState) {
+    } else if (received == onState) {
         Serial.println("off");
         digitalWrite(courtain1dirPin1, LOW);
         digitalWrite(courtain1dirPin2, HIGH);   
