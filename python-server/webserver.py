@@ -1,15 +1,17 @@
 import logging
-import config
+
 from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
-from dataContainer import dataContainer
-from locationTracker import locationTracker
-from jobControl import jobControll
-from web.timeRulesHandler import timeRulesHandler
-from web.graphsBuilderHandler import graphsBuilderHandler
-from web.loginHandler import loginHandler
+
+from tools.dataContainer import dataContainer
+from tools.jobControl import jobControll
+from tools.locationTracker import locationTracker
 from web.actuatorsHandler import actuatorsHandler
 from web.apiHandler import apiHandler
+from web.graphsBuilderHandler import graphsBuilderHandler
+from web.loginHandler import loginHandler
+from web.timeRulesHandler import timeRulesHandler
+import config
 
 dataContainer = dataContainer(config.redisConfig)
 locationTracker = locationTracker(config.redisConfig)

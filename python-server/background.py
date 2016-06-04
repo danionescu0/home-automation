@@ -1,17 +1,18 @@
-import threading
-import logging
 import json
+import logging
+import threading
 import time
-from dateutil import tz
 from datetime import datetime
 
-from brain import brain
-from dataContainer import dataContainer
-from btConnections import btConnections
-from jobControl import jobControll
-from communication import communication
-from emailNotifier import emailNotifier
+from dateutil import tz
+
 import config
+from tools.brain import brain
+from tools.btConnections import btConnections
+from tools.communication import communication
+from tools.dataContainer import dataContainer
+from tools.emailNotifier import emailNotifier
+from tools.jobControl import jobControll
 
 bluetoothBuffers = ['' for x in range(4)]
 
