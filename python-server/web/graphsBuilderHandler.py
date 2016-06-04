@@ -7,6 +7,7 @@ from web.baseHandler import baseHandler
 
 class graphsBuilderHandler(baseHandler):
     def initialize(self, dataContainer):
+        super(baseHandler, self).initialize()
         self.dataContainer = dataContainer
 
     @authenticated
