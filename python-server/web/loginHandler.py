@@ -2,7 +2,6 @@ from web.baseHandler import baseHandler
 
 class loginHandler(baseHandler):
     def initialize(self, credentials):
-        super(baseHandler, self).initialize()
         self.credentials = credentials
 
     def get(self):

@@ -13,6 +13,8 @@ from tools.communication import communication
 from tools.dataContainer import dataContainer
 from tools.emailNotifier import emailNotifier
 from tools.jobControl import jobControll
+from event.actuatorChangedRequest import actuatorChangedRequest
+from listener.changeActuatorListener import changeActuatorListener
 
 bluetoothBuffers = ['' for x in range(4)]
 
@@ -25,6 +27,9 @@ jobControll = jobControll(config.redisConfig)
 emailNotif = emailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
 homeBrain = brain(btComm, config.burglerSoundsFolder, dataContainer, emailNotif)
 communication = communication()
+changeActuatorListener = changeActuatorListener(homeBrain)
+actuatorChangedRequest = actuatorChangedRequest()
+
 
 # listens to a bluetooth connection until some data appears
 # the format in which data arives is senzorName:senzorData with pipe separators between
@@ -43,7 +48,7 @@ def btSensorsPolling(communication, btBuffer, dataContainer, btComm, btDeviceNam
             btBuffer = ''
 
 # the jobManager thread listenes to a redis pub sub server for incoming jobs
-def jobManager(jobControll, homeBrain):
+def jobManager(jobControll, actuatorChangedRequest):
     while True:
         for job in jobControll.listen():
             if job["data"] == 1:
@@ -51,11 +56,11 @@ def jobManager(jobControll, homeBrain):
             logging.debug(job["data"])
             jobData = json.loads(job["data"])
             if jobData["job_name"] == "actuators":
-                homeBrain.changeActuator(jobData["actuator"], jobData["state"])
+                actuatorChangedRequest.send(jobData["actuator"], jobData["state"])
 
 # periodically check if a time rules match the programmed interval
 # if so the actuator is activated
-def timeRulesControl(dataContainer, homeBrain):
+def timeRulesControl(dataContainer, actuatorChangedRequest):
     from_zone = tz.gettz('UTC')
     to_zone = tz.gettz('Europe/Bucharest')
 
@@ -70,7 +75,7 @@ def timeRulesControl(dataContainer, homeBrain):
             if rule['stringTime'] != currentTime or rule['active'] != True:
                 continue
             logging.debug("Changing actuator:", rule)
-            homeBrain.changeActuator(rule["actuator"], rule["state"])
+            actuatorChangedRequest.send(rule["actuator"], rule["state"])
 
 def burglerMode(homeBrain):
     while True:
@@ -94,13 +99,13 @@ for threadData in poolingThreads:
 threading.Thread(
     name='jobManager',
     target=jobManager,
-    args=(jobControll, homeBrain)
+    args=(jobControll, actuatorChangedRequest)
 ).start()
 
 threading.Thread(
     name='timeRulesControl',
     target=timeRulesControl,
-    args=(dataContainer, homeBrain)
+    args=(dataContainer, actuatorChangedRequest)
 ).start()
 
 thr5 = threading.Thread(
