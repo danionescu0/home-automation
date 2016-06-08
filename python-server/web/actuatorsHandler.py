@@ -5,7 +5,6 @@ from web.baseHandler import baseHandler
 
 class actuatorsHandler(baseHandler):
     def initialize(self, dataContainer, jobControll):
-        super(baseHandler, self).initialize()
         self.dataContainer = dataContainer
         self.jobControll = jobControll
 

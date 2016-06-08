@@ -1,4 +1,5 @@
 staticPath = '/home/pi/home-automation/python-server/public'
+applicationPort = 8080
 credentials = {
     'username' : 'dan',
     'password' : 'cicibici07'

@@ -3,6 +3,7 @@ import logging
 from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
 
+from listener.saveLocationListener import saveLocationListener
 from tools.dataContainer import dataContainer
 from tools.jobControl import jobControll
 from tools.locationTracker import locationTracker
@@ -17,6 +18,8 @@ dataContainer = dataContainer(config.redisConfig)
 locationTracker = locationTracker(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
+saveLocationListener = saveLocationListener(locationTracker)
+
 
 def make_app():
     global config, dataContainer, jobControll
@@ -40,11 +43,11 @@ def make_app():
             url(
                 r'/api/(.*)',
                 apiHandler,
-                dict(dataContainer=dataContainer, credentials=config.credentials, locationTracker=locationTracker, logging=logging),
+                dict(dataContainer=dataContainer, credentials=config.credentials, logging=logging),
                 name='api'
             ),
         ], **settings)
 
 app = make_app()
-app.listen(8080)
+app.listen(config.applicationPort)
 IOLoop.current().start()

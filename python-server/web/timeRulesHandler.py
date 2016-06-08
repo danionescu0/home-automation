@@ -4,7 +4,6 @@ import datetime
 
 class timeRulesHandler(baseHandler):
     def initialize(self, dataContainer, logging):
-        super(baseHandler, self).initialize()
         self.dataContainer = dataContainer
         self.logging = logging
 

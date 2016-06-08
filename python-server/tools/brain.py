@@ -62,6 +62,7 @@ class brain:
         self.btComm.sendToBluetooth('living', '|')
 
     # Contains sensors triggers, when values changes
+    # Todo split using event and listeners
     def sensorUpdate(self, name, value):
         self.dataContainer.setSensor(name, value)
         sensors = self.dataContainer.getSensors()
