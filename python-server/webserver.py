@@ -4,6 +4,7 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
 
 from listener.saveLocationListener import saveLocationListener
+from listener.toggleAlarmFromLocationListener import toggleAlarmFromLocationListener
 from tools.dataContainer import dataContainer
 from tools.jobControl import jobControll
 from tools.locationTracker import locationTracker
@@ -17,9 +18,10 @@ import config
 dataContainer = dataContainer(config.redisConfig)
 locationTracker = locationTracker(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
+
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 saveLocationListener = saveLocationListener(locationTracker)
-
+toggleAlarmFromLocationListener = toggleAlarmFromLocationListener(config.homeCoordonates, jobControll, locationTracker)
 
 def make_app():
     global config, dataContainer, jobControll
