@@ -1,5 +1,10 @@
 staticPath = '/home/pi/home-automation/python-server/public'
 applicationPort = 8080
+
+#home gps coordonates, used for determining if the user is near home or not
+homeCoordonates = (44.4169649,26.1542889)
+
+# credentials for logging into the webapp
 credentials = {
     'username' : 'dan',
     'password' : 'cicibici07'
