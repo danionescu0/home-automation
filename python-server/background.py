@@ -3,7 +3,6 @@ import logging
 import threading
 import time
 from datetime import datetime
-
 from dateutil import tz
 
 import config
@@ -13,27 +12,31 @@ from tools.communication import communication
 from tools.dataContainer import dataContainer
 from tools.emailNotifier import emailNotifier
 from tools.jobControl import jobControll
-from event.actuatorChangedRequest import actuatorChangedRequest
+from event.changeActuatorRequest import changeActuatorRequest
+from event.sensorUpdate import sensorUpdate
 from listener.changeActuatorListener import changeActuatorListener
-
-bluetoothBuffers = ['' for x in range(4)]
+from listener.sensorTriggeredRulesListener import sensorTriggeredRulesListener
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
+bluetoothBuffers = ['' for x in range(4)]
 btComm = btConnections(config.btConnections).connect()
 logging.debug('Finished connectiong to BT devices')
 
 dataContainer = dataContainer(config.redisConfig)
 jobControll = jobControll(config.redisConfig)
 emailNotif = emailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
-homeBrain = brain(btComm, config.burglerSoundsFolder, dataContainer, emailNotif)
+homeBrain = brain(btComm, config.burglerSoundsFolder, dataContainer)
 communication = communication()
+
 changeActuatorListener = changeActuatorListener(homeBrain)
-actuatorChangedRequest = actuatorChangedRequest()
+sensorTriggeredRulesListener = sensorTriggeredRulesListener(dataContainer, emailNotif, homeBrain)
+changeActuatorRequest = changeActuatorRequest()
+sensorUpdate = sensorUpdate()
 
 
 # listens to a bluetooth connection until some data appears
 # the format in which data arives is senzorName:senzorData with pipe separators between
-def btSensorsPolling(communication, btBuffer, dataContainer, btComm, btDeviceName):
+def btSensorsPolling(communication, btBuffer, dataContainer, sensorUpdate, btComm, btDeviceName):
     while True:
         data = btComm.reciveFromBluetooth(btDeviceName, 10)
         if data == False:
@@ -42,13 +45,15 @@ def btSensorsPolling(communication, btBuffer, dataContainer, btComm, btDeviceNam
         if communication.isBufferParsable(btBuffer):
             logging.debug("Senzors received: " + btBuffer)
             data = communication.parseSensorsString(btBuffer)
-            for key, value in data.iteritems():
-                homeBrain.sensorUpdate(key, value)
+            for sensorName, sensorValue in data.iteritems():
+                dataContainer.setSensor(sensorName, sensorValue)
+                sensorUpdate.send(sensorName, sensorValue)
+
             logging.debug(dataContainer.getSensors())
             btBuffer = ''
 
 # the jobManager thread listenes to a redis pub sub server for incoming jobs
-def jobManager(jobControll, actuatorChangedRequest):
+def jobManager(jobControll, changeActuatorRequest):
     while True:
         for job in jobControll.listen():
             if job["data"] == 1:
@@ -56,11 +61,11 @@ def jobManager(jobControll, actuatorChangedRequest):
             logging.debug(job["data"])
             jobData = json.loads(job["data"])
             if jobData["job_name"] == "actuators":
-                actuatorChangedRequest.send(jobData["actuator"], jobData["state"])
+                changeActuatorRequest.send(jobData["actuator"], jobData["state"])
 
 # periodically check if a time rules match the programmed interval
 # if so the actuator is activated
-def timeRulesControl(dataContainer, actuatorChangedRequest):
+def timeRulesControl(dataContainer, changeActuatorRequest):
     from_zone = tz.gettz('UTC')
     to_zone = tz.gettz('Europe/Bucharest')
 
@@ -75,7 +80,7 @@ def timeRulesControl(dataContainer, actuatorChangedRequest):
             if rule['stringTime'] != currentTime or rule['active'] != True:
                 continue
             logging.debug("Changing actuator:", rule)
-            actuatorChangedRequest.send(rule["actuator"], rule["state"])
+            changeActuatorRequest.send(rule["actuator"], rule["state"])
 
 def burglerMode(homeBrain):
     while True:
@@ -93,19 +98,19 @@ for threadData in poolingThreads:
     threading.Thread(
         name=threadData['name'],
         target=btSensorsPolling,
-        args=(communication, threadData['buffer'], dataContainer, btComm, threadData['deviceName'])
+        args=(communication, threadData['buffer'], dataContainer, sensorUpdate, btComm, threadData['deviceName'])
     ).start()
 
 threading.Thread(
     name='jobManager',
     target=jobManager,
-    args=(jobControll, actuatorChangedRequest)
+    args=(jobControll, changeActuatorRequest)
 ).start()
 
 threading.Thread(
     name='timeRulesControl',
     target=timeRulesControl,
-    args=(dataContainer, actuatorChangedRequest)
+    args=(dataContainer, changeActuatorRequest)
 ).start()
 
 thr5 = threading.Thread(
@@ -113,5 +118,3 @@ thr5 = threading.Thread(
     target=burglerMode,
     args=(homeBrain,)
 ).start()
-
-
