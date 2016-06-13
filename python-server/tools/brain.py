@@ -6,11 +6,10 @@ from pytz import timezone
 from astral import Astral
 
 class brain:
-    def __init__(self, btComm, burglerSoundsFolder, dataContainer, emailNotificator):
+    def __init__(self, btComm, burglerSoundsFolder, dataContainer):
         self.btComm = btComm
         self.burglerSoundsFolder = burglerSoundsFolder
         self.dataContainer = dataContainer
-        self.emailNotificator = emailNotificator
         self.lastBurglerLight = None
         self.burglerLights = ['livingLight', 'kitchenLight', 'bedroomLight']
         self.burglerMaxWaitBetweenActions = 3
@@ -31,8 +30,11 @@ class brain:
                 time.sleep(3)
 
     def __doChangeActuator(self, actuator, state):
-        lights = {'livingLight' : '1', 'bedroomLight' : '2', 'holwayLight' : '3', 'kitchenLight' : '4',
-                  'closetLight' : '5', 'balconyLight' : '6'}
+        lights = {
+            'livingLight' : '1', 'bedroomLight' : '2',
+            'holwayLight' : '3', 'kitchenLight' : '4',
+            'closetLight' : '5', 'balconyLight' : '6'
+        }
         if actuator == 'door':
             self.btComm.sendToBluetooth('holway', 'O')
         if actuator in lights:
@@ -60,21 +62,6 @@ class brain:
         else:
             self.btComm.sendToBluetooth('living', 'C')
         self.btComm.sendToBluetooth('living', '|')
-
-    # Contains sensors triggers, when values changes
-    # Todo split using event and listeners
-    def sensorUpdate(self, name, value):
-        self.dataContainer.setSensor(name, value)
-        sensors = self.dataContainer.getSensors()
-        actuators = self.dataContainer.getActuators()
-        if name == 'rain' and sensors['rain'] > 40 and actuators['window']['state'] == False:
-            self.btComm.sendToBluetooth('bedroom', '1')
-            actuators['window']['state'] = True
-            self.dataContainer.setActuator('window', True)
-        if actuators['homeAlarm']['state'] == True and name == 'presence' and sensors['presence'] == 1:
-            self.emailNotificator.sendAlert("Cineva a intrat in casa!", "Nasol naspa")
-        if name == 'fingerprint' and sensors['fingerprint'] > -1:
-            self.btComm.sendToBluetooth('holway', 'O')
 
     def iterateBurglerMode(self):
         actuators = self.dataContainer.getActuators()

@@ -7,7 +7,7 @@ class toggleAlarmFromLocationListener:
         self.__homeCoordonates = homeCoordonates
         self.__jobControll = jobControll
         self.__locationTracker = locationTracker
-        self.__maxDistanceToTriggerSwitch = 0.2
+        self.__maxDistanceToTriggerSwitch = 0.5
         location = signal("location")
         location.connect(self.callback)
 

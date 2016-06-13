@@ -1,11 +1,11 @@
 from blinker import signal
 
-class actuatorChangedRequest:
+class changeActuatorRequest:
     def send(self, name, newState):
-        actuatorChangedRequest = signal("actuator_changed_request")
+        event = signal("change_actuator_request")
         self.__name = name
         self.__newState = newState
-        actuatorChangedRequest.send(self)
+        event.send(self)
 
     def getName(self):
         return self.__name

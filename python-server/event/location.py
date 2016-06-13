@@ -2,11 +2,11 @@ from blinker import signal
 
 class location:
     def send(self, deviceName, latitude, longitude):
-        locationReceived = signal("location")
+        event = signal("location")
         self.__deviceName = deviceName
         self.__latitude = latitude
         self.__longitude = longitude
-        locationReceived.send(self)
+        event.send(self)
 
     def getDeviceName(self):
         return self.__deviceName
