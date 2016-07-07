@@ -79,8 +79,7 @@ class brain:
 
         if currentTime < sun['sunset'].time() or currentTime > datetime.time(22, 30, 00):
             return
-        p = subprocess.Popen(["mpg321", "-a", "bluetooth", "-g", "150:D"
-                                                                 "", self.__getBurglerSound()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(["mpg321", "-g", "150:D", self.__getBurglerSound()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         p.communicate()
         if self.lastBurglerLight is not None:
             self.changeActuator(self.lastBurglerLight, False)
