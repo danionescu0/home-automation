@@ -18,7 +18,7 @@ from listener.changeActuatorListener import changeActuatorListener
 from listener.sensorTriggeredRulesListener import sensorTriggeredRulesListener
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
-bluetoothBuffers = ['' for x in range(4)]
+bluetoothBuffers = ['' for x in range(5)]
 btComm = btConnections(config.btConnections).connect()
 logging.debug('Finished connectiong to BT devices')
 
@@ -92,6 +92,7 @@ poolingThreads = [
     {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom', 'buffer': bluetoothBuffers[1]},
     {'name' : 'livingSenzorPooling', 'deviceName' : 'living', 'buffer': bluetoothBuffers[2]},
     {'name' : 'holwaySenzorPooling', 'deviceName' : 'holway', 'buffer': bluetoothBuffers[3]},
+    # {'name' : 'fingerprintSenzorPooling', 'deviceName' : 'fingerprint', 'buffer': bluetoothBuffers[4]},
 ]
 
 for threadData in poolingThreads:

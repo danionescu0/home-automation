@@ -19,4 +19,4 @@ class sensorTriggeredRulesListener:
             self.__emailNotificator.sendAlert("Cineva a intrat in casa!", "Nasol naspa")
 
         if sensorName == 'fingerprint' and sensorValue > -1:
-            self.__brain.changeActuator('holway', True)
+            self.__brain.changeActuator('door', True)
