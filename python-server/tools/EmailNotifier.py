@@ -2,7 +2,7 @@ import smtplib
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 
-class emailNotifier:
+class EmailNotifier:
     def __init__(self, address, password, notifiedAddress):
         self.address = address
         self.password = password

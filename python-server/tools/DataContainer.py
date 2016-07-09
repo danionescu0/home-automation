@@ -5,9 +5,9 @@ import random
 import math
 import collections
 from collections import Counter
-from abstractRedis import abstractRedis
+from AbstractRedis import abstractRedis
 
-class dataContainer(abstractRedis):
+class DataContainer(abstractRedis):
     def __init__(self, config):
         abstractRedis.__init__(self, config)
         actuators = {

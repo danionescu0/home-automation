@@ -1,6 +1,6 @@
 from blinker import signal
 
-class sensorUpdate:
+class SensorUpdate:
     def send(self, name, newValue):
         event = signal("sensor_update")
         self.__name = name

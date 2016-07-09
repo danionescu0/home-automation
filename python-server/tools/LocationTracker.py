@@ -1,8 +1,8 @@
 import json
 
-from abstractRedis import abstractRedis
+from AbstractRedis import abstractRedis
 
-class locationTracker(abstractRedis):
+class LocationTracker(abstractRedis):
     def __init__(self, config):
         abstractRedis.__init__(self, config)
         self.locationKey = 'location'

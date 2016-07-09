@@ -1,4 +1,4 @@
-class communication:
+class Communication:
     def __init__(self):
         self.__btSeparator = '|'
 

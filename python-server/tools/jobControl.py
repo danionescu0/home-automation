@@ -1,6 +1,6 @@
 import redis
 
-class jobControll:
+class JobControll:
     CHANNEL_NAME = 'jobs'
 
     def __init__(self, config):

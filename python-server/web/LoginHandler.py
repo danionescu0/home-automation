@@ -1,6 +1,6 @@
-from web.baseHandler import baseHandler
+from web.BaseHandler import BaseHandler
 
-class loginHandler(baseHandler):
+class LoginHandler(BaseHandler):
     def initialize(self, credentials):
         self.credentials = credentials
 

@@ -5,7 +5,7 @@ import time
 from pytz import timezone
 from astral import Astral
 
-class brain:
+class Brain:
     def __init__(self, btComm, burglerSoundsFolder, dataContainer):
         self.btComm = btComm
         self.burglerSoundsFolder = burglerSoundsFolder

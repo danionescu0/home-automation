@@ -3,9 +3,9 @@ import logging
 from tornado.web import  authenticated
 from datetime import datetime, timedelta
 from dateutil import tz
-from web.baseHandler import baseHandler
+from web.BaseHandler import BaseHandler
 
-class graphsBuilderHandler(baseHandler):
+class GraphsBuilderHandler(BaseHandler):
     def initialize(self, dataContainer):
         self.dataContainer = dataContainer
 

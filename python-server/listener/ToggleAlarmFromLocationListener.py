@@ -2,7 +2,7 @@ import json
 from blinker import signal
 from geopy.distance import vincenty
 
-class toggleAlarmFromLocationListener:
+class ToggleAlarmFromLocationListener:
     def __init__(self, homeCoordonates, jobControll, locationTracker):
         self.__homeCoordonates = homeCoordonates
         self.__jobControll = jobControll
