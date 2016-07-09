@@ -1,6 +1,6 @@
 from blinker import signal
 
-class sensorTriggeredRulesListener:
+class SensorTriggeredRulesListener:
     def __init__(self, dataContainer, emailNotificator, brain):
         self.__dataContainer = dataContainer
         self.__emailNotificator = emailNotificator

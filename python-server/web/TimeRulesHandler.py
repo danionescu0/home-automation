@@ -1,8 +1,8 @@
-from web.baseHandler import baseHandler
+from web.BaseHandler import BaseHandler
 from tornado.web import authenticated
 import datetime
 
-class timeRulesHandler(baseHandler):
+class TimeRulesHandler(BaseHandler):
     def initialize(self, dataContainer, logging):
         self.dataContainer = dataContainer
         self.logging = logging

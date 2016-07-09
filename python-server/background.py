@@ -6,32 +6,32 @@ from datetime import datetime
 from dateutil import tz
 
 import config
-from tools.brain import brain
-from tools.btConnections import btConnections
-from tools.communication import communication
-from tools.dataContainer import dataContainer
-from tools.emailNotifier import emailNotifier
-from tools.jobControl import jobControll
-from event.changeActuatorRequest import changeActuatorRequest
-from event.sensorUpdate import sensorUpdate
-from listener.changeActuatorListener import changeActuatorListener
-from listener.sensorTriggeredRulesListener import sensorTriggeredRulesListener
+from tools.Brain import Brain
+from tools.BtConnections import BtConnections
+from tools.Communication import Communication
+from tools.DataContainer import DataContainer
+from tools.EmailNotifier import EmailNotifier
+from tools.jobControl import JobControll
+from event.ChangeActuatorRequest import ChangeActuatorRequest
+from event.SensorUpdate import SensorUpdate
+from listener.ChangeActuatorListener import ChangeActuatorListener
+from listener.SensorTriggeredRulesListener import SensorTriggeredRulesListener
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 bluetoothBuffers = ['' for x in range(5)]
-btComm = btConnections(config.btConnections).connect()
+btComm = BtConnections(config.btConnections).connect()
 logging.debug('Finished connectiong to BT devices')
 
-dataContainer = dataContainer(config.redisConfig)
-jobControll = jobControll(config.redisConfig)
-emailNotif = emailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
-homeBrain = brain(btComm, config.burglerSoundsFolder, dataContainer)
-communication = communication()
+dataContainer = DataContainer(config.redisConfig)
+jobControll = JobControll(config.redisConfig)
+emailNotif = EmailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
+homeBrain = Brain(btComm, config.burglerSoundsFolder, dataContainer)
+communication = Communication()
 
-changeActuatorListener = changeActuatorListener(homeBrain)
-sensorTriggeredRulesListener = sensorTriggeredRulesListener(dataContainer, emailNotif, homeBrain)
-changeActuatorRequest = changeActuatorRequest()
-sensorUpdate = sensorUpdate()
+changeActuatorListener = ChangeActuatorListener(homeBrain)
+sensorTriggeredRulesListener = SensorTriggeredRulesListener(dataContainer, emailNotif, homeBrain)
+changeActuatorRequest = ChangeActuatorRequest()
+sensorUpdate = SensorUpdate()
 
 
 # listens to a bluetooth connection until some data appears

@@ -1,6 +1,6 @@
 import bluetooth
 
-class btConnections:
+class BtConnections:
     def __init__(self, connectionMapping):
         self.connectionMapping = connectionMapping
         self.btConnections = {}

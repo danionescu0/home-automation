@@ -1,6 +1,6 @@
 from blinker import signal
 
-class saveLocationListener:
+class SaveLocationListener:
     def __init__(self, locationTracker):
         self.locationTracker = locationTracker
         location = signal("location")
