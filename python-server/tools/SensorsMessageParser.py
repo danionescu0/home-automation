@@ -1,4 +1,4 @@
-class Communication:
+class SensorsMessageParser:
     def __init__(self):
         self.__btSeparator = '|'
 
@@ -7,7 +7,6 @@ class Communication:
 
     def parseSensorsString(self, btBuffer):
         btBuffer = btBuffer[:-1]
-
         sensors = {}
         for sensor in btBuffer.split('|'):
             elements = sensor.split(':')

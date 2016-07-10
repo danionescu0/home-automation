@@ -36,32 +36,32 @@ class Brain:
             'closetLight' : '5', 'balconyLight' : '6'
         }
         if actuator == 'door':
-            self.btComm.sendToBluetooth('holway', 'O')
+            self.btComm.send('holway', 'O')
         if actuator in lights:
-            self.btComm.sendToBluetooth('living', lights[actuator])
+            self.btComm.send('living', lights[actuator])
             self.__writeActuatorState(state)
         if actuator == 'powerSocket1':
-            self.btComm.sendToBluetooth('living', '8')
+            self.btComm.send('living', '8')
             self.__writeActuatorState(state)
         if actuator == 'livingCourtains':
             if state:
-                self.btComm.sendToBluetooth('balcony', '1')
+                self.btComm.send('balcony', '1')
             else:
-                self.btComm.sendToBluetooth('balcony', '0')
+                self.btComm.send('balcony', '0')
         if actuator == 'windowNodgeDown':
-            self.btComm.sendToBluetooth('bedroom', '2')
+            self.btComm.send('bedroom', '2')
         if actuator == 'window':
             if state:
-                self.btComm.sendToBluetooth('bedroom', '1')
+                self.btComm.send('bedroom', '1')
             else:
-                self.btComm.sendToBluetooth('bedroom', '0')
+                self.btComm.send('bedroom', '0')
 
     def __writeActuatorState(self, state):
         if (state):
-            self.btComm.sendToBluetooth('living', 'O')
+            self.btComm.send('living', 'O')
         else:
-            self.btComm.sendToBluetooth('living', 'C')
-        self.btComm.sendToBluetooth('living', '|')
+            self.btComm.send('living', 'C')
+        self.btComm.send('living', '|')
 
     def iterateBurglerMode(self):
         actuators = self.dataContainer.getActuators()
