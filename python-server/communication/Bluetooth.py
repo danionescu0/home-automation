@@ -1,11 +1,8 @@
 import bluetooth
+from Base import Base
 
-class BtConnections:
-    def __init__(self, connectionMapping):
-        self.connectionMapping = connectionMapping
-        self.btConnections = {}
-
-    def sendToBluetooth(self, which, value):
+class Bluetooth(Base):
+    def send(self, which, value):
         try:
             self.btConnections[which].send(value)
         except bluetooth.btcommon.BluetoothError as error:
@@ -13,7 +10,18 @@ class BtConnections:
 
         return True
 
-    def reciveFromBluetooth(self, which, howMuch):
+    def listenToDevice(self, deviceName, untilCondition):
+        messageBuffer = ''
+        while True:
+            data = self.__receive(deviceName, 10)
+            if data == False:
+                continue
+            messageBuffer += data
+            if not untilCondition(messageBuffer):
+                continue
+            self.getReceiveMessageCallback()(messageBuffer)
+
+    def __receive(self, which, howMuch):
         try:
             return self.btConnections[which].recv(howMuch)
         except bluetooth.btcommon.BluetoothError as error:
@@ -21,8 +29,9 @@ class BtConnections:
 
         return False
 
-
     def connect(self):
+        self.connectionMapping = self.getEndpoint()
+        self.btConnections = {}
         for name, connectionString in self.connectionMapping.iteritems():
             self.btConnections[name] = self.__connnectToBluetooth(connectionString, 1)
 

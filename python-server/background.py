@@ -2,31 +2,33 @@ import json
 import logging
 import threading
 import time
+import config
 from datetime import datetime
 from dateutil import tz
+from communication.CommunicatorFactory import CommunicatorFactory
 
-import config
-from tools.Brain import Brain
-from tools.BtConnections import BtConnections
-from tools.Communication import Communication
-from tools.DataContainer import DataContainer
-from tools.EmailNotifier import EmailNotifier
-from tools.jobControl import JobControll
+from communication.Bluetooth import Bluetooth
 from event.ChangeActuatorRequest import ChangeActuatorRequest
 from event.SensorUpdate import SensorUpdate
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.SensorTriggeredRulesListener import SensorTriggeredRulesListener
+from tools.Brain import Brain
+from tools.DataContainer import DataContainer
+from tools.EmailNotifier import EmailNotifier
+from tools.SensorsMessageParser import SensorsMessageParser
+from tools.jobControl import JobControll
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
-bluetoothBuffers = ['' for x in range(5)]
-btComm = BtConnections(config.btConnections).connect()
+bluetoothCommunicator = CommunicatorFactory.createCommunicator('bluetooth')
+bluetoothCommunicator.setEndpoint(config.btConnections)
+bluetoothCommunicator.connect()
 logging.debug('Finished connectiong to BT devices')
 
 dataContainer = DataContainer(config.redisConfig)
 jobControll = JobControll(config.redisConfig)
 emailNotif = EmailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
-homeBrain = Brain(btComm, config.burglerSoundsFolder, dataContainer)
-communication = Communication()
+homeBrain = Brain(bluetoothCommunicator, config.burglerSoundsFolder, dataContainer)
+sensorsMessageParser = SensorsMessageParser()
 
 changeActuatorListener = ChangeActuatorListener(homeBrain)
 sensorTriggeredRulesListener = SensorTriggeredRulesListener(dataContainer, emailNotif, homeBrain)
@@ -36,21 +38,18 @@ sensorUpdate = SensorUpdate()
 
 # listens to a bluetooth connection until some data appears
 # the format in which data arives is senzorName:senzorData with pipe separators between
-def btSensorsPolling(communication, btBuffer, dataContainer, sensorUpdate, btComm, btDeviceName):
-    while True:
-        data = btComm.reciveFromBluetooth(btDeviceName, 10)
-        if data == False:
-            continue
-        btBuffer += data
-        if communication.isBufferParsable(btBuffer):
-            logging.debug("Senzors received: " + btBuffer)
-            data = communication.parseSensorsString(btBuffer)
-            for sensorName, sensorValue in data.iteritems():
-                dataContainer.setSensor(sensorName, sensorValue)
-                sensorUpdate.send(sensorName, sensorValue)
+def btSensorsPolling(sensorsMessageParser, dataContainer, sensorUpdate, bluetoothCommunicator, btDeviceName):
+    def __sensorCallback(message):
+        logging.debug("Senzors received: " + message)
+        data = sensorsMessageParser.parseSensorsString(message)
+        for sensorName, sensorValue in data.iteritems():
+            dataContainer.setSensor(sensorName, sensorValue)
+            sensorUpdate.send(sensorName, sensorValue)
+        logging.debug(dataContainer.getSensors())
 
-            logging.debug(dataContainer.getSensors())
-            btBuffer = ''
+    bluetoothCommunicator.setReceiveMessageCallback(__sensorCallback)
+    bluetoothCommunicator.listenToDevice(btDeviceName, sensorsMessageParser.isBufferParsable)
+
 
 # the jobManager thread listenes to a redis pub sub server for incoming jobs
 def jobManager(jobControll, changeActuatorRequest):
@@ -87,19 +86,18 @@ def burglerMode(homeBrain):
         time.sleep(60)
         homeBrain.iterateBurglerMode()
 
-# initiating all threads
 poolingThreads = [
-    {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom', 'buffer': bluetoothBuffers[1]},
-    {'name' : 'livingSenzorPooling', 'deviceName' : 'living', 'buffer': bluetoothBuffers[2]},
-    {'name' : 'holwaySenzorPooling', 'deviceName' : 'holway', 'buffer': bluetoothBuffers[3]},
-    # {'name' : 'fingerprintSenzorPooling', 'deviceName' : 'fingerprint', 'buffer': bluetoothBuffers[4]},
+    {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom'},
+    {'name' : 'livingSenzorPooling', 'deviceName' : 'living'},
+    {'name' : 'holwaySenzorPooling', 'deviceName' : 'holway'},
+    # {'name' : 'fingerprintSenzorPooling', 'deviceName' : 'fingerprint'},
 ]
 
 for threadData in poolingThreads:
     threading.Thread(
         name=threadData['name'],
         target=btSensorsPolling,
-        args=(communication, threadData['buffer'], dataContainer, sensorUpdate, btComm, threadData['deviceName'])
+        args=(sensorsMessageParser, dataContainer, sensorUpdate, bluetoothCommunicator, threadData['deviceName'])
     ).start()
 
 threading.Thread(
@@ -114,7 +112,7 @@ threading.Thread(
     args=(dataContainer, changeActuatorRequest)
 ).start()
 
-thr5 = threading.Thread(
+threading.Thread(
     name='burglerMode',
     target=burglerMode,
     args=(homeBrain,)
