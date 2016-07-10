@@ -1,10 +1,10 @@
 from blinker import signal
 
 class SensorTriggeredRulesListener:
-    def __init__(self, dataContainer, emailNotificator, brain):
+    def __init__(self, dataContainer, emailNotificator, actuatorCommands):
         self.__dataContainer = dataContainer
         self.__emailNotificator = emailNotificator
-        self.__brain = brain
+        self.__actuatorCommands = actuatorCommands
         sensorUpdate =  signal("sensor_update")
         sensorUpdate.connect(self.callback)
 
@@ -13,10 +13,10 @@ class SensorTriggeredRulesListener:
         sensorName = sensorUpdate.getName()
         sensorValue = sensorUpdate.getNewValue()
         if sensorName == 'rain' and sensorValue > 40 and actuators['window']['state'] == False:
-            self.__brain.changeActuator('window', True)
+            self.__actuatorCommands.changeActuator('window', True)
 
         if actuators['homeAlarm']['state'] == True and sensorName == 'presence' and sensorValue == 1:
             self.__emailNotificator.sendAlert("Cineva a intrat in casa!", "Nasol naspa")
 
         if sensorName == 'fingerprint' and sensorValue > -1:
-            self.__brain.changeActuator('door', True)
+            self.__actuatorCommands.changeActuator('door', True)

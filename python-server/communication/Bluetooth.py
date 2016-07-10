@@ -20,6 +20,7 @@ class Bluetooth(Base):
             if not untilCondition(messageBuffer):
                 continue
             self.getReceiveMessageCallback()(messageBuffer)
+            messageBuffer = ''
 
     def __receive(self, which, howMuch):
         try:
