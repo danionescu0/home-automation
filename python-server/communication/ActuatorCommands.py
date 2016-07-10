@@ -1,14 +1,8 @@
-import random
-import datetime
-import subprocess
 import time
-from pytz import timezone
-from astral import Astral
 
-class Brain:
-    def __init__(self, btComm, burglerSoundsFolder, dataContainer):
+class ActuatorCommands:
+    def __init__(self, btComm, dataContainer):
         self.btComm = btComm
-        self.burglerSoundsFolder = burglerSoundsFolder
         self.dataContainer = dataContainer
         self.lastBurglerLight = None
         self.burglerLights = ['livingLight', 'kitchenLight', 'bedroomLight']
@@ -22,7 +16,6 @@ class Brain:
             return
 
         allActuators = self.dataContainer.getActuators()
-
         for name, propreties in allActuators.iteritems():
             if propreties['device'] == 'light':
                 self.dataContainer.setActuator(name, False)
@@ -62,35 +55,3 @@ class Brain:
         else:
             self.btComm.send('living', 'C')
         self.btComm.send('living', '|')
-
-    def iterateBurglerMode(self):
-        actuators = self.dataContainer.getActuators()
-        currentTime = datetime.datetime.now(timezone('Europe/Bucharest')).time()
-        if actuators['homeAlarm']['state'] == False:
-            return
-
-        act = random.randint(0, self.burglerMaxWaitBetweenActions)
-        print(act)
-        if act != self.burglerMaxWaitBetweenActions:
-            return
-        astral = Astral()
-        astral.solar_depression = 'civil'
-        sun = astral['Bucharest'].sun(date=datetime.datetime.now(), local=True)
-
-        if currentTime < sun['sunset'].time() or currentTime > datetime.time(22, 30, 00):
-            return
-        p = subprocess.Popen(["mpg321", "-g", "150:D", self.__getBurglerSound()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.communicate()
-        if self.lastBurglerLight is not None:
-            self.changeActuator(self.lastBurglerLight, False)
-            self.lastBurglerLight = None
-        else:
-            self.lastBurglerLight = self.burglerLights[random.randint(0, 2)]
-            self.changeActuator(self.lastBurglerLight, True)
-
-    def __getBurglerSound(self):
-        sound = random.randint(1, self.burglerSounds)
-        path = "{}/p{}.mp3".format(self.burglerSoundsFolder, sound)
-
-        return path
-

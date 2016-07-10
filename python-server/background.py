@@ -2,21 +2,22 @@ import json
 import logging
 import threading
 import time
-import config
 from datetime import datetime
-from dateutil import tz
-from communication.CommunicatorFactory import CommunicatorFactory
 
-from communication.Bluetooth import Bluetooth
+from dateutil import tz
+
+import config
+from communication.ActuatorCommands import ActuatorCommands
+from communication.CommunicatorFactory import CommunicatorFactory
+from communication.SensorsMessageParser import SensorsMessageParser
 from event.ChangeActuatorRequest import ChangeActuatorRequest
 from event.SensorUpdate import SensorUpdate
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.SensorTriggeredRulesListener import SensorTriggeredRulesListener
-from tools.Brain import Brain
 from tools.DataContainer import DataContainer
 from tools.EmailNotifier import EmailNotifier
-from tools.SensorsMessageParser import SensorsMessageParser
 from tools.jobControl import JobControll
+from tools.HomeDefence import HomeDefence
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 bluetoothCommunicator = CommunicatorFactory.createCommunicator('bluetooth')
@@ -27,11 +28,12 @@ logging.debug('Finished connectiong to BT devices')
 dataContainer = DataContainer(config.redisConfig)
 jobControll = JobControll(config.redisConfig)
 emailNotif = EmailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
-homeBrain = Brain(bluetoothCommunicator, config.burglerSoundsFolder, dataContainer)
+actuatorCommands = ActuatorCommands(bluetoothCommunicator, dataContainer)
 sensorsMessageParser = SensorsMessageParser()
+homeDefence = HomeDefence(actuatorCommands, config.burglerSoundsFolder, dataContainer)
 
-changeActuatorListener = ChangeActuatorListener(homeBrain)
-sensorTriggeredRulesListener = SensorTriggeredRulesListener(dataContainer, emailNotif, homeBrain)
+changeActuatorListener = ChangeActuatorListener(actuatorCommands)
+sensorTriggeredRulesListener = SensorTriggeredRulesListener(dataContainer, emailNotif, actuatorCommands)
 changeActuatorRequest = ChangeActuatorRequest()
 sensorUpdate = SensorUpdate()
 
@@ -81,10 +83,10 @@ def timeRulesControl(dataContainer, changeActuatorRequest):
             logging.debug("Changing actuator:", rule)
             changeActuatorRequest.send(rule["actuator"], rule["state"])
 
-def burglerMode(homeBrain):
+def defence(homeDefence):
     while True:
         time.sleep(60)
-        homeBrain.iterateBurglerMode()
+        homeDefence.iterateBurglerMode()
 
 poolingThreads = [
     {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom'},
@@ -113,7 +115,7 @@ threading.Thread(
 ).start()
 
 threading.Thread(
-    name='burglerMode',
-    target=burglerMode,
-    args=(homeBrain,)
+    name='defence',
+    target=defence,
+    args=(homeDefence,)
 ).start()
