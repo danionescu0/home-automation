@@ -1,10 +1,10 @@
 from blinker import signal
 
 class ChangeActuatorListener:
-    def __init__(self, actuatorCommands):
-        self.__actuatorCommands = actuatorCommands
-        changeActuatorRequest = signal("change_actuator_request")
-        changeActuatorRequest.connect(self.callback)
+    def __init__(self, actuator_commands):
+        self.__actuator_commands = actuator_commands
+        change_actuator_request = signal("change_actuator_request")
+        change_actuator_request.connect(self.callback)
 
-    def callback(self, changeActuatorRequest):
-        self.__actuatorCommands.change_actuator(changeActuatorRequest.getName(), changeActuatorRequest.getNewState())
+    def callback(self, change_actuator_request):
+        self.__actuator_commands.change_actuator(change_actuator_request.get_name(), change_actuator_request.getNewState())

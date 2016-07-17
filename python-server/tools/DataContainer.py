@@ -1,15 +1,14 @@
 import json
 from datetime import datetime
 import calendar
-import random
 import math
 import collections
 from collections import Counter
-from AbstractRedis import abstractRedis
+from AbstractRedis import AbstractRedis
 
-class DataContainer(abstractRedis):
+class DataContainer(AbstractRedis):
     def __init__(self, config):
-        abstractRedis.__init__(self, config)
+        AbstractRedis.__init__(self, config)
         actuators = {
             'door' : {'state' : False, 'type': 'single', 'device': 'door'},
             'homeAlarm' : {'state' : False, 'type': 'bi', 'device': 'action'},
@@ -29,14 +28,13 @@ class DataContainer(abstractRedis):
                     'fingerprint' : -1}
         self.keys = {'actuators' : actuators, 'sensors' : sensors, 'time_rules': {}}
 
-        self.sensorsLastUpdated = 0
-        self.updateThresholdSeconds = 300
-        self.sensorsHistoryKey = 'sensors_history_key'
-        self.sensorsKey = 'sensors'
-        self.timeRules = 'time_rules'
-        self.locationKey = 'location'
-        self.actuatorsKey = 'actuators'
-        self.lastAverages = {}
+        self.sensors_last_updated = 0
+        self.update_threshold_seconds = 300
+        self.sensors_history_key = 'sensors_history_key'
+        self.sensors_key = 'sensors'
+        self.time_rules = 'time_rules'
+        self.actuators_key = 'actuators'
+        self.last_averages = {}
 
     def get(self, key):
         result = self.client.get(key)
@@ -47,36 +45,36 @@ class DataContainer(abstractRedis):
 
     def set(self, key, name, value):
         data = self.get(key)
-        if (key == self.sensorsKey):
+        if (key == self.sensors_key):
             data[name] = value
         else:
             data[name]['state'] = value
         self.client.set(key, json.dumps(data))
 
-    def getActuators(self, justNames = False):
+    def get_actuators(self, justNames = False):
         if not justNames:
-            actuators = self.get(self.actuatorsKey)
+            actuators = self.get(self.actuators_key)
             return collections.OrderedDict(sorted(actuators.items()))
 
-        actuators = self.get(self.actuatorsKey)
+        actuators = self.get(self.actuators_key)
         actuatorNames = []
         for name, data in actuators.iteritems():
             actuatorNames.append(name)
 
         return actuatorNames
 
-    def setActuator(self, name, value):
-        return self.set(self.actuatorsKey, name, value)
+    def set_actuator(self, name, value):
+        return self.set(self.actuators_key, name, value)
 
-    def getSensors(self):
-        return self.get(self.sensorsKey)
+    def get_sensors(self):
+        return self.get(self.sensors_key)
 
-    def setSensor(self, name, value):
-        self.set(self.sensorsKey, name, value)
-        self.__addSensorsInHistory(name, value)
+    def set_sensor(self, name, value):
+        self.set(self.sensors_key, name, value)
+        self.__add_sensors_in_history(name, value)
 
-    def upsertTimeRule(self, name, actuator, state, time, active):
-        rules = self.get(self.timeRules)
+    def upsert_time_rule(self, name, actuator, state, time, active):
+        rules = self.get(self.time_rules)
         rules[name] = {
             'actuator' : actuator,
             'state' : state,
@@ -84,41 +82,41 @@ class DataContainer(abstractRedis):
             'time' : time.isoformat()
         }
 
-        return self.client.set(self.timeRules, json.dumps(rules))
+        return self.client.set(self.time_rules, json.dumps(rules))
 
-    def deleteTimeRule(self, name):
-        rules = self.get(self.timeRules)
+    def delete_time_rule(self, name):
+        rules = self.get(self.time_rules)
         rules.pop(name, None)
 
-        return self.client.set(self.timeRules, json.dumps(rules))
+        return self.client.set(self.time_rules, json.dumps(rules))
 
-    def getTimeRules(self):
-        rules = self.get(self.timeRules)
+    def get_time_rules(self):
+        rules = self.get(self.time_rules)
         for rule in rules:
             rules[rule]['stringTime'] = rules[rule]['time']
             rules[rule]['time'] = datetime.strptime(rules[rule]['time'], "%H:%M:%S").time()
 
         return rules
 
-    def __addSensorsInHistory(self, name, value):
-        if name not in self.lastAverages.keys():
-            self.lastAverages[name] = []
-        self.lastAverages[name].append(value)
+    def __add_sensors_in_history(self, name, value):
+        if name not in self.last_averages.keys():
+            self.last_averages[name] = []
+        self.last_averages[name].append(value)
         currentTimestamp = calendar.timegm(datetime.now().timetuple())
-        if (currentTimestamp - self.sensorsLastUpdated < self.updateThresholdSeconds):
+        if (currentTimestamp - self.sensors_last_updated < self.update_threshold_seconds):
             return
 
-        self.sensorsLastUpdated = currentTimestamp
+        self.sensors_last_updated = currentTimestamp
         sensorsData = {}
-        for key, list in self.lastAverages.iteritems():
+        for key, list in self.last_averages.iteritems():
             sensorsData[key] = int(math.ceil(float(sum(list)) / len(list)))
-        self.addToList(self.sensorsHistoryKey, sensorsData, None)
-        self.lastAverages = {}
+        self.add_to_list(self.sensors_history_key, sensorsData, None)
+        self.last_averages = {}
 
-    def getSensorValuesInInterval(self, startDate, endDate, groupByHours = None):
+    def get_sensor_values_in_interval(self, startDate, endDate, groupByHours = None):
         startTimestamp = calendar.timegm(startDate.timetuple())
         endTimestamp = calendar.timegm(endDate.timetuple())
-        range = self.client.zrangebyscore(self.sensorsHistoryKey, startTimestamp, endTimestamp, withscores=True)
+        range = self.client.zrangebyscore(self.sensors_history_key, startTimestamp, endTimestamp, withscores=True)
         for index, element in enumerate(range):
             timestamp = range[index][1]
             range[index] = json.loads(range[index][0])

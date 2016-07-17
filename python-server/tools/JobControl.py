@@ -11,5 +11,5 @@ class JobControll:
     def listen(self):
         return self.pubsub.listen()
 
-    def addJob(self, jobDescription):
+    def add_job(self, jobDescription):
         self.client.publish(self.CHANNEL_NAME, jobDescription)

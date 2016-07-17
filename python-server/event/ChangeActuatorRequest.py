@@ -7,7 +7,7 @@ class ChangeActuatorRequest:
         self.__newState = newState
         event.send(self)
 
-    def getName(self):
+    def get_name(self):
         return self.__name
 
     def getNewState(self):

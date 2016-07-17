@@ -4,11 +4,11 @@ import random
 import json
 from datetime import datetime
 
-class abstractRedis:
+class AbstractRedis:
     def __init__(self, config):
         self.client = redis.StrictRedis(**config)
 
-    def addToList(self, key, data, timeAsTimestamp):
+    def add_to_list(self, key, data, timeAsTimestamp):
         if timeAsTimestamp == None:
             timeAsTimestamp = calendar.timegm(datetime.now().timetuple())
         data["randomize"] = random.randint(0, 999999999)

@@ -1,24 +1,24 @@
 import time
 
 class ActuatorCommands:
-    def __init__(self, btComm, dataContainer):
+    def __init__(self, btComm, data_container):
         self.btComm = btComm
-        self.dataContainer = dataContainer
+        self.data_container = data_container
         self.lastBurglerLight = None
         self.burglerLights = ['livingLight', 'kitchenLight', 'bedroomLight']
         self.burglerMaxWaitBetweenActions = 3
         self.burglerSounds = 2
 
     def change_actuator(self, actuator, state):
-        self.dataContainer.setActuator(actuator, state)
+        self.data_container.set_actuator(actuator, state)
         if actuator != 'closeAllLights':
             self.__do_change_actuator(actuator, state)
             return
 
-        allActuators = self.dataContainer.getActuators()
+        allActuators = self.data_container.get_actuators()
         for name, propreties in allActuators.iteritems():
             if propreties['device'] == 'light':
-                self.dataContainer.setActuator(name, False)
+                self.data_container.set_actuator(name, False)
                 self.__do_change_actuator(name, False)
                 time.sleep(3)
 

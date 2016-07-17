@@ -4,17 +4,17 @@ import time
 from web.BaseHandler import BaseHandler
 
 class ActuatorsHandler(BaseHandler):
-    def initialize(self, dataContainer, jobControll):
-        self.dataContainer = dataContainer
-        self.jobControll = jobControll
+    def initialize(self, data_container, job_controll):
+        self.data_container = data_container
+        self.job_controll = job_controll
 
     @authenticated
     def get(self, actuator, state):
-        actuators = self.dataContainer.getActuators()
+        actuators = self.data_container.get_actuators()
         if actuator in actuators and state in ['on', 'off']:
             state = (False, True)[state == 'on']
-            self.jobControll.addJob(json.dumps({"job_name": "actuators", "actuator": actuator, "state" : state}))
+            self.job_controll.add_job(json.dumps({"job_name": "actuators", "actuator": actuator, "state" : state}))
             time.sleep(0.3)
-        actuators = self.dataContainer.getActuators()
+        actuators = self.data_container.get_actuators()
 
-        self.render("../html/main.html", actuators = actuators, sensors = self.dataContainer.getSensors(), menuSelected="home")
+        self.render("../html/main.html", actuators = actuators, sensors = self.data_container.get_sensors(), menuSelected="home")
