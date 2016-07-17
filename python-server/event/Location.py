@@ -8,11 +8,11 @@ class Location:
         self.__longitude = longitude
         event.send(self)
 
-    def getDeviceName(self):
+    def get_device_name(self):
         return self.__deviceName
 
-    def getLatitude(self):
+    def get_latitude(self):
         return self.__latitude
 
-    def getLongitude(self):
+    def get_longitude(self):
         return self.__longitude

@@ -7,4 +7,4 @@ class SaveLocationListener:
         location.connect(self.callback)
 
     def callback(self, location):
-        self.locationTracker.addLocationPoint(location.getDeviceName(), location.getLatitude(), location.getLongitude())
+        self.locationTracker.add_location_point(location.get_device_name(), location.get_latitude(), location.get_longitude())

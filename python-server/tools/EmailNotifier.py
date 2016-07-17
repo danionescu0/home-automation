@@ -8,7 +8,7 @@ class EmailNotifier:
         self.password = password
         self.notifiedAddress = notifiedAddress
 
-    def sendAlert(self, subject, body):
+    def send_alert(self, subject, body):
         msg = MIMEMultipart()
         msg['From'] = self.address
         msg['To'] = self.notifiedAddress

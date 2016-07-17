@@ -3,9 +3,9 @@ from blinker import signal
 from geopy.distance import vincenty
 
 class ToggleAlarmFromLocationListener:
-    def __init__(self, homeCoordonates, jobControll, locationTracker):
+    def __init__(self, homeCoordonates, job_controll, locationTracker):
         self.__homeCoordonates = homeCoordonates
-        self.__jobControll = jobControll
+        self.__job_controll = job_controll
         self.__locationTracker = locationTracker
         self.__maxDistanceToTriggerSwitch = 0.5
         location = signal("location")
@@ -14,9 +14,9 @@ class ToggleAlarmFromLocationListener:
     def callback(self, location):
         actuatorState = False
         actuatorName = "homeAlarm"
-        currentCoordonates = (location.getLatitude(), location.getLongitude())
+        currentCoordonates = (location.get_latitude(), location.get_longitude())
         distanceFromHome = vincenty(self.__homeCoordonates, currentCoordonates)
         if distanceFromHome > self.__maxDistanceToTriggerSwitch:
             print "switched"
-        # self.jobControll.addJob(json.dumps({"job_name": "actuators", "actuator": actuatorName, "state": actuatorState}))
+        # self.__job_controll.add_job(json.dumps({"job_name": "actuators", "actuator": actuatorName, "state": actuatorState}))
         print(distanceFromHome)

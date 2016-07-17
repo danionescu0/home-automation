@@ -6,12 +6,12 @@ from dateutil import tz
 from web.BaseHandler import BaseHandler
 
 class GraphsBuilderHandler(BaseHandler):
-    def initialize(self, dataContainer):
-        self.dataContainer = dataContainer
+    def initialize(self, data_container):
+        self.data_container = data_container
 
     @authenticated
     def get(self):
-        data = self.__getDataFromDb('light', 1, None)
+        data = self.__get_data_from_db('light', 1, None)
         self.render("../html/graphs.html",
                     datetimeList = json.dumps(data["datetimeList"]),
                     datapointValues = json.dumps(data["datapointValues"]),
@@ -28,9 +28,9 @@ class GraphsBuilderHandler(BaseHandler):
         groupByHours = int(self.get_argument("group_by_hours", None, True))
         nrDaysBehind = int(self.get_argument("nr_days_behind", None, True))
         if groupByHours == 0:
-            data = self.__getDataFromDb(type, nrDaysBehind, None)
+            data = self.__get_data_from_db(type, nrDaysBehind, None)
         else:
-            data = self.__getDataFromDb(type, nrDaysBehind, groupByHours)
+            data = self.__get_data_from_db(type, nrDaysBehind, groupByHours)
 
         self.render("../html/graphs.html",
                     datetimeList = json.dumps(data["datetimeList"]),
@@ -41,10 +41,10 @@ class GraphsBuilderHandler(BaseHandler):
                     selectedGroupedByHours =  groupByHours
                     )
 
-    def __getDataFromDb(self, type, nrDaysBehind, groupByHours):
+    def __get_data_from_db(self, type, nrDaysBehind, groupByHours):
         startDate = datetime.today() - timedelta(days=nrDaysBehind)
         endDate = datetime.today()
-        data = self.dataContainer.getSensorValuesInInterval(startDate, endDate, groupByHours)
+        data = self.data_container.get_sensor_values_in_interval(startDate, endDate, groupByHours)
         datetimeList = []
         datapointValues = []
         from_zone = tz.gettz('UTC')

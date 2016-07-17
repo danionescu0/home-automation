@@ -1,10 +1,10 @@
 import json
 
-from AbstractRedis import abstractRedis
+from AbstractRedis import AbstractRedis
 
-class LocationTracker(abstractRedis):
+class LocationTracker(AbstractRedis):
     def __init__(self, config):
-        abstractRedis.__init__(self, config)
+        AbstractRedis.__init__(self, config)
         self.locationKey = 'location'
 
     def set(self, key, name, value):
@@ -15,10 +15,10 @@ class LocationTracker(abstractRedis):
             data[name]['state'] = value
         self.client.set(key, json.dumps(data))
 
-    def addLocationPoint(self, deviceName, latitude, longitude):
+    def add_location_point(self, deviceName, latitude, longitude):
         data = {
             'device' : deviceName,
             'lat' : latitude,
             'lng' : longitude
         }
-        self.addToList(self.locationKey, data, None)
+        self.add_to_list(self.locationKey, data, None)

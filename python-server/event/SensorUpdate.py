@@ -7,8 +7,8 @@ class SensorUpdate:
         self.__newValue = newValue
         event.send(self)
 
-    def getName(self):
+    def get_name(self):
         return self.__name
 
-    def getNewValue(self):
+    def get_new_value(self):
         return self.__newValue
