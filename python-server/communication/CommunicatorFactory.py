@@ -2,7 +2,7 @@ from Bluetooth import Bluetooth
 
 class CommunicatorFactory:
     @staticmethod
-    def createCommunicator(type):
+    def create_communicator(type):
         if type == 'bluetooth':
             return Bluetooth()
         elif type == 'serial':

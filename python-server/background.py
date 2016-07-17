@@ -20,8 +20,8 @@ from tools.jobControl import JobControll
 from tools.HomeDefence import HomeDefence
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
-bluetoothCommunicator = CommunicatorFactory.createCommunicator('bluetooth')
-bluetoothCommunicator.setEndpoint(config.btConnections)
+bluetoothCommunicator = CommunicatorFactory.create_communicator('bluetooth')
+bluetoothCommunicator.set_endpoint(config.btConnections)
 bluetoothCommunicator.connect()
 logging.debug('Finished connectiong to BT devices')
 
@@ -43,14 +43,14 @@ sensorUpdate = SensorUpdate()
 def btSensorsPolling(sensorsMessageParser, dataContainer, sensorUpdate, bluetoothCommunicator, btDeviceName):
     def __sensorCallback(message):
         logging.debug("Senzors received: " + message)
-        data = sensorsMessageParser.parseSensorsString(message)
+        data = sensorsMessageParser.parse_sensors_string(message)
         for sensorName, sensorValue in data.iteritems():
             dataContainer.setSensor(sensorName, sensorValue)
             sensorUpdate.send(sensorName, sensorValue)
         logging.debug(dataContainer.getSensors())
 
-    bluetoothCommunicator.setReceiveMessageCallback(__sensorCallback)
-    bluetoothCommunicator.listenToDevice(btDeviceName, sensorsMessageParser.isBufferParsable)
+    bluetoothCommunicator.set_receive_message_callback(__sensorCallback)
+    bluetoothCommunicator.listen_to_device(btDeviceName, sensorsMessageParser.is_buffer_parsable)
 
 
 # the jobManager thread listenes to a redis pub sub server for incoming jobs

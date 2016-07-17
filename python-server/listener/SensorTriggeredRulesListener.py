@@ -13,10 +13,10 @@ class SensorTriggeredRulesListener:
         sensorName = sensorUpdate.getName()
         sensorValue = sensorUpdate.getNewValue()
         if sensorName == 'rain' and sensorValue > 40 and actuators['window']['state'] == False:
-            self.__actuatorCommands.changeActuator('window', True)
+            self.__actuatorCommands.change_actuator('window', True)
 
         if actuators['homeAlarm']['state'] == True and sensorName == 'presence' and sensorValue == 1:
             self.__emailNotificator.sendAlert("Cineva a intrat in casa!", "Nasol naspa")
 
         if sensorName == 'fingerprint' and sensorValue > -1:
-            self.__actuatorCommands.changeActuator('door', True)
+            self.__actuatorCommands.change_actuator('door', True)

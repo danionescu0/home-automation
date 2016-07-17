@@ -46,11 +46,11 @@ class HomeDefence:
 
     def __toggleLights(self):
         if self.lastBurglerLight is not None:
-            self.actuatorCommands.changeActuator(self.lastBurglerLight, False)
+            self.actuatorCommands.change_actuator(self.lastBurglerLight, False)
             self.lastBurglerLight = None
         else:
             self.lastBurglerLight = self.burglerLights[random.randint(0, 2)]
-            self.actuatorCommands.changeActuator(self.lastBurglerLight, True)
+            self.actuatorCommands.change_actuator(self.lastBurglerLight, True)
 
     def __playRandomSound(self):
         process = subprocess.Popen(["mpg321", "-g", "150:D", self.__getBurglerSound()], stdout=subprocess.PIPE,

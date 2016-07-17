@@ -2,10 +2,10 @@ class SensorsMessageParser:
     def __init__(self):
         self.__btSeparator = '|'
 
-    def isBufferParsable(self, buffer):
+    def is_buffer_parsable(self, buffer):
         return buffer.endswith(self.__btSeparator)
 
-    def parseSensorsString(self, btBuffer):
+    def parse_sensors_string(self, btBuffer):
         btBuffer = btBuffer[:-1]
         sensors = {}
         for sensor in btBuffer.split('|'):

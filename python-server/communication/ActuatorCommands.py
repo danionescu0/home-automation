@@ -9,20 +9,20 @@ class ActuatorCommands:
         self.burglerMaxWaitBetweenActions = 3
         self.burglerSounds = 2
 
-    def changeActuator(self, actuator, state):
+    def change_actuator(self, actuator, state):
         self.dataContainer.setActuator(actuator, state)
         if actuator != 'closeAllLights':
-            self.__doChangeActuator(actuator, state)
+            self.__do_change_actuator(actuator, state)
             return
 
         allActuators = self.dataContainer.getActuators()
         for name, propreties in allActuators.iteritems():
             if propreties['device'] == 'light':
                 self.dataContainer.setActuator(name, False)
-                self.__doChangeActuator(name, False)
+                self.__do_change_actuator(name, False)
                 time.sleep(3)
 
-    def __doChangeActuator(self, actuator, state):
+    def __do_change_actuator(self, actuator, state):
         lights = {
             'livingLight' : '1', 'bedroomLight' : '2',
             'holwayLight' : '3', 'kitchenLight' : '4',
@@ -32,10 +32,10 @@ class ActuatorCommands:
             self.btComm.send('holway', 'O')
         if actuator in lights:
             self.btComm.send('living', lights[actuator])
-            self.__writeActuatorState(state)
+            self.__write_actuator_state(state)
         if actuator == 'powerSocket1':
             self.btComm.send('living', '8')
-            self.__writeActuatorState(state)
+            self.__write_actuator_state(state)
         if actuator == 'livingCourtains':
             if state:
                 self.btComm.send('balcony', '1')
@@ -49,7 +49,7 @@ class ActuatorCommands:
             else:
                 self.btComm.send('bedroom', '0')
 
-    def __writeActuatorState(self, state):
+    def __write_actuator_state(self, state):
         if (state):
             self.btComm.send('living', 'O')
         else:
