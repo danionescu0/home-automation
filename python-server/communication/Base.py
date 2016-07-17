@@ -3,14 +3,14 @@ class Base:
         self.__endpoint = None
         self.__callback = None
 
-    def setEndpoint(self, endpoint):
+    def set_endpoint(self, endpoint):
         self.__endpoint = endpoint
 
-    def getEndpoint(self):
+    def get_endpoint(self):
         return self.__endpoint
 
-    def setReceiveMessageCallback(self, callback):
+    def set_receive_message_callback(self, callback):
         self.__callback = callback
 
-    def getReceiveMessageCallback(self):
+    def get_receive_message_callback(self):
         return self.__callback

@@ -6,11 +6,11 @@ class Bluetooth(Base):
         try:
             self.btConnections[which].send(value)
         except bluetooth.btcommon.BluetoothError as error:
-            return self.__reconnectBluetooth(which)
+            return self.__reconnect_bluetooth(which)
 
         return True
 
-    def listenToDevice(self, deviceName, untilCondition):
+    def listen_to_device(self, deviceName, untilCondition):
         messageBuffer = ''
         while True:
             data = self.__receive(deviceName, 10)
@@ -19,34 +19,34 @@ class Bluetooth(Base):
             messageBuffer += data
             if not untilCondition(messageBuffer):
                 continue
-            self.getReceiveMessageCallback()(messageBuffer)
+            self.get_receive_message_callback()(messageBuffer)
             messageBuffer = ''
 
     def __receive(self, which, howMuch):
         try:
             return self.btConnections[which].recv(howMuch)
         except bluetooth.btcommon.BluetoothError as error:
-            self.__reconnectBluetooth(which)
+            self.__reconnect_bluetooth(which)
 
         return False
 
     def connect(self):
-        self.connectionMapping = self.getEndpoint()
+        self.connectionMapping = self.get_endpoint()
         self.btConnections = {}
         for name, connectionString in self.connectionMapping.iteritems():
-            self.btConnections[name] = self.__connnectToBluetooth(connectionString, 1)
+            self.btConnections[name] = self.__connnect_to_bluetooth(connectionString, 1)
 
         return self
 
-    def __reconnectBluetooth(self, which):
+    def __reconnect_bluetooth(self, which):
         try:
-            self.btConnections[which] = self.__connnectToBluetooth(self.connectionMapping[which], 1)
+            self.btConnections[which] = self.__connnect_to_bluetooth(self.connectionMapping[which], 1)
         except bluetooth.btcommon.BluetoothError as error:
             return False
 
         return True
 
-    def __connnectToBluetooth(self, id, ch):
+    def __connnect_to_bluetooth(self, id, ch):
         bt = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         bt.settimeout(None)
         bt.connect((id, ch))

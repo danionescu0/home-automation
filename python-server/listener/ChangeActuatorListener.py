@@ -7,4 +7,4 @@ class ChangeActuatorListener:
         changeActuatorRequest.connect(self.callback)
 
     def callback(self, changeActuatorRequest):
-        self.__actuatorCommands.changeActuator(changeActuatorRequest.getName(), changeActuatorRequest.getNewState())
+        self.__actuatorCommands.change_actuator(changeActuatorRequest.getName(), changeActuatorRequest.getNewState())
