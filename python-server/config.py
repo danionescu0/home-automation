@@ -26,4 +26,4 @@ emailConfig = {
     'password': "Abecedar01",
     'notifiedAddress': 'ionescu.dan84@gmail.com'
 }
-burglerSoundsFolder = '/home/pi/burglerSounds'
+burgler_sounds_folder = '/home/pi/burglerSounds'
