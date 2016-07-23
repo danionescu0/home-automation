@@ -5,9 +5,9 @@ from pytz import timezone
 from astral import Astral
 
 class HomeDefence:
-    def __init__(self, actuator_commands, burglerSoundsFolder, data_container):
+    def __init__(self, actuator_commands, burgler_sounds_folder, data_container):
         self.actuator_commands = actuator_commands
-        self.burglerSoundsFolder = burglerSoundsFolder
+        self.burgler_sounds_folder = burgler_sounds_folder
         self.data_container = data_container
         self.lastBurglerLight = None
         self.burglerLights = ['livingLight', 'kitchenLight', 'hollwayLight']
@@ -59,5 +59,5 @@ class HomeDefence:
 
     def __get_burgler_sound(self):
         sound = random.randint(1, self.burglerSounds)
-        path = "{}/p{}.mp3".format(self.burglerSoundsFolder, sound)
+        path = "{}/p{}.mp3".format(self.burgler_sounds_folder, sound)
         return path
