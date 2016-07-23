@@ -10,14 +10,14 @@ class Bluetooth(Base):
 
         return True
 
-    def listen_to_device(self, bluetooth_address, untilCondition):
+    def listen_to_device(self, bluetooth_address, complete_message_callback):
         message_buffer = ''
         while True:
             data = self.__receive(bluetooth_address, 10)
             if data == False:
                 continue
                 message_buffer += data
-            if not untilCondition(message_buffer):
+            if not complete_message_callback(message_buffer):
                 continue
             self.get_receive_message_callback()(message_buffer)
             message_buffer = ''
