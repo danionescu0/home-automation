@@ -3,7 +3,6 @@ import logging
 import threading
 import time
 from datetime import datetime
-
 from dateutil import tz
 
 import config
@@ -21,9 +20,9 @@ from tools.HomeDefence import HomeDefence
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 bluetooth_communicator = CommunicatorFactory.create_communicator('bluetooth')
-bluetooth_communicator.set_endpoint(config.btConnections)
+bluetooth_communicator.set_endpoint(config.bt_connections)
+bluetooth_communicator.set_logger(logging)
 bluetooth_communicator.connect()
-logging.debug('Finished connectiong to BT devices')
 
 data_container = DataContainer(config.redisConfig)
 job_controll = JobControll(config.redisConfig)
@@ -35,22 +34,21 @@ home_defence = HomeDefence(actuator_commands, config.burgler_sounds_folder, data
 change_actuator_listener = ChangeActuatorListener(actuator_commands)
 sensor_triggered_rules_listener = SensorTriggeredRulesListener(data_container, email_notif, actuator_commands)
 change_actuator_request = ChangeActuatorRequest()
-sensorUpdate = SensorUpdate()
+sensor_update = SensorUpdate()
 
 
 # listens to a bluetooth connection until some data appears
 # the format in which data arives is senzorName:senzorData with pipe separators between
-def bt_senzors_polling(sensors_message_parser, data_container, sensorUpdate, bluetooth_communicator, btDeviceName):
+def bt_senzors_polling(sensors_message_parser, data_container, sensor_update, bluetooth_communicator, bluetooth_address):
     def __sensor_callback(message):
-        logging.debug("Senzors received: " + message)
         data = sensors_message_parser.parse_sensors_string(message)
         for sensorName, sensorValue in data.iteritems():
             data_container.set_sensor(sensorName, sensorValue)
-            sensorUpdate.send(sensorName, sensorValue)
+            sensor_update.send(sensorName, sensorValue)
         logging.debug(data_container.get_sensors())
 
     bluetooth_communicator.set_receive_message_callback(__sensor_callback)
-    bluetooth_communicator.listen_to_device(btDeviceName, sensors_message_parser.is_buffer_parsable)
+    bluetooth_communicator.listen_to_device(bluetooth_address, sensors_message_parser.is_buffer_parsable)
 
 
 # the job_manager thread listenes to a redis pub sub server for incoming jobs
@@ -88,18 +86,12 @@ def defence(home_defence):
         time.sleep(60)
         home_defence.iterate_burgler_mode()
 
-pooling_threads = [
-    {'name' : 'bedroomSenzorPooling', 'deviceName' : 'bedroom'},
-    {'name' : 'livingSenzorPooling', 'deviceName' : 'living'},
-    {'name' : 'holwaySenzorPooling', 'deviceName' : 'holway'},
-    # {'name' : 'fingerprintSenzorPooling', 'deviceName' : 'fingerprint'},
-]
-
-for thread_data in pooling_threads:
+#connect to bluetooth devices
+for bluetooth_device_name, bluetooth_address in config.bt_connections.iteritems():
     threading.Thread(
-        name=thread_data['name'],
+        name=bluetooth_device_name + '_thread',
         target=bt_senzors_polling,
-        args=(sensors_message_parser, data_container, sensorUpdate, bluetooth_communicator, thread_data['deviceName'])
+        args=(sensors_message_parser, data_container, sensor_update, bluetooth_communicator, bluetooth_device_name)
     ).start()
 
 threading.Thread(

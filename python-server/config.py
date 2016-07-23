@@ -9,7 +9,7 @@ credentials = {
     'username' : 'dan',
     'password' : 'cicibici07'
 }
-btConnections = {
+bt_connections = {
     'bedroom' : '00:14:01:13:16:44',
     'living' : '20:14:12:08:20:45',
     'holway' : '20:14:11:26:10:26',

@@ -4,43 +4,48 @@ from Base import Base
 class Bluetooth(Base):
     def send(self, which, value):
         try:
-            self.btConnections[which].send(value)
+            self.bt_connections[which].send(value)
         except bluetooth.btcommon.BluetoothError as error:
             return self.__reconnect_bluetooth(which)
 
         return True
 
-    def listen_to_device(self, deviceName, untilCondition):
-        messageBuffer = ''
+    def listen_to_device(self, bluetooth_address, untilCondition):
+        message_buffer = ''
         while True:
-            data = self.__receive(deviceName, 10)
+            data = self.__receive(bluetooth_address, 10)
             if data == False:
                 continue
-            messageBuffer += data
-            if not untilCondition(messageBuffer):
+                message_buffer += data
+            if not untilCondition(message_buffer):
                 continue
-            self.get_receive_message_callback()(messageBuffer)
-            messageBuffer = ''
+            self.get_receive_message_callback()(message_buffer)
+            message_buffer = ''
 
-    def __receive(self, which, howMuch):
+    def __receive(self, which, size):
         try:
-            return self.btConnections[which].recv(howMuch)
+            received_data = self.bt_connections[which].recv(size)
+            self.get_logger().debug("Senzors data received: " + received_data)
+            return received_data
+
         except bluetooth.btcommon.BluetoothError as error:
             self.__reconnect_bluetooth(which)
 
         return False
 
     def connect(self):
-        self.connectionMapping = self.get_endpoint()
-        self.btConnections = {}
-        for name, connectionString in self.connectionMapping.iteritems():
-            self.btConnections[name] = self.__connnect_to_bluetooth(connectionString, 1)
+        self.connection_mapping = self.get_endpoint()
+        self.bt_connections = {}
+        for name, connection_string in self.connection_mapping.iteritems():
+            self.get_logger().debug("Connecting to {0} on address {1}".format(name, connection_string))
+            self.bt_connections[name] = self.__connnect_to_bluetooth(connection_string, 1)
+        self.get_logger().debug("Connected to all devices")
 
         return self
 
     def __reconnect_bluetooth(self, which):
         try:
-            self.btConnections[which] = self.__connnect_to_bluetooth(self.connectionMapping[which], 1)
+            self.bt_connections[which] = self.__connnect_to_bluetooth(self.connection_mapping[which], 1)
         except bluetooth.btcommon.BluetoothError as error:
             return False
 
