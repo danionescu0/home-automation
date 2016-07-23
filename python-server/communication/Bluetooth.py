@@ -4,7 +4,7 @@ from Base import Base
 class Bluetooth(Base):
     def send(self, which, value):
         try:
-            self.bt_connections[which].send(value)
+            self.__connections[which].send(value)
         except bluetooth.btcommon.BluetoothError as error:
             return self.__reconnect_bluetooth(which)
 
@@ -24,7 +24,7 @@ class Bluetooth(Base):
 
     def __receive(self, which, size):
         try:
-            received_data = self.bt_connections[which].recv(size)
+            received_data = self.__connections[which].recv(size)
             self.get_logger().debug("Senzors data received: " + received_data)
             return received_data
 
@@ -35,17 +35,17 @@ class Bluetooth(Base):
 
     def connect(self):
         self.connection_mapping = self.get_endpoint()
-        self.bt_connections = {}
+        self.__connections = {}
         for name, connection_string in self.connection_mapping.iteritems():
             self.get_logger().debug("Connecting to {0} on address {1}".format(name, connection_string))
-            self.bt_connections[name] = self.__connnect_to_bluetooth(connection_string, 1)
+            self.__connections[name] = self.__connnect_to_bluetooth(connection_string, 1)
         self.get_logger().debug("Connected to all devices")
 
         return self
 
     def __reconnect_bluetooth(self, which):
         try:
-            self.bt_connections[which] = self.__connnect_to_bluetooth(self.connection_mapping[which], 1)
+            self.__connections[which] = self.__connnect_to_bluetooth(self.connection_mapping[which], 1)
         except bluetooth.btcommon.BluetoothError as error:
             return False
 

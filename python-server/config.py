@@ -1,5 +1,8 @@
-staticPath = '/home/pi/home-automation/python-server/public'
-applicationPort = 8080
+web_server = {
+    'static_path' : '/home/pi/home-automation/python-server/public',
+    'application_port' : 8080,
+    'cookie_secret' : 'wellithinksecretisnice'
+}
 
 #home gps coordonates, used for determining if the user is near home or not
 homeCoordonates = (44.4169649,26.1542889)

@@ -64,7 +64,7 @@ def job_manager(job_controll, change_actuator_request):
 
 # periodically check if a time rules match the programmed interval
 # if so the actuator is activated
-def timeRulesControl(data_container, change_actuator_request):
+def time_rules_control(data_container, change_actuator_request):
     from_zone = tz.gettz('UTC')
     to_zone = tz.gettz('Europe/Bucharest')
 
@@ -101,8 +101,8 @@ threading.Thread(
 ).start()
 
 threading.Thread(
-    name='timeRulesControl',
-    target=timeRulesControl,
+    name='time_rules_control',
+    target=time_rules_control,
     args=(data_container, change_actuator_request)
 ).start()
 
