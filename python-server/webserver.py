@@ -27,8 +27,8 @@ def make_app():
     global config, data_container, job_controll
 
     settings = {
-        "cookie_secret": "wellithinksecretisnice",
-        "login_url": "/login",
+        'cookie_secret': config.web_server['cookie_secret'],
+        'login_url': '/login',
     }
 
     return Application([
@@ -39,7 +39,9 @@ def make_app():
                 name="actuator-states"
             ),
             url(r'/login', LoginHandler, dict(credentials=config.credentials), name='login'),
-            url(r'/public/(.*)', StaticFileHandler, {'path': config.staticPath}),
+            url(r'/public/(.*)', StaticFileHandler, {
+                'path': config.web_server['static_path']
+            }),
             url(r'/graphs', GraphsBuilderHandler, dict(data_container=data_container), name='graphs'),
             url(r'/time-rules', TimeRulesHandler, dict(data_container=data_container, logging=logging), name='timeRules'),
             url(
@@ -51,5 +53,5 @@ def make_app():
         ], **settings)
 
 app = make_app()
-app.listen(config.applicationPort)
+app.listen(config.web_server['application_port'])
 IOLoop.current().start()
