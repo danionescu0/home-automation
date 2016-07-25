@@ -2,8 +2,6 @@ import json
 import logging
 import threading
 import time
-from datetime import datetime
-from dateutil import tz
 
 import configuration
 from communication.ActuatorCommands import ActuatorCommands
@@ -14,6 +12,7 @@ from event.SensorUpdate import SensorUpdate
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.SensorTriggeredRulesListener import SensorTriggeredRulesListener
 from tools.DataContainer import DataContainer
+from tools.TimeRules import TimeRules
 from tools.EmailNotifier import EmailNotifier
 from tools.JobControl import JobControll
 from tools.HomeDefence import HomeDefence
@@ -25,6 +24,7 @@ bluetooth_communicator.set_logger(logging)
 bluetooth_communicator.connect()
 
 data_container = DataContainer(configuration.redis_config)
+time_rules = TimeRules(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
 email_notif = EmailNotifier(configuration.email['email'], configuration.email['password'], configuration.email['notifiedAddress'])
 actuator_commands = ActuatorCommands(bluetooth_communicator, data_container)
@@ -56,25 +56,14 @@ def job_manager(job_controll, change_actuator_request):
 
     job_controll.listen(__job_callback)
 
-
-# periodically check if a time rules match the programmed interval
-# if so the actuator is activated
-def time_rules_control(data_container, change_actuator_request):
-    from_zone = tz.gettz('UTC')
-    to_zone = tz.gettz('Europe/Bucharest')
-
+# periodically check if a time rules match the programmed interval and applies actuator changes
+def time_rules_control(time_rules, change_actuator_request):
     while True:
         time.sleep(60)
-        rules = data_container.get_time_rules()
-        initialDate = datetime.now().replace(tzinfo=from_zone)
-        bucharestDate = initialDate.astimezone(to_zone)
-        currentTime = bucharestDate.strftime('%H:%M:00')
-
+        rules = time_rules.get_rules_that_match()
         for key, rule in rules.iteritems():
-            if rule['stringTime'] != currentTime or rule['active'] != True:
-                continue
-            logging.debug("Changing actuator:", rule)
-            change_actuator_request.send(rule["actuator"], rule["state"])
+            logging.debug('Changing actuator {0} to state {1}'.format(rule['actuator'], rule['state']))
+            change_actuator_request.send(rule['actuator'], rule['state'])
 
 def defence(home_defence):
     while True:
@@ -97,7 +86,7 @@ threading.Thread(
 threading.Thread(
     name='time_rules_control',
     target=time_rules_control,
-    args=(data_container, change_actuator_request)
+    args=(time_rules, change_actuator_request)
 ).start()
 
 threading.Thread(

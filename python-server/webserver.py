@@ -6,6 +6,7 @@ from tornado.web import Application, url, StaticFileHandler
 from listener.SaveLocationListener import SaveLocationListener
 from listener.ToggleAlarmFromLocationListener import ToggleAlarmFromLocationListener
 from tools.DataContainer import DataContainer
+from tools.TimeRules import TimeRules
 from tools.JobControl import JobControll
 from tools.LocationTracker import LocationTracker
 from web.ActuatorsHandler import ActuatorsHandler
@@ -16,6 +17,7 @@ from web.TimeRulesHandler import TimeRulesHandler
 import configuration
 
 data_container = DataContainer(configuration.redis_config)
+time_rules = TimeRules(configuration.redis_config)
 locationTracker = LocationTracker(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
 
@@ -43,11 +45,22 @@ def make_app():
                 'path': configuration.web_server['static_path']
             }),
             url(r'/graphs', GraphsBuilderHandler, dict(data_container=data_container), name='graphs'),
-            url(r'/time-rules', TimeRulesHandler, dict(data_container=data_container, logging=logging), name='timeRules'),
+            url(r'/time-rules',
+                TimeRulesHandler,
+                dict(
+                    data_container=data_container,
+                    time_rules=time_rules,
+                    logging=logging
+                ),
+                name='timeRules'),
             url(
                 r'/api/(.*)',
                 ApiHandler,
-                dict(data_container=data_container, credentials=configuration.credentials, logging=logging),
+                dict(
+                    data_container=data_container,
+                    credentials=configuration.credentials,
+                    logging=logging
+                ),
                 name='api'
             ),
         ], **settings)
