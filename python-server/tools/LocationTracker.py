@@ -3,8 +3,8 @@ import json
 from AbstractRedis import AbstractRedis
 
 class LocationTracker(AbstractRedis):
-    def __init__(self, config):
-        AbstractRedis.__init__(self, config)
+    def __init__(self, configuration):
+        AbstractRedis.__init__(self, configuration)
         self.locationKey = 'location'
 
     def set(self, key, name, value):

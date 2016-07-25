@@ -3,7 +3,7 @@
 * redis server running
 * bluetooth configured
 
-# configuration in config.py
+# configuration in configuration.py
 * replace username and password with your own
 * static path is the absolute path to /public folder
 * bluetooth connection strings for the three devices

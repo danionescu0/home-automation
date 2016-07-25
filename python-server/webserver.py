@@ -13,21 +13,21 @@ from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.TimeRulesHandler import TimeRulesHandler
-import config
+import configuration
 
-data_container = DataContainer(config.redisConfig)
-locationTracker = LocationTracker(config.redisConfig)
-job_controll = JobControll(config.redisConfig)
+data_container = DataContainer(configuration.redis_config)
+locationTracker = LocationTracker(configuration.redis_config)
+job_controll = JobControll(configuration.redis_config)
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 saveLocationListener = SaveLocationListener(locationTracker)
-toggleAlarmFromLocationListener = ToggleAlarmFromLocationListener(config.homeCoordonates, job_controll, locationTracker)
+toggleAlarmFromLocationListener = ToggleAlarmFromLocationListener(configuration.home_coordonates, job_controll, locationTracker)
 
 def make_app():
-    global config, data_container, job_controll
+    global configuration, data_container, job_controll
 
     settings = {
-        'cookie_secret': config.web_server['cookie_secret'],
+        'cookie_secret': configuration.web_server['cookie_secret'],
         'login_url': '/login',
     }
 
@@ -38,20 +38,20 @@ def make_app():
                 dict(data_container=data_container, job_controll=job_controll),
                 name="actuator-states"
             ),
-            url(r'/login', LoginHandler, dict(credentials=config.credentials), name='login'),
+            url(r'/login', LoginHandler, dict(credentials=configuration.credentials), name='login'),
             url(r'/public/(.*)', StaticFileHandler, {
-                'path': config.web_server['static_path']
+                'path': configuration.web_server['static_path']
             }),
             url(r'/graphs', GraphsBuilderHandler, dict(data_container=data_container), name='graphs'),
             url(r'/time-rules', TimeRulesHandler, dict(data_container=data_container, logging=logging), name='timeRules'),
             url(
                 r'/api/(.*)',
                 ApiHandler,
-                dict(data_container=data_container, credentials=config.credentials, logging=logging),
+                dict(data_container=data_container, credentials=configuration.credentials, logging=logging),
                 name='api'
             ),
         ], **settings)
 
 app = make_app()
-app.listen(config.web_server['application_port'])
+app.listen(configuration.web_server['application_port'])
 IOLoop.current().start()

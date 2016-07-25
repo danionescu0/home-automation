@@ -7,8 +7,8 @@ from collections import Counter
 from AbstractRedis import AbstractRedis
 
 class DataContainer(AbstractRedis):
-    def __init__(self, config):
-        AbstractRedis.__init__(self, config)
+    def __init__(self, configuration):
+        AbstractRedis.__init__(self, configuration)
         actuators = {
             'door' : {'state' : False, 'type': 'single', 'device': 'door'},
             'homeAlarm' : {'state' : False, 'type': 'bi', 'device': 'action'},

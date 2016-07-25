@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 from dateutil import tz
 
-import config
+import configuration
 from communication.ActuatorCommands import ActuatorCommands
 from communication.CommunicatorFactory import CommunicatorFactory
 from communication.SensorsMessageParser import SensorsMessageParser
@@ -20,26 +20,23 @@ from tools.HomeDefence import HomeDefence
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 bluetooth_communicator = CommunicatorFactory.create_communicator('bluetooth')
-bluetooth_communicator.set_endpoint(config.bt_connections)
+bluetooth_communicator.set_endpoint(configuration.bt_connections)
 bluetooth_communicator.set_logger(logging)
 bluetooth_communicator.connect()
 
-data_container = DataContainer(config.redisConfig)
-job_controll = JobControll(config.redisConfig)
-email_notif = EmailNotifier(config.emailConfig['email'], config.emailConfig['password'], config.emailConfig['notifiedAddress'])
+data_container = DataContainer(configuration.redis_config)
+job_controll = JobControll(configuration.redis_config)
+email_notif = EmailNotifier(configuration.email['email'], configuration.email['password'], configuration.email['notifiedAddress'])
 actuator_commands = ActuatorCommands(bluetooth_communicator, data_container)
 sensors_message_parser = SensorsMessageParser()
-home_defence = HomeDefence(actuator_commands, config.burgler_sounds_folder, data_container)
+home_defence = HomeDefence(actuator_commands, configuration.burgler_sounds_folder, data_container)
 
 change_actuator_listener = ChangeActuatorListener(actuator_commands)
 sensor_triggered_rules_listener = SensorTriggeredRulesListener(data_container, email_notif, actuator_commands)
 change_actuator_request = ChangeActuatorRequest()
 sensor_update = SensorUpdate()
 
-
-# listens to a bluetooth connection until some data appears
-# the format in which data arives is senzorName:senzorData with pipe separators between
-def bt_senzors_polling(sensors_message_parser, data_container, sensor_update, bluetooth_communicator, bluetooth_address):
+def communication(sensors_message_parser, data_container, sensor_update, bluetooth_communicator):
     def __sensor_callback(message):
         data = sensors_message_parser.parse_sensors_string(message)
         for sensorName, sensorValue in data.iteritems():
@@ -47,9 +44,7 @@ def bt_senzors_polling(sensors_message_parser, data_container, sensor_update, bl
             sensor_update.send(sensorName, sensorValue)
         logging.debug(data_container.get_sensors())
 
-    bluetooth_communicator.set_receive_message_callback(__sensor_callback)
-    bluetooth_communicator.listen_to_device(bluetooth_address, sensors_message_parser.is_buffer_parsable)
-
+    bluetooth_communicator.listen(sensors_message_parser.is_buffer_parsable, __sensor_callback)
 
 # the job_manager thread listenes to a redis pub sub server for incoming jobs
 def job_manager(job_controll, change_actuator_request):
@@ -86,13 +81,12 @@ def defence(home_defence):
         time.sleep(60)
         home_defence.iterate_burgler_mode()
 
-#connect to bluetooth devices
-for bluetooth_device_name, bluetooth_address in config.bt_connections.iteritems():
-    threading.Thread(
-        name=bluetooth_device_name + '_thread',
-        target=bt_senzors_polling,
-        args=(sensors_message_parser, data_container, sensor_update, bluetooth_communicator, bluetooth_device_name)
-    ).start()
+threading.Thread(
+    name='communication',
+    target=communication,
+    args=(sensors_message_parser, data_container, sensor_update, bluetooth_communicator)
+).start()
+
 
 threading.Thread(
     name='job_manager',
