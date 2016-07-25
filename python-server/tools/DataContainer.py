@@ -26,24 +26,16 @@ class DataContainer(AbstractRedis):
         }
         sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0, 'airQuality' : 0,
                     'fingerprint' : -1}
-        self.keys = {'actuators' : actuators, 'sensors' : sensors, 'time_rules': {}}
+        self.keys = {'actuators' : actuators, 'sensors' : sensors}
 
         self.sensors_last_updated = 0
         self.update_threshold_seconds = 300
         self.sensors_history_key = 'sensors_history_key'
         self.sensors_key = 'sensors'
-        self.time_rules = 'time_rules'
         self.actuators_key = 'actuators'
         self.last_averages = {}
 
-    def get(self, key):
-        result = self.client.get(key)
-        if (not result):
-            return self.keys[key]
-
-        return json.loads(result)
-
-    def set(self, key, name, value):
+    def __set(self, key, name, value):
         data = self.get(key)
         if (key == self.sensors_key):
             data[name] = value
@@ -64,39 +56,14 @@ class DataContainer(AbstractRedis):
         return actuatorNames
 
     def set_actuator(self, name, value):
-        return self.set(self.actuators_key, name, value)
+        return self.__set(self.actuators_key, name, value)
 
     def get_sensors(self):
         return self.get(self.sensors_key)
 
     def set_sensor(self, name, value):
-        self.set(self.sensors_key, name, value)
+        self.__set(self.sensors_key, name, value)
         self.__add_sensors_in_history(name, value)
-
-    def upsert_time_rule(self, name, actuator, state, time, active):
-        rules = self.get(self.time_rules)
-        rules[name] = {
-            'actuator' : actuator,
-            'state' : state,
-            'active': active,
-            'time' : time.isoformat()
-        }
-
-        return self.client.set(self.time_rules, json.dumps(rules))
-
-    def delete_time_rule(self, name):
-        rules = self.get(self.time_rules)
-        rules.pop(name, None)
-
-        return self.client.set(self.time_rules, json.dumps(rules))
-
-    def get_time_rules(self):
-        rules = self.get(self.time_rules)
-        for rule in rules:
-            rules[rule]['stringTime'] = rules[rule]['time']
-            rules[rule]['time'] = datetime.strptime(rules[rule]['time'], "%H:%M:%S").time()
-
-        return rules
 
     def __add_sensors_in_history(self, name, value):
         if name not in self.last_averages.keys():

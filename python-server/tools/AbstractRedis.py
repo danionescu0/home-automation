@@ -13,3 +13,10 @@ class AbstractRedis:
             timeAsTimestamp = calendar.timegm(datetime.now().timetuple())
         data["randomize"] = random.randint(0, 999999999)
         self.client.zadd(key, timeAsTimestamp, json.dumps(data))
+
+    def get(self, key):
+        result = self.client.get(key)
+        if (not result):
+            return self.keys[key]
+
+        return json.loads(result)
