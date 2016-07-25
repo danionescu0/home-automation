@@ -2,7 +2,7 @@
 
 Yet another home automation project. The main concern of the project is keeping price down, it's a DIY project for makers and hackers:) it is based on a raspberry pi (or another linux compatible board) and arduinos.
 
-### How cheap it will be  ###
+### How cheap will it be ?  ###
 
 * The PI, case, SD card and power adapter will be around 70 dollars
 * Each controller composed of arduino, case, bluetooth device, power adapter, sensors etc will be around 20-30 $ each
@@ -13,7 +13,7 @@ So if you implement all the features the total will be slightly under **300 $**
 
 Note: The RC light switches, wall sockets, electric curtains, and electromagnetic door lock wore not included here.
 
-### What can it do ###
+### What can it do ? ###
 
 * unlock a electromagnetic door through the press of a button on the app or through fingerprint
 * control various types of electric curtains (open / close)
