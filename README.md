@@ -2,6 +2,8 @@
 
 Yet another home automation project. The main concern of the project is keeping price down, it's a DIY project for makers and hackers:) it is based on a raspberry pi (or another linux compatible board) and arduinos.
 
+Don't judge by python code too harsh, i am noobie in python but i'm willing to learn, the project will suffer refactors periodically and hopefully it will become more pythonian.
+
 ### How cheap will it be ?  ###
 
 * The PI, case, SD card and power adapter will be around 70 dollars
