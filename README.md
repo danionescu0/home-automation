@@ -11,9 +11,11 @@ Yet another home automation project. The main concern of the project is keeping 
 
 So if you implement all the features the total will be slightly under **300 $**
 
+Note: The RC light switches, wall sockets, electric curtains, and electromagnetic door lock wore not included here.
+
 ### What can it do ###
 
-* unlock a electromagnetic door
+* unlock a electromagnetic door through the press of a button on the app or through fingerprint
 * control various types of electric curtains (open / close)
 * control remote wall sockets
 * monitor temperature, humidity, light level, air quality, human presence 
@@ -25,13 +27,15 @@ So if you implement all the features the total will be slightly under **300 $**
 * toggle all lights off button
 * ability to react to sensors output (you can easily write a piece of code to react to sensors data)
 
-### Contribution guidelines ###
+### Project structure ###
+* The python code for the raspberry pi is inside home_automation folder
+* The rest of the folders contain arduino sketches that communicate through bluetooth and do specfic tasks
 
-* Writing tests
-* Code review
-* Other guidelines
 
-### Who do I talk to? ###
+### Arduino sketches explained ###
 
-* Repo owner or admin
-* Other community or team contact
+1.  windowSwitchController
+* Description: controlls 12 V electric motors that powers electric courtains, the motors go up / down if the polarity is inversed
+* parts: case, 12 v 10A power supply, 5A fuse, arduino nano, L298 Dual H-Bridge Motor Driver, HC-05 bluetooth, l7805cv 5V regulator
+
+2. 
