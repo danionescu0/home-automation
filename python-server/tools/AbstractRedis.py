@@ -5,8 +5,8 @@ import json
 from datetime import datetime
 
 class AbstractRedis:
-    def __init__(self, config):
-        self.client = redis.StrictRedis(**config)
+    def __init__(self, configuration):
+        self.client = redis.StrictRedis(**configuration)
 
     def add_to_list(self, key, data, timeAsTimestamp):
         if timeAsTimestamp == None:

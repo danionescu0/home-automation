@@ -3,8 +3,8 @@ import redis
 class JobControll:
     CHANNEL_NAME = 'jobs'
 
-    def __init__(self, config):
-        self.client = redis.StrictRedis(**config)
+    def __init__(self, configuration):
+        self.client = redis.StrictRedis(**configuration)
         self.pubsub = self.client.pubsub()
         self.pubsub.subscribe(self.CHANNEL_NAME)
 
