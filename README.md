@@ -4,10 +4,11 @@ Yet another home automation project. The main concern of the project is keeping 
 
 ### How cheap it will be  ###
 
-The PI, case, SD card and power adapter will be around 70 dollars
-Each controller composed of arduino, case, bluetooth device, power adapter, sensors etc will be around 20-30 $ each
-The fingerprind module will make an exception and will cost around 70 dollars.
-A pair of speakers to play the sounds will be 20$
+* The PI, case, SD card and power adapter will be around 70 dollars
+* Each controller composed of arduino, case, bluetooth device, power adapter, sensors etc will be around 20-30 $ each
+* The fingerprind module will make an exception and will cost around 70 dollars.
+* A pair of speakers to play the sounds will be 20$
+
 So if you implement all the features the total will be slightly under **300 $**
 
 ### What can it do ###
