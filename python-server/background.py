@@ -10,7 +10,9 @@ from communication.SensorsMessageParser import SensorsMessageParser
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
 from listener.ChangeActuatorListener import ChangeActuatorListener
-from listener.SensorTriggeredRulesListener import SensorTriggeredRulesListener
+from listener.CloseCourtainsOnRainListener import CloseCourtainsOnRainListener
+from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
+from listener.IntruderAlertListener import IntruderAlertListener
 from tools.DataContainer import DataContainer
 from tools.TimeRules import TimeRules
 from tools.EmailNotifier import EmailNotifier
@@ -26,13 +28,15 @@ bluetooth_communicator.connect()
 data_container = DataContainer(configuration.redis_config)
 time_rules = TimeRules(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
-email_notif = EmailNotifier(configuration.email['email'], configuration.email['password'], configuration.email['notifiedAddress'])
+email_notificator = EmailNotifier(configuration.email['email'], configuration.email['password'], configuration.email['notifiedAddress'])
 actuator_commands = ActuatorCommands(bluetooth_communicator, data_container)
 sensors_message_parser = SensorsMessageParser()
 home_defence = HomeDefence(actuator_commands, configuration.burgler_sounds_folder, data_container)
 
 change_actuator_listener = ChangeActuatorListener(actuator_commands)
-sensor_triggered_rules_listener = SensorTriggeredRulesListener(data_container, email_notif, actuator_commands)
+fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(data_container, actuator_commands)
+close_courtains_on_rain_listener = CloseCourtainsOnRainListener(data_container, actuator_commands)
+intruder_alert_listener = IntruderAlertListener(data_container, email_notificator)
 change_actuator_request_event = ChangeActuatorRequestEvent()
 sensor_update_event = SensorUpdateEvent()
 

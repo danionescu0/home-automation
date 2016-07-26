@@ -13,10 +13,9 @@ class Bluetooth(Base):
         return True
 
     def listen(self, complete_message_callback, receive_message_callback):
-        message_buffer = {}
+        message_buffer = self.__create_empty_message_buffer()
         while True:
             for name, bluetooth_address in self.connection_mapping.iteritems():
-                message_buffer[name] = ''
                 data = self.__receive(name, 10)
                 if data == False:
                     continue
@@ -25,6 +24,13 @@ class Bluetooth(Base):
                     continue
                 receive_message_callback(message_buffer[name])
                 message_buffer[name] = ''
+
+    def __create_empty_message_buffer(self):
+        message_buffer = {}
+        for name, bluetooth_address in self.connection_mapping.iteritems():
+            message_buffer[name] = ''
+
+        return message_buffer
 
     def __receive(self, which, size):
         try:

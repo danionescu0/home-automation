@@ -1,14 +1,14 @@
 class SensorsMessageParser:
     def __init__(self):
-        self.__btSeparator = '|'
+        self.__sensor_separator = '|'
 
     def is_buffer_parsable(self, buffer):
-        return buffer.endswith(self.__btSeparator)
+        return buffer.endswith(self.__sensor_separator)
 
-    def parse_sensors_string(self, btBuffer):
-        btBuffer = btBuffer[:-1]
+    def parse_sensors_string(self, text_buffer):
+        text_buffer = text_buffer[:-1]
         sensors = {}
-        for sensor in btBuffer.split('|'):
+        for sensor in text_buffer.split('|'):
             elements = sensor.split(':')
             if elements[0] == 'H':
                 sensors['humidity'] = int(elements[1])
