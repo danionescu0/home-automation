@@ -1,5 +1,5 @@
 from web.BaseHandler import BaseHandler
-from event.Location import Location
+from event.LocationEvent import LocationEvent
 
 class ApiHandler(BaseHandler):
     def initialize(self, data_container, credentials, logging):
@@ -23,7 +23,7 @@ class ApiHandler(BaseHandler):
 
         latitude = float(self.get_argument('latitude', None, True))
         longitude = float(self.get_argument('longitude', None, True))
-        locationEvent = Location()
-        locationEvent.send(deviceName, latitude, longitude)
+        location_event = LocationEvent()
+        location_event.send(deviceName, latitude, longitude)
 
         self.write({'status' : True})
