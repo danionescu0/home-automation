@@ -1,6 +1,6 @@
 from blinker import signal
 
-class ChangeActuatorRequest:
+class ChangeActuatorRequestEvent:
     def send(self, name, newState):
         event = signal("change_actuator_request")
         self.__name = name
