@@ -25,43 +25,46 @@ class GraphsBuilderHandler(BaseHandler):
     def post(self, *args, **kwargs):
         logging.debug(self.get_argument('type', 'light'))
         type = self.get_argument('type', 'light')
-        groupByHours = int(self.get_argument("group_by_hours", None, True))
-        nrDaysBehind = int(self.get_argument("nr_days_behind", None, True))
-        if groupByHours == 0:
-            data = self.__get_data_from_db(type, nrDaysBehind, None)
+        group_by_hours = int(self.get_argument("group_by_hours", None, True))
+        nr_days_behind = int(self.get_argument("nr_days_behind", None, True))
+        if group_by_hours == 0:
+            data = self.__get_data_from_db(type, nr_days_behind, None)
         else:
-            data = self.__get_data_from_db(type, nrDaysBehind, groupByHours)
+            data = self.__get_data_from_db(type, nr_days_behind, group_by_hours)
 
         self.render("../html/graphs.html",
-                    datetimeList = json.dumps(data["datetimeList"]),
-                    datapointValues = json.dumps(data["datapointValues"]),
+                    datetimeList = json.dumps(data["datetime_list"]),
+                    datapointValues = json.dumps(data["datapoint_values"]),
                     selectedType = type,
                     menuSelected ="graphs",
-                    selectedDaysBehind =  nrDaysBehind,
-                    selectedGroupedByHours =  groupByHours
+                    selectedDaysBehind =  nr_days_behind,
+                    selectedGroupedByHours =  group_by_hours
                     )
 
-    def __get_data_from_db(self, type, nrDaysBehind, groupByHours):
-        startDate = datetime.today() - timedelta(days=nrDaysBehind)
-        endDate = datetime.today()
-        data = self.data_container.get_sensor_values_in_interval(startDate, endDate, groupByHours)
-        datetimeList = []
-        datapointValues = []
+    def __get_data_from_db(self, type, nr_days_behind, group_by_hours):
+        start_date = datetime.today() - timedelta(days=nr_days_behind)
+        end_date = datetime.today()
+        data = self.data_container.get_sensor_values_in_interval(start_date, end_date, group_by_hours)
+        datetime_list = []
+        datapoint_values = []
         from_zone = tz.gettz('UTC')
         to_zone = tz.gettz('Europe/Bucharest')
-        lastValueBySenzorType = {}
+        self.__last_value_by_senzor_type = {}
 
         for datapoint in data:
-            initialDate = datetime.fromtimestamp(int(datapoint['timestamp'])).replace(tzinfo=from_zone)
-            bucharestDate = initialDate.astimezone(to_zone)
-            datetimeAsString = bucharestDate.strftime('%Y-%m-%d %H:%M:%S')
-            datetimeList.append(datetimeAsString)
-            if type in datapoint.keys():
-                datapointValues.append(datapoint[type])
-                lastValueBySenzorType[type] = datapoint[type]
-            elif type in lastValueBySenzorType.keys():
-                datapointValues.append(lastValueBySenzorType[type])
-            else:
-                datapointValues.append(0)
+            initial_date = datetime.fromtimestamp(int(datapoint['timestamp'])).replace(tzinfo=from_zone)
+            local_date = initial_date.astimezone(to_zone)
+            datetime_text = local_date.strftime('%Y-%m-%d %H:%M:%S')
+            datetime_list.append(datetime_text)
+            datapoint_values.append(self.__compute_datapoint_value(datapoint, type))
 
-        return {"datapointValues": datapointValues, "datetimeList" : datetimeList}
+        return {"datapoint_values": datapoint_values, "datetime_list" : datetime_list}
+
+    def __compute_datapoint_value(self, datapoint, type):
+        if type in datapoint.keys():
+            self.__last_value_by_senzor_type[type] = datapoint[type]
+            return  datapoint[type]
+        elif type in self.__last_value_by_senzor_type.keys():
+            return self.__last_value_by_senzor_type[type]
+
+        return 0
