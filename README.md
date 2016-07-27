@@ -69,6 +69,8 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 
 ### Further improvements ###
 * refactor the code to be more extendable
+* light, window switches to be configurable (now are hardcoded for my house)
+* finish the fingerprint scanner system (with door opening)
 * integrate air conditioning system
 * water, power consumption sensors
 * mailbox senzor with email notification
