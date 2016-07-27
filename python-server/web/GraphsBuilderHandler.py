@@ -13,8 +13,8 @@ class GraphsBuilderHandler(BaseHandler):
     def get(self):
         data = self.__get_data_from_db('light', 1, None)
         self.render("../html/graphs.html",
-                    datetimeList = json.dumps(data["datetimeList"]),
-                    datapointValues = json.dumps(data["datapointValues"]),
+                    datetimeList = json.dumps(data["datetime_list"]),
+                    datapointValues = json.dumps(data["datapoint_values"]),
                     selectedType = type,
                     menuSelected ="graphs",
                     selectedDaysBehind =  1,
