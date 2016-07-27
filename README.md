@@ -32,7 +32,7 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 ### Project structure ###
 * The python code for the raspberry pi is inside home_automation folder
 * The rest of the folders contain arduino sketches that communicate through bluetooth and do specfic tasks
-
+* the Android App (webview + reporting location) is [here](https://bitbucket.org/danionescu/androidprojects/src/f9de4cec96bc4720326011c14c9a029436fe1488/HomeAutomation/?at=default), note that the password and username are hardcoded, needs some refactoring to get it from manifest
 
 ### Arduino sketches explained ###
 
@@ -68,8 +68,8 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 * Light switches and remote wall socket do not have built in security, the signal can be sniffed and clonned easily
 
 ### Further improvements ###
-* refactor the code to be more extendable
-* light, window switches to be configurable (now are hardcoded for my house)
+* refactor the code to be more extensible
+* light, window switches etc to be configurable (now are hardcoded for my houss in DataContainer)
 * finish the fingerprint scanner system (with door opening)
 * integrate air conditioning system
 * water, power consumption sensors
