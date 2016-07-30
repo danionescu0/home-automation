@@ -1,13 +1,11 @@
 import logging
 
-import configuration
 from communication.ActuatorCommands import ActuatorCommands
+from communication.CommunicationThread import CommunicationThread
 from communication.CommunicatorFactory import CommunicatorFactory
 from communication.SensorsMessageParser import SensorsMessageParser
-from communication.CommunicationThread import CommunicationThread
-from tools.JobControlThread import JobControlThread
-from tools.TimeRulesControlThread import TimeRulesControlThread
-from tools.HomeDefenceThread import HomeDefenceThread
+from config import configuration
+from config import actuators
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
 from listener.ChangeActuatorListener import ChangeActuatorListener
@@ -15,10 +13,13 @@ from listener.CloseCourtainsOnRainListener import CloseCourtainsOnRainListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
 from tools.DataContainer import DataContainer
-from tools.TimeRules import TimeRules
 from tools.EmailNotifier import EmailNotifier
-from tools.JobControl import JobControll
 from tools.HomeDefence import HomeDefence
+from tools.HomeDefenceThread import HomeDefenceThread
+from tools.JobControl import JobControll
+from tools.JobControlThread import JobControlThread
+from tools.TimeRules import TimeRules
+from tools.TimeRulesControlThread import TimeRulesControlThread
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 bluetooth_communicator = CommunicatorFactory.create_communicator('bluetooth')
@@ -26,11 +27,11 @@ bluetooth_communicator.set_endpoint(configuration.bt_connections)
 bluetooth_communicator.set_logger(logging)
 bluetooth_communicator.connect()
 
-data_container = DataContainer(configuration.redis_config)
+data_container = DataContainer(configuration.redis_config, actuators.conf)
 time_rules = TimeRules(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
 email_notificator = EmailNotifier(configuration.email['email'], configuration.email['password'], configuration.email['notifiedAddress'])
-actuator_commands = ActuatorCommands(bluetooth_communicator, data_container)
+actuator_commands = ActuatorCommands(bluetooth_communicator, data_container, actuators.conf)
 sensors_message_parser = SensorsMessageParser()
 home_defence = HomeDefence(actuator_commands, configuration.burgler_sounds_folder, data_container)
 

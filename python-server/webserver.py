@@ -6,17 +6,18 @@ from tornado.web import Application, url, StaticFileHandler
 from listener.SaveLocationListener import SaveLocationListener
 from listener.ToggleAlarmFromLocationListener import ToggleAlarmFromLocationListener
 from tools.DataContainer import DataContainer
-from tools.TimeRules import TimeRules
 from tools.JobControl import JobControll
 from tools.LocationTracker import LocationTracker
+from tools.TimeRules import TimeRules
 from web.ActuatorsHandler import ActuatorsHandler
 from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.TimeRulesHandler import TimeRulesHandler
-import configuration
+from config import configuration
+from config import actuators
 
-data_container = DataContainer(configuration.redis_config)
+data_container = DataContainer(configuration.redis_config, actuators.conf)
 time_rules = TimeRules(configuration.redis_config)
 locationTracker = LocationTracker(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
