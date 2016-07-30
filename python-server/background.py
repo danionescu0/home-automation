@@ -1,5 +1,4 @@
 import logging
-import time
 
 import configuration
 from communication.ActuatorCommands import ActuatorCommands
@@ -21,7 +20,6 @@ from tools.EmailNotifier import EmailNotifier
 from tools.JobControl import JobControll
 from tools.HomeDefence import HomeDefence
 
-# def main():
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 bluetooth_communicator = CommunicatorFactory.create_communicator('bluetooth')
 bluetooth_communicator.set_endpoint(configuration.bt_connections)
@@ -43,19 +41,20 @@ intruder_alert_listener = IntruderAlertListener(data_container, email_notificato
 change_actuator_request_event = ChangeActuatorRequestEvent()
 sensor_update_event = SensorUpdateEvent()
 
-threads = []
-threads.append(CommunicationThread(sensors_message_parser, data_container, sensor_update_event, bluetooth_communicator))
-threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
-threads.append(TimeRulesControlThread(time_rules, change_actuator_request_event, logging))
-threads.append(HomeDefenceThread(home_defence))
+def main():
+    threads = []
+    threads.append(CommunicationThread(sensors_message_parser, data_container, sensor_update_event, bluetooth_communicator))
+    threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
+    threads.append(TimeRulesControlThread(time_rules, change_actuator_request_event, logging))
+    threads.append(HomeDefenceThread(home_defence))
+    for thread in threads:
+        thread.start()
+    try:
+        threads = [thread.join(1) for thread in threads if thread is not None and thread.isAlive()]
+    except KeyboardInterrupt:
+        print "Ctrl-c received! Sending kill to threads..."
+        for thread in threads:
+            thread.shutdown = True
 
-for thread in threads:
-    thread.start()
-
-# if __name__ == '__main__':
-#     print 'here'
-#     try:
-#         main()
-#     except KeyboardInterrupt:
-#         print "shutdown"
-#         shutdown = True
+if __name__ == '__main__':
+    main()
