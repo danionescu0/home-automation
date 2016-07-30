@@ -1,32 +1,17 @@
 import json
-from datetime import datetime
 import calendar
 import math
 import collections
 from collections import Counter
 from AbstractRedis import AbstractRedis
+from datetime import datetime
 
 class DataContainer(AbstractRedis):
-    def __init__(self, configuration):
-        AbstractRedis.__init__(self, configuration)
-        actuators = {
-            'door' : {'state' : False, 'type': 'single', 'device': 'door'},
-            'homeAlarm' : {'state' : False, 'type': 'bi', 'device': 'action'},
-            'window' : {'state' : False, 'type': 'bi', 'device' : 'window'},
-            'windowNodgeDown' : {'state' : False, 'type': 'single', 'device' : 'window'},
-            'closeAllLights' : {'state' : False, 'type': 'single', 'device': 'action'},
-            'livingLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
-            'bedroomLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
-            'kitchenLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
-            'holwayLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
-            'closetLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
-            'balconyLight' : {'state' : False, 'type': 'bi', 'device' : 'light'},
-            'powerSocket1' : {'state' : False, 'type': 'bi', 'device' : 'powerSocket'},
-            'livingCourtains' : {'state' : False, 'type': 'bi', 'device' : 'livingCourtains'},
-        }
+    def __init__(self, redis_configuration, actuators_config):
+        AbstractRedis.__init__(self, redis_configuration)
         sensors = {'humidity' : 0, 'temperature' : 0, 'light' : 0, 'rain' : 0, 'presence' : 0, 'airQuality' : 0,
                     'fingerprint' : -1}
-        self.keys = {'actuators' : actuators, 'sensors' : sensors}
+        self.keys = {'actuators' : actuators_config, 'sensors' : sensors}
 
         self.sensors_last_updated = 0
         self.update_threshold_seconds = 300
