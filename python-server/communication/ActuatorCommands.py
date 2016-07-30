@@ -1,13 +1,9 @@
 import time
 
 class ActuatorCommands:
-    def __init__(self, btComm, data_container):
-        self.btComm = btComm
+    def __init__(self, communicator, data_container):
+        self.communicator = communicator
         self.data_container = data_container
-        self.lastBurglerLight = None
-        self.burglerLights = ['livingLight', 'kitchenLight', 'bedroomLight']
-        self.burglerMaxWaitBetweenActions = 3
-        self.burglerSounds = 2
 
     def change_actuator(self, actuator, state):
         self.data_container.set_actuator(actuator, state)
@@ -29,29 +25,29 @@ class ActuatorCommands:
             'closetLight' : '5', 'balconyLight' : '6'
         }
         if actuator == 'door':
-            self.btComm.send('holway', 'O')
+            self.communicator.send('holway', 'O')
         if actuator in lights:
-            self.btComm.send('living', lights[actuator])
+            self.communicator.send('living', lights[actuator])
             self.__write_actuator_state(state)
         if actuator == 'powerSocket1':
-            self.btComm.send('living', '8')
+            self.communicator.send('living', '8')
             self.__write_actuator_state(state)
         if actuator == 'livingCourtains':
             if state:
-                self.btComm.send('balcony', '1')
+                self.communicator.send('balcony', '1')
             else:
-                self.btComm.send('balcony', '0')
+                self.communicator.send('balcony', '0')
         if actuator == 'windowNodgeDown':
-            self.btComm.send('bedroom', '2')
+            self.communicator.send('bedroom', '2')
         if actuator == 'window':
             if state:
-                self.btComm.send('bedroom', '1')
+                self.communicator.send('bedroom', '1')
             else:
-                self.btComm.send('bedroom', '0')
+                self.communicator.send('bedroom', '0')
 
     def __write_actuator_state(self, state):
         if (state):
-            self.btComm.send('living', 'O')
+            self.communicator.send('living', 'O')
         else:
-            self.btComm.send('living', 'C')
-        self.btComm.send('living', '|')
+            self.communicator.send('living', 'C')
+        self.communicator.send('living', '|')
