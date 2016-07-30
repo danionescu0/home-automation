@@ -12,9 +12,11 @@ class Bluetooth(Base):
 
         return True
 
-    def listen(self, complete_message_callback, receive_message_callback):
+    def listen(self, complete_message_callback, receive_message_callback, shutdown):
         message_buffer = self.__create_empty_message_buffer()
         while True:
+            if shutdown:
+                self.__disconnect_all()
             for name, bluetooth_address in self.connection_mapping.iteritems():
                 data = self.__receive(name, 10)
                 if data == False:
@@ -64,9 +66,14 @@ class Bluetooth(Base):
         return True
 
     def __connnect_to_bluetooth(self, id, ch):
-        bt = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-        bt.settimeout(None)
-        bt.connect((id, ch))
-        bt.setblocking(False)
+        connection = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+        connection.settimeout(None)
+        connection.connect((id, ch))
+        connection.setblocking(False)
 
-        return bt
+        return connection
+
+    def __disconnect_all(self):
+        self.get_logger().debug("Disconnecting all bluetooth devices")
+        for name, connection in self.__connections:
+            connection.close()
