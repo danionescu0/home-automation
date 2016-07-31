@@ -48,9 +48,9 @@ class DataContainer(AbstractRedis):
 
     def set_sensor(self, name, value):
         self.__set(self.sensors_key, name, value)
-        self.__add_sensors_in_history(name, value)
+        self.__add_last_sensor_averages_in_history(name, value)
 
-    def __add_sensors_in_history(self, name, value):
+    def __add_last_sensor_averages_in_history(self, name, value):
         if name not in self.last_averages.keys():
             self.last_averages[name] = []
         self.last_averages[name].append(value)
@@ -65,29 +65,32 @@ class DataContainer(AbstractRedis):
         self.add_to_list(self.sensors_history_key, sensorsData, None)
         self.last_averages = {}
 
-    def get_sensor_values_in_interval(self, startDate, endDate, groupByHours = None):
-        startTimestamp = calendar.timegm(startDate.timetuple())
-        endTimestamp = calendar.timegm(endDate.timetuple())
-        range = self.client.zrangebyscore(self.sensors_history_key, startTimestamp, endTimestamp, withscores=True)
+    def get_sensor_values_in_interval(self, start_date, end_date):
+        start_timestamp = calendar.timegm(start_date.timetuple())
+        end_timestamp = calendar.timegm(end_date.timetuple())
+        range = self.client.zrangebyscore(self.sensors_history_key, start_timestamp, end_timestamp, withscores=True)
         for index, element in enumerate(range):
             timestamp = range[index][1]
             range[index] = json.loads(range[index][0])
             range[index]['timestamp'] = timestamp
-        if groupByHours is None:
-            return range
-        lastHour = datetime.fromtimestamp(int(range[0]['timestamp'])).hour
+
+        return range
+
+    def get_hourly_sensor_values_in_interval(self, start_date, end_date):
+        range = self.get_sensor_values_in_interval(start_date, end_date)
+        last_hour = datetime.fromtimestamp(int(range[0]['timestamp'])).hour
         counter = 0
-        averageData = range[0]
-        groupedRange = []
+        average_date = range[0]
+        grouped_range = []
         for datapoint in range:
-            extractedHour = datetime.fromtimestamp(int(datapoint['timestamp'])).hour
+            extracted_hour = datetime.fromtimestamp(int(datapoint['timestamp'])).hour
             counter += 1
-            if extractedHour != lastHour:
-                lastHour = extractedHour
-                averageData.update((x, y/counter) for x, y in averageData.items())
-                groupedRange.append(averageData)
+            if extracted_hour != last_hour:
+                last_hour = extracted_hour
+                average_date.update((x, y / counter) for x, y in average_date.items())
+                grouped_range.append(average_date)
                 counter = 0
             else:
-                averageData = dict(Counter(averageData) + Counter(datapoint))
+                average_date = dict(Counter(average_date) + Counter(datapoint))
 
-        return groupedRange
+        return grouped_range
