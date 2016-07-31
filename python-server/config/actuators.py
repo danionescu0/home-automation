@@ -5,7 +5,7 @@ conf = {
         'device_type': 'door',
         'channel': 'bluetooth',
         'send_to_device': 'holway',
-        'command': {True: '0'}
+        'command': {True: 'O'}
     },
     'homeAlarm': {
         'state': False,
@@ -15,18 +15,26 @@ conf = {
         'send_to_device': False,
         'command': False
     },
-    'window': {
+    'bedroomCourtains': {
         'state': False,
         'type': 'bi',
-        'device_type': 'window',
+        'device_type': 'courtains',
         'channel': 'bluetooth',
         'send_to_device': 'bedroom',
         'command': {False: '0', True: '1'}
     },
-    'windowNodgeDown': {
+    'livingCourtains': {
+        'state': False,
+        'type': 'bi',
+        'device_type': 'courtains',
+        'channel': 'bluetooth',
+        'send_to_device': 'balcony',
+        'command': {False: '0', True: '1'}
+    },
+    'bedroomCourtainsNodgeDown': {
         'state': False,
         'type': 'single',
-        'device_type': 'window',
+        'device_type': 'courtains',
         'channel': 'bluetooth',
         'send_to_device': 'bedroom',
         'command': {True: '2'}
@@ -94,13 +102,5 @@ conf = {
         'channel': 'bluetooth',
         'send_to_device': 'living',
         'command': {False: '8C|', True: '8O|'}
-    },
-    'livingCourtains': {
-        'state': False,
-        'type': 'bi',
-        'device_type': 'livingCourtains',
-        'channel': 'bluetooth',
-        'send_to_device': 'balcony',
-        'command': {False: '0', True: '1'}
     },
 }
