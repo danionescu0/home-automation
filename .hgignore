@@ -1,0 +1,4 @@
+syntax: regexp
+(?i)\.pyc
+test
+\.idea
