@@ -7,7 +7,6 @@ class ActuatorCommands:
         self.__actuators_config = actuators_config
 
     def change_actuator(self, actuator_name, state):
-        print actuator_name, state
         self.data_container.set_actuator(actuator_name, state)
         if actuator_name == 'closeAllLights':
             self.__close_all_lights()
@@ -17,11 +16,11 @@ class ActuatorCommands:
         self.communicator.send(device_name, command)
 
     def __close_all_lights(self):
-        allActuators = self.data_container.get_actuators()
-        for name, propreties in allActuators.iteritems():
-            if propreties['device'] == 'light':
-                self.data_container.set_actuator(name, False)
-                self.__do_change_actuator(name, False)
+        all_actuators = self.data_container.get_actuators()
+        for actuator_name, propreties in all_actuators.iteritems():
+            if propreties['device_type'] == 'light':
+                self.data_container.set_actuator(actuator_name, False)
+                self.change_actuator(actuator_name, False)
                 time.sleep(3)
 
     def __calculate_actuator_command(self, actuator_name, state):

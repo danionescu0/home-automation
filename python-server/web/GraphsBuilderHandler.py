@@ -16,7 +16,7 @@ class GraphsBuilderHandler(BaseHandler):
                     datetimeList = json.dumps(data["datetime_list"]),
                     datapointValues = json.dumps(data["datapoint_values"]),
                     selectedType = type,
-                    menuSelected ="graphs",
+                    selected_menu_item ="graphs",
                     selectedDaysBehind =  1,
                     selectedGroupedByHours =  0
                     )
@@ -36,7 +36,7 @@ class GraphsBuilderHandler(BaseHandler):
                     datetimeList = json.dumps(data["datetime_list"]),
                     datapointValues = json.dumps(data["datapoint_values"]),
                     selectedType = sensor_type,
-                    menuSelected ="graphs",
+                    selected_menu_item ="graphs",
                     selectedDaysBehind =  nr_days_behind,
                     selectedGroupedByHours =  group_by_hours
                     )

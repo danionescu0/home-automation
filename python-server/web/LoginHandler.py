@@ -5,7 +5,7 @@ class LoginHandler(BaseHandler):
         self.credentials = credentials
 
     def get(self):
-        self.render("../html/login.html", menuSelected="login")
+        self.render("../html/login.html", selected_menu_item="login")
 
     def post(self):
         username = self.get_argument("username", default=None, strip=False)

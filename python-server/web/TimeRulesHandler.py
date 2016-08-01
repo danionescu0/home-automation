@@ -21,7 +21,7 @@ class TimeRulesHandler(BaseHandler):
 
         self.render("../html/timeRules.html",
                     rules = all_rules,
-                    menuSelected="rules",
+                    selected_menu_item="rules",
                     actuators = actuator_list
                     )
 
