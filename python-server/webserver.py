@@ -36,7 +36,7 @@ def make_app():
 
     return Application([
             url(
-                r"/actuator/([a-zA-Z1-9]+)/(on|off)",
+                r"/actuator/([a-zA-Z1-9]+)/(on|off)|/actuators",
                 ActuatorsHandler,
                 dict(data_container=data_container, job_controll=job_controll),
                 name="actuator-states"

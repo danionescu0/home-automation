@@ -18,13 +18,11 @@
          <table class="table">
             <tbody>
                 <tr>
-                {% for actuator in actuators %}
-                    {% if actuators[actuator]['type'] != 'bi' %}
-                        <td>
-                                <a href="/actuator/{{ actuator }}/on">{{ actuator }}</a>
-                        </td>
-                    {% end %}
-                    {% end %}
+                {% for actuator in actuator_type_single %}
+                    <td>
+                        <a href="/actuator/{{ actuator }}/on">{{ actuator }}</a>
+                    </td>
+                {% end %}
                 </tr>
             </tbody>
         </table>
@@ -39,20 +37,25 @@
                 </tr>
             </thead>
             <tbody>
-            {% for actuator in actuators %}
+            {% for actuator_type in actuator_type_bi %}
                 <tr>
-                {% if actuators[actuator]['type'] == 'bi' %}
-                    <td><a href="/actuator/{{ actuator }}/on">{{ actuator }} {% if actuators[actuator]['state'] %}<b>ON</b>{% else %}on{% end %}</a>
-                    <td><a href="/actuator/{{ actuator }}/off">{{ actuator }} {% if not actuators[actuator]['state'] %}<b>OFF</b>{% else %}off{% end %}</a></td>
-                {% end %}
+                    <td colspan="2">
+                        <b>{{ actuator_type.capitalize() }}</b>
+                    </td>
                 </tr>
+                {% for actuator in actuator_type_bi[actuator_type] %}
+                <tr>
+                    <td><a href="/actuator/{{ actuator['name'] }}/on">{{ actuator['name'] }} {% if actuator['state'] %}<b>ON</b>{% else %}on{% end %}</a>
+                    <td><a href="/actuator/{{ actuator['name'] }}/off">{{ actuator['name'] }} {% if not actuator['state'] %}<b>OFF</b>{% else %}off{% end %}</a></td>
+                </tr>
+                {% end %}
             {% end %}
             </tbody>
         </table>
       </div>
 
       <footer class="footer">
-        <p>Smecherie</p>
+            <p>Smecherie</p>
       </footer>
 
     </div> <!-- /container -->
