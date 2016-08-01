@@ -29,6 +29,8 @@ class TimeRules(AbstractRedis):
 
     def get_all(self):
         rules = self.get(self.__REDIS_KEY)
+        if not rules:
+            return {}
         for rule in rules:
             rules[rule]['stringTime'] = rules[rule]['time']
             rules[rule]['time'] = datetime.strptime(rules[rule]['time'], "%H:%M:%S").time()
