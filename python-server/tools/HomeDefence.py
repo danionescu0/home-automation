@@ -10,7 +10,7 @@ class HomeDefence:
         self.burgler_sounds_folder = burgler_sounds_folder
         self.data_container = data_container
         self.lastBurglerLight = None
-        self.burglerLights = ['livingLight', 'kitchenLight', 'hollwayLight']
+        self.burglerLights = ['livingLight', 'kitchenLight', 'holwayLight']
         self.burglerMaxWaitBetweenActions = 3
         self.burglerSounds = 2
 
