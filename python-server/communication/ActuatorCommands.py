@@ -12,8 +12,9 @@ class ActuatorCommands:
             self.__close_all_lights()
             return
         device_name = self.__actuators_config[actuator_name]['send_to_device']
-        command = self.__calculate_actuator_command(actuator_name, state)
-        self.communicator.send(device_name, command)
+        if self.__should_execute_command(actuator_name):
+            command = self.__calculate_actuator_command(actuator_name, state)
+            self.communicator.send(device_name, command)
 
     def __close_all_lights(self):
         all_actuators = self.data_container.get_actuators()
@@ -22,6 +23,13 @@ class ActuatorCommands:
                 self.data_container.set_actuator(actuator_name, False)
                 self.change_actuator(actuator_name, False)
                 time.sleep(3)
+
+    def __should_execute_command(self, actuator_name):
+        actuator_details = self.__actuators_config[actuator_name]
+        if actuator_details['command']!= False:
+            return True
+
+        return False
 
     def __calculate_actuator_command(self, actuator_name, state):
         actuator_details = self.__actuators_config[actuator_name]
