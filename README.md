@@ -1,8 +1,19 @@
 # Home automation project #
 
 Yet another home automation project. The main concern of the project is keeping price down, it's a DIY project for makers and hackers:) it is based on a raspberry pi (or another linux compatible board) and arduinos.
+
+## First some screenshots ##
+
+### The main menu which contains the sensors listings, and all the "buttons" ###
 ![actuators.png](https://bitbucket.org/repo/GERMME/images/2663228157-actuators.png)
 Don't judge by python code too harsh, i am noobie in python but i'm improving, the project will suffer refactors periodically and hopefully it will become more pythonian.
+
+
+### The sensors graphs menu ###
+![sensors.png](https://bitbucket.org/repo/GERMME/images/3652208713-sensors.png)
+
+### The time rules menu ###
+![time_rules.png](https://bitbucket.org/repo/GERMME/images/425738660-time_rules.png)
 
 ### How cheap will it be ?  ###
 
