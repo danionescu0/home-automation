@@ -1,9 +1,10 @@
 from blinker import signal
 
 class FingerprintDoorUnlockListener:
-    def __init__(self, data_container, actuator_commands):
+    def __init__(self, data_container, actuator_commands, authentication):
         self.__dataContainer = data_container
         self.__actuator_commands = actuator_commands
+        self.__authentication = authentication
         sensor_update =  signal("sensor_update")
         sensor_update.connect(self.callback)
 
@@ -12,6 +13,7 @@ class FingerprintDoorUnlockListener:
             self.__actuator_commands.change_actuator('door', True)
 
     def __should_unlock_door(self, sensor_update):
-        sensorName = sensor_update.get_name()
-        sensorValue = sensor_update.get_new_value()
-        return sensorName == 'fingerprint' and sensorValue > -1
+        sensor_name = sensor_update.get_name()
+        fingerprint_code = sensor_update.get_new_value()
+
+        return sensor_name == 'fingerprint' and self.__authentication.verify_fingerprint_code(fingerprint_code)
