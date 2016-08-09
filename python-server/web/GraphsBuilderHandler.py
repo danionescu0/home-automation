@@ -1,5 +1,4 @@
 import json
-import logging
 from tornado.web import  authenticated
 from datetime import datetime, timedelta
 from dateutil import tz
@@ -23,7 +22,6 @@ class GraphsBuilderHandler(BaseHandler):
 
     @authenticated
     def post(self, *args, **kwargs):
-        logging.debug(self.get_argument('type', 'light'))
         sensor_type = self.get_argument('type', 'light')
         group_by_hours = int(self.get_argument("group_by_hours", None, True))
         nr_days_behind = int(self.get_argument("nr_days_behind", None, True))

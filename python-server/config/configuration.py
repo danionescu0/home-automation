@@ -8,10 +8,13 @@ web_server = {
 home_coordonates = (22.4169649,35.1542889) # replace this with your own
 
 # credentials for logging into the webapp
-credentials = {
-    'username' : '', # your username for web interface
-    'password' : '' # your password
-}
+credentials = [
+    {
+        'username' : '', # your username for web interface
+        'password' : '', # your password,
+        'fingerprint_code' : '' # your fingerprint code or False if none
+    }
+]
 bt_connections = {
     'bedroom' : '', # replace each with bluetooth connection string like  00:14:01:13:26:44
     'living' : '',

@@ -2,9 +2,9 @@ from web.BaseHandler import BaseHandler
 from event.LocationEvent import LocationEvent
 
 class ApiHandler(BaseHandler):
-    def initialize(self, data_container, credentials, logging):
+    def initialize(self, data_container, authentication, logging):
         self.data_container = data_container
-        self.credentials = credentials
+        self.__authentication = authentication
         self.logging = logging
 
     def get(self, module):
@@ -17,7 +17,7 @@ class ApiHandler(BaseHandler):
         if deviceName == None:
             self.set_status(500)
             self.write({'status': False, 'error': 'device name not set'})
-        if (username != self.credentials['username'] or password != self.credentials['password']):
+        if (self.__authentication.verify_credentials(username, password)):
             self.set_status(500)
             self.write({'status': False, 'error': 'bad credentials'})
 
