@@ -20,6 +20,7 @@ from tools.JobControl import JobControll
 from tools.JobControlThread import JobControlThread
 from tools.TimeRules import TimeRules
 from tools.TimeRulesControlThread import TimeRulesControlThread
+from tools.Authentication import Authentication
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 bluetooth_communicator = CommunicatorFactory.create_communicator('bluetooth')
@@ -34,9 +35,10 @@ email_notificator = EmailNotifier(configuration.email['email'], configuration.em
 actuator_commands = ActuatorCommands(bluetooth_communicator, data_container, actuators.conf)
 sensors_message_parser = SensorsMessageParser()
 home_defence = HomeDefence(actuator_commands, configuration.burgler_sounds_folder, data_container)
+authentication = Authentication(configuration.credentials)
 
 change_actuator_listener = ChangeActuatorListener(actuator_commands)
-fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(data_container, actuator_commands)
+fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(data_container, actuator_commands, authentication)
 close_courtains_on_rain_listener = CloseCourtainsOnRainListener(data_container, actuator_commands)
 intruder_alert_listener = IntruderAlertListener(data_container, email_notificator)
 change_actuator_request_event = ChangeActuatorRequestEvent()
