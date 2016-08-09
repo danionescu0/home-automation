@@ -4,6 +4,7 @@
             <li role="presentation" {% if selected_menu_item == 'home' %}class="active"{% end %}><a href="/actuators">Home</a></li>
             <li role="presentation" {% if selected_menu_item == 'graphs' %}class="active"{% end %} ><a href="/graphs">Graphs</a></li>
             <li role="presentation" {% if selected_menu_item == 'rules' %}class="active"{% end %} ><a href="/time-rules">Time Based Rules</a></li>
+            <li role="presentation" {% if selected_menu_item == 'logout' %}class="active"{% end %} ><a href="/logout">Logout</a></li>
             {% if not username %}
             <li role="presentation" {% if selected_menu_item == 'login' %}class="active"{% end %}><a href="/login">Login</a></li>
             {% end %}

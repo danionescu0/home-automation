@@ -1,8 +1,9 @@
 from web.BaseHandler import BaseHandler
+from tools.Authentication import Authentication
 
 class LoginHandler(BaseHandler):
-    def initialize(self, credentials):
-        self.credentials = credentials
+    def initialize(self, authentication):
+        self.__authentication = authentication
 
     def get(self):
         self.render("../html/login.html", selected_menu_item="login")
@@ -10,9 +11,9 @@ class LoginHandler(BaseHandler):
     def post(self):
         username = self.get_argument("username", default=None, strip=False)
         password = self.get_argument("password", default=None, strip=False)
-        if (username == self.credentials['username'] and password == self.credentials['password']):
-            self.set_secure_cookie("user", username)
-            self.redirect("/actuator/test/on")
+        if (self.__authentication.verify_credentials(username, password)):
+            self.set_secure_cookie(Authentication.AUTHENTICATION_COOKIE_NAME, username)
+            self.redirect("/actuators")
             return
 
         self.redirect("/login")

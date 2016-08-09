@@ -9,22 +9,25 @@ from tools.DataContainer import DataContainer
 from tools.JobControl import JobControll
 from tools.LocationTracker import LocationTracker
 from tools.TimeRules import TimeRules
+from tools.Authentication import Authentication
 from web.ActuatorsHandler import ActuatorsHandler
 from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.TimeRulesHandler import TimeRulesHandler
+from web.LogoutHandler import LogoutHandler
 from config import configuration
 from config import actuators
 
+authentication = Authentication(configuration.credentials)
 data_container = DataContainer(configuration.redis_config, actuators.conf)
 time_rules = TimeRules(configuration.redis_config)
-locationTracker = LocationTracker(configuration.redis_config)
+location_tracker = LocationTracker(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
-saveLocationListener = SaveLocationListener(locationTracker)
-toggleAlarmFromLocationListener = ToggleAlarmFromLocationListener(configuration.home_coordonates, job_controll, locationTracker)
+saveLocationListener = SaveLocationListener(location_tracker)
+toggle_alarm_from_location_listener = ToggleAlarmFromLocationListener(configuration.home_coordonates, job_controll, location_tracker)
 
 def make_app():
     global configuration, data_container, job_controll
@@ -41,7 +44,7 @@ def make_app():
                 dict(data_container=data_container, job_controll=job_controll),
                 name="actuator-states"
             ),
-            url(r'/login', LoginHandler, dict(credentials=configuration.credentials), name='login'),
+            url(r'/login', LoginHandler, dict(authentication = authentication), name='login'),
             url(r'/public/(.*)', StaticFileHandler, {
                 'path': configuration.web_server['static_path']
             }),
@@ -59,11 +62,12 @@ def make_app():
                 ApiHandler,
                 dict(
                     data_container=data_container,
-                    credentials=configuration.credentials,
+                    authentication=authentication,
                     logging=logging
                 ),
                 name='api'
             ),
+            url(r'/logout', LogoutHandler, name='logout')
         ], **settings)
 
 app = make_app()
