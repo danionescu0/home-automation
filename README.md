@@ -82,10 +82,10 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 * Light switches and remote wall socket do not have built in security, the signal can be sniffed and clonned easily
 
 ### Further improvements ###
-* user permissions
 * IFTTT  system
 * add the possibility to connect serial devices
 * finish the fingerprint scanner system (with door opening)
 * integrate air conditioning system
 * water, power consumption sensors
 * mailbox senzor with email notification
+* user permissions, user management from inside the app
