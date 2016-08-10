@@ -32,18 +32,18 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 * unlock a electromagnetic door through the press of a button on the app or through fingerprint
 * control various types of electric curtains (open / close)
 * control remote wall sockets
+* toggle lights on / off
+* toggle all lights off (single action)
 * monitor temperature, humidity, light level, air quality, human presence 
 * display charts with sensors data
 * ability to activate a switch, light etc on a time schedule
 * email notifications if the alarm is set and someone enters the house
 * burgler mode (lights are randomly toggled on and off and voices are played)
-* Toggle lights on / off
-* toggle all lights off button
-* ability to react to sensors output (you can easily write a piece of code to react to sensors data)
+* ability to react to sensors output: you can easily write a piece of code to react to sensors data
 
 ### Project structure ###
-* The python code for the raspberry pi is inside home_automation folder
-* The rest of the folders contain arduino sketches that communicate through bluetooth and do specfic tasks
+* The python code for the raspberry pi is inside python_server folder
+* Arduino sketches that communicate through bluetooth and do specfic tasks are located in arduino-sketches folder
 * the Android App (webview + reporting location) is [here](https://bitbucket.org/danionescu/androidprojects/src/f9de4cec96bc4720326011c14c9a029436fe1488/HomeAutomation/?at=default), note that the password and username are hardcoded, needs some refactoring to get it from manifest
 
 ### Arduino sketches explained ###
