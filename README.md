@@ -2,6 +2,8 @@
 
 Yet another home automation project. The main concern of the project is keeping price down, it's a DIY project for makers and hackers:) it is based on a raspberry pi (or another linux compatible board) and arduinos.
 
+For more information on how to configurate the python server, go insite python_server folder, you will find and additional readme file.
+
 ## First some screenshots ##
 
 ### The main menu which contains the sensors listings, and all the "buttons" ###
