@@ -12,7 +12,8 @@ class CommunicationThread(threading.Thread):
     def run(self):
         while not self.shutdown:
             self.__bluetooth_communicator.listen(self.__sensors_message_parser.is_buffer_parsable,
-                                                 self.__sensor_callback, self.shutdown)
+                                                 self.__sensor_callback)
+        self.__bluetooth_communicator.disconnect()
 
     def __sensor_callback(self, message):
         data = self.__sensors_message_parser.parse_sensors_string(message)
