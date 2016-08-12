@@ -1,8 +1,8 @@
 import time
 
 class ActuatorCommands:
-    def __init__(self, communicator, data_container, actuators_config):
-        self.communicator = communicator
+    def __init__(self, communicator_registry, data_container, actuators_config):
+        self.__communicator_registry = communicator_registry
         self.data_container = data_container
         self.__actuators_config = actuators_config
 
@@ -14,7 +14,10 @@ class ActuatorCommands:
         device_name = self.__actuators_config[actuator_name]['send_to_device']
         if self.__should_execute_command(actuator_name):
             command = self.__calculate_actuator_command(actuator_name, state)
-            self.communicator.send(device_name, command)
+            communicator_name = self.__actuators_config[actuator_name]['communicator']
+            self.__communicator_registry.\
+                get_communicator(communicator_name).\
+                send(device_name, command)
 
     def __close_all_lights(self):
         all_actuators = self.data_container.get_actuators()

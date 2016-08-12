@@ -4,6 +4,9 @@ from Base import Base
 class Bluetooth(Base):
     RESOURCE_TEMPORARILY_UNAVAILABLE = '11'
 
+    def __init__(self, endpoint):
+        self.__endpoint = endpoint
+
     def send(self, which, value):
         try:
             self.__connections[which].send(value)
@@ -45,7 +48,7 @@ class Bluetooth(Base):
         return False
 
     def connect(self):
-        self.connection_mapping = self.get_endpoint()
+        self.connection_mapping = self.__get_endpoint()
         self.__connections = {}
         for name, bluetooth_address in self.connection_mapping.iteritems():
             self.get_logger().debug("Connecting to {0} on address {1}".format(name, bluetooth_address))
@@ -74,3 +77,6 @@ class Bluetooth(Base):
         self.get_logger().debug("Disconnecting all bluetooth devices")
         for name, connection in self.__connections:
             connection.close()
+
+    def __get_endpoint(self):
+        return self.__endpoint
