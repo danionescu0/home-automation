@@ -3,7 +3,7 @@ conf = {
         'state': False,
         'type': 'single',
         'device_type': 'door',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'holway',
         'command': {True: 'O'}
     },
@@ -11,7 +11,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'action',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': False,
         'command': False
     },
@@ -19,7 +19,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'courtains',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'bedroom',
         'command': {False: '0', True: '1'}
     },
@@ -27,7 +27,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'courtains',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'balcony',
         'command': {False: '0', True: '1'}
     },
@@ -35,7 +35,7 @@ conf = {
         'state': False,
         'type': 'single',
         'device_type': 'courtains',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'bedroom',
         'command': {True: '2'}
     },
@@ -43,7 +43,7 @@ conf = {
         'state': False,
         'type': 'single',
         'device_type': 'action',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': False,
         'command': False
     },
@@ -51,7 +51,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'light',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'living',
         'command': {False: '1C|', True: '1O|'}
     },
@@ -59,7 +59,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'light',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'living',
         'command': {False: '2C|', True: '2O|'}
     },
@@ -67,7 +67,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'light',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'living',
         'command': {False: '4C|', True: '4O|'}
     },
@@ -75,7 +75,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'light',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'living',
         'command': {False: '3C|', True: '3O|'}
     },
@@ -83,7 +83,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'light',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'living',
         'command': {False: '5C|', True: '5O|'}
     },
@@ -91,7 +91,7 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'light',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'living',
         'command': {False: '6C|', True: '6O|'}
     },
@@ -99,8 +99,16 @@ conf = {
         'state': False,
         'type': 'bi',
         'device_type': 'powerSocket',
-        'channel': 'bluetooth',
+        'communicator': 'bluetooth',
         'send_to_device': 'living',
+        'command': {False: '8C|', True: '8O|'}
+    },
+    'testActuator': {
+        'state': False,
+        'type': 'bi',
+        'device_type': 'powerSocket',
+        'communicator': 'serial',
+        'send_to_device': False,
         'command': {False: '8C|', True: '8O|'}
     },
 }
