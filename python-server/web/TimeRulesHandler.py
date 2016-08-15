@@ -3,14 +3,14 @@ from tornado.web import authenticated
 import datetime
 
 class TimeRulesHandler(BaseHandler):
-    def initialize(self, data_container, time_rules, logging):
-        self.data_container = data_container
+    def initialize(self, actuators_repo, time_rules, logging):
+        self.__actuators_repo = actuators_repo
         self.time_rules = time_rules
         self.logging = logging
 
     @authenticated
     def get(self):
-        actuator_list = self.data_container.get_actuators(True)
+        actuator_list = self.__actuators_repo.get_actuators(True)
         all_rules = self.time_rules.get_all()
         all_rules['test'] =\
             {

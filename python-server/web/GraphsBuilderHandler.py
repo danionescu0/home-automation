@@ -5,8 +5,8 @@ from dateutil import tz
 from web.BaseHandler import BaseHandler
 
 class GraphsBuilderHandler(BaseHandler):
-    def initialize(self, data_container):
-        self.data_container = data_container
+    def initialize(self, sensors_repo):
+        self.__sensors_repo = sensors_repo
 
     @authenticated
     def get(self):
@@ -43,9 +43,9 @@ class GraphsBuilderHandler(BaseHandler):
         start_date = datetime.today() - timedelta(days=nr_days_behind)
         end_date = datetime.today()
         if group_by_hours is None:
-            data = self.data_container.get_sensor_values_in_interval(start_date, end_date)
+            data = self.__sensors_repo.get_sensor_values_in_interval(start_date, end_date)
         else:
-            data = self.data_container.get_hourly_sensor_values_in_interval(start_date, end_date)
+            data = self.__sensors_repo.get_hourly_sensor_values_in_interval(start_date, end_date)
         datetime_list = []
         datapoint_values = []
         from_zone = tz.gettz('UTC')

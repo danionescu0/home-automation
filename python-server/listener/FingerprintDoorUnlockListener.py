@@ -1,8 +1,7 @@
 from blinker import signal
 
 class FingerprintDoorUnlockListener:
-    def __init__(self, data_container, actuator_commands, authentication):
-        self.__dataContainer = data_container
+    def __init__(self, actuator_commands, authentication):
         self.__actuator_commands = actuator_commands
         self.__authentication = authentication
         sensor_update =  signal("sensor_update")

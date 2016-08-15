@@ -7,9 +7,10 @@ from config import actuators
 from config import configuration
 from listener.SaveLocationListener import SaveLocationListener
 from listener.ToggleAlarmFromLocationListener import ToggleAlarmFromLocationListener
-from repository.DataContainer import DataContainer
 from repository.LocationTracker import LocationTracker
 from repository.TimeRules import TimeRules
+from repository.Actuators import Actuators
+from repository.Sensors import Sensors
 from tools.Authentication import Authentication
 from tools.JobControl import JobControll
 from web.ActuatorsHandler import ActuatorsHandler
@@ -20,7 +21,8 @@ from web.LogoutHandler import LogoutHandler
 from web.TimeRulesHandler import TimeRulesHandler
 
 authentication = Authentication(configuration.credentials)
-data_container = DataContainer(configuration.redis_config, actuators.conf)
+actuators_repo = Actuators(configuration.redis_config, actuators.conf)
+sensors_repo = Sensors(configuration.redis_config)
 time_rules = TimeRules(configuration.redis_config)
 location_tracker = LocationTracker(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
@@ -30,8 +32,6 @@ saveLocationListener = SaveLocationListener(location_tracker)
 toggle_alarm_from_location_listener = ToggleAlarmFromLocationListener(configuration.home_coordonates, job_controll, location_tracker)
 
 def make_app():
-    global configuration, data_container, job_controll
-
     settings = {
         'cookie_secret': configuration.web_server['cookie_secret'],
         'login_url': '/login',
@@ -41,18 +41,18 @@ def make_app():
             url(
                 r"/actuator/([a-zA-Z1-9]+)/(on|off)|/actuators",
                 ActuatorsHandler,
-                dict(data_container=data_container, job_controll=job_controll),
+                dict(job_controll=job_controll, actuators_repo = actuators_repo, sensors_repo = sensors_repo),
                 name="actuator-states"
             ),
             url(r'/login', LoginHandler, dict(authentication = authentication), name='login'),
             url(r'/public/(.*)', StaticFileHandler, {
                 'path': configuration.web_server['static_path']
             }),
-            url(r'/graphs', GraphsBuilderHandler, dict(data_container=data_container), name='graphs'),
+            url(r'/graphs', GraphsBuilderHandler, dict(sensors_repo=sensors_repo), name='graphs'),
             url(r'/time-rules',
                 TimeRulesHandler,
                 dict(
-                    data_container=data_container,
+                    actuators_repo=actuators_repo,
                     time_rules=time_rules,
                     logging=logging
                 ),
@@ -61,7 +61,6 @@ def make_app():
                 r'/api/(.*)',
                 ApiHandler,
                 dict(
-                    data_container=data_container,
                     authentication=authentication,
                     logging=logging
                 ),

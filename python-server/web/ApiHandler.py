@@ -2,8 +2,7 @@ from web.BaseHandler import BaseHandler
 from event.LocationEvent import LocationEvent
 
 class ApiHandler(BaseHandler):
-    def initialize(self, data_container, authentication, logging):
-        self.data_container = data_container
+    def initialize(self, authentication, logging):
         self.__authentication = authentication
         self.logging = logging
 

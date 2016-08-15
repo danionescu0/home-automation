@@ -5,10 +5,10 @@ from pytz import timezone
 from astral import Astral
 
 class HomeDefence:
-    def __init__(self, actuator_commands, burgler_sounds_folder, data_container):
+    def __init__(self, actuator_commands, burgler_sounds_folder, actuators_repo):
         self.actuator_commands = actuator_commands
         self.burgler_sounds_folder = burgler_sounds_folder
-        self.data_container = data_container
+        self.actuators_repo = actuators_repo
         self.lastBurglerLight = None
         self.burglerLights = ['livingLight', 'kitchenLight', 'holwayLight']
         self.burglerMaxWaitBetweenActions = 3
@@ -34,7 +34,7 @@ class HomeDefence:
         return act != self.burglerMaxWaitBetweenActions
 
     def __is_alarm_set(self):
-        actuators = self.data_container.get_actuators()
+        actuators = self.actuators_repo.get_actuators()
         return actuators['homeAlarm']['state'] == True
 
     def __is_over_sunset(self):

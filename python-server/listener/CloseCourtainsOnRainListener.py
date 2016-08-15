@@ -3,8 +3,8 @@ from blinker import signal
 class CloseCourtainsOnRainListener:
     __RAIN_SENSOR_THRESHOLD = 40
 
-    def __init__(self, data_container, actuator_commands):
-        self.__dataContainer = data_container
+    def __init__(self, actuators_repo, actuator_commands):
+        self.__actuators_repo = actuators_repo
         self.__actuator_commands = actuator_commands
         sensor_update =  signal("sensor_update")
         sensor_update.connect(self.callback)
@@ -20,6 +20,6 @@ class CloseCourtainsOnRainListener:
         return  sensor_name == 'rain' and sensor_value > self.__RAIN_SENSOR_THRESHOLD and self.__is_window_actuator_open()
 
     def __is_window_actuator_open(self):
-        actuators = self.__dataContainer.get_actuators()
+        actuators = self.__actuators_repo.get_actuators()
 
         return actuators['bedroomCourtains']['state'] == False
