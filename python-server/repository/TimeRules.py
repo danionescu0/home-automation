@@ -1,7 +1,8 @@
 import json
 from datetime import datetime
-from AbstractRedis import AbstractRedis
 from dateutil import tz
+
+from repository.AbstractRedis import AbstractRedis
 
 class TimeRules(AbstractRedis):
     __REDIS_KEY = 'time_rules'

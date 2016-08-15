@@ -3,21 +3,21 @@ import logging
 from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
 
+from config import actuators
+from config import configuration
 from listener.SaveLocationListener import SaveLocationListener
 from listener.ToggleAlarmFromLocationListener import ToggleAlarmFromLocationListener
-from tools.DataContainer import DataContainer
-from tools.JobControl import JobControll
-from tools.LocationTracker import LocationTracker
-from tools.TimeRules import TimeRules
+from repository.DataContainer import DataContainer
+from repository.LocationTracker import LocationTracker
+from repository.TimeRules import TimeRules
 from tools.Authentication import Authentication
+from tools.JobControl import JobControll
 from web.ActuatorsHandler import ActuatorsHandler
 from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
-from web.TimeRulesHandler import TimeRulesHandler
 from web.LogoutHandler import LogoutHandler
-from config import configuration
-from config import actuators
+from web.TimeRulesHandler import TimeRulesHandler
 
 authentication = Authentication(configuration.credentials)
 data_container = DataContainer(configuration.redis_config, actuators.conf)
