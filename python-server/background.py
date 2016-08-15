@@ -13,8 +13,9 @@ from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.CloseCourtainsOnRainListener import CloseCourtainsOnRainListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
-from repository.DataContainer import DataContainer
 from repository.TimeRules import TimeRules
+from repository.Actuators import Actuators
+from repository.Sensors import Sensors
 from tools.Authentication import Authentication
 from tools.EmailNotifier import EmailNotifier
 from tools.HomeDefence import HomeDefence
@@ -27,25 +28,26 @@ logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-
 comm_registry = CommunicatorRegistry(communication, logging)
 comm_registry.configure_communicators()
 
-data_container = DataContainer(configuration.redis_config, actuators.conf)
+actuators_repo = Actuators(configuration.redis_config, actuators.conf)
+sensors_repo = Sensors(configuration.redis_config)
 time_rules = TimeRules(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
 email_notificator = EmailNotifier(configuration.email['email'], configuration.email['password'], configuration.email['notifiedAddress'])
-actuator_commands = ActuatorCommands(comm_registry, data_container, actuators.conf)
+actuator_commands = ActuatorCommands(comm_registry, actuators_repo, actuators.conf)
 sensors_message_parser = SensorsMessageParser()
-home_defence = HomeDefence(actuator_commands, configuration.burgler_sounds_folder, data_container)
+home_defence = HomeDefence(actuator_commands, configuration.burgler_sounds_folder, actuators_repo)
 authentication = Authentication(configuration.credentials)
 
 change_actuator_listener = ChangeActuatorListener(actuator_commands)
-fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(data_container, actuator_commands, authentication)
-close_courtains_on_rain_listener = CloseCourtainsOnRainListener(data_container, actuator_commands)
-intruder_alert_listener = IntruderAlertListener(data_container, email_notificator)
+fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(actuator_commands, authentication)
+close_courtains_on_rain_listener = CloseCourtainsOnRainListener(actuators_repo, actuator_commands)
+intruder_alert_listener = IntruderAlertListener(actuators_repo, email_notificator)
 change_actuator_request_event = ChangeActuatorRequestEvent()
 sensor_update_event = SensorUpdateEvent()
 
 def main():
     threads = []
-    threads.append(CommunicationThread(sensors_message_parser, data_container, sensor_update_event, comm_registry.get_communicator('bluetooth')))
+    threads.append(CommunicationThread(sensors_message_parser, sensors_repo, sensor_update_event, comm_registry.get_communicator('bluetooth')))
     threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
     threads.append(TimeRulesControlThread(time_rules, change_actuator_request_event, logging))
     threads.append(HomeDefenceThread(home_defence))

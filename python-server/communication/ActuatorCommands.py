@@ -1,13 +1,13 @@
 import time
 
 class ActuatorCommands:
-    def __init__(self, communicator_registry, data_container, actuators_config):
+    def __init__(self, communicator_registry, actuators_repo, actuators_config):
         self.__communicator_registry = communicator_registry
-        self.data_container = data_container
+        self.__actuators_repo = actuators_repo
         self.__actuators_config = actuators_config
 
     def change_actuator(self, actuator_name, state):
-        self.data_container.set_actuator(actuator_name, state)
+        self.__actuators_repo.set_actuator(actuator_name, state)
         if actuator_name == 'closeAllLights':
             self.__close_all_lights()
             return
@@ -20,10 +20,10 @@ class ActuatorCommands:
                 send(device_name, command)
 
     def __close_all_lights(self):
-        all_actuators = self.data_container.get_actuators()
+        all_actuators = self.__actuators_repo.get_actuators()
         for actuator_name, propreties in all_actuators.iteritems():
             if propreties['device_type'] == 'light':
-                self.data_container.set_actuator(actuator_name, False)
+                self.__actuators_repo.set_actuator(actuator_name, False)
                 self.change_actuator(actuator_name, False)
                 time.sleep(3)
 

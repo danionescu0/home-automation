@@ -1,10 +1,10 @@
 import threading
 
 class CommunicationThread(threading.Thread):
-    def __init__(self, sensors_message_parser, data_container, sensor_update_event, bluetooth_communicator):
+    def __init__(self, sensors_message_parser, sensors_repo, sensor_update_event, bluetooth_communicator):
         threading.Thread.__init__(self)
         self.__sensors_message_parser = sensors_message_parser
-        self.__data_container = data_container
+        self.__sensors_repo = sensors_repo
         self.__sensor_update_event = sensor_update_event
         self.__bluetooth_communicator = bluetooth_communicator
         self.shutdown = False
@@ -18,5 +18,5 @@ class CommunicationThread(threading.Thread):
     def __sensor_callback(self, message):
         data = self.__sensors_message_parser.parse_sensors_string(message)
         for sensorName, sensorValue in data.iteritems():
-            self.__data_container.set_sensor(sensorName, sensorValue)
+            self.__sensors_repo.set_sensor(sensorName, sensorValue)
             self.__sensor_update_event.send(sensorName, sensorValue)

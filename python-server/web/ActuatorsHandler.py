@@ -4,23 +4,24 @@ import time
 from web.BaseHandler import BaseHandler
 
 class ActuatorsHandler(BaseHandler):
-    def initialize(self, data_container, job_controll):
-        self.data_container = data_container
+    def initialize(self, job_controll, actuators_repo, sensors_repo):
         self.job_controll = job_controll
+        self.__actuators_repo = actuators_repo
+        self.__sensors_repo = sensors_repo
 
     @authenticated
     def get(self, actuator, state):
-        actuators = self.data_container.get_actuators()
+        actuators = self.__actuators_repo.get_actuators()
         if actuator in actuators and state in ['on', 'off']:
             state = (False, True)[state == 'on']
             self.job_controll.add_job(json.dumps({"job_name": "actuators", "actuator": actuator, "state" : state}))
             time.sleep(0.3)
-        actuators = self.data_container.get_actuators()
+        actuators = self.__actuators_repo.get_actuators()
         self.render(
             "../html/main.html",
             actuator_type_single = self.__filter_actuator_by_type(actuators, 'single'),
             actuator_type_bi = self.__group_actuators_by_type(self.__filter_actuator_by_type(actuators, 'bi')),
-            sensors = self.data_container.get_sensors(),
+            sensors = self.__sensors_repo.get_sensors(),
             selected_menu_item="home"
         )
 
@@ -38,4 +39,3 @@ class ActuatorsHandler(BaseHandler):
             grouped_actuators[group_key].append(actuator_data)
 
         return grouped_actuators
-
