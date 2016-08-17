@@ -15,13 +15,6 @@ credentials = [
         'fingerprint_code' : '' # your fingerprint code or False if none
     }
 ]
-bt_connections = {
-    'bedroom' : '', # replace each with bluetooth connection string like  00:14:01:13:26:44
-    'living' : '',
-    'holway' : '',
-    'balcony': '',
-    # 'fingerprint': ''
-}
 redis_config = {
     'host': 'localhost',
     'port': 6379,
