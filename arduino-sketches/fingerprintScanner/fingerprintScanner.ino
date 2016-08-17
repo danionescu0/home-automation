@@ -49,7 +49,7 @@ void sendFingerId(int id)
     bluetooth.write("F:");
     char buffer[1];
     dtostrf(id, 1, 0, buffer);
-    bluetooth.write(buffer);
+    bluetooth.write("0");
     bluetooth.write("|");  
 }
 

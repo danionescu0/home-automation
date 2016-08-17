@@ -29,7 +29,7 @@ class ActuatorCommands:
 
     def __should_execute_command(self, actuator_name):
         actuator_details = self.__actuators_config[actuator_name]
-        if actuator_details['command']!= False:
+        if actuator_details['command'] != False:
             return True
 
         return False
