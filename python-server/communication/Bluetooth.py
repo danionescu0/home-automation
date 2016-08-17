@@ -16,16 +16,15 @@ class Bluetooth(Base):
         return True
 
     def listen(self, complete_message_callback, receive_message_callback):
-        message_buffer = self.__create_empty_message_buffer()
         for name, bluetooth_address in self.connection_mapping.iteritems():
             data = self.__receive(name, 10)
             if data == False:
                 continue
-            message_buffer[name] += data
-            if not complete_message_callback(message_buffer[name]):
+            self.__message_buffer[name] += data
+            if not complete_message_callback(self.__message_buffer[name]):
                 continue
-            receive_message_callback(message_buffer[name])
-            message_buffer[name] = ''
+            receive_message_callback(self.__message_buffer[name])
+            self.__message_buffer[name] = ''
 
     def __create_empty_message_buffer(self):
         message_buffer = {}
@@ -54,6 +53,7 @@ class Bluetooth(Base):
             self.get_logger().debug("Connecting to {0} on address {1}".format(name, bluetooth_address))
             self.__connections[name] = self.__connnect_to_bluetooth(bluetooth_address, 1)
         self.get_logger().debug("Connected to all devices")
+        self.__message_buffer = self.__create_empty_message_buffer()
 
         return self
 

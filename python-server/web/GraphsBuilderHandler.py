@@ -43,9 +43,9 @@ class GraphsBuilderHandler(BaseHandler):
         start_date = datetime.today() - timedelta(days=nr_days_behind)
         end_date = datetime.today()
         if group_by_hours is None:
-            data = self.__sensors_repo.get_sensor_values_in_interval(start_date, end_date)
+            data = self.__sensors_repo.get_sensor_values_in_interval(sensor_type, start_date, end_date)
         else:
-            data = self.__sensors_repo.get_hourly_sensor_values_in_interval(start_date, end_date)
+            data = self.__sensors_repo.get_hourly_sensor_values_in_interval(sensor_type, start_date, end_date)
         datetime_list = []
         datapoint_values = []
         from_zone = tz.gettz('UTC')
@@ -57,15 +57,6 @@ class GraphsBuilderHandler(BaseHandler):
             local_date = initial_date.astimezone(to_zone)
             datetime_text = local_date.strftime('%Y-%m-%d %H:%M:%S')
             datetime_list.append(datetime_text)
-            datapoint_values.append(self.__fill_missing_sensor_values(datapoint, sensor_type))
+            datapoint_values.append(datapoint['value'])
 
         return {"datapoint_values": datapoint_values, "datetime_list" : datetime_list}
-
-    def __fill_missing_sensor_values(self, datapoint, sensor_type):
-        if sensor_type in datapoint.keys():
-            self.__last_value_by_sensor_type[sensor_type] = datapoint[sensor_type]
-            return datapoint[sensor_type]
-        elif type in self.__last_value_by_sensor_type.keys():
-            return self.__last_value_by_sensor_type[sensor_type]
-
-        return 0

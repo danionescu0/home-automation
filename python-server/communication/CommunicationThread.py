@@ -17,6 +17,7 @@ class CommunicationThread(threading.Thread):
 
     def __sensor_callback(self, message):
         data = self.__sensors_message_parser.parse_sensors_string(message)
-        for sensorName, sensorValue in data.iteritems():
-            self.__sensors_repo.set_sensor(sensorName, sensorValue)
-            self.__sensor_update_event.send(sensorName, sensorValue)
+        for sensor_name, sensor_value in data.iteritems():
+            print "setting sensor:" + str(sensor_name) + ' with value:' + str(sensor_value)
+            self.__sensors_repo.set_sensor(sensor_name, sensor_value)
+            self.__sensor_update_event.send(sensor_name, sensor_value)
