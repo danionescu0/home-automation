@@ -8,11 +8,11 @@ class AbstractRedis:
     def __init__(self, configuration):
         self.client = redis.StrictRedis(**configuration)
 
-    def add_to_list(self, key, data, timeAsTimestamp):
-        if timeAsTimestamp == None:
-            timeAsTimestamp = calendar.timegm(datetime.now().timetuple())
+    def add_to_list(self, key, data, timestamp):
+        if timestamp == None:
+            timestamp = calendar.timegm(datetime.now().timetuple())
         data["randomize"] = random.randint(0, 999999999)
-        self.client.zadd(key, timeAsTimestamp, json.dumps(data))
+        self.client.zadd(key, timestamp, json.dumps(data))
 
     def get(self, key):
         result = self.client.get(key)

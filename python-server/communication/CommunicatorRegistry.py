@@ -14,6 +14,7 @@ class CommunicatorRegistry:
         self.__communicators.update({'bluetooth' : bluetooth})
         serial = Serial(self.__configuration.serial)
         serial.set_logger(self.__logger)
+        serial.connect()
         self.__communicators.update({'serial': serial})
 
     def get_communicator(self, type):
