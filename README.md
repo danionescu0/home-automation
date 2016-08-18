@@ -38,10 +38,10 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 * toggle all lights off (single action)
 * monitor temperature, humidity, light level, air quality, human presence 
 * display charts with sensors data
-* ability to activate a switch, light etc on a time schedule
+* ability to activate an actuator(light, courtain etc) on a time schedule
 * email notifications if the alarm is set and someone enters the house
 * burgler mode (lights are randomly toggled on and off and voices are played)
-* ability to react to sensors output: you can easily write a piece of code to react to sensors data
+* ability to react to sensors output: you can easily write a piece of code(listener) to react to sensors data
 
 ### Project structure ###
 * The python code for the raspberry pi is inside python_server folder
@@ -74,17 +74,14 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 
 * Description: will sit outside the apartment and scans the fingerprint, it will report the fingerprint found to the main unit which will eventually open the door
 * Parts: 3V 0.5A power supply, arduino nano, HC-05 bluetooth, Fingerprint Scanner - TTL (GT-511C3)
-* Note. It's still a bit of a work in progress
 
 ### Limitations ###
 
-* The current bluetooth communication method has a limitation to 7 connected devices, to overcome it a star topology must be implemented
+* The current bluetooth communication method has a limitation to 7 connected devices, to overcome it a star topology must be implemented, or add xbee / hc12 modules on the serial interface
 * Light switches and remote wall socket do not have built in security, the signal can be sniffed and clonned easily
 
 ### Further improvements ###
 * IFTTT  system
-* add the possibility to connect serial devices
-* finish the fingerprint scanner system (with door opening)
 * integrate air conditioning system
 * water, power consumption sensors
 * mailbox senzor with email notification
