@@ -14,7 +14,7 @@ from repository.Actuators import Actuators
 from repository.Sensors import Sensors
 from tools.Authentication import Authentication
 from tools.JobControl import JobControll
-from web.ActuatorsHandler import ActuatorsHandler
+from web.MainHandler import MainHandler
 from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
@@ -40,8 +40,8 @@ def make_app():
 
     return Application([
             url(
-                r"/actuator/([a-zA-Z1-9]+)/(on|off)|/actuators",
-                ActuatorsHandler,
+                r"/actuator/([a-zA-Z1-9]+)/(on|off)|/",
+                MainHandler,
                 dict(job_controll=job_controll, actuators_repo = actuators_repo, sensors_repo = sensors_repo),
                 name="actuator-states"
             ),
