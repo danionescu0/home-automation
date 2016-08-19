@@ -5,6 +5,7 @@ from tornado.web import Application, url, StaticFileHandler
 
 from config import actuators
 from config import configuration
+from config import sensors
 from listener.SaveLocationListener import SaveLocationListener
 from listener.ToggleAlarmFromLocationListener import ToggleAlarmFromLocationListener
 from repository.LocationTracker import LocationTracker
@@ -22,7 +23,7 @@ from web.TimeRulesHandler import TimeRulesHandler
 
 authentication = Authentication(configuration.credentials)
 actuators_repo = Actuators(configuration.redis_config, actuators.conf)
-sensors_repo = Sensors(configuration.redis_config)
+sensors_repo = Sensors(configuration.redis_config, sensors.conf)
 time_rules = TimeRules(configuration.redis_config)
 location_tracker = LocationTracker(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)

@@ -8,7 +8,9 @@
         <p class="lead">
             <b>Sensors:</b>
             {% for sensor in sensors %}
-                {{ sensor.capitalize()}} = {{ sensors[sensor] }}
+                {% if sensor['visible'] %}
+                    {{ sensor['name'].capitalize()}} = {{ sensor['value'] }}
+                {% end %}
             {% end %}
         </p>
       </div>
