@@ -41,4 +41,10 @@ conf = [
         'visible' : False,
         'room': 'outside'
     },
+    {
+        'name' : 'phoneIsHome',
+        'value' : False,
+        'visible' : True,
+        'room': False
+    },
 ]

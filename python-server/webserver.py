@@ -7,7 +7,7 @@ from config import actuators
 from config import configuration
 from config import sensors
 from listener.SaveLocationListener import SaveLocationListener
-from listener.ToggleAlarmFromLocationListener import ToggleAlarmFromLocationListener
+from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
 from repository.LocationTracker import LocationTracker
 from repository.TimeRules import TimeRules
 from repository.Actuators import Actuators
@@ -30,7 +30,7 @@ job_controll = JobControll(configuration.redis_config)
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 saveLocationListener = SaveLocationListener(location_tracker)
-toggle_alarm_from_location_listener = ToggleAlarmFromLocationListener(configuration.home_coordonates, job_controll, location_tracker)
+set_phone_is_home_listener = SetPhoneIsHomeListener(configuration.home_coordonates, sensors_repo, location_tracker)
 
 def make_app():
     settings = {
