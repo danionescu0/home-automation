@@ -13,7 +13,7 @@ class LoginHandler(BaseHandler):
         password = self.get_argument("password", default=None, strip=False)
         if (self.__authentication.verify_credentials(username, password)):
             self.set_secure_cookie(Authentication.AUTHENTICATION_COOKIE_NAME, username)
-            self.redirect("/actuators")
+            self.redirect("/")
             return
 
         self.redirect("/login")

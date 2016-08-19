@@ -3,7 +3,7 @@ from tornado.web import  authenticated
 import time
 from web.BaseHandler import BaseHandler
 
-class ActuatorsHandler(BaseHandler):
+class MainHandler(BaseHandler):
     def initialize(self, job_controll, actuators_repo, sensors_repo):
         self.job_controll = job_controll
         self.__actuators_repo = actuators_repo
