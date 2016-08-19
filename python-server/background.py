@@ -7,6 +7,7 @@ from communication.SensorsMessageParser import SensorsMessageParser
 from config import actuators
 from config import communication
 from config import configuration
+from config import sensors
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
 from listener.ChangeActuatorListener import ChangeActuatorListener
@@ -29,7 +30,7 @@ comm_registry = CommunicatorRegistry(communication, logging)
 comm_registry.configure_communicators()
 
 actuators_repo = Actuators(configuration.redis_config, actuators.conf)
-sensors_repo = Sensors(configuration.redis_config)
+sensors_repo = Sensors(configuration.redis_config, sensors.conf)
 time_rules = TimeRules(configuration.redis_config)
 job_controll = JobControll(configuration.redis_config)
 email_notificator = EmailNotifier(configuration.email['email'], configuration.email['password'], configuration.email['notifiedAddress'])

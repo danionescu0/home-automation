@@ -11,11 +11,9 @@ class Sensors(AbstractRedis):
     REDIS_SENSORS_HISTORY_KEY = 'sensors_history_{0}'
     SENSORS_UPDATE_INTERVAL_IN_HISTORY = 300
 
-    def __init__(self, redis_configuration):
+    def __init__(self, redis_configuration, sensors_configuration):
         AbstractRedis.__init__(self, redis_configuration)
-        sensors = {'humidity': 0, 'temperature': 0, 'light': 0, 'rain': 0, 'presence': 0, 'airQuality': 0,
-                   'fingerprint': -1}
-        self.keys = {self.REDIS_SENSORS_KEY: sensors}
+        self.keys = {self.REDIS_SENSORS_KEY: sensors_configuration}
         self.last_averages = {}
         self.sensors_last_updated = {}
 
@@ -27,9 +25,12 @@ class Sensors(AbstractRedis):
         self.__add_last_sensor_averages_in_history(name, value)
 
     def __set(self, key, name, value):
-        data = self.get(key)
-        data[name] = value
-        self.client.set(key, json.dumps(data))
+        sensors = self.get(key)
+        for sensor in sensors:
+            if sensor['name'] == name:
+                sensor['value'] = value
+
+        self.client.set(key, json.dumps(sensors))
 
     def __add_last_sensor_averages_in_history(self, name, value):
         if name not in self.last_averages.keys():
