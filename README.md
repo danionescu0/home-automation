@@ -41,7 +41,7 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 * ability to activate an actuator(light, courtain etc) on a time schedule
 * email notifications if the alarm is set and someone enters the house
 * burgler mode (lights are randomly toggled on and off and voices are played)
-* ability to react to sensors output: you can easily write a piece of code(listener) to react to sensors data
+* ability to react to sensors output: you can easily write a piece of code (a listener) to react to sensors data 
 
 ### Project structure ###
 * The python code for the raspberry pi is inside python_server folder
@@ -50,7 +50,7 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 
 ### Arduino sketches explained ###
 
-**livingWindowCourtains**
+**ACMotorCourtains**
 
 * Description: controlls 12 V electric motors that powers electric courtains, the motors go up / down if the polarity is inversed
 * Parts: case, 12 v 10A power supply, 5A fuse, arduino nano, L298 Dual H-Bridge Motor Driver, HC-05 bluetooth, l7805cv 5V regulator
@@ -73,7 +73,7 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 **fingerprintScanner**
 
 * Description: will sit outside the apartment and scans the fingerprint, it will report the fingerprint found to the main unit which will eventually open the door
-* Parts: 3V 0.5A power supply, arduino nano, HC-05 bluetooth, Fingerprint Scanner - TTL (GT-511C3)
+* Parts: 3V 0.5A power supply, arduino nano, HC-05 bluetooth, Fingerprint Scanner - TTL (GT-511C3), case
 
 ### Limitations ###
 
