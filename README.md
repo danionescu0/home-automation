@@ -60,12 +60,12 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 * Description: controlls the 12V electromagnetic door lock (sends a current for a short time to unlock the door), also the device has a human presence sensors and report to the main unit 
 * Parts: case, 12 V 2 A power supply, arduino nano, HC-05 bluetooth, l7805cv 5V regulator, passive IR presence sensor
 
-**livingSensors** 
+**multiSensors** 
 
 * Description: senses light level, air quality, temperature, humidity and reports to the main unit, also it receives commands about light siwtches states and sends the commands through the 433 MHZ Livolo standard
 * Parts: case, 5V 1A power supply, arduino nano, HC-05 bluetooth, MQ135 air quality sensor, BH1750 lux sensor, HTU21D temp&humid sensor, 12 V battery holder & battery, 433 MHZ transmitter
 
-**windowSwitchController**
+**DCMotorCourtains**
 
 * Description: controlls an AC window exterior courtain, the switching is done through relays and it involves switching phase through one of the two wires for either opening and closing the courtains, also it has a rain sensor which can be mounted on the interior or exterior. The sensor will report to the main unit, and the default behavior is close the courtain if the rain is detected
 * Parts: case, 5V 1A power supply, arduino nano, HC-05 bluetooth, two relays, rain sensor
