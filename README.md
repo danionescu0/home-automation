@@ -2,7 +2,14 @@
 
 Yet another home automation project. The main concern of the project is keeping price down, it's a DIY project for makers and hackers:) it is based on a raspberry pi (or another linux compatible board) and arduinos.
 
-For more information on how to configurate the python server, go insite python_server folder, you will find and additional readme file.
+The project is composed of three parts:
+
+### First the python server (project brain) located in python-server
+
+### Second the arduino sketches located in arduino-sketches. The sketches are for custom devices that controll various actuators and collect data from sensors.
+
+### third and optional an android application located [here](https://bitbucket.org/danionescu/androidhomeautomation). The application is a webview and besides that it sends from time to time your location the server, which can enable or disables various thisgs like the fingerprint scanner
+
 
 ## First some screenshots ##
 
