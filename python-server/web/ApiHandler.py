@@ -16,9 +16,9 @@ class ApiHandler(BaseHandler):
         if device_name == None:
             self.set_status(500)
             self.write({'status': False, 'error': 'device name not set'})
-        if (self.__authentication.verify_credentials(username, password)):
+        if (not self.__authentication.verify_credentials(username, password)):
             self.set_status(500)
-            # self.write({'status': False, 'error': 'bad credentials'})
+            self.write({'status': False, 'error': 'bad credentials'})
 
         latitude = float(self.get_argument('latitude', None, True))
         longitude = float(self.get_argument('longitude', None, True))
