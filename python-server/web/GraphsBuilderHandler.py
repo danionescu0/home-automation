@@ -11,7 +11,7 @@ class GraphsBuilderHandler(BaseHandler):
     @authenticated
     def get(self):
         data = self.__get_formated_data('light', 1, None)
-        self.render("../html/graphs.html",
+        self.render("./template/graphs.html",
                     datetimeList = json.dumps(data["datetime_list"]),
                     datapointValues = json.dumps(data["datapoint_values"]),
                     selectedType = type,
@@ -30,7 +30,7 @@ class GraphsBuilderHandler(BaseHandler):
         else:
             data = self.__get_formated_data(sensor_type, nr_days_behind, group_by_hours)
 
-        self.render("../html/graphs.html",
+        self.render("./template/graphs.html",
                     datetimeList = json.dumps(data["datetime_list"]),
                     datapointValues = json.dumps(data["datapoint_values"]),
                     selectedType = sensor_type,

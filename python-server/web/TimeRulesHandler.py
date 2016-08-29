@@ -19,7 +19,7 @@ class TimeRulesHandler(BaseHandler):
                 "template": True
             }
 
-        self.render("../html/timeRules.html",
+        self.render("./template/timeRules.html",
                     rules = all_rules,
                     selected_menu_item="rules",
                     actuators = actuator_list

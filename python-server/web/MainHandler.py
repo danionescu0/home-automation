@@ -18,7 +18,7 @@ class MainHandler(BaseHandler):
             time.sleep(0.3)
         actuators = self.__actuators_repo.get_actuators()
         self.render(
-            "../html/main.html",
+            "./template/main.html",
             actuator_type_single = self.__filter_actuator_by_type(actuators, 'single'),
             actuator_type_bi = self.__group_actuators_by_type(self.__filter_actuator_by_type(actuators, 'bi')),
             sensors = self.__sensors_repo.get_sensors(),

@@ -368,7 +368,7 @@
 		},
 
 		/*
-		* generate and inject html for timepicker into ui datepicker
+		* generate and inject template for timepicker into ui datepicker
 		*/
 		_injectTimePicker: function () {
 			var $dp = this.inst.dpDiv,

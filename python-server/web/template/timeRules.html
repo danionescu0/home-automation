@@ -1,4 +1,4 @@
-{% extends "../html/base.html" %}
+{% extends "./base.html" %}
 {% block scripts %}
     {% autoescape None %}
     <link href="/public/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
@@ -12,7 +12,7 @@
 
 {% block body %}
     <div class="container">
-     {% include "../html/menu.html" %}
+     {% include "./menu.html" %}
 
       <div class="jumbotron">
         <h2>Time rules management</h2>
