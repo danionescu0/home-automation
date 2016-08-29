@@ -1,4 +1,4 @@
-{% extends "../html/base.html" %}
+{% extends "./base.html" %}
 
 {% block scripts %}
     {% autoescape None %}
@@ -17,7 +17,7 @@
 
 {% block body %}
     <div class="container">
-      {% include "../html/menu.html" %}
+      {% include "./menu.html" %}
       <div class="jumbotron">
         <form action="/graphs" method="post">
         <h2>Sensors timeline</h2>

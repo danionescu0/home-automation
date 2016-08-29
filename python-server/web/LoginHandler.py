@@ -6,7 +6,7 @@ class LoginHandler(BaseHandler):
         self.__authentication = authentication
 
     def get(self):
-        self.render("../html/login.html", selected_menu_item="login")
+        self.render("./template/login.html", selected_menu_item="login")
 
     def post(self):
         username = self.get_argument("username", default=None, strip=False)
