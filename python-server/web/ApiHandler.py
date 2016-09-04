@@ -21,11 +21,11 @@ class ApiHandler(BaseHandler):
             self.write({'status': False, 'error': 'not implemented'})
 
     def record_location(self):
-        username = self.check_token()
+        username = self.__check_token()
         if not username:
             self.set_status(500)
             self.write({'status': False, 'error': 'bad token'})
-            return 
+            return
 
         latitude = float(self.get_argument('latitude', None, True))
         longitude = float(self.get_argument('longitude', None, True))
@@ -45,10 +45,9 @@ class ApiHandler(BaseHandler):
         expire = datetime.date.today() + relativedelta(months=1)
         jwt_data = {'sub' : username, 'exp': time.mktime(expire.timetuple())}
         token = jwt.encode(jwt_data, self.__api_token_secret, algorithm='HS256')
-        print token
         self.write(token)
 
-    def check_token(self):
+    def __check_token(self):
         auth_header = self.request.headers.get("Authorization")
         if not auth_header:
             return False
@@ -56,6 +55,5 @@ class ApiHandler(BaseHandler):
         if auth_header[0] != 'Bearer':
             return False
         decoded_token_data = jwt.decode(auth_header[1], self.__api_token_secret, algorithm='HS256')
-        print decoded_token_data
 
         return decoded_token_data['sub']
