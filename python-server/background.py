@@ -6,7 +6,7 @@ from communication.CommunicatorRegistry import CommunicatorRegistry
 from communication.SensorsMessageParser import SensorsMessageParser
 from config import actuators
 from config import communication
-from config import configuration
+from config import general
 from config import sensors
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
@@ -29,15 +29,15 @@ logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-
 comm_registry = CommunicatorRegistry(communication, logging)
 comm_registry.configure_communicators()
 
-actuators_repo = Actuators(configuration.redis_config, actuators.conf)
-sensors_repo = Sensors(configuration.redis_config, sensors.conf)
-time_rules = TimeRules(configuration.redis_config)
-job_controll = JobControll(configuration.redis_config)
-email_notificator = EmailNotifier(configuration.email['email'], configuration.email['password'], configuration.email['notifiedAddress'])
+actuators_repo = Actuators(general.redis_config, actuators.conf)
+sensors_repo = Sensors(general.redis_config, sensors.conf)
+time_rules = TimeRules(general.redis_config)
+job_controll = JobControll(general.redis_config)
+email_notificator = EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
 actuator_commands = ActuatorCommands(comm_registry, actuators_repo, actuators.conf)
 sensors_message_parser = SensorsMessageParser()
-home_defence = HomeDefence(actuator_commands, configuration.burgler_sounds_folder, actuators_repo)
-authentication = Authentication(configuration.credentials)
+home_defence = HomeDefence(actuator_commands, general.burgler_sounds_folder, actuators_repo)
+authentication = Authentication(general.credentials)
 
 change_actuator_listener = ChangeActuatorListener(actuator_commands)
 fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(actuator_commands, authentication)

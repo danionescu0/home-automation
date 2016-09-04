@@ -4,7 +4,7 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
 
 from config import actuators
-from config import configuration
+from config import general
 from config import sensors
 from listener.SaveLocationListener import SaveLocationListener
 from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
@@ -21,20 +21,20 @@ from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.TimeRulesHandler import TimeRulesHandler
 
-authentication = Authentication(configuration.credentials)
-actuators_repo = Actuators(configuration.redis_config, actuators.conf)
-sensors_repo = Sensors(configuration.redis_config, sensors.conf)
-time_rules = TimeRules(configuration.redis_config)
-location_tracker = LocationTracker(configuration.redis_config)
-job_controll = JobControll(configuration.redis_config)
+authentication = Authentication(general.credentials)
+actuators_repo = Actuators(general.redis_config, actuators.conf)
+sensors_repo = Sensors(general.redis_config, sensors.conf)
+time_rules = TimeRules(general.redis_config)
+location_tracker = LocationTracker(general.redis_config)
+job_controll = JobControll(general.redis_config)
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 saveLocationListener = SaveLocationListener(location_tracker)
-set_phone_is_home_listener = SetPhoneIsHomeListener(configuration.home_coordonates, sensors_repo, location_tracker)
+set_phone_is_home_listener = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
 
 def make_app():
     settings = {
-        'cookie_secret': configuration.web_server['cookie_secret'],
+        'cookie_secret': general.web_server['cookie_secret'],
         'login_url': '/login',
     }
 
@@ -47,7 +47,7 @@ def make_app():
             ),
             url(r'/login', LoginHandler, dict(authentication = authentication), name='login'),
             url(r'/public/(.*)', StaticFileHandler, {
-                'path': configuration.web_server['static_path']
+                'path': general.web_server['static_path']
             }),
             url(r'/graphs', GraphsBuilderHandler, dict(sensors_repo=sensors_repo), name='graphs'),
             url(r'/time-rules',
@@ -63,6 +63,7 @@ def make_app():
                 ApiHandler,
                 dict(
                     authentication=authentication,
+                    api_token_secret = general.web_server['api_token_secret'],
                     logging=logging
                 ),
                 name='api'
@@ -71,5 +72,5 @@ def make_app():
         ], **settings)
 
 app = make_app()
-app.listen(configuration.web_server['application_port'])
+app.listen(general.web_server['application_port'])
 IOLoop.current().start()

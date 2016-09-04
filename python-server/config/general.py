@@ -1,7 +1,8 @@
 web_server = {
     'static_path' : '', # absolute path to static folder ex /home/pi/home-automation/python-server/public
     'application_port' : 8080,
-    'cookie_secret' : '' # used for tornado hasing algorithm
+    'cookie_secret' : '', # used for tornado hasing algorithm,
+    'api_token_secret': '' # used for secure jwt token generation
 }
 
 #home gps coordonates, used for determining if the user is near home or not
