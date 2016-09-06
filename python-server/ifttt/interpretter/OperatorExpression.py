@@ -1,4 +1,5 @@
 import abc
+
 from ifttt.interpretter.Expression import Expression
 
 class OperatorExpression(Expression):
