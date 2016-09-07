@@ -6,5 +6,4 @@ class InterpretterContext:
         self.__expressions[expression.get_key()] = value
 
     def lookup(self, expression):
-        print self.__expressions
         return self.__expressions[expression.get_key()]

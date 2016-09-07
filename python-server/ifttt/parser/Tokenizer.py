@@ -7,13 +7,16 @@ class Tokenizer:
         self.__token_rules = [
             ('A\[(\w+)\]', Token.TYPE_ACTUATOR),
             ('S\[(\w+)\]', Token.TYPE_SENSOR),
-            ('T\[([0-9]{1,2}\:[0-9]{1,2})]', Token.TYPE_TIME),
+            ('TIME', Token.TYPE_TIME),
             ('gt', Token.TYPE_EXPR_GREATER),
             ('lt', Token.TYPE_EXPR_LESS),
+            ('btw', Token.TYPE_EXPR_BETWEEN),
             ('eq', Token.TYPE_EXPR_EQUAL),
             ('and', Token.TYPE_BOOLEAN_AND),
             ('or', Token.TYPE_BOOLEAN_OR),
-            ('True|False|\d+', Token.TYPE_LITERAL),
+            ('True|False', Token.TYPE_LITERAL_BOOLEAN),
+            ('[0-9]{1,2}\:[0-9]{1,2}', Token.TYPE_LITERAL_TIME),
+            ('\d+', Token.TYPE_LITERAL_INT),
         ]
 
     def tokenize(self, text):
@@ -21,24 +24,11 @@ class Tokenizer:
         tokens = []
         for token_text in cleanned_text.split():
             tokens.append(self.__get_token(token_text))
-            print self.__get_token(token_text).get_type() + ' with value ' +self.__get_token(token_text).get_value()
+            print self.__get_token(token_text).get_type() + ' with value ' + str(self.__get_token(token_text).get_value())
+            #       " and type: " + type(self.__get_token(token_text).get_value()).__name__
+        print "\n"
 
         return tokens
-
-        #
-        # return [
-        #     Token(Token.TYPE_BOOLEAN_AND, None),
-        #     Token(Token.TYPE_EXPR_EQUAL, None),
-        #     Token(Token.TYPE_ACTUATOR, 'homeAlarm'),
-        #     Token(Token.TYPE_LITERAL, 'False'),
-        #     Token(Token.TYPE_BOOLEAN_OR, None),
-        #     Token(Token.TYPE_EXPR_GREATER, None),
-        #     Token(Token.TYPE_SENSOR, 'light'),
-        #     Token(Token.TYPE_LITERAL, '18'),
-        #     Token(Token.TYPE_EXPR_EQUAL, None),
-        #     Token(Token.TYPE_SENSOR, 'temperature'),
-        #     Token(Token.TYPE_LITERAL, '26')
-        # ]
 
     def __get_cleanned_text(self, text):
         return re.sub('[(),]', ' ', text)
@@ -48,8 +38,15 @@ class Tokenizer:
             found_matches = re.findall(token_rule[0], token_text)
             if not found_matches:
                 continue
-            return Token(token_rule[1], found_matches[0])
+            return Token(token_rule[1], self.__get_token_value(token_rule[1], found_matches[0]))
 
         raise Exception('Cannot parse symbol: {0}'.format(token_text))
 
+    def __get_token_value(self, token_type, literal_value):
+        if token_type == Token.TYPE_LITERAL_BOOLEAN:
+            return {'True' : True, 'False' : False}[literal_value]
+        elif token_type == Token.TYPE_LITERAL_INT:
+            return int(literal_value)
+
+        return literal_value
 
