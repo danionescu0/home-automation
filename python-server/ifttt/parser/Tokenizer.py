@@ -25,8 +25,6 @@ class Tokenizer:
         for token_text in cleanned_text.split():
             tokens.append(self.__get_token(token_text))
             print self.__get_token(token_text).get_type() + ' with value ' + str(self.__get_token(token_text).get_value())
-            #       " and type: " + type(self.__get_token(token_text).get_value()).__name__
-        print "\n"
 
         return tokens
 
