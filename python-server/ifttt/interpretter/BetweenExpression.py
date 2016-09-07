@@ -15,4 +15,4 @@ class BetweenExpression(Expression):
         left_result = context.lookup(self.__left_operator)
         right_result = context.lookup(self.__right_operator)
 
-        context.set(self, left_result >= reference <= right_result)
+        context.set(self, left_result <= reference <= right_result)

@@ -7,6 +7,7 @@ from ifttt.interpretter.BooleanAndExpression import BooleanAndExpression
 from ifttt.interpretter.LiteralExpression import LiteralExpression
 from ifttt.interpretter.GreaterThanExpression import GreaterThanExpression
 from ifttt.interpretter.LessThanExpression import LessThanExpression
+from ifttt.interpretter.BetweenExpression import BetweenExpression
 from ifttt.parser.Token import Token
 
 class ExpressionBuilder:
@@ -47,6 +48,9 @@ class ExpressionBuilder:
 
         left_expr = self.__evaluate()
         right_expr = self.__evaluate()
+        if token_type == Token.TYPE_EXPR_BETWEEN:
+            third_expr = self.__evaluate()
+            return  BetweenExpression(left_expr, right_expr, third_expr)
         if token_type == Token.TYPE_EXPR_EQUAL:
             return EqualsExpression(left_expr, right_expr)
         elif token_type == Token.TYPE_BOOLEAN_AND:
