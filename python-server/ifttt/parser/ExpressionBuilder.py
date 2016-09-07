@@ -1,8 +1,10 @@
+from datetime import datetime
+from dateutil import tz
+
 from ifttt.interpretter.EqualsExpression import EqualsExpression
 from ifttt.interpretter.BooleanOrExpression import BooleanOrExpression
 from ifttt.interpretter.BooleanAndExpression import BooleanAndExpression
 from ifttt.interpretter.LiteralExpression import LiteralExpression
-from ifttt.interpretter.VariableExpression import VariableExpression
 from ifttt.interpretter.GreaterThanExpression import GreaterThanExpression
 from ifttt.interpretter.LessThanExpression import LessThanExpression
 from ifttt.parser.Token import Token
@@ -21,6 +23,7 @@ class ExpressionBuilder:
         self.__expression = None
 
     def build(self):
+        ExpressionBuilder.current_token_index = 0
         self.__tokens = self.__tokenizer.tokenize(self.__text)
         self.__actuators = self.__actuators_repo.get_actuators()
         self.__sensors = self.__sensors_repo.get_sensors()
@@ -33,14 +36,14 @@ class ExpressionBuilder:
         token = self.__get_current_token()
         token_type = token.get_type()
         self.__next_token()
-        if token_type == Token.TYPE_LITERAL:
+        if token_type in [Token.TYPE_LITERAL_BOOLEAN, Token.TYPE_LITERAL_INT, Token.TYPE_LITERAL_TIME]:
             return LiteralExpression(token.get_value())
         elif token_type == Token.TYPE_SENSOR:
             return LiteralExpression(self.__get_senzor_value(token.get_value()))
         elif token_type == Token.TYPE_ACTUATOR:
             return LiteralExpression(self.__get_actuator_value(token.get_value()))
         elif token_type == Token.TYPE_TIME:
-            return LiteralExpression(self.__get_time_value(token.get_value()))
+            return LiteralExpression(self.__get_time_value())
 
         left_expr = self.__evaluate()
         right_expr = self.__evaluate()
@@ -66,8 +69,8 @@ class ExpressionBuilder:
     def __get_senzor_value(self, senzor_name):
         for senzor in self.__sensors:
             if senzor['name'] == senzor_name:
-                print "sensor: {0} with value: {1}".format(senzor['name'], str(senzor['value']))
-                return str(senzor['value'])
+                print "sensor: {0} with value: {1}".format(senzor['name'], senzor['value'])
+                return senzor['value']
 
         raise Exception("Sensor with name {0} not found".format(senzor_name))
 
@@ -75,8 +78,14 @@ class ExpressionBuilder:
         if actuator_name not in self.__actuators:
             raise Exception("Actuator with name {0} not found".format(actuator_name))
 
-        print "actuator: {0} with value: {1}".format(actuator_name, str(self.__actuators[actuator_name]['state']))
-        return str(self.__actuators[actuator_name]['state'])
+        print "actuator: {0} with value: {1}".format(actuator_name, self.__actuators[actuator_name]['state'])
+        return self.__actuators[actuator_name]['state']
 
-    def __get_time_value(self, time_text):
-        return 5
+    def __get_time_value(self):
+        from_zone = tz.gettz('UTC')
+        to_zone = tz.gettz('Europe/Bucharest')
+        initial_date = datetime.now().replace(tzinfo=from_zone)
+        local_date = initial_date.astimezone(to_zone)
+        print "time is {0}".format(local_date.strftime('%H:%M'))
+
+        return local_date.strftime('%H:%M')
