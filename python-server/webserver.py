@@ -19,7 +19,7 @@ from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
-from web.TimeRulesHandler import TimeRulesHandler
+from web.Ifttt import Ifttt
 
 authentication = Authentication(general.credentials)
 actuators_repo = Actuators(general.redis_config, actuators.conf)
@@ -50,14 +50,14 @@ def make_app():
                 'path': general.web_server['static_path']
             }),
             url(r'/graphs', GraphsBuilderHandler, dict(sensors_repo=sensors_repo), name='graphs'),
-            url(r'/time-rules',
-                TimeRulesHandler,
+            url(r'/ifttt',
+                Ifttt,
                 dict(
                     actuators_repo=actuators_repo,
                     time_rules=time_rules,
                     logging=logging
                 ),
-                name='timeRules'),
+                name='ifttt'),
             url(
                 r'/api/(.*)',
                 ApiHandler,

@@ -2,7 +2,7 @@ from web.BaseHandler import BaseHandler
 from tornado.web import authenticated
 import datetime
 
-class TimeRulesHandler(BaseHandler):
+class Ifttt(BaseHandler):
     def initialize(self, actuators_repo, time_rules, logging):
         self.__actuators_repo = actuators_repo
         self.time_rules = time_rules
@@ -19,7 +19,7 @@ class TimeRulesHandler(BaseHandler):
                 "template": True
             }
 
-        self.render("./template/timeRules.html",
+        self.render("./template/ifttt.html",
                     rules = all_rules,
                     selected_menu_item="rules",
                     actuators = actuator_list

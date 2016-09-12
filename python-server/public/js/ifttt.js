@@ -1,18 +1,13 @@
 
-timeRules = {
+ifttt = {
     actionsURL: '/time-rules',
 
     init: function() {
-        $( document ).ready(function() {
-            $('.datepick').each(function(){
-                $(this).timepicker({timeFormat: 'HH:mm:ss'});
-            });
-        });
         $( ".action-update" ).click(function() {
-            timeRules.update($(this).closest('tr'));
+            ifttt.update($(this).closest('tr'));
         });
         $( ".action-delete" ).click(function() {
-            timeRules.delete($(this).closest('tr'));
+            ifttt.delete($(this).closest('tr'));
         });
         $( ".new-rule" ).click(function() {
             $(".add-nwl-rule").show();
@@ -28,7 +23,6 @@ timeRules = {
                 actuator: trElem.find("select[name='actuator'] option:selected").val(),
                 active: trElem.find("select[name='active'] option:selected").val(),
                 state: trElem.find("select[name='state'] option:selected").val(),
-                time: trElem.find("input[name='time']").val()
             },
             method: 'POST',
             complete: function() {
@@ -57,5 +51,5 @@ timeRules = {
 };
 
 $( document ).ready(function() {
-    timeRules.init();
+    ifttt.init();
 });
