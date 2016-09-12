@@ -1,6 +1,7 @@
 import re
 
 from ifttt.parser.Token import Token
+from ifttt.parser.ParseException import ParseException
 
 class Tokenizer:
     def __init__(self):
@@ -38,7 +39,7 @@ class Tokenizer:
                 continue
             return Token(token_rule[1], self.__get_token_value(token_rule[1], found_matches[0]))
 
-        raise Exception('Cannot parse symbol: {0}'.format(token_text))
+        raise ParseException('Cannot parse symbol: {0}'.format(token_text))
 
     def __get_token_value(self, token_type, literal_value):
         if token_type == Token.TYPE_LITERAL_BOOLEAN:

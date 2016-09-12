@@ -9,7 +9,7 @@ from config import sensors
 from listener.SaveLocationListener import SaveLocationListener
 from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
 from repository.LocationTracker import LocationTracker
-from repository.TimeRules import TimeRules
+from repository.IftttRules import IftttRules
 from repository.Actuators import Actuators
 from repository.Sensors import Sensors
 from tools.Authentication import Authentication
@@ -19,12 +19,12 @@ from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
-from web.Ifttt import Ifttt
+from web.IftttHandler import IftttHandler
 
 authentication = Authentication(general.credentials)
 actuators_repo = Actuators(general.redis_config, actuators.conf)
 sensors_repo = Sensors(general.redis_config, sensors.conf)
-time_rules = TimeRules(general.redis_config)
+ifttt_rules = IftttRules(general.redis_config)
 location_tracker = LocationTracker(general.redis_config)
 job_controll = JobControll(general.redis_config)
 
@@ -51,10 +51,10 @@ def make_app():
             }),
             url(r'/graphs', GraphsBuilderHandler, dict(sensors_repo=sensors_repo), name='graphs'),
             url(r'/ifttt',
-                Ifttt,
+                IftttHandler,
                 dict(
                     actuators_repo=actuators_repo,
-                    time_rules=time_rules,
+                    ifttt_rules=ifttt_rules,
                     logging=logging
                 ),
                 name='ifttt'),

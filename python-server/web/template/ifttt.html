@@ -1,7 +1,7 @@
 {% extends "./base.html" %}
 {% block scripts %}
     {% autoescape None %}
-    <link href="/public/css/jquery-ui-timepicker-addon.css" rel="stylesheet">
+<link href="/public/css/jquery-ui-timepicker-addon.css" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link href="/public/css/smart-table.css" rel="stylesheet">
 
@@ -15,7 +15,7 @@
      {% include "./snippets/menu.html" %}
 
       <div class="jumbotron">
-        <h2>If This Than That</h2>
+            <h2>If This Than That</h2>
       </div>
 
       <div id="no-more-tables" class="row marketing">
@@ -23,10 +23,10 @@
             <thead>
                 <tr>
                     <th>Rule name</th>
+                    <th>Rule data</th>
                     <th>Active</th>
                     <th>Actuator name</th>
                     <th>Actuator state</th>
-                    <th>Time</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -39,7 +39,7 @@
                     <input type="text" name="rule_name" value="{{ rule }}" {% if 'template' not in rules[rule].keys() %}readonly="true"{% end %}>
                 </td>
                 <td data-title="Rule data">
-                    <input type="text" name="rule_data" value="" />
+                    <textarea  name="rule_data" rows="4" cols="30" />{{ rules[rule]['data'] }}</textarea>
                 </td>
                 <td data-title="Active">
                     <select name="active">
