@@ -81,3 +81,8 @@ body {
     padding-top: 0px;
     padding-bottom: 0px;
 }
+/*personal adition*/
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}

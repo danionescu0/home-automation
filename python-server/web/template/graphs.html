@@ -17,7 +17,7 @@
 
 {% block body %}
     <div class="container">
-      {% include "./menu.html" %}
+      {% include "./snippets/menu.html" %}
       <div class="jumbotron">
         <form action="/graphs" method="post">
         <h2>Sensors timeline</h2>
@@ -57,11 +57,10 @@
         </div>
         </form>
       </div>
-        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
-        </div>
-      <footer class="footer">
-        <p>Smecherie</p>
-      </footer>
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+     {% include "./snippets/footer.html" %}
+
 
     </div> <!-- /container -->
 {% end %}
