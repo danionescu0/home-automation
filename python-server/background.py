@@ -14,7 +14,7 @@ from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.CloseCourtainsOnRainListener import CloseCourtainsOnRainListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
-from repository.TimeRules import TimeRules
+from repository.IftttRules import IftttRules
 from repository.Actuators import Actuators
 from repository.Sensors import Sensors
 from tools.Authentication import Authentication
@@ -23,7 +23,7 @@ from tools.HomeDefence import HomeDefence
 from tools.HomeDefenceThread import HomeDefenceThread
 from tools.JobControl import JobControll
 from tools.JobControlThread import JobControlThread
-from tools.TimeRulesControlThread import TimeRulesControlThread
+from tools.IftttRulesThread import IftttRulesThread
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 comm_registry = CommunicatorRegistry(communication, logging)
@@ -31,7 +31,7 @@ comm_registry.configure_communicators()
 
 actuators_repo = Actuators(general.redis_config, actuators.conf)
 sensors_repo = Sensors(general.redis_config, sensors.conf)
-time_rules = TimeRules(general.redis_config)
+ifttt_rules = IftttRules(general.redis_config)
 job_controll = JobControll(general.redis_config)
 email_notificator = EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
 actuator_commands = ActuatorCommands(comm_registry, actuators_repo, actuators.conf)
@@ -50,7 +50,7 @@ def main():
     threads = []
     threads.append(CommunicationThread(sensors_message_parser, sensors_repo, sensor_update_event, comm_registry.get_communicator('bluetooth')))
     threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
-    threads.append(TimeRulesControlThread(time_rules, change_actuator_request_event, logging))
+    threads.append(IftttRulesThread(ifttt_rules, change_actuator_request_event, sensors_repo, actuators_repo, logging))
     threads.append(HomeDefenceThread(home_defence))
     for thread in threads:
         thread.start()

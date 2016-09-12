@@ -1,6 +1,7 @@
 from datetime import datetime
 from dateutil import tz
 
+from ifttt.parser.ParseException import ParseException
 from ifttt.interpretter.EqualsExpression import EqualsExpression
 from ifttt.interpretter.BooleanOrExpression import BooleanOrExpression
 from ifttt.interpretter.BooleanAndExpression import BooleanAndExpression
@@ -62,7 +63,7 @@ class ExpressionBuilder:
         elif token_type == Token.TYPE_EXPR_LESS:
             return LessThanExpression(left_expr, right_expr)
 
-        raise Exception("Token type {0} not implemented".format(token_type))
+        raise  ParseException("Token type {0} not implemented".format(token_type))
 
     def __get_current_token(self):
         return self.__tokens[ExpressionBuilder.current_token_index]
@@ -76,11 +77,11 @@ class ExpressionBuilder:
                 print "sensor: {0} with value: {1}".format(senzor['name'], senzor['value'])
                 return senzor['value']
 
-        raise Exception("Sensor with name {0} not found".format(senzor_name))
+        raise  ParseException("Sensor with name {0} not found".format(senzor_name))
 
     def __get_actuator_value(self, actuator_name):
         if actuator_name not in self.__actuators:
-            raise Exception("Actuator with name {0} not found".format(actuator_name))
+            raise  ParseException("Actuator with name {0} not found".format(actuator_name))
 
         print "actuator: {0} with value: {1}".format(actuator_name, self.__actuators[actuator_name]['state'])
         return self.__actuators[actuator_name]['state']
