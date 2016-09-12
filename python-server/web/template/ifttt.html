@@ -7,8 +7,7 @@
 
     <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
     <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
-    <script src="/public/js/jquery-ui-timepicker-addon.js"></script>
-    <script src="/public/js/timeRules.js"></script>
+    <script src="/public/js/ifttt.js"></script>
 {% end %}
 
 {% block body %}
@@ -16,7 +15,7 @@
      {% include "./snippets/menu.html" %}
 
       <div class="jumbotron">
-        <h2>Time rules management</h2>
+        <h2>If This Than That</h2>
       </div>
 
       <div id="no-more-tables" class="row marketing">
@@ -36,7 +35,12 @@
             {% for rule in rules %}
 
             <tr {% if 'template' in rules[rule].keys() %}class="main-tr add-nwl-rule" style="display:none"{% else %} class="main-tr" {% end %}>
-                <td data-title="Rule name"><input type="text" name="rule_name" value="{{ rule }}" {% if 'template' not in rules[rule].keys() %}readonly="true"{% end %}></td>
+                <td data-title="Rule name">
+                    <input type="text" name="rule_name" value="{{ rule }}" {% if 'template' not in rules[rule].keys() %}readonly="true"{% end %}>
+                </td>
+                <td data-title="Rule data">
+                    <input type="text" name="rule_data" value="" />
+                </td>
                 <td data-title="Active">
                     <select name="active">
                         <option value="True" {% if rules[rule]['active'] == True %}SELECTED=SELECTED{% end %}>True</option>
@@ -55,9 +59,6 @@
                         <option value="True" {% if rules[rule]['state'] == True %}SELECTED=SELECTED{% end %}>True</option>
                         <option value="False" {% if rules[rule]['state'] == False %}SELECTED=SELECTED{% end %}>False</option>
                     </select>
-                </td>
-                <td data-title="Time">
-                    <input name="time" id="basic_example_{{ rule }}" type="text" class="datepick" name="date[{{ rule }}]" value="{{ rules[rule]['stringTime'] }}">
                 </td>
                 <td data-title="Actions">
                     {% if 'template' in rules[rule].keys() %}
