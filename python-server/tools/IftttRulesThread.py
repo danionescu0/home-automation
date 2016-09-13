@@ -28,7 +28,7 @@ class IftttRulesThread(threading.Thread):
             for key, rule in rules.iteritems():
                 self.__logging.debug('Checking rule {0}'.format(key))
                 if not self.__check_rule(rule[IftttRules.DATA]):
-                    pass
+                    continue
                 self.__logging.debug('Changing actuator {0} to state {1}'.format(rule['actuator'], rule['state']))
                 self.__change_actuator_request_event.send(rule['actuator'], rule['state'])
 
