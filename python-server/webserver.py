@@ -20,6 +20,7 @@ from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
+from ifttt.ExpressionValidator import ExpressionValidator
 
 authentication = Authentication(general.credentials)
 actuators_repo = Actuators(general.redis_config, actuators.conf)
@@ -31,6 +32,7 @@ job_controll = JobControll(general.redis_config)
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 saveLocationListener = SaveLocationListener(location_tracker)
 set_phone_is_home_listener = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
+ifttt_expression_validator = ExpressionValidator(sensors_repo, actuators_repo)
 
 def make_app():
     settings = {
@@ -55,6 +57,7 @@ def make_app():
                 dict(
                     actuators_repo=actuators_repo,
                     ifttt_rules=ifttt_rules,
+                    ifttt_expression_validator=ifttt_expression_validator,
                     logging=logging
                 ),
                 name='ifttt'),
