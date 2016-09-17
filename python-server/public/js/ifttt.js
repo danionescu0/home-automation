@@ -1,4 +1,3 @@
-
 ifttt = {
     actionsURL: '/ifttt',
 
@@ -26,14 +25,22 @@ ifttt = {
                 state: trElem.find("select[name='state'] option:selected").val(),
             },
             method: 'POST',
-            complete: function() {
-                console.log('complete');
+            complete: function(xhr) {
+                if (xhr.status == 406) {
+                    ifttt.showError(xhr.responseText);
+                    return;
+                }
                 var tr = trElem.find("input[name='rule_name']").parent().parent();
-                console.log(tr);
                 tr.css({backgroundColor: '#E3AF7B'});
                 tr.animate({backgroundColor:'white'}, 1200);
             }
         })
+    },
+
+    showError: function (message) {
+        $('#custom-alert').html(message);
+        $('#custom-alert').show();
+        $('#custom-alert').fadeOut(4000);
     },
 
     delete: function(trElem) {
