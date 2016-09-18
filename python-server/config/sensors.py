@@ -1,50 +1,65 @@
 conf = [
     {
-        'name' : 'humidity',
+        'type' : 'humidity',
         'value' : 0,
         'visible' : True,
-        'room': 'living'
+        'location': 'living',
+        'communication_code': ('H', False)
     },
     {
-        'name' : 'temperature',
+        'type' : 'temperature',
         'value' : 0,
         'visible' : True,
-        'room': 'living'
+        'location': 'living',
+        'communication_code': ('T', False)
     },
     {
-        'name' : 'light',
+        'type' : 'temperature',
         'value' : 0,
         'visible' : True,
-        'room': 'living'
+        'location': 'outside',
+        'communication_code': ('T', '1')
     },
     {
-        'name' : 'rain',
+        'type' : 'light',
+        'value' : 0,
+        'visible' : True,
+        'location': 'living',
+        'communication_code': ('L', False)
+    },
+    {
+        'type' : 'rain',
         'value' : 0,
         'visible' : False,
-        'room': 'bedroom'
+        'location': 'bedroom',
+        'communication_code': ('R', False)
     },
     {
-        'name' : 'presence',
+        'type' : 'presence',
         'value' : 0,
         'visible' : True,
-        'room': 'holway'
+        'location': 'holway',
+        'communication_code': ('P', False)
     },
     {
-        'name' : 'airQuality',
+        'type' : 'airQuality',
         'value' : 0,
         'visible' : True,
-        'room': 'living'
+        'location': 'living',
+        'communication_code': ('Q', False)
     },
     {
-        'name' : 'fingerprint',
+        'type' : 'fingerprint',
         'value' : 0,
         'visible' : False,
-        'room': 'outside'
+        'location': 'outside',
+        'communication_code': ('F', False)
     },
     {
-        'name' : 'phoneIsHome',
+        'type' : 'phoneIsHome',
         'value' : False,
         'visible' : True,
-        'room': False
+        'location': False,
+        'communication_code': (False, False)
     },
 ]

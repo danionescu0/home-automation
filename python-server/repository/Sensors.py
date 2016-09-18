@@ -20,19 +20,20 @@ class Sensors(AbstractRedis):
     def get_sensors(self):
         return self.get(self.REDIS_SENSORS_KEY)
 
-    def set_sensor(self, name, value):
-        self.__set(self.REDIS_SENSORS_KEY, name, value)
-        self.__add_last_sensor_averages_in_history(name, value)
+    def set_sensor(self, type, location, value):
+        self.__set(type, location, value)
+        self.__add_last_sensor_averages_in_history(type, location, value)
 
-    def __set(self, key, name, value):
-        sensors = self.get(key)
+    def __set(self, type, location, value):
+        sensors = self.get(self.REDIS_SENSORS_KEY)
         for sensor in sensors:
-            if sensor['name'] == name:
+            if sensor['type'] == type and sensor['location'] == location:
                 sensor['value'] = value
 
-        self.client.set(key, json.dumps(sensors))
+        self.client.set(self.REDIS_SENSORS_KEY, json.dumps(sensors))
 
-    def __add_last_sensor_averages_in_history(self, name, value):
+    def __add_last_sensor_averages_in_history(self, type, location, value):
+        name = self.__get_sensor_key(type, location)
         if name not in self.last_averages.keys():
             self.last_averages[name] = []
         self.last_averages[name].append(value)
@@ -44,13 +45,13 @@ class Sensors(AbstractRedis):
 
         self.sensors_last_updated[name] = current_timestamp
         sensor_average_value = int(math.ceil(float(sum(self.last_averages[name])) / len(self.last_averages[name])))
-        self.add_to_list(self.__get_sensor_key(name), {'value': sensor_average_value}, None)
+        self.add_to_list(self.__get_sensor_key(type, location), {'value': sensor_average_value}, None)
         self.last_averages[name] = []
 
-    def get_sensor_values_in_interval(self, sensor_name, start_date, end_date):
+    def get_sensor_values_in_interval(self, type, location, start_date, end_date):
         start_timestamp = calendar.timegm(start_date.timetuple())
         end_timestamp = calendar.timegm(end_date.timetuple())
-        range = self.client.zrangebyscore(self.__get_sensor_key(sensor_name), start_timestamp, end_timestamp, withscores=True)
+        range = self.client.zrangebyscore(self.__get_sensor_key(type, location), start_timestamp, end_timestamp, withscores=True)
         for index, element in enumerate(range):
             timestamp = range[index][1]
             range[index] = json.loads(range[index][0])
@@ -58,8 +59,8 @@ class Sensors(AbstractRedis):
 
         return range
 
-    def get_hourly_sensor_values_in_interval(self, sensor_name, start_date, end_date):
-        range = self.get_sensor_values_in_interval(sensor_name, start_date, end_date)
+    def get_hourly_sensor_values_in_interval(self, type, location, start_date, end_date):
+        range = self.get_sensor_values_in_interval(type, location, start_date, end_date)
         last_hour = datetime.fromtimestamp(int(range[0]['timestamp'])).hour
         counter = 0
         average_date = range[0]
@@ -77,5 +78,8 @@ class Sensors(AbstractRedis):
 
         return grouped_range
 
-    def __get_sensor_key(self, sensor_name):
-        return self.REDIS_SENSORS_HISTORY_KEY.format(sensor_name)
+    def __get_sensor_key(self, type, location):
+        return self.REDIS_SENSORS_HISTORY_KEY.format(self.__get_sensor_name(type, location))
+
+    def __get_sensor_name(self, type, location):
+        return '{0}_{1}'.format(type, location)

@@ -12,7 +12,7 @@ class FingerprintDoorUnlockListener:
             self.__actuator_commands.change_actuator('door', True)
 
     def __should_unlock_door(self, sensor_update):
-        sensor_name = sensor_update.get_name()
+        sensor_type = sensor_update.get_type()
         fingerprint_code = str(sensor_update.get_new_value())
 
-        return sensor_name == 'fingerprint' and self.__authentication.verify_fingerprint_code(fingerprint_code)
+        return sensor_type == 'fingerprint' and self.__authentication.verify_fingerprint_code(fingerprint_code)

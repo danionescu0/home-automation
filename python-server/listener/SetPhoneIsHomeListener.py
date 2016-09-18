@@ -15,6 +15,6 @@ class SetPhoneIsHomeListener:
         currentCoordonates = (location.get_latitude(), location.get_longitude())
         distance_from_home = vincenty(self.__home_coordonates, currentCoordonates)
         phone_is_home = distance_from_home < self.HOME_RADIUS
-        self.__sensors_repo.set_sensor('phoneIsHome', phone_is_home)
+        self.__sensors_repo.set_sensor('phoneIsHome', False, phone_is_home)
         print(distance_from_home)
         print(phone_is_home)

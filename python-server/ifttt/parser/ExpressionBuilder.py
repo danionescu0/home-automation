@@ -71,13 +71,16 @@ class ExpressionBuilder:
     def __next_token(self):
         ExpressionBuilder.current_token_index += 1
 
-    def __get_senzor_value(self, senzor_name):
+    def __get_senzor_value(self, senzor_data):
+        data = senzor_data.split(':')
+        senzor_type = data[0]
+        senzor_location = data[1]
         for senzor in self.__sensors:
-            if senzor['name'] == senzor_name:
-                print "sensor: {0} with value: {1}".format(senzor['name'], senzor['value'])
+            if senzor['type'] == senzor_type and senzor['location'] == senzor_location:
+                print "Sensor type: {0}, and location {1} with value: {2}".format(senzor['type'], senzor['location'], senzor['value'])
                 return senzor['value']
 
-        raise  ParseException("Sensor with name {0} not found".format(senzor_name))
+        raise  ParseException("Sensor with name {0} not found".format(senzor_data))
 
     def __get_actuator_value(self, actuator_name):
         if actuator_name not in self.__actuators:

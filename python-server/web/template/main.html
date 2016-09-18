@@ -9,7 +9,7 @@
             <b>Sensors:</b>
             {% for sensor in sensors %}
                 {% if sensor['visible'] %}
-                    {{ sensor['name'].capitalize()}} = {{ sensor['value'] }}
+                    {{ sensor['type'].capitalize()}} ({{sensor['location']}}) = {{ sensor['value'] }}
                 {% end %}
             {% end %}
         </p>
