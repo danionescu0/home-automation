@@ -22,13 +22,12 @@
         <form action="/graphs" method="post">
         <h2>Sensors timeline</h2>
             Senzor type:
-            <select name="type">
-                  <option value="light"{% if selectedType == 'light' %}selected="selected"{% end %}>Light</option>
-                  <option value="temperature"{% if selectedType == 'temperature' %}selected="selected"{% end %}>Temperature</option>
-                  <option value="humidity"{% if selectedType == 'humidity' %}selected="selected"{% end %}>Humidity</option>
-                  <option value="rain"{% if selectedType == 'rain' %}selected="selected"{% end %}>Rain</option>
-                  <option value="presence"{% if selectedType == 'presence' %}selected="selected"{% end %}>Humain presence</option>
-                  <option value="airQuality"{% if selectedType == 'airQuality' %}selected="selected"{% end %}>Air quality</option>
+            <select name="sensor">
+            {% for sensor in sensors_config %}
+                {% if sensor['visible'] %}
+                <option value="{{sensor['type']}}:{{sensor['location']}}"{% if selected_sensor['type'] == sensor['type'] and selected_sensor['location'] == sensor['location'] %}selected="selected"{% end %}>{{sensor['type']}}( {{sensor['location']}} )</option>
+                {% end %}
+            {% end %}
             </select>
         <div class="row">
             Days behind:
@@ -60,7 +59,6 @@
         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
      {% include "./snippets/footer.html" %}
-
 
     </div> <!-- /container -->
 {% end %}
