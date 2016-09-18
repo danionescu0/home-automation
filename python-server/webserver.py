@@ -51,7 +51,10 @@ def make_app():
             url(r'/public/(.*)', StaticFileHandler, {
                 'path': general.web_server['static_path']
             }),
-            url(r'/graphs', GraphsBuilderHandler, dict(sensors_repo=sensors_repo), name='graphs'),
+            url(r'/graphs', GraphsBuilderHandler, dict(
+                sensors_repo=sensors_repo,
+                sensors_config=sensors.conf
+            ), name='graphs'),
             url(r'/ifttt',
                 IftttHandler,
                 dict(

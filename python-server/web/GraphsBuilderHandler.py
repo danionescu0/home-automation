@@ -5,8 +5,9 @@ from dateutil import tz
 from web.BaseHandler import BaseHandler
 
 class GraphsBuilderHandler(BaseHandler):
-    def initialize(self, sensors_repo):
+    def initialize(self, sensors_repo, sensors_config):
         self.__sensors_repo = sensors_repo
+        self.__sensors_config = sensors_config
 
     @authenticated
     def get(self):
@@ -14,7 +15,8 @@ class GraphsBuilderHandler(BaseHandler):
         self.render("./template/graphs.html",
                     datetimeList = json.dumps(data["datetime_list"]),
                     datapointValues = json.dumps(data["datapoint_values"]),
-                    selectedType = type,
+                    selected_sensor = self.__get_selected_sensor_data(),
+                    sensors_config = self.__sensors_config,
                     selected_menu_item ="graphs",
                     selectedDaysBehind =  1,
                     selectedGroupedByHours =  0
@@ -22,35 +24,35 @@ class GraphsBuilderHandler(BaseHandler):
 
     @authenticated
     def post(self, *args, **kwargs):
-        sensor_type = self.get_argument('type', 'light')
+        selected_sensor = self.__get_selected_sensor_data()
         group_by_hours = int(self.get_argument("group_by_hours", None, True))
         nr_days_behind = int(self.get_argument("nr_days_behind", None, True))
         if group_by_hours == 0:
-            data = self.__get_formated_data(sensor_type, nr_days_behind, None)
+            data = self.__get_formated_data(selected_sensor['type'], selected_sensor['location'], nr_days_behind, None)
         else:
-            data = self.__get_formated_data(sensor_type, nr_days_behind, group_by_hours)
+            data = self.__get_formated_data(selected_sensor['type'], selected_sensor['location'], nr_days_behind, group_by_hours)
 
         self.render("./template/graphs.html",
                     datetimeList = json.dumps(data["datetime_list"]),
                     datapointValues = json.dumps(data["datapoint_values"]),
-                    selectedType = sensor_type,
+                    selected_sensor = self.__get_selected_sensor_data(),
+                    sensors_config=self.__sensors_config,
                     selected_menu_item ="graphs",
                     selectedDaysBehind =  nr_days_behind,
                     selectedGroupedByHours =  group_by_hours
                     )
 
-    def __get_formated_data(self, sensor_type, nr_days_behind, group_by_hours):
+    def __get_formated_data(self, sensor_type, sensor_location, nr_days_behind, group_by_hours):
         start_date = datetime.today() - timedelta(days=nr_days_behind)
         end_date = datetime.today()
         if group_by_hours is None:
-            data = self.__sensors_repo.get_sensor_values_in_interval(sensor_type, 'living', start_date, end_date)
+            data = self.__sensors_repo.get_sensor_values_in_interval(sensor_type, sensor_location, start_date, end_date)
         else:
-            data = self.__sensors_repo.get_hourly_sensor_values_in_interval(sensor_type, 'living', start_date, end_date)
+            data = self.__sensors_repo.get_hourly_sensor_values_in_interval(sensor_type, sensor_location, start_date, end_date)
         datetime_list = []
         datapoint_values = []
         from_zone = tz.gettz('UTC')
         to_zone = tz.gettz('Europe/Bucharest')
-        self.__last_value_by_sensor_type = {}
 
         for datapoint in data:
             initial_date = datetime.fromtimestamp(int(datapoint['timestamp'])).replace(tzinfo=from_zone)
@@ -60,3 +62,13 @@ class GraphsBuilderHandler(BaseHandler):
             datapoint_values.append(datapoint['value'])
 
         return {"datapoint_values": datapoint_values, "datetime_list" : datetime_list}
+
+
+    def __get_selected_sensor_data(self):
+        selected = self.get_argument('sensor', 'light:living')
+        sensor_data = selected.split(':')
+
+        return {
+            'type' : sensor_data[0],
+            'location' : sensor_data[1]
+        }
