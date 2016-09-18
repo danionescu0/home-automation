@@ -7,7 +7,7 @@ class Tokenizer:
     def __init__(self):
         self.__token_rules = [
             ('A\[(\w+)\]', Token.TYPE_ACTUATOR),
-            ('S\[(\w+)\]', Token.TYPE_SENSOR),
+            ('S\[(\w+\:\w+)\]', Token.TYPE_SENSOR),
             ('TIME', Token.TYPE_TIME),
             ('gt', Token.TYPE_EXPR_GREATER),
             ('lt', Token.TYPE_EXPR_LESS),

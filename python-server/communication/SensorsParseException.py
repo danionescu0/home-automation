@@ -1,0 +1,2 @@
+class SensorsParseException(Exception):
+    pass

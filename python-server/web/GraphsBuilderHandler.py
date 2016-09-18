@@ -43,9 +43,9 @@ class GraphsBuilderHandler(BaseHandler):
         start_date = datetime.today() - timedelta(days=nr_days_behind)
         end_date = datetime.today()
         if group_by_hours is None:
-            data = self.__sensors_repo.get_sensor_values_in_interval(sensor_type, start_date, end_date)
+            data = self.__sensors_repo.get_sensor_values_in_interval(sensor_type, 'living', start_date, end_date)
         else:
-            data = self.__sensors_repo.get_hourly_sensor_values_in_interval(sensor_type, start_date, end_date)
+            data = self.__sensors_repo.get_hourly_sensor_values_in_interval(sensor_type, 'living', start_date, end_date)
         datetime_list = []
         datapoint_values = []
         from_zone = tz.gettz('UTC')

@@ -13,7 +13,7 @@ class IntruderAlertListener:
 
     def __should_send_alert(self, sensor_update):
         actuators = self.__actuators_repo.get_actuators()
-        sensorName = sensor_update.get_name()
-        sensorValue = sensor_update.get_new_value()
+        sensor_type = sensor_update.get_type()
+        sensor_value = sensor_update.get_new_value()
 
-        return actuators['homeAlarm']['state'] == True and sensorName == 'presence' and sensorValue == 1
+        return actuators['homeAlarm']['state'] == True and sensor_type == 'presence' and sensor_value == 1
