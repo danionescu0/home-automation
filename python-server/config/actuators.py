@@ -15,14 +15,6 @@ conf = {
         'send_to_device': False,
         'command': False
     },
-    'bedroomCourtains': {
-        'state': False,
-        'type': 'bi',
-        'device_type': 'courtains',
-        'communicator': 'bluetooth',
-        'send_to_device': 'bedroom',
-        'command': {False: '0', True: '1'}
-    },
     'livingCourtains': {
         'state': False,
         'type': 'bi',
