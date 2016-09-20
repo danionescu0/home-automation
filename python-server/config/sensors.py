@@ -7,6 +7,13 @@ conf = [
         'communication_code': ('H', False)
     },
     {
+        'type': 'humidity',
+        'value': 0,
+        'visible': True,
+        'location': 'outside',
+        'communication_code': ('H', '1')
+    },
+    {
         'type' : 'temperature',
         'value' : 0,
         'visible' : True,
@@ -19,6 +26,13 @@ conf = [
         'visible' : True,
         'location': 'outside',
         'communication_code': ('T', '1')
+    },
+    {
+        'type': 'airPressure',
+        'value': 0,
+        'visible': True,
+        'location': 'outside',
+        'communication_code': ('PS', '1')
     },
     {
         'type' : 'light',
@@ -42,7 +56,7 @@ conf = [
         'communication_code': ('P', False)
     },
     {
-        'type' : 'airQuality',
+        'type' : 'airPollution',
         'value' : 0,
         'visible' : True,
         'location': 'living',
