@@ -11,7 +11,7 @@ class GraphsBuilderHandler(BaseHandler):
 
     @authenticated
     def get(self):
-        data = self.__get_formated_data('light', 1, None)
+        data = self.__get_formated_data('light', 'living', 1, None)
         self.render("./template/graphs.html",
                     datetimeList = json.dumps(data["datetime_list"]),
                     datapointValues = json.dumps(data["datapoint_values"]),
