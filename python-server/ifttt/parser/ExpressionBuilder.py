@@ -76,9 +76,12 @@ class ExpressionBuilder:
         senzor_type = data[0]
         senzor_location = data[1]
         for senzor in self.__sensors:
-            if senzor['type'] == senzor_type and senzor['location'] == senzor_location:
-                print "Sensor type: {0}, and location {1} with value: {2}".format(senzor['type'], senzor['location'], senzor['value'])
-                return senzor['value']
+            if senzor['location'] and senzor['location'] != senzor_location:
+                continue
+            if senzor['type'] != senzor_type:
+                continue
+            print "Sensor type: {0}, and location {1} with value: {2}".format(senzor['type'], senzor['location'], senzor['value'])
+            return senzor['value']
 
         raise  ParseException("Sensor with name {0} not found".format(senzor_data))
 
