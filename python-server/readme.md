@@ -2,6 +2,7 @@
 * python 2.7
 * redis server running
 * bluetooth configured
+* festival installed
 
 # configuration 
 ## general.py
@@ -32,11 +33,13 @@ communication method
 * audio: http://blog.whatgeek.com.pt/2014/04/raspberry-pi-bluetooth-wireless-speaker/
 
 # python libs to install with pip
-* for linux pybluez requires the following linux packages: libbluetooth-dev, python-dev
 * sudo pip install pytz astral tornado python-dateutil redis pybluez geopy blinker
 
+# linux packages
+* sudo apt-get install screen redis-server festival
+* pybluez requires the following linux packages: libbluetooth-dev, python-dev
+
 # running the servers
-* sudo apt-get install screen redis-server
 * in a screen or background process run the background process:
 * python background.py
 * in other screen or background process run
