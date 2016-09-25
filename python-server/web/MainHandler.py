@@ -10,12 +10,7 @@ class MainHandler(BaseHandler):
         self.__sensors_repo = sensors_repo
 
     @authenticated
-    def get(self, actuator, state):
-        actuators = self.__actuators_repo.get_actuators()
-        if actuator in actuators and state in ['on', 'off']:
-            state = (False, True)[state == 'on']
-            self.job_controll.add_job(json.dumps({"job_name": "actuators", "actuator": actuator, "state" : state}))
-            time.sleep(0.3)
+    def get(self):
         actuators = self.__actuators_repo.get_actuators()
         self.render(
             "./template/main.html",
@@ -24,6 +19,15 @@ class MainHandler(BaseHandler):
             sensors = self.__sensors_repo.get_sensors(),
             selected_menu_item="home"
         )
+
+    @authenticated
+    def post(self, *args, **kwargs):
+        actuator_name = self.get_argument("actuator_name", None, True)
+        actuator_value = self.get_argument("actuator_value", None, True)
+        bool_actuator_value = {'false' : False, 'true': True}[actuator_value]
+        print actuator_name, actuator_value, bool_actuator_value
+        self.job_controll.add_job(json.dumps({"job_name": "actuators", "actuator": actuator_name, "state": bool_actuator_value}))
+        time.sleep(0.3)
 
     def __filter_actuator_by_type(self, actuators, type):
         return {key: data for key, data in actuators.items() if actuators[key]['type'] == type}
