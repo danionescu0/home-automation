@@ -6,24 +6,21 @@ Yet another home automation project. The main concern of the project is keeping 
 
 * First the python server (project brain) located in python-server
 
-* Second the arduino sketches located in arduino-sketches. The sketches are for custom devices that controll various actuators and collect data from sensors.
+* Second the arduino sketches located in arduino-sketches. The sketches are for custom devices that control various actuators and collect data from sensors.
 
 * Third and optional an android application located [here](https://bitbucket.org/danionescu/androidhomeautomation). The application is a webview and besides that it sends from time to time your location the server, which can enable or disables various thisgs like the fingerprint scanner
 
 
 ## First some screenshots ##
 
-### The main menu which contains the sensors listings, and all the "buttons" ###
-![actuators.png](https://bitbucket.org/repo/GERMME/images/2663228157-actuators.png)
-
-Don't judge by python code too harsh, i am noobie in python but i'm improving, the project will suffer refactors periodically and hopefully it will become more pythonian.
-
+### The main menu which contains the sensors listings, and all the "switches" ###
+![homepage.png](https://bitbucket.org/repo/GERMME/images/2673176056-homepage.png)
 
 ### The sensors graphs menu ###
 ![sensors.png](https://bitbucket.org/repo/GERMME/images/3652208713-sensors.png)
 
-### The time rules menu ###
-![time_rules.png](https://bitbucket.org/repo/GERMME/images/425738660-time_rules.png)
+### If this than that ###
+![ifttt.png](https://bitbucket.org/repo/GERMME/images/977083034-ifttt.png)
 
 ### How cheap will it be ?  ###
 
@@ -40,15 +37,14 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 
 * unlock a electromagnetic door through the press of a button on the app or through fingerprint
 * control various types of electric curtains (open / close)
-* control remote wall sockets
-* toggle lights on / off
+* control remote wall sockets (433 mhz versions by clonning their signal)
+* toggle lights on / off (Livolo switches (check the product [here](https://www.aliexpress.com/item/Free-Shipping-Livolo-EU-Standard-Remote-Switch-White-Crystal-Glass-Panel-110-250V-Wall-Light-Remote/629004768.html?spm=2114.13010608.0.126.Mt7G6z)))
 * toggle all lights off (single action)
 * monitor temperature, humidity, light level, air quality, human presence 
 * display charts with sensors data
-* ability to activate an actuator(light, courtain etc) on a time schedule
+* ability to activate an actuator(light, courtain etc) on a time schedule and based on sensors data and actuators state
 * email notifications if the alarm is set and someone enters the house
 * burgler mode (lights are randomly toggled on and off and voices are played)
-* ability to react to sensors output: you can easily write a piece of code (a listener) to react to sensors data 
 
 ### Project structure ###
 * The python code for the raspberry pi is inside python_server folder
@@ -82,14 +78,21 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 * Description: will sit outside the apartment and scans the fingerprint, it will report the fingerprint found to the main unit which will eventually open the door
 * Parts: 3V 0.5A power supply, arduino nano, HC-05 bluetooth, Fingerprint Scanner - TTL (GT-511C3), case
 
+**weatherStation**
+
+* Description: a mini weather station, low power runs only on batteries. It sends data using HC-12 comm module, the colleted data will be: humidity, temperature, pressure, light, rain
+* Parts: arduino pro mini, HC-12 module, BME280 sensors, rain sensor, BH1750 lux sensor, 3x battery holder, battery, a NPN tranzistor, case, wires, PCB
+
 ### Limitations ###
 
-* The current bluetooth communication method has a limitation to 7 connected devices, to overcome it a star topology must be implemented, or add xbee / hc12 modules on the serial interface
+* The current bluetooth communication method has a limitation to 7 connected devices, to overcome it a star topology must be implemented or multiple bluetooth dongles might be connected. The limitation can be overcome by using HC-12 long range modules
 * Light switches and remote wall socket do not have built in security, the signal can be sniffed and clonned easily
 
 ### Further improvements ###
-* IFTTT  system
+* integrate IOT  wifi devices
+* A more easy to use IFTTT interface
 * integrate air conditioning system
 * water, power consumption sensors
+* SMS notifications
 * mailbox senzor with email notification
 * user permissions, user management from inside the app
