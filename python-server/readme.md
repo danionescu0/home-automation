@@ -24,9 +24,15 @@ communication method
 * the 'send_to_device' is the name of the device that the commands will be sent to
 * the 'command' is a dictionary with values for each state ex: {False: '3C|', True: '3O|'}
 ## sensors.py
-* work in progres, will change
+* the 'type' can be 'humidity', 'temperature', 'presence', 'light', 'rain', 'fingerprint',
+'phoneIsHome'
+* value is default value
+* visible is an array with visible zones: 'homepage', 'graphs'
+* location can be any room name
+* communication_code is a touple with communication incomming code and
+node number
 ## communication.py
-* bluetooth connection strings for the three devices
+* bluetooth connection strings for the devices
 
 # configure bluetooth
 * serial: http://www.uugear.com/portfolio/bluetooth-communication-between-raspberry-pi-and-arduino/
@@ -40,7 +46,5 @@ communication method
 * pybluez requires the following linux packages: libbluetooth-dev, python-dev
 
 # running the servers
-* in a screen or background process run the background process:
-* python background.py
-* in other screen or background process run
-* python webserver.py
+* in a screen or background process run: "python background.py"
+* in other screen or background process run: "python webserver.py"
