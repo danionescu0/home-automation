@@ -2,78 +2,78 @@ conf = [
     {
         'type' : 'humidity',
         'value' : 0,
-        'visible' : True,
+        'visible' : ['graphs', 'homepage'],
         'location': 'living',
         'communication_code': ('H', False)
     },
     {
         'type': 'humidity',
         'value': 0,
-        'visible': True,
+        'visible' : ['graphs'],
         'location': 'outside',
         'communication_code': ('H', '1')
     },
     {
         'type' : 'temperature',
         'value' : 0,
-        'visible' : True,
+        'visible' : ['graphs', 'homepage'],
         'location': 'living',
         'communication_code': ('T', False)
     },
     {
         'type' : 'temperature',
         'value' : 0,
-        'visible' : True,
-        'location': 'outside',
+        'visible' : ['graphs', 'homepage'],
+        'location' : 'outside',
         'communication_code': ('T', '1')
     },
     {
         'type': 'airPressure',
         'value': 0,
-        'visible': True,
-        'location': 'outside',
+        'visible' : ['graphs', 'homepage'],
+        'location' : 'outside',
         'communication_code': ('PS', '1')
     },
     {
         'type' : 'light',
         'value' : 0,
-        'visible' : True,
-        'location': 'living',
+        'visible' : ['graphs', 'homepage'],
+        'location' : 'living',
         'communication_code': ('L', False)
     },
     {
         'type' : 'rain',
         'value' : 0,
-        'visible' : False,
-        'location': 'bedroom',
+        'visible' : [],
+        'location': 'outside',
         'communication_code': ('R', False)
     },
     {
         'type' : 'presence',
         'value' : 0,
-        'visible' : True,
+        'visible' : ['graphs', 'homepage'],
         'location': 'holway',
         'communication_code': ('P', False)
     },
     {
         'type' : 'airPollution',
         'value' : 0,
-        'visible' : True,
+        'visible' : ['graphs', 'homepage'],
         'location': 'living',
         'communication_code': ('Q', False)
     },
     {
         'type' : 'fingerprint',
         'value' : 0,
-        'visible' : False,
+        'visible' : [],
         'location': 'outside',
         'communication_code': ('F', False)
     },
     {
         'type' : 'phoneIsHome',
         'value' : False,
-        'visible' : True,
+        'visible' : ['homepage'],
         'location': False,
         'communication_code': (False, False)
-    },
+    }
 ]
