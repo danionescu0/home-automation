@@ -15,7 +15,6 @@
 
       <div class="jumbotron">
         <p class="lead">
-            <b>Sensors:</b>
             {% for sensor in sensors %}
                 {% if 'homepage' in sensor['visible'] %}
                     <img src="/public/img/sensors/{{ sensor['type'] }}.png" title = "{{ sensor['type'].capitalize() }}" />
@@ -28,34 +27,32 @@
       </div>
 
       <div class="row marketing">
-        <h4>Buttons</h4>
-         <table class="table">
-            <tbody>
-                <tr>
+        <h3>Push buttons</h3>
+          <div class="container-fluid">
+              <div class="row">
                 {% for actuator in actuator_type_single %}
-                    <td>
-                        <a href="/actuator/{{ actuator }}/on">{{ actuator }}</a>
-                    </td>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-default" rel="{{ actuator }}">{{ actuator.capitalize() }}</button>
+                </div>
                 {% end %}
-                </tr>
-            </tbody>
-        </table>
+              </div>
+          </div>
       </div>
       <div class="row marketing">
-        <h4>Actuators</h4>
+        <h3>Switches</h3>
             <div class="container-fluid">
             {% for actuator_type in actuator_type_bi %}
                 <div class="row">
                     <div class="col-md-4">
-                        <b>{{ actuator_type.capitalize() }}</b>
+                        <h4>{{ actuator_type.capitalize() }}</h4>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8">
                     {% for actuator in actuator_type_bi[actuator_type] %}
-                        {{ actuator['name'].capitalize() }}: &nbsp;<input type="checkbox" name="{{ actuator['name'] }}" {% if actuator['state'] %}checked{% end %}>
-                    {% end %}
+                    <div class="col-md-4">
+                        <input data-label-text="{{ actuator['name'].capitalize() }}" type="checkbox" name="{{ actuator['name'] }}" {% if actuator['state'] %}checked{% end %}/>
                     </div>
+                    {% end %}
                 </div>
             {% end %}
             </div>

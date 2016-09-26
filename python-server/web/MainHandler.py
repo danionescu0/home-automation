@@ -25,7 +25,6 @@ class MainHandler(BaseHandler):
         actuator_name = self.get_argument("actuator_name", None, True)
         actuator_value = self.get_argument("actuator_value", None, True)
         bool_actuator_value = {'false' : False, 'true': True}[actuator_value]
-        print actuator_name, actuator_value, bool_actuator_value
         self.job_controll.add_job(json.dumps({"job_name": "actuators", "actuator": actuator_name, "state": bool_actuator_value}))
         time.sleep(0.3)
 

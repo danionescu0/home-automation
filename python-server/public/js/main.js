@@ -4,21 +4,23 @@ main = {
     init: function() {
         $(":checkbox").bootstrapSwitch();
         $(":checkbox").on('switchChange.bootstrapSwitch', function (event, state) {
-            main.update($(this));
+            main.update($(this).attr("name"), $(this).is(":checked"));
         });
-    },
-
-    update: function(checkbox) {
-        $.ajax({
-            url: this.updateURL,
-            data: {
-                actuator_name: checkbox.attr("name"),
-                actuator_value: checkbox.is(":checked")
-            },
-            method: 'POST',
+        $(":button").click(function (event) {
+            main.update($(this).attr("rel"), true);
         })
     },
 
+    update: function(name, value) {
+        $.ajax({
+            url: this.updateURL,
+            data: {
+                actuator_name: name,
+                actuator_value: value
+            },
+            method: 'POST'
+        })
+    },
 };
 
 $( document ).ready(function() {

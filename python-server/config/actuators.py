@@ -23,14 +23,6 @@ conf = {
         'send_to_device': 'balcony',
         'command': {False: '0', True: '1'}
     },
-    'bedroomCourtainsNodgeDown': {
-        'state': False,
-        'type': 'single',
-        'device_type': 'courtains',
-        'communicator': 'bluetooth',
-        'send_to_device': 'bedroom',
-        'command': {True: '2'}
-    },
     'closeAllLights': {
         'state': False,
         'type': 'single',
@@ -94,13 +86,5 @@ conf = {
         'communicator': 'bluetooth',
         'send_to_device': 'living',
         'command': {False: '8C|', True: '8O|'}
-    },
-    'testActuator': {
-        'state': False,
-        'type': 'bi',
-        'device_type': 'powerSocket',
-        'communicator': 'serial',
-        'send_to_device': False,
-        'command': {False: '8C|', True: '8O|'}
-    },
+    }
 }
