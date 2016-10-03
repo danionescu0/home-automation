@@ -42,6 +42,13 @@ conf = [
         'communication_code': ('L', False)
     },
     {
+        'type': 'voltage',
+        'value': 0,
+        'visible': ['graphs'],
+        'location': 'outside',
+        'communication_code': ('V', '1')
+    },
+    {
         'type' : 'rain',
         'value' : 0,
         'visible' : [],
