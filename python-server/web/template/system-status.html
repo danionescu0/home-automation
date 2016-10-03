@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% extends "./base.html" %}
+
+{% block scripts %}
+    {% autoescape None %}
+    <script src="http://code.jquery.com/jquery-1.9.0rc1.js"></script>
+    <script src="/public/js/bootstrap-switch.min.js"></script>
+    <script src="/public/js/main.js"></script>
+
+    <link href="/public/css/bootstrap-switch.min.css" rel="stylesheet">
+{% end %}
+
+{% block body %}
+    <div class="container">
+     {% include "./snippets/menu.html" %}
+
+
+      <div class="row marketing">
+        <h3>Sensors last updated</h3>
+            <div class="container-fluid">
+            {% for sensor_data in sensors_last_updated %}
+                <b>{{ sensor_data['name'].capitalize() }}</b> -> {{ sensor_data['last_updated'] }} </br>
+            {% end %}
+            </div>
+      </div>
+
+     {% include "./snippets/footer.html" %}
+
+    </div> <!-- /container -->
+{% end %}</title>
+</head>
+<body>
+
+</body>
+</html>

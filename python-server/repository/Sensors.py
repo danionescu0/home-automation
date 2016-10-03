@@ -16,11 +16,13 @@ class Sensors(AbstractRedis):
         self.keys = {self.REDIS_SENSORS_KEY: sensors_configuration}
         self.last_averages = {}
         self.sensors_last_updated = {}
+        self.current_timestamp = 0
 
     def get_sensors(self):
         return self.get(self.REDIS_SENSORS_KEY)
 
     def set_sensor(self, type, location, value):
+        self.current_timestamp = calendar.timegm(datetime.now().timetuple())
         self.__set(type, location, value)
         self.__add_last_sensor_averages_in_history(type, location, value)
 
@@ -29,6 +31,7 @@ class Sensors(AbstractRedis):
         for sensor in sensors:
             if sensor['type'] == type and sensor['location'] == location:
                 sensor['value'] = value
+                sensor['last_updated'] = self.current_timestamp
 
         self.client.set(self.REDIS_SENSORS_KEY, json.dumps(sensors))
 
@@ -37,13 +40,12 @@ class Sensors(AbstractRedis):
         if name not in self.last_averages.keys():
             self.last_averages[name] = []
         self.last_averages[name].append(value)
-        current_timestamp = calendar.timegm(datetime.now().timetuple())
         if name not in self.sensors_last_updated:
             self.sensors_last_updated[name] = 0
-        if (current_timestamp - self.sensors_last_updated[name] < self.SENSORS_UPDATE_INTERVAL_IN_HISTORY):
+        if (self.current_timestamp - self.sensors_last_updated[name] < self.SENSORS_UPDATE_INTERVAL_IN_HISTORY):
             return
 
-        self.sensors_last_updated[name] = current_timestamp
+        self.sensors_last_updated[name] = self.current_timestamp
         sensor_average_value = int(math.ceil(float(sum(self.last_averages[name])) / len(self.last_averages[name])))
         self.add_to_list(self.__get_sensor_key(type, location), {'value': sensor_average_value}, None)
         self.last_averages[name] = []

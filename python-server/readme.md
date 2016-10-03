@@ -31,6 +31,7 @@ communication method
 * location can be any room name
 * communication_code is a touple with communication incomming code and
 node number
+* last_updated is a timestamp and it denotes the last sensor updated time
 ## communication.py
 * bluetooth connection strings for the devices
 
