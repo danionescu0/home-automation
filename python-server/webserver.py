@@ -20,6 +20,7 @@ from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
+from web.SystemStatusHandler import SystemStatusHandler
 from ifttt.ExpressionValidator import ExpressionValidator
 
 authentication = Authentication(general.credentials)
@@ -73,6 +74,14 @@ def make_app():
                     logging=logging
                 ),
                 name='api'
+            ),
+            url(
+                r'/system-status',
+                SystemStatusHandler,
+                dict(
+                    sensors_repo=sensors_repo,
+                ),
+                name='systemStatus'
             ),
             url(r'/logout', LogoutHandler, name='logout')
         ], **settings)
