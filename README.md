@@ -14,7 +14,7 @@ Yet another home automation project. The main concern of the project is keeping 
 ## First some screenshots ##
 
 ### The main menu which contains the sensors listings, and all the "switches" ###
-![homepage.png](https://bitbucket.org/repo/GERMME/images/2673176056-homepage.png)
+![home_automation_main.png](https://bitbucket.org/repo/GERMME/images/2704480034-home_automation_main.png)
 
 ### The sensors graphs menu ###
 ![sensors.png](https://bitbucket.org/repo/GERMME/images/3652208713-sensors.png)
@@ -81,7 +81,7 @@ Note: The RC light switches, wall sockets, electric curtains, and electromagneti
 **weatherStation**
 
 * Description: a mini weather station, low power runs only on batteries. It sends data using HC-12 comm module, the colleted data will be: humidity, temperature, pressure, light, rain
-* Parts: arduino pro mini, HC-12 module, BME280 sensors, rain sensor, BH1750 lux sensor, 3x battery holder, battery, a NPN tranzistor, case, wires, PCB
+* Parts: arduino pro mini, HC-12 module, BME280 sensors, rain sensor, BH1750 lux sensor, 3x battery holder, battery, a NPN tranzistor, case, wires, PCB, a solar pannel, diode
 
 ### Limitations ###
 
