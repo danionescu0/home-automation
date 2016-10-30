@@ -49,6 +49,14 @@ conf = [
         'last_updated': 0
     },
     {
+        'type': 'light',
+        'value': 0,
+        'visible': ['graphs'],
+        'location': 'outside',
+        'communication_code': ('L', '1'),
+        'last_updated': 0
+    },
+    {
         'type': 'voltage',
         'value': 0,
         'visible': ['graphs'],
