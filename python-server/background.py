@@ -1,9 +1,9 @@
 import logging
 
-from communication.ActuatorCommands import ActuatorCommands
 from communication.CommunicationThread import CommunicationThread
 from communication.CommunicatorRegistry import CommunicatorRegistry
 from communication.SerialSensorsParser import SerialSensorsParser
+from communication.actuator.ActuatorCommands import ActuatorCommands
 from config import actuators
 from config import communication
 from config import general
@@ -13,16 +13,16 @@ from event.SensorUpdateEvent import SensorUpdateEvent
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
-from repository.IftttRules import IftttRules
 from repository.Actuators import Actuators
+from repository.IftttRules import IftttRules
 from repository.Sensors import Sensors
 from tools.Authentication import Authentication
 from tools.EmailNotifier import EmailNotifier
 from tools.HomeDefence import HomeDefence
 from tools.HomeDefenceThread import HomeDefenceThread
+from tools.IftttRulesThread import IftttRulesThread
 from tools.JobControl import JobControll
 from tools.JobControlThread import JobControlThread
-from tools.IftttRulesThread import IftttRulesThread
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 comm_registry = CommunicatorRegistry(communication, logging)
