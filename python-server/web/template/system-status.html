@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% extends "./base.html" %}
+    <title>{% extends "./base.html" %}</title>
+</head>
 
 {% block scripts %}
     {% autoescape None %}
@@ -16,22 +17,36 @@
 {% block body %}
     <div class="container">
      {% include "./snippets/menu.html" %}
-
-
       <div class="row marketing">
         <h3>Sensors last updated</h3>
-            <div class="container-fluid">
+        <div class="container-fluid">
+        <table class="col-md-12 table-bordered table-striped table-condensed cf">
+            <thead>
+                <tr>
+                    <th>Senzor name</th>
+                    <th>Since</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for sensor_data in sensors_last_updated %}
-                <b>{{ sensor_data['name'].capitalize() }}</b> -> {{ sensor_data['last_updated'] }} </br>
+                <tr>
+                    <td>{{ sensor_data['name'].capitalize() }}</td>
+                    <td>
+                        <b>{{ sensor_data['minutes_since_updated'] }}</b>
+                        &nbsp;&nbsp;
+                        ({{ sensor_data['last_updated'] }})
+                    </td>
+                </tr>
             {% end %}
-            </div>
+            </tbody>
+            </table>
+
+        </div>
       </div>
 
      {% include "./snippets/footer.html" %}
-
-    </div> <!-- /container -->
-{% end %}</title>
-</head>
+    </div>
+{% end %}
 <body>
 
 </body>
