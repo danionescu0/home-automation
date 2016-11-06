@@ -1,11 +1,13 @@
 from communication.actuator.SendStrategy import SendStrategy
 from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
+from communication.actuator.GroupStrategy import GroupStrategy
 
 class ActuatorCommands:
-    def __init__(self, communicator_registry, actuators_repo, actuators_config):
+    def __init__(self, communicator_registry, actuators_repo, actuators_config, job_controll):
         self.__communicator_registry = communicator_registry
         self.__actuators_repo = actuators_repo
         self.__actuators_config = actuators_config
+        self.__job_controll = job_controll
 
     def change_actuator(self, actuator_name, state):
         self.__actuators_repo.set_actuator(actuator_name, state)
@@ -24,5 +26,6 @@ class ActuatorCommands:
         strategies = []
         strategies.append(SendStrategy(self.__communicator_registry, self.__actuators_config, self.__actuators_repo))
         strategies.append(WemoSwitchStrategy(self.__actuators_config))
+        strategies.append(GroupStrategy(self.__actuators_config, self.__job_controll))
 
         return strategies

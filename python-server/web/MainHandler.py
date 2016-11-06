@@ -1,6 +1,4 @@
-import json
 from tornado.web import  authenticated
-import time
 from web.BaseHandler import BaseHandler
 
 class MainHandler(BaseHandler):
@@ -24,9 +22,7 @@ class MainHandler(BaseHandler):
     def post(self, *args, **kwargs):
         actuator_name = self.get_argument("actuator_name", None, True)
         actuator_value = self.get_argument("actuator_value", None, True)
-        bool_actuator_value = {'false' : False, 'true': True}[actuator_value]
-        self.job_controll.add_job(json.dumps({"job_name": "actuators", "actuator": actuator_name, "state": bool_actuator_value}))
-        time.sleep(0.3)
+        self.job_controll.change_actuator(actuator_name, {'false' : False, 'true': True}[actuator_value])
 
     def __filter_actuator_by_type(self, actuators, type):
         return {key: data for key, data in actuators.items() if actuators[key]['type'] == type}
