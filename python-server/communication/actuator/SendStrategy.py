@@ -1,6 +1,5 @@
-import time
-
 from BaseStrategy import BaseStrategy
+import time
 
 class SendStrategy(BaseStrategy):
     def __init__(self, communicator_registry, actuators_config, actuators_repo):
@@ -12,9 +11,6 @@ class SendStrategy(BaseStrategy):
         return self.actuators_config[actuator_name]['strategy'] == 'send'
 
     def toggle(self, actuator_name, state):
-        if actuator_name == 'closeAllLights':
-            self.__close_all_lights()
-            return
         device_name = self.actuators_config[actuator_name]['send_to_device']
         if self.__should_execute_command(actuator_name):
             command = self.__calculate_actuator_command(actuator_name, state)
@@ -22,15 +18,7 @@ class SendStrategy(BaseStrategy):
             self.__communicator_registry. \
                 get_communicator(communicator_name). \
                 send(device_name, command)
-
-
-    def __close_all_lights(self):
-        all_actuators = self.__actuators_repo.get_actuators()
-        for actuator_name, propreties in all_actuators.iteritems():
-            if propreties['device_type'] == 'light':
-                self.__actuators_repo.set_actuator(actuator_name, False)
-                self.change_actuator(actuator_name, False)
-                time.sleep(3)
+            time.sleep(0.5)
 
     def __should_execute_command(self, actuator_name):
         actuator_details = self.actuators_config[actuator_name]

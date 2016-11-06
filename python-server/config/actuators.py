@@ -17,6 +17,17 @@ conf = {
         'send_to_device': False,
         'command': False
     },
+    'closeAllLights': {
+        'state': False,
+        'type': 'single',
+        'device_type': 'action',
+        'strategy': 'group',
+        'futureState': False,
+        'actuators' : ['livingLight', 'bedroomLight', 'kitchenLight', 'holwayLight', 'closetLight', 'balconyLight'],
+        'communicator': False,
+        'send_to_device': False,
+        'command': False
+    },
     'livingCourtains': {
         'state': False,
         'type': 'bi',
@@ -25,15 +36,6 @@ conf = {
         'communicator': 'bluetooth',
         'send_to_device': 'balcony',
         'command': {False: '0', True: '1'}
-    },
-    'closeAllLights': {
-        'state': False,
-        'type': 'single',
-        'device_type': 'action',
-        'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': False,
-        'command': False
     },
     'livingLight': {
         'state': False,

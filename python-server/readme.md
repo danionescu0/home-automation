@@ -1,10 +1,10 @@
-# requirements
+# Requirements
 * python 2.7
 * redis server running
 * bluetooth configured
 * festival installed
 
-# configuration 
+# Configuration 
 ## general.py
 * in credentials add as many usernames/passwords as you wish
 * webserver.static path is the absolute path to /public folder
@@ -34,18 +34,18 @@ node number
 * last_updated is a timestamp and it denotes the last sensor updated time
 ## communication.py
 * bluetooth connection strings for the devices
-
-# configure bluetooth
+## bluetooth
 * serial: http://www.uugear.com/portfolio/bluetooth-communication-between-raspberry-pi-and-arduino/
-* audio: http://blog.whatgeek.com.pt/2014/04/raspberry-pi-bluetooth-wireless-speaker/
 
-# python libs to install with pip
-* sudo pip install pytz astral tornado python-dateutil redis pybluez geopy blinker
+# Install: 
+## python libs  with pip:
+* sudo pip install pytz astral tornado python-dateutil redis pybluez geopy blinker ouimeaux
+* tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
 
-# linux packages
+# Linux packages
 * sudo apt-get install screen redis-server festival
 * pybluez requires the following linux packages: libbluetooth-dev, python-dev
 
-# running the servers
+# Running the servers
 * in a screen or background process run: "python background.py"
 * in other screen or background process run: "python webserver.py"
