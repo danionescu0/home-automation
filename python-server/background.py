@@ -23,11 +23,14 @@ from tools.HomeDefenceThread import HomeDefenceThread
 from tools.IftttRulesThread import IftttRulesThread
 from tools.JobControl import JobControll
 from tools.JobControlThread import JobControlThread
+from tools.TextToSpeech import TextToSpeech
+from ifttt.command.CommandExecutor import CommandExecutor
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 comm_registry = CommunicatorRegistry(communication, logging)
 comm_registry.configure_communicators()
 
+text_to_speech = TextToSpeech()
 actuators_repo = Actuators(general.redis_config, actuators.conf)
 sensors_repo = Sensors(general.redis_config, sensors.conf)
 ifttt_rules = IftttRules(general.redis_config)
@@ -43,6 +46,7 @@ fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(actuator_comman
 intruder_alert_listener = IntruderAlertListener(actuators_repo, email_notificator)
 change_actuator_request_event = ChangeActuatorRequestEvent()
 sensor_update_event = SensorUpdateEvent()
+command_executor = CommandExecutor(change_actuator_request_event, text_to_speech, logging)
 
 def main():
     threads = []
@@ -51,7 +55,7 @@ def main():
     threads.append(CommunicationThread(serial_sensors_parser, sensors_repo, sensor_update_event,
                                        comm_registry.get_communicator('serial')))
     threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
-    threads.append(IftttRulesThread(ifttt_rules, change_actuator_request_event, sensors_repo, actuators_repo, logging))
+    threads.append(IftttRulesThread(ifttt_rules, command_executor, sensors_repo, actuators_repo, logging))
     threads.append(HomeDefenceThread(home_defence))
     for thread in threads:
         thread.start()
