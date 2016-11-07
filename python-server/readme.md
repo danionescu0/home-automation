@@ -41,6 +41,7 @@ node number
 ## python libs  with pip:
 * sudo pip install pytz astral tornado python-dateutil redis pybluez geopy blinker ouimeaux
 * tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
+* in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
 
 # Linux packages
 * sudo apt-get install screen redis-server festival

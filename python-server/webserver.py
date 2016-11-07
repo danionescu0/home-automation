@@ -14,6 +14,7 @@ from repository.Actuators import Actuators
 from repository.Sensors import Sensors
 from tools.Authentication import Authentication
 from tools.JobControl import JobControll
+from tools.VoiceCommands import VoiceCommands
 from web.MainHandler import MainHandler
 from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
@@ -34,6 +35,7 @@ logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-
 saveLocationListener = SaveLocationListener(location_tracker)
 set_phone_is_home_listener = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
 ifttt_expression_validator = ExpressionValidator(sensors_repo, actuators_repo)
+voice_commands = VoiceCommands(job_controll, logging).configure()
 
 def make_app():
     settings = {
@@ -71,6 +73,7 @@ def make_app():
                 dict(
                     authentication=authentication,
                     api_token_secret = general.web_server['api_token_secret'],
+                    voice_commands=voice_commands,
                     logging=logging
                 ),
                 name='api'

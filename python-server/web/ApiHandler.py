@@ -6,19 +6,33 @@ from web.BaseHandler import BaseHandler
 from event.LocationEvent import LocationEvent
 
 class ApiHandler(BaseHandler):
-    def initialize(self, authentication, api_token_secret, logging):
+    def initialize(self, authentication, api_token_secret, voice_commands, logging):
         self.__authentication = authentication
         self.__api_token_secret = api_token_secret
+        self.__voice_commands = voice_commands
         self.logging = logging
 
     def get(self, module):
-        if (module == 'record-location'):
+        if module == 'record-location':
             self.record_location()
-        elif (module == 'token-auth'):
+        elif module == 'token-auth':
             self.token_auth()
+        elif module == 'voice-command':
+            self.execute_command()
         else:
             self.set_status(404)
             self.write({'status': False, 'error': 'not implemented'})
+
+    # @ToDo refactored duplicate code with record_location
+    def execute_command(self):
+        username = self.__check_token()
+        if not username:
+            self.set_status(500)
+            self.write({'status': False, 'error': 'bad token'})
+            return
+        command = self.get_argument('command', None, True)
+        self.__voice_commands.execute(command)
+        self.write({'status': True})
 
     def record_location(self):
         username = self.__check_token()
