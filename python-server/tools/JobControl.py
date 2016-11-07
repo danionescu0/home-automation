@@ -19,5 +19,5 @@ class JobControll:
     def __add_job(self, jobDescription):
         self.client.publish(self.CHANNEL_NAME, jobDescription)
 
-    def change_actuator(self, name, value):
-        self.__add_job(json.dumps({"job_name": "actuators", "actuator": name, "state": value}))
+    def change_actuator(self, name, state):
+        self.__add_job(json.dumps({"job_name": "actuators", "actuator": name, "state": state}))
