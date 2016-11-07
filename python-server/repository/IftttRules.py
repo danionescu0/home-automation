@@ -3,23 +3,24 @@ import json
 from repository.AbstractRedis import AbstractRedis
 
 class IftttRules(AbstractRedis):
-    DATA = 'data'
-    STATE = 'state'
+    TRIGGER_RULES = 'trigger-rules'
     ACTIVE = 'active'
-    ACTUATOR = 'actuator'
+    COMMANDS = 'commands'
+    COMMAND_ACTUATOR_NAME = 'actuator_name'
+    COMMAND_ACTUATOR_STATE = 'actuator_state'
+    COMMAND_VOICE = 'voice'
     __REDIS_KEY = 'rules'
 
     def __init__(self, configuration):
         AbstractRedis.__init__(self, configuration)
         self.keys = {self.__REDIS_KEY: {}}
 
-    def upsert(self, name, data, actuator, state, active):
+    def upsert(self, name, trigger_rules, active, commands):
         rules = self.get(self.__REDIS_KEY)
         rules[name] = {
-            self.ACTUATOR : actuator,
-            self.STATE : state,
-            self.DATA : data,
+            self.TRIGGER_RULES : trigger_rules,
             self.ACTIVE: active,
+            self.COMMANDS: commands
         }
 
         return self.client.set(self.__REDIS_KEY, json.dumps(rules))

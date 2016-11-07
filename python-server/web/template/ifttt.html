@@ -24,24 +24,23 @@
         <table class="col-md-12 table-bordered table-striped table-condensed cf">
             <thead>
                 <tr>
-                    <th>Rule name</th>
-                    <th>Rule data</th>
-                    <th>Active</th>
-                    <th>Actuator name</th>
-                    <th>Actuator state</th>
+                    <th>Name</th>
+                    <th>Conditions</th>
+                    <th>Is active</th>
+                    <th>Command</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+
             <form name="allrules" method="POST">
             {% for rule in rules %}
-
             <tr {% if 'template' in rules[rule].keys() %}class="main-tr add-nwl-rule" style="display:none"{% else %} class="main-tr" {% end %}>
                 <td data-title="Rule name">
                     <input type="text" name="rule_name" value="{{ rule }}" {% if 'template' not in rules[rule].keys() %}readonly="true"{% end %}>
                 </td>
-                <td data-title="Rule data">
-                    <textarea  name="rule_data" rows="4" cols="30" />{{ rules[rule]['data'] }}</textarea>
+                <td data-title="Trigger rules">
+                    <textarea name="trigger_rules" rows="4" cols="30" />{{ rules[rule]['trigger-rules'] }}</textarea>
                 </td>
                 <td data-title="Active">
                     <select name="active">
@@ -49,18 +48,20 @@
                         <option value="False" {% if rules[rule]['active'] == False %}SELECTED=SELECTED{% end %}>False</option>
                     </select>
                 </td>
-                <td data-title="Actuator name">
-                    <select name="actuator">
+                <td data-title="Command">
+                    <select name="actuator_name">
+                        <option value=""></option>
                     {% for actuator in actuators %}
-                        <option value="{{ actuator }}" {% if rules[rule]['actuator'] == actuator %}SELECTED=SELECTED{% end %}>{{ actuator }}</option>
+                        <option value="{{ actuator }}" {% if rules[rule]['commands'][0]['actuator_name'] == actuator %}SELECTED=SELECTED{% end %}>{{ actuator }}</option>
                     {% end %}
+                    </select> /
+                    <select name="actuator_state">
+                        <option value="On" {% if rules[rule]['commands'][0]['actuator_state'] == True %}SELECTED=SELECTED{% end %}>On</option>
+                        <option value="Off" {% if rules[rule]['commands'][0]['actuator_state'] == False %}SELECTED=SELECTED{% end %}>Off</option>
                     </select>
-                </td>
-                <td data-title="Actuator state">
-                    <select name="state">
-                        <option value="True" {% if rules[rule]['state'] == True %}SELECTED=SELECTED{% end %}>True</option>
-                        <option value="False" {% if rules[rule]['state'] == False %}SELECTED=SELECTED{% end %}>False</option>
-                    </select>
+                    <textarea name="voice" rows="2" cols="18" >
+                        {{ rules[rule]['commands'][0]['voice'] }}
+                    </textarea>
                 </td>
                 <td data-title="Actions">
                     {% if 'template' in rules[rule].keys() %}
@@ -75,6 +76,7 @@
                 <td colspan="6"><a href="javascript://" class="new-rule">Add new rule</a></td>
             </tr>
             </form>
+
             </tbody>
         </table>
         </div>

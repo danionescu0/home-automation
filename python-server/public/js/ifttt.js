@@ -18,11 +18,12 @@ ifttt = {
             url: this.actionsURL,
             data: {
                 type: 'update',
-                rule: trElem.find("input[name='rule_name']").val(),
-                data: trElem.find("textarea[name='rule_data']").val(),
-                actuator: trElem.find("select[name='actuator'] option:selected").val(),
+                rule_name: trElem.find("input[name='rule_name']").val(),
+                trigger_rules: trElem.find("textarea[name='trigger_rules']").val(),
+                actuator_name: trElem.find("select[name='actuator_name'] option:selected").val(),
+                actuator_state: trElem.find("select[name='actuator_state'] option:selected").val(),
+                voice: trElem.find("textarea[name='voice']").val(),
                 active: trElem.find("select[name='active'] option:selected").val(),
-                state: trElem.find("select[name='state'] option:selected").val(),
             },
             method: 'POST',
             complete: function(xhr) {
