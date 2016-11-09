@@ -7,6 +7,8 @@ Yet another home automation project. The main concern of the project is keeping 
 * unlock a electromagnetic door through the press of a button on the app or through fingerprint
 * control various types of electric curtains (open / close)
 * control remote wall sockets (433 mhz versions by clonning their signal), and WeMo siwtches
+* use a speaker to emit alerts and statuses
+* supports voice remote controll from the [android](https://bitbucket.org/danionescu/androidhomeautomation) application
 * toggle lights on / off (Livolo switches (check the product [here](https://www.aliexpress.com/item/Free-Shipping-Livolo-EU-Standard-Remote-Switch-White-Crystal-Glass-Panel-110-250V-Wall-Light-Remote/629004768.html?spm=2114.13010608.0.126.Mt7G6z)))
 * multiple action switches ex: toggle all lights off
 * monitor temperature, humidity, light level, air quality, human presence inside and outside
