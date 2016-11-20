@@ -13,7 +13,12 @@ class ActuatorCommands:
         self.__actuators_repo.set_actuator(actuator_name, state)
         if not self.__actuators_config[actuator_name]['strategy']:
             return
-        self.__get_strategy(actuator_name).toggle(actuator_name, state)
+
+        success = self.__get_strategy(actuator_name).toggle(actuator_name, state)
+        if not success and self.__actuators_config[actuator_name]['type'] == 'bi':
+            self.__actuators_repo.set_actuator(actuator_name, not state)
+
+        return success
 
     def __get_strategy(self, actuator_name):
         for strategy in self.__get_actuator_strategies():

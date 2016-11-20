@@ -13,3 +13,5 @@ class GroupStrategy(BaseStrategy):
         future_state = self.actuators_config[actuator_name]['futureState']
         for actuator_name in toggle_actuators:
             self.__job_controll.change_actuator(actuator_name, future_state)
+
+        return True

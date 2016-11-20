@@ -1,5 +1,6 @@
 from BaseStrategy import BaseStrategy
 from ouimeaux.environment import Environment
+from ouimeaux.environment import UnknownDevice
 
 class WemoSwitchStrategy(BaseStrategy):
 
@@ -11,10 +12,15 @@ class WemoSwitchStrategy(BaseStrategy):
 
     def toggle(self, actuator_name, state):
         env = Environment()
-        env.start()
-        env.discover(seconds=1)
-        switch = env.get_switch(self.actuators_config[actuator_name]['send_to_device'])
-        if (state):
-            switch.on()
-        else:
-            switch.off()
+        try:
+            env.start()
+            env.discover(seconds=1)
+            switch = env.get_switch(self.actuators_config[actuator_name]['send_to_device'])
+            if (state):
+                switch.on()
+            else:
+                switch.off()
+        except UnknownDevice:
+            return False
+
+        return True

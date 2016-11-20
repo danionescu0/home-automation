@@ -12,20 +12,15 @@ class SendStrategy(BaseStrategy):
 
     def toggle(self, actuator_name, state):
         device_name = self.actuators_config[actuator_name]['send_to_device']
-        if self.__should_execute_command(actuator_name):
-            command = self.__calculate_actuator_command(actuator_name, state)
-            communicator_name = self.actuators_config[actuator_name]['communicator']
-            self.__communicator_registry. \
-                get_communicator(communicator_name). \
-                send(device_name, command)
-            time.sleep(0.5)
+        command = self.__calculate_actuator_command(actuator_name, state)
+        communicator_name = self.actuators_config[actuator_name]['communicator']
+        self.__communicator_registry. \
+            get_communicator(communicator_name). \
+            send(device_name, command)
+        time.sleep(0.5)
 
-    def __should_execute_command(self, actuator_name):
-        actuator_details = self.actuators_config[actuator_name]
-        if actuator_details['command'] != False:
-            return True
+        return True
 
-        return False
 
     def __calculate_actuator_command(self, actuator_name, state):
         actuator_details = self.actuators_config[actuator_name]
