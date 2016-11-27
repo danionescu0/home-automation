@@ -14,52 +14,53 @@ class ApiHandler(BaseHandler):
 
     def get(self, module):
         if module == 'record-location':
-            self.record_location()
+            success = self.record_location()
         elif module == 'token-auth':
-            self.token_auth()
+            success = self.token_auth()
         elif module == 'voice-command':
-            self.execute_command()
+            success = self.execute_command()
         else:
             self.set_status(404)
             self.write({'status': False, 'error': 'not implemented'})
+        if not success:
+            self.set_status(500)
+            self.write({'status': False, 'error': 'bad credentials'})
 
     # @ToDo refactored duplicate code with record_location
     def execute_command(self):
         username = self.__check_token()
         if not username:
-            self.set_status(500)
-            self.write({'status': False, 'error': 'bad token'})
-            return
+            return False
         command = self.get_argument('command', None, True)
         self.__voice_commands.execute(command)
         self.write({'status': True})
 
+        return True
+
     def record_location(self):
         username = self.__check_token()
         if not username:
-            self.set_status(500)
-            self.write({'status': False, 'error': 'bad token'})
-            return
-
+            return False
         latitude = float(self.get_argument('latitude', None, True))
         longitude = float(self.get_argument('longitude', None, True))
         location_event = LocationEvent()
         location_event.send(username, latitude, longitude)
-
         self.write({'status': True})
+
+        return True
 
     def token_auth(self):
         username = self.get_argument('username', None, True)
         password = self.get_argument('password', None, True)
         if (not self.__authentication.verify_credentials(username, password)):
-            self.set_status(500)
-            self.write({'status': False, 'error': 'bad credentials'})
-            return
+            return False
 
         expire = datetime.date.today() + relativedelta(months=1)
         jwt_data = {'sub' : username, 'exp': time.mktime(expire.timetuple())}
         token = jwt.encode(jwt_data, self.__api_token_secret, algorithm='HS256')
         self.write(token)
+
+        return True
 
     def __check_token(self):
         auth_header = self.request.headers.get("Authorization")
