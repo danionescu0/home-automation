@@ -40,6 +40,7 @@ node number
 # Install: 
 ## python libs  with pip:
 * sudo pip install pytz astral tornado python-dateutil redis pybluez geopy blinker ouimeaux
+or install using "pip install -r requirements.txt"
 * tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
 * in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
 
@@ -50,3 +51,17 @@ node number
 # Running the servers
 * in a screen or background process run: "python background.py"
 * in other screen or background process run: "python webserver.py"
+
+# Extending the code
+
+## create a listener to respond to events
+* available events to subscribe: ChangeActuatorRequest, Location, SensorUpdate
+the events are located in /events folder
+* first create a file in /listener folder, the file name should end up in "Listener"
+the file name should describe what the listener does not on what it subscribes
+* events listner uses "blinker" so we should use the import statement: "from blinker import signal"
+* define a class, and in the constructor inject all dependencies needed ex: "actuator_commands"
+* in the constructor subscribe to the event like this "signal("sensor_update").connect(self.callback)"
+in this exampled we subscribed to "sensor_update" event and we'll receive the event in the "callback" method
+inside the class
+
