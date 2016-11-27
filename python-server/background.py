@@ -1,8 +1,8 @@
 import logging
 
-from communication.CommunicationThread import CommunicationThread
+from communication.IncommingCommunicationThread import IncommingCommunicationThread
 from communication.CommunicatorRegistry import CommunicatorRegistry
-from communication.SerialSensorsParser import SerialSensorsParser
+from communication.TextSensorDataParser import TextSensorDataParser
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from config import actuators
 from config import communication
@@ -37,7 +37,7 @@ ifttt_rules = IftttRules(general.redis_config)
 job_controll = JobControll(general.redis_config)
 email_notificator = EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
 actuator_commands = ActuatorCommands(comm_registry, actuators_repo, actuators.conf, job_controll)
-serial_sensors_parser = SerialSensorsParser(sensors.conf)
+text_sensor_data_parser = TextSensorDataParser(sensors.conf)
 home_defence = HomeDefence(actuator_commands, general.burgler_sounds_folder, actuators_repo)
 authentication = Authentication(general.credentials)
 
@@ -50,10 +50,10 @@ command_executor = CommandExecutor(change_actuator_request_event, text_to_speech
 
 def main():
     threads = []
-    threads.append(CommunicationThread(serial_sensors_parser, sensors_repo, sensor_update_event,
-                                       comm_registry.get_communicator('bluetooth')))
-    threads.append(CommunicationThread(serial_sensors_parser, sensors_repo, sensor_update_event,
-                                       comm_registry.get_communicator('serial')))
+    threads.append(IncommingCommunicationThread(text_sensor_data_parser, sensors_repo, sensor_update_event,
+                                                comm_registry.get_communicator('bluetooth')))
+    threads.append(IncommingCommunicationThread(text_sensor_data_parser, sensors_repo, sensor_update_event,
+                                                comm_registry.get_communicator('serial')))
     threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
     threads.append(IftttRulesThread(ifttt_rules, command_executor, sensors_repo, actuators_repo, logging))
     threads.append(HomeDefenceThread(home_defence))

@@ -30,7 +30,7 @@ class ActuatorCommands:
     def __get_actuator_strategies(self):
         strategies = []
         strategies.append(SendStrategy(self.__communicator_registry, self.__actuators_config, self.__actuators_repo))
-        strategies.append(WemoSwitchStrategy(self.__actuators_config))
+        strategies.append(WemoSwitchStrategy(self.__actuators_config, self.__communicator_registry))
         strategies.append(GroupStrategy(self.__actuators_config, self.__job_controll))
 
         return strategies

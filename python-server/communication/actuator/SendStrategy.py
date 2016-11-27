@@ -21,7 +21,6 @@ class SendStrategy(BaseStrategy):
 
         return True
 
-
     def __calculate_actuator_command(self, actuator_name, state):
         actuator_details = self.actuators_config[actuator_name]
         actuator_type = actuator_details['type']
