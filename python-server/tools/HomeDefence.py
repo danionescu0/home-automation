@@ -3,9 +3,9 @@ import datetime
 import subprocess
 from pytz import timezone
 from astral import Astral
-
+from tools.DaytimeMoments import DaytimeMoments
 class HomeDefence:
-    def __init__(self, actuator_commands, burgler_sounds_folder, actuators_repo):
+    def __init__(self, actuator_commands, burgler_sounds_folder, actuators_repo, ):
         self.actuator_commands = actuator_commands
         self.burgler_sounds_folder = burgler_sounds_folder
         self.actuators_repo = actuators_repo
@@ -23,7 +23,7 @@ class HomeDefence:
         if currentTime > datetime.time(22, 30, 00):
             return
 
-        if self.__is_over_sunset():
+        if not DaytimeMoments.is_over_sunset():
             return
 
         self.__toggle_lights()
@@ -36,13 +36,6 @@ class HomeDefence:
     def __is_alarm_set(self):
         actuators = self.actuators_repo.get_actuators()
         return actuators['homeAlarm']['state'] == True
-
-    def __is_over_sunset(self):
-        astral = Astral()
-        astral.solar_depression = 'civil'
-        sun = astral['Bucharest'].sun(date=datetime.datetime.now(), local=True)
-        currentTime = datetime.datetime.now(timezone('Europe/Bucharest')).time()
-        return currentTime < sun['sunset'].time()
 
     def __toggle_lights(self):
         if self.lastBurglerLight is not None:

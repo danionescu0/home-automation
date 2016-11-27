@@ -26,7 +26,6 @@ class ApiHandler(BaseHandler):
             self.set_status(500)
             self.write({'status': False, 'error': 'bad credentials'})
 
-    # @ToDo refactored duplicate code with record_location
     def execute_command(self):
         username = self.__check_token()
         if not username:

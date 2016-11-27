@@ -4,8 +4,7 @@ class IntruderAlertListener:
     def __init__(self, actuators_repo, email_notificator):
         self.__actuators_repo = actuators_repo
         self.__email_notificator = email_notificator
-        sensor_update =  signal("sensor_update")
-        sensor_update.connect(self.callback)
+        signal("sensor_update").connect(self.callback)
 
     def callback(self, sensor_update):
         if self.__should_send_alert(sensor_update):
