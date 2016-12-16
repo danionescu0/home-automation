@@ -16,7 +16,6 @@ class Serial(Base):
 
     def send(self, which, value):
         print which, value
-        pass
 
     def listen(self, complete_message_callback, receive_message_callback):
         received_data = self.__serial.read()

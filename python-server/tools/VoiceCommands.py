@@ -21,7 +21,7 @@ class VoiceCommands:
         self.__register_entity(actions, self.ACTIONS)
         locations = ['living', 'kitchen', 'hollway', 'wemo']
         self.__register_entity(locations, self.NAME)
-        actuator_types = ['light', 'switch', 'courtain', 'door']
+        actuator_types = ['light', 'switch', 'courtains', 'door']
         self.__register_entity(actuator_types, self.ACTUATOR_TYPE)
 
         actuator_intent = IntentBuilder("ActuatorIntent") \
@@ -32,6 +32,7 @@ class VoiceCommands:
         self.__engine.register_intent_parser(actuator_intent)
         self.__commands_map = [
             {'entities' : {'name' : 'living', 'type' : 'light'}, 'actuator' : 'livingLight'},
+            {'entities' : {'name' : 'living', 'type' : 'courtains'}, 'actuator' : 'livingCourtains'},
             {'entities' : {'name' : 'hollway', 'type' : 'light'}, 'actuator' : 'holwayLight'},
             {'entities' : {'name' : 'wemo', 'type' : 'switch'}, 'actuator' : 'wemoSwitch1'},
         ]
@@ -65,7 +66,7 @@ class VoiceCommands:
         self.__job_controll.change_actuator(command['actuator'], actuator_state)
 
     def __normalize_command(self, command):
-        replaces = [('life', 'light'), ('leaving', 'living'), ('hallway', 'hollway')]
+        replaces = [('life', 'light'), ('leaving', 'living'), ('hallway', 'hollway'), ('quarters', 'courtains'), ('of', 'off')]
         for replace in replaces:
             command = re.sub(replace[0], replace[1], command)
 

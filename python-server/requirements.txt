@@ -1,0 +1,12 @@
+PyBluez==0.22
+PyJWT==1.4.2
+astral==1.0
+blinker==1.4
+ouimeaux==0.8
+pyserial==2.6
+python-dateutil==2.5.1
+redis==2.10.5
+tornado==4.3
+pytz==2016.3
+geopy==1.11.0
+pyserial==2.6

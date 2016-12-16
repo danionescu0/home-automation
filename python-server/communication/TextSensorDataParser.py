@@ -2,7 +2,7 @@ import re
 
 from communication.SensorsParseException import SensorsParseException
 
-class SerialSensorsParser:
+class TextSensorDataParser:
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:(\d{1,4})'
 
     def __init__(self, sensors_conf):

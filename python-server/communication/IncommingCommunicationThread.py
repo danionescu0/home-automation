@@ -1,6 +1,6 @@
 import threading
 
-class CommunicationThread(threading.Thread):
+class IncommingCommunicationThread(threading.Thread):
     def __init__(self, serial_sensors_parser, sensors_repo, sensor_update_event, communicator):
         threading.Thread.__init__(self)
         self.__serial_sensors_parser = serial_sensors_parser
