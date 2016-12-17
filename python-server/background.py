@@ -1,4 +1,4 @@
-import logging
+import sys
 
 from communication.IncommingCommunicationThread import IncommingCommunicationThread
 from communication.CommunicatorRegistry import CommunicatorRegistry
@@ -24,9 +24,13 @@ from tools.IftttRulesThread import IftttRulesThread
 from tools.JobControl import JobControll
 from tools.JobControlThread import JobControlThread
 from tools.TextToSpeech import TextToSpeech
+from tools.LoggingConfig import LoggingConfig
 from ifttt.command.CommandExecutor import CommandExecutor
 
-logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
+logging_config = LoggingConfig(general.logging['log_file'], general.logging['log_entries'])
+logging = logging_config.get_logger()
+sys.excepthook = logging_config.set_error_hadler
+
 comm_registry = CommunicatorRegistry(communication, logging)
 comm_registry.configure_communicators()
 

@@ -1,8 +1,5 @@
 import re
 
-from adapt.entity_tagger import EntityTagger
-from adapt.tools.text.tokenizer import EnglishTokenizer
-from adapt.tools.text.trie import Trie
 from adapt.intent import IntentBuilder
 from adapt.engine import IntentDeterminationEngine
 
@@ -66,7 +63,8 @@ class VoiceCommands:
         self.__job_controll.change_actuator(command['actuator'], actuator_state)
 
     def __normalize_command(self, command):
-        replaces = [('life', 'light'), ('leaving', 'living'), ('hallway', 'hollway'), ('quarters', 'courtains'), ('of', 'off')]
+        # replaces = [('life', 'light'), ('leaving', 'living'), ('hallway', 'hollway'), ('quarters', 'courtains'), ('of', 'off')]
+        replaces = [('life', 'light'), ('leaving', 'living'), ('hallway', 'hollway'), ('quarters', 'courtains')]
         for replace in replaces:
             command = re.sub(replace[0], replace[1], command)
 

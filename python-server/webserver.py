@@ -1,4 +1,4 @@
-import logging
+import sys
 
 from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
@@ -15,6 +15,7 @@ from repository.Sensors import Sensors
 from tools.Authentication import Authentication
 from tools.JobControl import JobControll
 from tools.VoiceCommands import VoiceCommands
+from tools.LoggingConfig import LoggingConfig
 from web.MainHandler import MainHandler
 from web.ApiHandler import ApiHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
@@ -31,7 +32,10 @@ ifttt_rules = IftttRules(general.redis_config)
 location_tracker = LocationTracker(general.redis_config)
 job_controll = JobControll(general.redis_config)
 
-logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
+logging_config = LoggingConfig(general.logging['log_file'], general.logging['log_entries'])
+logging = logging_config.get_logger()
+sys.excepthook = logging_config.set_error_hadler
+
 saveLocationListener = SaveLocationListener(location_tracker)
 set_phone_is_home_listener = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
 ifttt_expression_validator = ExpressionValidator(sensors_repo, actuators_repo)

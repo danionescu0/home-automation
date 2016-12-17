@@ -27,3 +27,7 @@ email = {
     'notifiedAddress': '' # receiving email
 }
 burgler_sounds_folder = '' # absoluth path to burgler sounds folder like: /home/pi/burglerSounds
+logging = {
+    'log_file': 'log.txt',
+    'log_entries': 10000
+}

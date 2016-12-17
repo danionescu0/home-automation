@@ -6,7 +6,7 @@ it is based on a raspberry pi (or another linux compatible board) and arduino bo
 # Summary
 * [First what can it do ?](#first-what-can-it-do)
 * [Project review](#project-review)
-* [IFTTT](#IFTTT)
+* [IFTTT](#ifttt)
 * [Screenshots](#screenshots)
 * [Components prices](#components-prices)
 * [Limitations](#limitations)
