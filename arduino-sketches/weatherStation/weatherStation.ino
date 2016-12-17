@@ -23,7 +23,7 @@ char buffer[] = {' ',' ',' ',' ',' ',' ',' '};
 struct sensorData
   {
       byte humidity;    
-      byte temperature;
+      int temperature;
       byte rain;
       int  pressure;
       long voltage;

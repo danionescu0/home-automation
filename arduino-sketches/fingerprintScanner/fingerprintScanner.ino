@@ -33,7 +33,7 @@ void loop()
 
 bool isKnownFinger(int id)
 {   
-    return (id == 0 || id == 1);
+    return (id >= 0 && id <= 4);
 }
 
 int getFingerId()
