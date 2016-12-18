@@ -10,6 +10,8 @@ class FingerprintDoorUnlockListener:
     def callback(self, sensor_update):
         if self.__should_unlock_door(sensor_update):
             self.__actuator_commands.change_actuator('door', True)
+            self.__actuator_commands.change_actuator('homeAlarm', False)
+
             if self.__should_open_lights():
                 self.__actuator_commands.change_actuator('holwayLight', True)
                 self.__actuator_commands.change_actuator('livingLight', True)
