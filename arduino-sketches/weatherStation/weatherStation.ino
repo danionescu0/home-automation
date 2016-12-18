@@ -1,7 +1,6 @@
 /*
  * This sketch uses: 
  * - BME280 sensor for pressure, temperature, and humidity
- * - a rain senzor
  * - a light senzor
  * It transmits data over serial using SoftwareSerial library, to be picked up by the HC-12 module 
  */
@@ -17,8 +16,13 @@ Adafruit_BME280 bme;
 BH1750 lightMeter;
 
 byte sensorsCode = 1;
+/**
+ * voltage level that will pun the microcontroller in deep sleep instead of regular sleep
+ */
+int voltageDeepSleepThreshold = 4100; 
 const byte peripherialsPowerPin = 6;
 char buffer[] = {' ',' ',' ',' ',' ',' ',' '};
+
 
 struct sensorData
   {
@@ -27,7 +31,7 @@ struct sensorData
       byte rain;
       int  pressure;
       long voltage;
-      byte light;
+      int light;
   };
 
 sensorData sensors;
@@ -41,18 +45,20 @@ void setup()
     delay(500);
     if (!bme.begin()) {
         Serial.println("Could not find a valid BME280 sensor, check wiring!");
-        while (1);
+        while (1) {
+           deepSleep(100);
+        }
     }
     Serial.println("Initialization finished succesfully");
     delay(50);
-    digitalWrite(peripherialsPowerPin, LOW);
+    digitalWrite(peripherialsPowerPin, HIGH);
 }
 
 void loop() 
-{   
-    deepSleep(75);    
+{    
     updateSenzors();
-    transmitData();
+    transmitData();    
+    deepSleep(75);       
 }
 
 void updateSenzors() 
@@ -102,6 +108,10 @@ void transmitSenzorData(String type, int value)
 
 void deepSleep(int eightSecondCycles)
 {
+    if (sensors.voltage > voltageDeepSleepThreshold) {
+        delay(eightSecondCycles * 8000);
+        return;
+    }
     digitalWrite(peripherialsPowerPin, LOW);
     for (int i = 0; i < eightSecondCycles; i++) {
         LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);  
