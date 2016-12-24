@@ -3,7 +3,7 @@ import re
 from communication.SensorsParseException import SensorsParseException
 
 class TextSensorDataParser:
-    SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:(\d{1,4})'
+    SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'
 
     def __init__(self, sensors_conf):
         self.__sensors_conf = sensors_conf
@@ -33,7 +33,11 @@ class TextSensorDataParser:
         for sensor in self.__sensors_conf:
             if sensor['communication_code'][0] == code and sensor['communication_code'][1] == location:
                 found_sensor = sensor
-                found_sensor['value'] = int(value)
+                try:
+                    found_sensor['value'] = int(value)
+                except ValueError as e:
+                    raise SensorsParseException(
+                        'Badly formatted sensor value: {0}, error: {1})'.format(value, e.message))
                 return found_sensor
 
         raise SensorsParseException('Sensor with code: {0} and location {1} not found!'.format(code, location))
