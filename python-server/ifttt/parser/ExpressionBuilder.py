@@ -38,7 +38,7 @@ class ExpressionBuilder:
         token = self.__get_current_token()
         token_type = token.get_type()
         self.__next_token()
-        if token_type in [Token.TYPE_LITERAL_BOOLEAN, Token.TYPE_LITERAL_INT, Token.TYPE_LITERAL_TIME]:
+        if token_type in [Token.TYPE_LITERAL_BOOLEAN, Token.TYPE_LITERAL_INT, Token.TYPE_LITERAL_TIME, Token.TYPE_ACTUATOR_STATE]:
             return LiteralExpression(token.get_value())
         elif token_type == Token.TYPE_SENSOR:
             return LiteralExpression(self.__get_senzor_value(token.get_value()))
@@ -80,7 +80,7 @@ class ExpressionBuilder:
                 continue
             if senzor['type'] != senzor_type:
                 continue
-            print "Sensor type: {0}, and location {1} with value: {2}".format(senzor['type'], senzor['location'], senzor['value'])
+
             return senzor['value']
 
         raise  ParseException("Sensor with name {0} not found".format(senzor_data))
@@ -89,7 +89,6 @@ class ExpressionBuilder:
         if actuator_name not in self.__actuators:
             raise  ParseException("Actuator with name {0} not found".format(actuator_name))
 
-        print "actuator: {0} with value: {1}".format(actuator_name, self.__actuators[actuator_name]['state'])
         return self.__actuators[actuator_name]['state']
 
     def __get_time_value(self):
@@ -97,6 +96,5 @@ class ExpressionBuilder:
         to_zone = tz.gettz('Europe/Bucharest')
         initial_date = datetime.now().replace(tzinfo=from_zone)
         local_date = initial_date.astimezone(to_zone)
-        print "time is {0}".format(local_date.strftime('%H:%M'))
 
         return local_date.strftime('%H:%M')

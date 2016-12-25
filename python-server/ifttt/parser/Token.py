@@ -6,6 +6,7 @@ class Token:
     TYPE_EXPR_BETWEEN = 'btw'
     TYPE_EXPR_LESS = 'lt'
     TYPE_LITERAL_BOOLEAN = 'literal_bool'
+    TYPE_ACTUATOR_STATE = 'actuator_state'
     TYPE_LITERAL_INT = 'literal_int'
     TYPE_LITERAL_TIME = 'literal_time'
     TYPE_SENSOR = 'sensor'

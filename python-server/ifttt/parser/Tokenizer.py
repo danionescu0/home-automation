@@ -16,6 +16,7 @@ class Tokenizer:
             ('and', Token.TYPE_BOOLEAN_AND),
             ('or', Token.TYPE_BOOLEAN_OR),
             ('True|False', Token.TYPE_LITERAL_BOOLEAN),
+            ('On|Off', Token.TYPE_ACTUATOR_STATE),
             ('[0-9]{1,2}\:[0-9]{1,2}', Token.TYPE_LITERAL_TIME),
             ('\d+', Token.TYPE_LITERAL_INT),
         ]
@@ -25,7 +26,6 @@ class Tokenizer:
         tokens = []
         for token_text in cleanned_text.split():
             tokens.append(self.__get_token(token_text))
-            print self.__get_token(token_text).get_type() + ' with value ' + str(self.__get_token(token_text).get_value())
 
         return tokens
 
@@ -44,6 +44,8 @@ class Tokenizer:
     def __get_token_value(self, token_type, literal_value):
         if token_type == Token.TYPE_LITERAL_BOOLEAN:
             return {'True' : True, 'False' : False}[literal_value]
+        elif token_type == Token.TYPE_ACTUATOR_STATE:
+            return {'On' : True, 'Off' : False}[literal_value]
         elif token_type == Token.TYPE_LITERAL_INT:
             return int(literal_value)
 
