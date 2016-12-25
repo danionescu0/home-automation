@@ -75,7 +75,7 @@ class Bluetooth(Base):
 
     def disconnect(self):
         self.get_logger().debug("Disconnecting all bluetooth devices")
-        for name, connection in self.__connections:
+        for name, connection in self.__connections.iteritems():
             connection.close()
 
     def __get_endpoint(self):

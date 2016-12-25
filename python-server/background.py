@@ -1,4 +1,5 @@
 import sys
+import signal
 
 from communication.IncommingCommunicationThread import IncommingCommunicationThread
 from communication.CommunicatorRegistry import CommunicatorRegistry
@@ -61,14 +62,17 @@ def main():
     threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
     threads.append(IftttRulesThread(ifttt_rules, command_executor, sensors_repo, actuators_repo, logging))
     threads.append(HomeDefenceThread(home_defence))
-    for thread in threads:
-        thread.start()
-    try:
-        threads = [thread.join(1) for thread in threads if thread is not None and thread.isAlive()]
-    except KeyboardInterrupt:
-        print "Ctrl-c received! Sending kill to threads..."
+    def handler(signum, frame):
         for thread in threads:
             thread.shutdown = True
+
+    signal.signal(signal.SIGINT, handler)
+    signal.signal(signal.SIGTERM, handler)
+
+    for thread in threads:
+        thread.start()
+        while thread.is_alive():
+            thread.join(timeout=1)
 
 if __name__ == '__main__':
     main()
