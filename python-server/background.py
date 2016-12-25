@@ -69,8 +69,8 @@ def main():
     signal.signal(signal.SIGINT, handler)
     signal.signal(signal.SIGTERM, handler)
 
+    [thread.start() for thread in threads]
     for thread in threads:
-        thread.start()
         while thread.is_alive():
             thread.join(timeout=1)
 

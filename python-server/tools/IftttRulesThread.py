@@ -8,6 +8,8 @@ from repository.IftttRules import IftttRules
 from ifttt.parser.ParseException import ParseException
 
 class IftttRulesThread(threading.Thread):
+    ITERATE_INTERVAL = 60
+
     def __init__(self, ifttt_rules, command_executor, sensors_repo, actuators_repo, logging):
         threading.Thread.__init__(self)
         self.__ifttt_rules = ifttt_rules
@@ -20,17 +22,16 @@ class IftttRulesThread(threading.Thread):
     def run(self):
         while not self.shutdown:
             self.__do_run()
+            time.sleep(self.ITERATE_INTERVAL)
 
     def __do_run(self):
-        while True:
-            rules = self.__ifttt_rules.get_all_active()
-            for key, rule in rules.iteritems():
-                self.__logging.debug('Checking rule {0}'.format(key))
-                if not self.__check_rule(rule[IftttRules.TRIGGER_RULES]):
-                    continue
-                for command in rule[IftttRules.COMMANDS]:
-                    self.__command_executor.execute(command)
-            time.sleep(60)
+        rules = self.__ifttt_rules.get_all_active()
+        for key, rule in rules.iteritems():
+            self.__logging.debug('Checking rule {0}'.format(key))
+            if not self.__check_rule(rule[IftttRules.TRIGGER_RULES]):
+                continue
+            for command in rule[IftttRules.COMMANDS]:
+                self.__command_executor.execute(command)
 
     def __check_rule(self, rule):
         context = InterpretterContext()

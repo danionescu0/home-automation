@@ -10,11 +10,10 @@ class JobControll:
         self.pubsub.subscribe(self.CHANNEL_NAME)
 
     def listen(self, callback):
-        while True:
-            for job in self.pubsub.listen():
-                if job["data"] == 1:
-                    continue
-                callback(job["data"])
+        message = self.pubsub.get_message()
+        if not message or message['type'] != 'message':
+            return
+        callback(message['data'])
 
     def __add_job(self, jobDescription):
         self.client.publish(self.CHANNEL_NAME, jobDescription)
