@@ -35,7 +35,7 @@ conf = {
         'strategy': 'send',
         'communicator': 'bluetooth',
         'send_to_device': 'balcony',
-        'command': {False: '0', True: '1'}
+        'command': {False: 'C50;', True: 'O50;'}
     },
     'livingLight': {
         'state': False,
