@@ -17,6 +17,24 @@ conf = {
         'send_to_device': False,
         'command': False
     },
+    'livingCourtainsDwn': {
+        'state': False,
+        'type': 'single',
+        'device_type': 'courtains',
+        'strategy': 'send',
+        'communicator': 'bluetooth',
+        'send_to_device': 'balcony',
+        'command': {True: 'C3;'}
+    },
+    'livingCourtainsUp': {
+        'state': False,
+        'type': 'single',
+        'device_type': 'courtains',
+        'strategy': 'send',
+        'communicator': 'bluetooth',
+        'send_to_device': 'balcony',
+        'command': {True: 'O3;'}
+    },
     'closeAllLights': {
         'state': False,
         'type': 'single',
@@ -35,7 +53,7 @@ conf = {
         'strategy': 'send',
         'communicator': 'bluetooth',
         'send_to_device': 'balcony',
-        'command': {False: '0', True: '1'}
+        'command': {False: 'O50;', True: 'C50;'}
     },
     'livingLight': {
         'state': False,
