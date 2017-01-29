@@ -14,6 +14,7 @@
 SoftwareSerial serialComm(4, 5); // RX, TX
 Adafruit_BME280 bme; 
 BH1750 lightMeter;
+const byte rainPin = A0;
 
 byte sensorsCode = 1;
 /**
@@ -71,6 +72,7 @@ void updateSenzors()
     sensors.humidity = bme.readHumidity();
     sensors.light = lightMeter.readLightLevel();
     sensors.voltage = readVcc();
+    sensors.rain = readRain();
 }
 
 void transmitData()
@@ -118,6 +120,13 @@ void deepSleep(int eightSecondCycles)
     }
     digitalWrite(peripherialsPowerPin, HIGH);
     delay(500);
+}
+
+byte readRain()
+{
+    byte level = analogRead(rainPin);
+
+    return map(level, 0, 1023, 0, 100);  
 }
 
 long readVcc() {
