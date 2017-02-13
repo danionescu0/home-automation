@@ -20,7 +20,7 @@ the commands through the 433 MHZ Livolo standard
 12 V battery holder & battery, 433 MHZ transmitter
 
 **DCMotorCourtains**
-
+Check [this](http://www.instructables.com/id/Automated-Windows-Shades/) instructable for more information
 * Description: controlls 12 V electric motors that powers electric courtains, the motors go up / down if the polarity is inversed
 * Parts: plastic case, 12 v 10A power supply, 5A fuse, arduino nano, 2 x 5 v relays, HC-05 bluetooth, l7805cv 5V regulator, Tip142T NPN tranzistor, a 1 k resitor
 and a small diode, 2 x 5.5mm DC Power Plug Jack Socket male and female
@@ -33,5 +33,9 @@ and a small diode, 2 x 5.5mm DC Power Plug Jack Socket male and female
 
 **WeatherStation**
 
-* Description: a mini weather station, low power runs only on batteries. It sends data using HC-12 comm module, the colleted data will be: humidity, temperature, pressure, light, rain
-* Parts: arduino pro mini, HC-12 module, BME280 sensors, rain sensor, BH1750 lux sensor, 3x battery holder, battery, a NPN tranzistor, case, wires, PCB, a 6 V solar pannel, diode
+* Description: a mini weather station, low power runs only on batteries. 
+It sends data using HC-12 comm module, the colleted data will be: humidity, temperature, pressure, light, rain
+* Parts: arduino pro mini, HC-12 module, BME280 sensors, rain sensor, 
+BH1750 lux sensor, 3x battery holder / liPo battery, battery,
+ a NPN tranzistor, a resistor, case, wires, PCB, a 6 V solar pannel, diode
+ ![sketch.png](https://raw.githubusercontent.com/danionescu0/home-automation/master/arduino-sketches/weatherStation/sketch_bb.png)

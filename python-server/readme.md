@@ -4,6 +4,20 @@
 * bluetooth configured
 * festival installed
 
+# Install: 
+## python libs  with pip:
+* install python packages using "pip install -r requirements.txt"
+* tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
+* in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
+
+# Linux packages
+* sudo apt-get install screen redis-server festival
+* pybluez requires the following linux packages: libbluetooth-dev, python-dev
+
+# Running the servers
+* in a screen or background process run: "python background.py"
+* in other screen or background process run: "python webserver.py"
+
 # Configuration 
 ## general.py
 * in credentials add as many usernames/passwords as you wish
@@ -37,20 +51,6 @@ node number
 ## bluetooth
 * serial: http://www.uugear.com/portfolio/bluetooth-communication-between-raspberry-pi-and-arduino/
 
-# Install: 
-## python libs  with pip:
-* sudo pip install pytz astral tornado python-dateutil redis pybluez geopy blinker ouimeaux
-or install using "pip install -r requirements.txt"
-* tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
-* in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
-
-# Linux packages
-* sudo apt-get install screen redis-server festival
-* pybluez requires the following linux packages: libbluetooth-dev, python-dev
-
-# Running the servers
-* in a screen or background process run: "python background.py"
-* in other screen or background process run: "python webserver.py"
 
 # Extending the code
 
