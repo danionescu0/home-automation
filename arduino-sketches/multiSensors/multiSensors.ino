@@ -1,3 +1,8 @@
+// HTU21D library: https://github.com/adafruit/Adafruit_HTU21DF_Library
+// BH1750 library: https://github.com/claws/BH1750
+// RCSwitch library: https://github.com/sui77/rc-switch
+// Livolo library will inside arduino-sketches folder
+
 #include <SoftwareSerial.h>
 #include <Wire.h>
 #include "HTU21D.h"

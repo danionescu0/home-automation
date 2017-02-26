@@ -18,6 +18,11 @@ The sensor will report to the main unit, and the default behavior is close the c
 the commands through the 433 MHZ Livolo standard
 * Parts: case, 5V 1A power supply, arduino nano, HC-05 bluetooth, MQ135 air quality sensor, BH1750 lux sensor, HTU21D temp&humid sensor, 
 12 V battery holder & battery, 433 MHZ transmitter
+* External libraries:
+[HTU21D](https://github.com/adafruit/Adafruit_HTU21DF_Library)
+[BH1750](https://github.com/claws/BH1750)
+[RCSwitch](https://github.com/sui77/rc-switch)
+Livolo library  will inside arduino-sketches folder)
 
 **DCMotorCourtains**
 Check [this](http://www.instructables.com/id/Automated-Windows-Shades/) instructable for more information
@@ -30,6 +35,8 @@ and a small diode, 2 x 5.5mm DC Power Plug Jack Socket male and female
 
 * Description: will sit outside the apartment and scans the fingerprint, it will report the fingerprint found to the main unit which will eventually open the door
 * Parts: 3V 0.5A power supply, arduino nano, HC-05 bluetooth, Fingerprint Scanner - TTL (GT-511C3), case
+* External libraries:
+[FPS_GT511C3](https://github.com/sparkfun/Fingerprint_Scanner-TTL)
 
 **WeatherStation**
 
@@ -38,4 +45,9 @@ It sends data using HC-12 comm module, the colleted data will be: humidity, temp
 * Parts: arduino pro mini, HC-12 module, BME280 sensors, rain sensor, 
 BH1750 lux sensor, 3x battery holder / liPo battery, battery,
  a NPN tranzistor, a resistor, case, wires, PCB, a 6 V solar pannel, diode
+* External libraries:
+[BH1750](https://github.com/claws/BH1750)
+[LowPower](https://github.com/rocketscream/Low-Power)
+[Adafruit Sensor](https://github.com/adafruit/Adafruit_Sensor)
+[Adafruit BME280](https://github.com/adafruit/Adafruit_BME280_Library)
  ![sketch.png](https://raw.githubusercontent.com/danionescu0/home-automation/master/arduino-sketches/weatherStation/sketch_bb.png)

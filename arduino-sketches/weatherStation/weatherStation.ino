@@ -2,7 +2,11 @@
  * This sketch uses: 
  * - BME280 sensor for pressure, temperature, and humidity
  * - a light senzor
- * It transmits data over serial using SoftwareSerial library, to be picked up by the HC-12 module 
+ * It transmits data over serial using SoftwareSerial library, to be picked up by the HC-12 module
+ * BH1750 library: https://github.com/claws/BH1750
+ * LowPower library: https://github.com/rocketscream/Low-Power
+ * Adafruit Sensor library: https://github.com/adafruit/Adafruit_Sensor
+ * Adafruit BME280 library: https://github.com/adafruit/Adafruit_BME280_Library
  */
 #include "LowPower.h"
 #include <SoftwareSerial.h>

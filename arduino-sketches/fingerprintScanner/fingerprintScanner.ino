@@ -1,3 +1,5 @@
+// FPS_GT511C3 library: https://github.com/sparkfun/Fingerprint_Scanner-TTL
+
 #include "FPS_GT511C3.h"
 #include "SoftwareSerial.h"
 
