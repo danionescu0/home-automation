@@ -25,7 +25,6 @@ const long transmitInterval = 60000;
 
 const int lightsOffCode = 106;
 const int lightsToggleCode = 120;
-char *controller;
 char buffer[] = {' ',' ',' ',' ',' ',' ',' '};
 
 int switches[7] =
@@ -76,7 +75,6 @@ void loop()
 void powerSocket(char buffer[]) 
 {
     Serial.println("Computing power socker, and anything with rc switch lib");
-    //digitalWrite(transmitterPowerPin, HIGH);
     switch (buffer[0]) {
         case '8':
             if (buffer[1] == 'O') {
@@ -93,12 +91,10 @@ void powerSocket(char buffer[])
             }
             break;            
     }
-    //digitalWrite(transmitterPowerPin, LOW);
 }
 
 void lightSwitch(char buffer[])
 {
-    //digitalWrite(transmitterPowerPin, HIGH);
     Serial.println("computing light switch");
     String convert;
     convert = convert + buffer[0];
@@ -113,7 +109,6 @@ void lightSwitch(char buffer[])
         livolo.sendButton(remoteCode, lightsToggleCode);
     }     
     delay(100);
-    //digitalWrite(transmitterPowerPin, LOW);
 }
 
 void printOverSerial(int humd, int temp, int light, int airQuality)
