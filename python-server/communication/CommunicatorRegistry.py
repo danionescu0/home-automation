@@ -1,4 +1,4 @@
-from communication.Bluetooth import Bluetooth
+from communication.SerialBluetooth import SerialBluetooth
 from communication.Serial import Serial
 from communication.WemoSwitch import WemoSwitch
 
@@ -13,7 +13,7 @@ class CommunicatorRegistry:
         serial.set_logger(self.__logger)
         serial.connect()
         self.__communicators.update({'serial': serial})
-        bluetooth = Bluetooth(self.__configuration.bluetooth['connections'])
+        bluetooth = SerialBluetooth(self.__configuration.bluetooth['connections'])
         bluetooth.set_logger(self.__logger)
         bluetooth.connect()
         self.__communicators.update({'bluetooth' : bluetooth})

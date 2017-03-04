@@ -1,4 +1,4 @@
-from communication.actuator.SendStrategy import SendStrategy
+from communication.actuator.SerialSendStrategy import SerialSendStrategy
 from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
 from communication.actuator.GroupStrategy import GroupStrategy
 
@@ -29,7 +29,7 @@ class ActuatorCommands:
 
     def __get_actuator_strategies(self):
         strategies = []
-        strategies.append(SendStrategy(self.__communicator_registry, self.__actuators_config, self.__actuators_repo))
+        strategies.append(SerialSendStrategy(self.__communicator_registry, self.__actuators_config, self.__actuators_repo))
         strategies.append(WemoSwitchStrategy(self.__actuators_config, self.__communicator_registry))
         strategies.append(GroupStrategy(self.__actuators_config, self.__job_controll))
 
