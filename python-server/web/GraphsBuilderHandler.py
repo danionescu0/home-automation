@@ -24,7 +24,6 @@ class GraphsBuilderHandler(BaseHandler):
 
     # @authenticated
     def post(self, *args, **kwargs):
-        print json.dumps({ k: self.get_argument(k) for k in self.request.arguments })
         selected_sensor = self.__get_selected_sensor_data()
         group_by_hours = int(self.get_argument("group_by_hours", None, True))
         nr_days_behind = int(self.get_argument("nr_days_behind", None, True))

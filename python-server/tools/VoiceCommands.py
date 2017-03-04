@@ -38,7 +38,6 @@ class VoiceCommands:
 
     def execute(self, command):
         command = self.__normalize_command(command)
-        print command
         for intent in self.__engine.determine_intent(command):
             if intent and intent.get('confidence') > 0:
                 self.__logging.debug(intent)

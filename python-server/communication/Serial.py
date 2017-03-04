@@ -15,7 +15,7 @@ class Serial(Base):
         self.__serial.close()
 
     def send(self, which, value):
-        print which, value
+        self.__serial.write('{0}:{1}'.format(which, value))
 
     def listen(self, complete_message_callback, receive_message_callback):
         received_data = self.__serial.read()

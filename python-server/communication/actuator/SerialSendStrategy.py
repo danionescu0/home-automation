@@ -12,7 +12,7 @@ class SerialSendStrategy(BaseStrategy):
 
     def toggle(self, actuator_name, state):
         device_name = self.actuators_config[actuator_name]['send_to_device']
-        command = self.__calculate_actuator_command(actuator_name, state)
+        command = self.get_encriptor().encrypt(self.__calculate_actuator_command(actuator_name, state))
         communicator_name = self.actuators_config[actuator_name]['communicator']
         self.__communicator_registry. \
             get_communicator(communicator_name). \

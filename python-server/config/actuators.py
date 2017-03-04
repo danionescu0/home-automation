@@ -105,8 +105,9 @@ conf = {
         'type': 'bi',
         'device_type': 'light',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'living',
+        'communicator': 'serial',
+        'send_to_device': 'T1',
+        'encription' : 'aes',
         'command': {False: '6C|', True: '6O|'}
     },
     'powerSocket1': {
