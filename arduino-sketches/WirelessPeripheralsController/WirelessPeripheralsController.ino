@@ -1,3 +1,7 @@
+// AESLib library: https://github.com/DavyLandman/AESLib
+// RCSwitch library: https://github.com/sui77/rc-switch
+// Livolo library will inside arduino-sketches folder
+
 #include <SoftwareSerial.h>
 #include <AESLib.h>
 #include <Livolo.h>
@@ -8,8 +12,9 @@ const int lightsOffCode = 106;
 const int lightsToggleCode = 120;
 const char TERMINATOR = '|';
 const int bufferSize = 19;
+const String DEVICE_CODE = "XX"; // this will be used to identify incomming commands
 
-SoftwareSerial bluetooth(10, 11); // RX, TX
+SoftwareSerial serialWirelessDevice(10, 11); // RX, TX
 Livolo livolo(transmitPin); // transmitter connected to pin #8
 RCSwitch mySwitch = RCSwitch();
 int switches[7] = {0, 6400, 6410, 6420, 6430, 6440, 6450};
@@ -23,7 +28,9 @@ int i;
 void setup() 
 {
     Serial.begin(9600);
-    bluetooth.begin(9600);
+    serialWirelessDevice.begin(9600);
+    serialWirelessDevice.setTimeout(100);
+    mySwitch.enableTransmit(transmitPin);
     for (i=0;i<=bufferSize - 1; i++){
         buffer[i] = ' ';
     }
@@ -32,28 +39,38 @@ void setup()
 
 void loop() 
 {
-  if (bluetooth.available() > 0) {   
-      bluetooth.readBytesUntil(';', buffer, 19);
-      String command = decrypt();
-      Serial.println("decripted:");
-      Serial.println(command);
-      computeSwitches(command);
-      clearBuffer();  
-  } 
+    if (serialWirelessDevice.available() > 0) {   
+        serialWirelessDevice.readBytes(buffer, 19);
+        if (isForThisDevice()) {        
+            String command = decrypt();
+            Serial.print("decripted:");Serial.println(command);
+            computeSwitches(command);
+        }
+        clearBuffer();  
+    } 
 }
 
-void powerSocket(char buffer[]) 
+boolean isForThisDevice()
 {
-    switch (buffer[0]) {
-        case '8':
-            if (buffer[1] == 'O') {
+    String incommingDeviceCode = "";
+    incommingDeviceCode += buffer[0];
+    incommingDeviceCode += buffer[1];
+
+    return incommingDeviceCode == DEVICE_CODE;
+}
+
+void powerSocket(byte switchNr, boolean state) 
+{
+    switch (switchNr) {
+        case 8:
+            if (state) {
                 mySwitch.send(1381717, 24);      
             } else {
                 mySwitch.send(1381716, 24);
             }
             break;
-        case '9':
-            if (buffer[1] == 'O') {
+        case 9:
+            if (state) {
                 mySwitch.send(1397845, 24);      
             } else {
                 mySwitch.send(1397844, 24);
@@ -67,7 +84,6 @@ void lightSwitch(byte lightNr, boolean state)
     int remoteCode = switches[lightNr];
     int sendCode = lightsToggleCode;
     livolo.sendButton(remoteCode, lightsOffCode);
-    Serial.println("sending");
     delay(500);    
     if (state) {    
         livolo.sendButton(remoteCode, lightsToggleCode);
@@ -89,7 +105,7 @@ void computeSwitches(String command)
     if (nr < 9) {
         lightSwitch(nr, state);
     } else {
-        // power swithc toggle
+        powerSocket(nr, state);
     }
 }
 
@@ -101,7 +117,6 @@ byte getNumber(String command)
 boolean getState(String command)
 {
     String state = command.substring(command.length() - 1, command.length());
-    Serial.println(state);
 
     return state == "O" ? true : false;
 }
