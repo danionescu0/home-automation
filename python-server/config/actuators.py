@@ -60,8 +60,9 @@ conf = {
         'type': 'bi',
         'device_type': 'light',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'living',
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L1',
         'command': {False: '1C|', True: '1O|'}
     },
     'bedroomLight': {
@@ -69,8 +70,9 @@ conf = {
         'type': 'bi',
         'device_type': 'light',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'living',
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L1',
         'command': {False: '2C|', True: '2O|'}
     },
     'kitchenLight': {
@@ -78,8 +80,9 @@ conf = {
         'type': 'bi',
         'device_type': 'light',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'living',
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L1',
         'command': {False: '4C|', True: '4O|'}
     },
     'holwayLight': {
@@ -87,8 +90,9 @@ conf = {
         'type': 'bi',
         'device_type': 'light',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'living',
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L1',
         'command': {False: '3C|', True: '3O|'}
     },
     'closetLight': {
@@ -96,8 +100,9 @@ conf = {
         'type': 'bi',
         'device_type': 'light',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'living',
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L1',
         'command': {False: '5C|', True: '5O|'}
     },
     'balconyLight': {
@@ -106,8 +111,8 @@ conf = {
         'device_type': 'light',
         'strategy': 'send',
         'communicator': 'serial',
-        'send_to_device': 'T1',
-        'encription' : 'aes',
+        'encription': 'aes',
+        'send_to_device': 'L1',
         'command': {False: '6C|', True: '6O|'}
     },
     'powerSocket1': {
@@ -115,8 +120,9 @@ conf = {
         'type': 'bi',
         'device_type': 'powerSocket',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'living',
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L1',
         'command': {False: '8C|', True: '8O|'}
     },
     'wemoSwitch1': {

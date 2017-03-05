@@ -8,11 +8,10 @@ class AesEncriptor(BaseEncriptor):
         self.__encriptor = None
 
     def encrypt(self, text):
+        if len(text) > 16:
+            raise RuntimeError("Aes encription is not ment to handle more than 16 characters")
         padded_text = text.ljust(16, ' ')
         encripted = self.__get_encriptor().encrypt(padded_text)
-        string_i = ''
-        for char in encripted:
-            string_i += str(ord(char)) + ","
 
         return encripted
 

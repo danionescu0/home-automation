@@ -10,7 +10,7 @@ class SerialBluetooth(Base):
     def send(self, which, value):
         try:
             self.__connections[which].send(value)
-        except bluetooth.btcommon.BluetoothError as error:
+        except bluetooth.btcommon.BluetoothError:
             return self.__reconnect_bluetooth(which)
 
         return True

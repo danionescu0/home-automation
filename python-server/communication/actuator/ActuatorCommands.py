@@ -5,10 +5,11 @@ from communication.encriptors.AesEncriptor import AesEncriptor
 from communication.encriptors.PlainTextEncriptor import PlainTextEncriptor
 
 class ActuatorCommands:
-    def __init__(self, communicator_registry, actuators_repo, actuators_config, job_controll):
+    def __init__(self, communicator_registry, actuators_repo, actuators_config, aes_key, job_controll):
         self.__communicator_registry = communicator_registry
         self.__actuators_repo = actuators_repo
         self.__actuators_config = actuators_config
+        self.__aes_key = aes_key
         self.__job_controll = job_controll
 
     def change_actuator(self, actuator_name, state):
@@ -54,6 +55,6 @@ class ActuatorCommands:
     def __get_encription_strategies(self):
         encription_strategies = []
         encription_strategies.append(PlainTextEncriptor())
-        encription_strategies.append(AesEncriptor('0000000000000000'))
+        encription_strategies.append(AesEncriptor(self.__aes_key))
 
         return encription_strategies
