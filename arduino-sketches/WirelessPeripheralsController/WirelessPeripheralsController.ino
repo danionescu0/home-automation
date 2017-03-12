@@ -2,61 +2,41 @@
 // RCSwitch library: https://github.com/sui77/rc-switch
 // Livolo library will inside arduino-sketches folder
 
-#include <SoftwareSerial.h>
 #include <AESLib.h>
 #include <Livolo.h>
 #include <RCSwitch.h>
+#include <EncryptedSoftwareSerial.h>
 
 const int transmitPin = 8;
 const int lightsOffCode = 106;
 const int lightsToggleCode = 120;
 const char TERMINATOR = '|';
 const int bufferSize = 19;
-const String DEVICE_CODE = "XX"; // this will be used to identify incomming commands
+const String DEVICE_CODE = "L1"; // this will be used to identify incomming commands
 
-SoftwareSerial serialWirelessDevice(10, 11); // RX, TX
 Livolo livolo(transmitPin); // transmitter connected to pin #8
 RCSwitch mySwitch = RCSwitch();
 int switches[7] = {0, 6400, 6410, 6420, 6430, 6440, 6450};
-char buffer[19];
 
 uint8_t key[] = {48, 48, 48 , 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48};
-char data[16];
 
+EncryptedSoftwareSerial encryptedCommunicator = EncryptedSoftwareSerial(10, 11, 9600, key, DEVICE_CODE);
 int i;
 
 void setup() 
 {
     Serial.begin(9600);
-    serialWirelessDevice.begin(9600);
-    serialWirelessDevice.setTimeout(100);
     mySwitch.enableTransmit(transmitPin);
-    for (i=0;i<=bufferSize - 1; i++){
-        buffer[i] = ' ';
-    }
-    char data[] = "                ";
 }
 
 void loop() 
 {
-    if (serialWirelessDevice.available() > 0) {   
-        serialWirelessDevice.readBytes(buffer, 19);
-        if (isForThisDevice()) {        
-            String command = decrypt();
-            Serial.print("decripted:");Serial.println(command);
-            computeSwitches(command);
-        }
-        clearBuffer();  
-    } 
-}
-
-boolean isForThisDevice()
-{
-    String incommingDeviceCode = "";
-    incommingDeviceCode += buffer[0];
-    incommingDeviceCode += buffer[1];
-
-    return incommingDeviceCode == DEVICE_CODE;
+    if (encryptedCommunicator.parseIncomming()) {
+        String command = encryptedCommunicator.getDecrypted();
+        Serial.println(command);
+        Serial.print("decripted:");Serial.println(command);
+        computeSwitches(command);
+    }
 }
 
 void powerSocket(byte switchNr, boolean state) 
@@ -121,27 +101,4 @@ boolean getState(String command)
     return state == "O" ? true : false;
 }
 
-String decrypt()
-{
-    for (i=0;i<=15;i++) {
-        data[i] = buffer[i+3];
-    }
-    aes128_cbc_dec(key, key, data, 16);
-    String result = "";
-    for (i=0;i<=15;i++) {
-        if (data[i] == TERMINATOR) {
-            return result;
-        }
-        result += data[i];
-    }
-
-    return result;
-}
-
-void clearBuffer()
-{
-    for (int i=0; i<=bufferSize - 1; i++) {
-        buffer[i] = ' ';
-    }
-}
 

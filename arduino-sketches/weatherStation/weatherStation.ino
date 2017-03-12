@@ -87,11 +87,13 @@ void transmitData()
     Serial.print("Pressure:");Serial.println(sensors.pressure);
     Serial.print("Light:");Serial.println(sensors.light);
     Serial.print("Voltage:");Serial.println(sensors.voltage);
+    Serial.print("Rain:");Serial.println(sensors.rain);
     transmitSenzorData("T", sensors.temperature);
     transmitSenzorData("H", sensors.humidity);
     transmitSenzorData("PS", sensors.pressure);
     transmitSenzorData("L", sensors.light);
     transmitSenzorData("V", sensors.voltage);
+    transmitSenzorData("R", sensors.rain);
 }
 
 void emptyIncommingSerialBuffer()
@@ -109,7 +111,7 @@ void transmitSenzorData(String type, int value)
     serialComm.print(":");
     serialComm.print(value);
     serialComm.print("|");
-    delay(200);
+    delay(50);
 }
 
 void deepSleep(int eightSecondCycles)

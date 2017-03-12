@@ -11,58 +11,45 @@
 #include <Livolo.h>
 #include <RCSwitch.h>
 #include <AESLib.h>
+#include <EncryptedSoftwareSerial.h>
 
 const int transmitPin = 8;
 const int lightsOffCode = 106;
 const int lightsToggleCode = 120;
-const char TERMINATOR = '|';
 const String DEVICE_CODE = "L1";// this will be used to identify incomming commands
-const int bufferSize = 19;
 const long transmitInterval = 60000;
 const int airQualitySenzorPin = A3;
 
-SoftwareSerial serialWirelessDevice(6, 5); // RX, TX
 HTU21D tempHumid;
 BH1750 lightMeter;
 Livolo livolo(transmitPin); // transmitter connected to pin #8
 RCSwitch mySwitch = RCSwitch();
 int switches[7] = {0, 6400, 6410, 6420, 6430, 6440, 6450};
-char buffer[19];
 uint8_t key[] = {48, 48, 48 , 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48};
-char data[16];
 int i;
 long timeLastTransmitted;
 boolean movementDetected = false;
 
+EncryptedSoftwareSerial encryptedCommunicator = EncryptedSoftwareSerial(6, 5, 9600, key, DEVICE_CODE);
 
 void setup() 
 {
-    serialWirelessDevice.begin(9600);
-    serialWirelessDevice.setTimeout(100);
     Serial.begin(9600);
     tempHumid.begin();
     lightMeter.begin();
     timeLastTransmitted = millis();
     mySwitch.enableTransmit(transmitPin);
-    for (i=0;i<=bufferSize - 1; i++){
-        buffer[i] = ' ';
-    }
-    char data[] = "                ";  
     Serial.println("Finish init");
 }
 
 void loop() 
 {
-    if (serialWirelessDevice.available() > 0) {   
-        serialWirelessDevice.readBytes(buffer, 19);
-        Serial.println("incomming");
-        if (isForThisDevice()) {
-            String command = decrypt();
-            Serial.print("decripted:");Serial.println(command);
-            computeSwitches(command);
-        }
-        clearBuffer();  
-    } 
+    if (encryptedCommunicator.parseIncomming()) {
+        String command = encryptedCommunicator.getDecrypted();
+        Serial.println(command);
+        Serial.print("decripted:");Serial.println(command);
+        computeSwitches(command);
+    }
 
     if (millis() - timeLastTransmitted >= transmitInterval) {      
         int humd = tempHumid.readHumidity();
@@ -74,15 +61,6 @@ void loop()
         movementDetected = false;
         timeLastTransmitted = millis();
     }         
-}
-
-boolean isForThisDevice()
-{
-    String incommingDeviceCode = "";
-    incommingDeviceCode += buffer[0];
-    incommingDeviceCode += buffer[1];
-
-    return incommingDeviceCode == DEVICE_CODE;
 }
 
 void powerSocket(byte switchNr, boolean state) 
@@ -128,7 +106,7 @@ void computeSwitches(String command)
       Serial.print("state:");Serial.println("FALSE");
     }
     
-    if (nr < 9) {
+    if (nr < 8) {
         lightSwitch(nr, state);
     } else {
         powerSocket(nr, state);
@@ -147,37 +125,14 @@ boolean getState(String command)
     return state == "O" ? true : false;
 }
 
-String decrypt()
-{
-    for (i=0;i<=15;i++) {
-        data[i] = buffer[i+3];
-    }
-    aes128_cbc_dec(key, key, data, 16);
-    String result = "";
-    for (i=0;i<=15;i++) {
-        if (data[i] == TERMINATOR) {
-            return result;
-        }
-        result += data[i];
-    }
-
-    return result;
-}
-
-void clearBuffer()
-{
-    for (int i=0; i<=bufferSize - 1; i++) {
-        buffer[i] = ' ';
-    }
-}
 
 void transmitData(int humd, int temp, int light, int airQuality)
 {
-    serialWirelessDevice.print("H:");serialWirelessDevice.print(humd);
-    serialWirelessDevice.print("|L:");serialWirelessDevice.print(light);
-    serialWirelessDevice.print("|T:");  serialWirelessDevice.print(temp);
-    serialWirelessDevice.print("|Q:");     serialWirelessDevice.print(airQuality);
-    serialWirelessDevice.print("|");
+    encryptedCommunicator.transmit("H:");encryptedCommunicator.transmit(String(humd));
+    encryptedCommunicator.transmit("|L:");encryptedCommunicator.transmit(String(light));
+    encryptedCommunicator.transmit("|T:");encryptedCommunicator.transmit(String(temp));
+    encryptedCommunicator.transmit("|Q:");encryptedCommunicator.transmit(String(airQuality));
+    encryptedCommunicator.transmit("|");
     Serial.print("Humid:");Serial.println(humd);
     Serial.print("Temp:");Serial.println(temp);  
     Serial.print("Light:");Serial.println(light);  
