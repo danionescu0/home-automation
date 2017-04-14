@@ -67,9 +67,9 @@ conf = [
     {
         'type' : 'rain',
         'value' : 0,
-        'visible' : [],
+        'visible' : ['graphs'],
         'location': 'outside',
-        'communication_code': ('R', False),
+        'communication_code': ('R', '1'),
         'last_updated': 0
     },
     {
