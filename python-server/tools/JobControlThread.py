@@ -3,6 +3,8 @@ import json
 import time
 
 class JobControlThread(threading.Thread):
+    LISTEN_DELAY = 0.01
+
     def __init__(self, job_controll, change_actuator_request_event, logging):
         threading.Thread.__init__(self)
         self.__job_controll = job_controll
@@ -13,6 +15,7 @@ class JobControlThread(threading.Thread):
     def run(self):
         while not self.shutdown:
             self.__job_controll.listen(self.__job_callback)
+            time.sleep(self.LISTEN_DELAY)
 
     def __job_callback(self, job_data):
         self.__logging.debug('Incomming job data: {0}' .format(job_data))

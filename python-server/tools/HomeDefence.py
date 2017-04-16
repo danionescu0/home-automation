@@ -1,9 +1,8 @@
 import random
 import datetime
-import subprocess
 from pytz import timezone
-from astral import Astral
 from tools.DaytimeMoments import DaytimeMoments
+
 class HomeDefence:
     def __init__(self, actuator_commands, burgler_sounds_folder, actuators_repo, ):
         self.actuator_commands = actuator_commands
@@ -45,12 +44,12 @@ class HomeDefence:
             self.lastBurglerLight = self.burglerLights[random.randint(0, 2)]
             self.actuator_commands.change_actuator(self.lastBurglerLight, True)
 
+    # @ToDo implement an api call to a device that plays sounds
     def __play_random_sound(self):
-        process = subprocess.Popen(["mpg321", "-g", "150:D", self.__get_burgler_sound()], stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-        process.communicate()
+        pass
 
     def __get_burgler_sound(self):
         sound = random.randint(1, self.burglerSounds)
         path = "{}/p{}.mp3".format(self.burgler_sounds_folder, sound)
+
         return path
