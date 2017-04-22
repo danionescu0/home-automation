@@ -24,7 +24,7 @@ byte sensorsCode = 1;
 /**
  * voltage level that will pun the microcontroller in deep sleep instead of regular sleep
  */
-int voltageDeepSleepThreshold = 4100; 
+int voltageDeepSleepThreshold = 4200; 
 const byte peripherialsPowerPin = 6;
 char buffer[] = {' ',' ',' ',' ',' ',' ',' '};
 
@@ -51,7 +51,7 @@ void setup()
     if (!bme.begin()) {
         Serial.println("Could not find a valid BME280 sensor, check wiring!");
         while (1) {
-           deepSleep(100);
+           customSleep(100);
         }
     }
     Serial.println("Initialization finished succesfully");
@@ -63,7 +63,7 @@ void loop()
 {    
     updateSenzors();
     transmitData();    
-    deepSleep(75);       
+    customSleep(75);       
 }
 
 void updateSenzors() 
@@ -114,7 +114,7 @@ void transmitSenzorData(String type, int value)
     delay(50);
 }
 
-void deepSleep(int eightSecondCycles)
+void customSleep(long eightSecondCycles)
 {
     if (sensors.voltage > voltageDeepSleepThreshold) {
         delay(eightSecondCycles * 8000);
