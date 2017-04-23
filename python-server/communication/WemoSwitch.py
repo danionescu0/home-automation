@@ -1,4 +1,4 @@
-from Base import Base
+from .Base import Base
 from ouimeaux.environment import Environment
 from ouimeaux.environment import UnknownDevice
 

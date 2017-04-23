@@ -15,10 +15,12 @@ class Serial(Base):
         self.__serial.close()
 
     def send(self, which, value):
-        self.__serial.write('{0}:{1}'.format(which, value))
+        self.__serial.write(which.encode('ascii'))
+        self.__serial.write(':'.encode('ascii'))
+        self.__serial.write(value)
 
     def listen(self, complete_message_callback, receive_message_callback):
-        received_data = self.__serial.read()
+        received_data = self.__serial.read().decode('utf-8')
         if received_data == False or received_data == '':
             return
         self.get_logger().debug("Senzors data received from serial: {0}".format(received_data))

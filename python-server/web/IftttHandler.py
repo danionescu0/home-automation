@@ -1,5 +1,3 @@
-import pprint
-
 from web.BaseHandler import BaseHandler
 from tornado.web import authenticated
 from repository.IftttRules import IftttRules
@@ -15,7 +13,6 @@ class IftttHandler(BaseHandler):
     def get(self):
         actuator_list = self.__actuators_repo.get_actuators(True)
         all_rules = self.__ifttt_rules.get_all()
-        pprint.pprint(self.__ifttt_rules.get_all_active())
         all_rules['test_rule'] =\
             {
                 "active" : True,

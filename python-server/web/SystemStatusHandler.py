@@ -33,7 +33,7 @@ class SystemStatusHandler(BaseHandler):
             sensors_list.append({
                 'name': "{0}_{1}".format(datapoint['type'], datapoint['location']),
                 'last_updated' : datetime_text,
-                'minutes_since_updated' : (current_time - local_date).seconds / 60
+                'minutes_since_updated' : int((current_time - local_date).seconds / 60)
             })
 
         return sorted(sensors_list, key=itemgetter('minutes_since_updated'), reverse=True)

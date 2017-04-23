@@ -1,7 +1,6 @@
 import abc
 
-class Expression:
-    __metaclass__ = abc.ABCMeta
+class Expression(metaclass=abc.ABCMeta):
     keycount = 0
 
     def __init__(self):

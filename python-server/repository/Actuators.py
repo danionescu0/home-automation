@@ -17,7 +17,7 @@ class Actuators(AbstractRedis):
 
         actuators = self.get(self.REDIS_KEY)
         actuatorNames = []
-        for name, data in actuators.iteritems():
+        for name, data in actuators.items():
             actuatorNames.append(name)
 
         return actuatorNames

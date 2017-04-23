@@ -1,8 +1,6 @@
 import abc
 
-class Base:
-    __metaclass__ = abc.ABCMeta
-
+class Base(metaclass=abc.ABCMeta):
     def __init__(self):
         self.__endpoint = None
         self.__callback = None

@@ -26,7 +26,7 @@ class IftttRulesThread(threading.Thread):
 
     def __do_run(self):
         rules = self.__ifttt_rules.get_all_active()
-        for key, rule in rules.iteritems():
+        for key, rule in rules.items():
             self.__logging.debug('Checking rule {0}'.format(key))
             if not self.__check_rule(rule[IftttRules.TRIGGER_RULES]):
                 continue

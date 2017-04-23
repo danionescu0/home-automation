@@ -1,5 +1,5 @@
-from BaseStrategy import BaseStrategy
 import time
+from .BaseStrategy import BaseStrategy
 
 class SerialSendStrategy(BaseStrategy):
     def __init__(self, communicator_registry, actuators_config, actuators_repo):

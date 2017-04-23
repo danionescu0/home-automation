@@ -1,8 +1,6 @@
 import abc
 
-class BaseStrategy:
-    __metaclass__ = abc.ABCMeta
-
+class BaseStrategy(metaclass=abc.ABCMeta):
     def __init__(self, actuators_config):
         self.actuators_config = actuators_config
         self.__encriptor = None

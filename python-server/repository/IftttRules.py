@@ -40,7 +40,7 @@ class IftttRules(AbstractRedis):
 
     def get_all_active(self):
         active = {}
-        for key, rule in self.get_all().iteritems():
+        for key, rule in self.get_all().items():
             if rule[self.ACTIVE]:
                 active[key] = rule
 

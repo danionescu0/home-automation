@@ -1,12 +1,11 @@
 # Requirements
-* python 2.7
-* redis server running
+* python 3.4
+* redis server 
 * bluetooth configured
-* festival installed
 
 # Install: 
-## python libs  with pip:
-* install python packages using "pip install -r requirements.txt"
+## python libs  with pip3:
+* install python packages using "pip3 install -r requirements.txt"
 * tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
 * in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
 
@@ -33,7 +32,7 @@
 * the 'type' can be 'bi', 'single' and it corresponds to the values that an actuator can have
 a 'single' type can only have one state: False, the 'bi' type can have True or False
 * the 'device_type' can be: door, courtain, light. powerSocket etc
-* the 'communicator' can be : 'bluetooht' or 'serial' and it corresopond with the 
+* the 'communicator' can be : 'bluetooth' or 'serial' and it corresopond with the 
 communication method
 * the 'send_to_device' is the name of the device that the commands will be sent to
 * the 'command' is a dictionary with values for each state ex: {False: '3C|', True: '3O|'}

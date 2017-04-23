@@ -37,7 +37,7 @@ class Sensors(AbstractRedis):
 
     def __add_last_sensor_averages_in_history(self, type, location, value):
         name = self.__get_sensor_key(type, location)
-        if name not in self.last_averages.keys():
+        if name not in list(self.last_averages.keys()):
             self.last_averages[name] = []
         self.last_averages[name].append(value)
         if name not in self.sensors_last_updated:
@@ -56,7 +56,7 @@ class Sensors(AbstractRedis):
         range = self.client.zrangebyscore(self.__get_sensor_key(type, location), start_timestamp, end_timestamp, withscores=True)
         for index, element in enumerate(range):
             timestamp = range[index][1]
-            range[index] = json.loads(range[index][0])
+            range[index] = json.loads(range[index][0].decode("utf-8"))
             range[index]['timestamp'] = timestamp
 
         return range
@@ -72,7 +72,7 @@ class Sensors(AbstractRedis):
             counter += 1
             if extracted_hour != last_hour:
                 last_hour = extracted_hour
-                average_date.update((x, y / counter) for x, y in average_date.items())
+                average_date.update((x, y / counter) for x, y in list(average_date.items()))
                 grouped_range.append(average_date)
                 counter = 0
             else:

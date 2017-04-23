@@ -13,7 +13,7 @@ class JobControll:
         message = self.pubsub.get_message()
         if not message or message['type'] != 'message':
             return
-        callback(message['data'])
+        callback(message['data'].decode('utf-8'))
 
     def __add_job(self, jobDescription):
         self.client.publish(self.CHANNEL_NAME, jobDescription)

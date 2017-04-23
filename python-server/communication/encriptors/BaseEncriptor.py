@@ -1,8 +1,6 @@
 import abc
 
-class BaseEncriptor:
-    __metaclass__ = abc.ABCMeta
-
+class BaseEncriptor(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def encrypt(self, text):
         pass

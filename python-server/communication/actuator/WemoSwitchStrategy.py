@@ -1,4 +1,4 @@
-from BaseStrategy import BaseStrategy
+from .BaseStrategy import BaseStrategy
 
 class WemoSwitchStrategy(BaseStrategy):
     def __init__(self, actuators_config, communication_registry):

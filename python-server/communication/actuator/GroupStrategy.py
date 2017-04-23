@@ -1,4 +1,4 @@
-from BaseStrategy import BaseStrategy
+from .BaseStrategy import BaseStrategy
 
 class GroupStrategy(BaseStrategy):
     def __init__(self, actuators_config, job_controll):

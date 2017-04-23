@@ -25,11 +25,11 @@ class MainHandler(BaseHandler):
         self.job_controll.change_actuator(actuator_name, {'false' : False, 'true': True}[actuator_value])
 
     def __filter_actuator_by_type(self, actuators, type):
-        return {key: data for key, data in actuators.items() if actuators[key]['type'] == type}
+        return {key: data for key, data in list(actuators.items()) if actuators[key]['type'] == type}
 
     def __group_actuators_by_type(self, actuators):
         grouped_actuators = {}
-        for actuator_name, actuator_properties in actuators.iteritems():
+        for actuator_name, actuator_properties in actuators.items():
             group_key = actuator_properties['device_type']
             if not group_key in grouped_actuators:
                 grouped_actuators[group_key] = []
