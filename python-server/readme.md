@@ -20,11 +20,15 @@
 # Configuration 
 ## general.py
 * in credentials add as many usernames/passwords as you wish
-* webserver.static path is the absolute path to /public folder
-* webserver.api_token_secret the token secret(random value) for authorising android app api requests
+* web_server contains a dictionary with: 
+  - static path is the absolute path to /public folder
+  - api_token_secret the token secret(random value) for authorising android app api requests
+  - cookie_secret used for tornado hasing algorithm 
+  - application_port: self explanatory
 * in redis_config redis port, host and default database nr
 * in email, sending email with password and receiving email for notifications
 * path for burgler alarm sounds
+* in logging_config dictionary you can configure the log file and max entries
 ## actuators.py
 * conf is a dictionary with every available actuator
 * an actuator has the following propreties: state, type, device_type, communicator, send_to_device, command
@@ -47,13 +51,38 @@ node number
 * last_updated is a timestamp and it denotes the last sensor updated time
 ## communication.py
 * bluetooth connection strings for the devices
+* serial port and baud rat
+* aes key for encripted communication with the serial devices
 ## bluetooth
-* serial: http://www.uugear.com/portfolio/bluetooth-communication-between-raspberry-pi-and-arduino/
+To pair a bluetooth device:
+```` 
+bluetoothctl
+     power on
+     discoverable on
+     agent on
+     default-agent
+     pairable on
+     scan on
+     pair xx:xx:xx:xx:xx:xx (and enter password)
+     trust xx:xx:xx:xx:xx:xx 
 
+vim /etc/bluetooth/rfcomm.conf
+         rfcomm1 {
+            bind yes;
+            device xx:xx:xx:xx:xx:xx;
+            channel 1;
+            comment "Connection to some bluetooth";
+         }
+
+sudo rfcomm bind all
+sudo /etc/init.d/bluetooth restart
+
+sudo hciconfig hci0 up
+````
 
 # Extending the code
 
-## create a listener to respond to events
+##create a listener to respond to events
 * available events to subscribe: ChangeActuatorRequest, Location, SensorUpdate
 the events are located in /events folder
 * first create a file in /listener folder, the file name should end up in "Listener"
