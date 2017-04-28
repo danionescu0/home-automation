@@ -5,14 +5,14 @@ it's a DIY project for makers and hacker and it's based on a raspberry pi (or an
 
 
 # Summary
-* [First what can it do ?](#first-what-can-it-do)
-* [Project review](#project-review)
-* [IFTTT](#ifttt)
-* [Screenshots](#screenshots)
-* [Component prices](#component-prices)
-* [Limitations](#limitations)
-* [Technical overwiew](#technical-overview)
-* [Further improvements](#further-improvements)
+* First what can it do ?
+* Project review
+* IFTTT
+* Screenshots
+* Component prices
+* Limitations
+* Technical overwiew
+* Further improvements
 
 
 
@@ -59,13 +59,13 @@ the time is greater than 8:45 or temperature in living is between 21 and 22 degr
 #Screenshots 
 
  The main menu which contains the sensors listings, and all the "switches" 
-![home_automation_main.png](https://github.com/danionescu0/home-automation/blob/master/home_automation_hp.png)
+![home_automation_main.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/home_automation_hp.png)
 
  The sensors graphs menu 
-![sensors.png](https://github.com/danionescu0/home-automation/blob/master/home_automation_graphs.png)
+![sensors.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/home_automation_graphs.png)
 
  If this than that 
-![ifttt.png](https://github.com/danionescu0/home-automation/blob/master/home_automation_ifttt.png)
+![ifttt.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/home_automation_ifttt.png)
 
 #Component prices:
 * The PI, case, SD card and power adapter will be around 70 dollars
