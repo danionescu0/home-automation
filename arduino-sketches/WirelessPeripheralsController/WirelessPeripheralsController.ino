@@ -20,13 +20,14 @@ int switches[7] = {0, 6400, 6410, 6420, 6430, 6440, 6450};
 
 uint8_t key[] = {48, 48, 48 , 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48};
 
-EncryptedSoftwareSerial encryptedCommunicator = EncryptedSoftwareSerial(10, 11, 9600, key, DEVICE_CODE);
+EncryptedSoftwareSerial encryptedCommunicator = EncryptedSoftwareSerial(6,5, 9600, key, DEVICE_CODE);
 int i;
 
 void setup() 
 {
     Serial.begin(9600);
     mySwitch.enableTransmit(transmitPin);
+    Serial.println("init ok");
 }
 
 void loop() 
