@@ -5,6 +5,8 @@ from dateutil import tz
 from web.BaseHandler import BaseHandler
 
 class GraphsBuilderHandler(BaseHandler):
+    __DEFAULT_SELECTED_SENSOR = 'light:living'
+
     def initialize(self, sensors_repo, sensors_config):
         self.__sensors_repo = sensors_repo
         self.__sensors_config = sensors_config
@@ -65,7 +67,7 @@ class GraphsBuilderHandler(BaseHandler):
 
 
     def __get_selected_sensor_data(self):
-        selected = self.get_argument('sensor', 'light:living')
+        selected = self.get_argument('sensor', self.__DEFAULT_SELECTED_SENSOR)
         sensor_data = selected.split(':')
 
         return {

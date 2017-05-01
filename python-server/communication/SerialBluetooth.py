@@ -39,10 +39,8 @@ class SerialBluetooth(Base):
             self.get_logger().debug("Senzors data received: " + received_data)
             return received_data
 
-        except bluetooth.btcommon.BluetoothError as error:
-            if self.RESOURCE_TEMPORARILY_UNAVAILABLE == error[0]:
-                return False
-            self.__reconnect_bluetooth(which)
+        except bluetooth.btcommon.BluetoothError:
+            return False
 
         return False
 

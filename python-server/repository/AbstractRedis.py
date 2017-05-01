@@ -15,8 +15,8 @@ class AbstractRedis:
         self.client.zadd(key, timestamp, json.dumps(data))
 
     def get(self, key):
-        result = self.client.get(key).decode("utf-8")
+        result = self.client.get(key)
         if (not result):
             return self.keys[key]
 
-        return json.loads(result)
+        return json.loads(result.decode("utf-8"))

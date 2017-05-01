@@ -103,5 +103,13 @@ conf = [
         'location': False,
         'communication_code': (False, False),
         'last_updated': 0
+    },
+    {
+        'type' : 'power',
+        'value': 0,
+        'visible' : ['graphs'],
+        'location': 'holway',
+        'communication_code' : ('W', False),
+        'last_updated' : 0
     }
 ]
