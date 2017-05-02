@@ -3,6 +3,7 @@ import calendar
 import random
 import json
 from datetime import datetime
+from typeguard import typechecked
 
 class AbstractRedis:
     def __init__(self, configuration):
@@ -14,7 +15,8 @@ class AbstractRedis:
         data["randomize"] = random.randint(0, 999999999)
         self.client.zadd(key, timestamp, json.dumps(data))
 
-    def get(self, key):
+    @typechecked()
+    def get(self, key: str):
         result = self.client.get(key)
         if (not result):
             return self.keys[key]

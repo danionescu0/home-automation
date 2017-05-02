@@ -3,6 +3,7 @@ import json
 import math
 from collections import Counter
 from datetime import datetime
+from typeguard import typechecked
 
 from repository.AbstractRedis import AbstractRedis
 
@@ -11,14 +12,16 @@ class Sensors(AbstractRedis):
     REDIS_SENSORS_HISTORY_KEY = 'sensors_history_{0}'
     SENSORS_UPDATE_INTERVAL_IN_HISTORY = 300
 
-    def __init__(self, redis_configuration, sensors_configuration):
+    @typechecked()
+    def __init__(self, redis_configuration: dict, sensors_configuration: list):
         AbstractRedis.__init__(self, redis_configuration)
         self.keys = {self.REDIS_SENSORS_KEY: sensors_configuration}
         self.last_averages = {}
         self.sensors_last_updated = {}
         self.current_timestamp = 0
 
-    def get_sensors(self):
+    @typechecked()
+    def get_sensors(self) -> list:
         return self.get(self.REDIS_SENSORS_KEY)
 
     def set_sensor(self, type, location, value):
@@ -50,7 +53,8 @@ class Sensors(AbstractRedis):
         self.add_to_list(self.__get_sensor_key(type, location), {'value': sensor_average_value}, None)
         self.last_averages[name] = []
 
-    def get_sensor_values_in_interval(self, type, location, start_date, end_date):
+    @typechecked()
+    def get_sensor_values_in_interval(self, type: str, location: str, start_date: datetime, end_date: datetime) -> list:
         start_timestamp = calendar.timegm(start_date.timetuple())
         end_timestamp = calendar.timegm(end_date.timetuple())
         range = self.client.zrangebyscore(self.__get_sensor_key(type, location), start_timestamp, end_timestamp, withscores=True)

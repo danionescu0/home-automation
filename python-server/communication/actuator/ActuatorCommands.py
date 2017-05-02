@@ -3,16 +3,24 @@ from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
 from communication.actuator.GroupStrategy import GroupStrategy
 from communication.encriptors.AesEncriptor import AesEncriptor
 from communication.encriptors.PlainTextEncriptor import PlainTextEncriptor
+from communication.CommunicatorRegistry import CommunicatorRegistry
+from repository.Actuators import Actuators
+from tools.JobControl import JobControll
+from typeguard import typechecked
 
 class ActuatorCommands:
-    def __init__(self, communicator_registry, actuators_repo, actuators_config, aes_key, job_controll):
+
+    @typechecked()
+    def __init__(self, communicator_registry: CommunicatorRegistry, actuators_repo: Actuators,
+                 actuators_config: dict, aes_key: str, job_controll: JobControll):
         self.__communicator_registry = communicator_registry
         self.__actuators_repo = actuators_repo
         self.__actuators_config = actuators_config
         self.__aes_key = aes_key
         self.__job_controll = job_controll
 
-    def change_actuator(self, actuator_name, state):
+    @typechecked()
+    def change_actuator(self, actuator_name: str, state: bool):
         self.__actuators_repo.set_actuator(actuator_name, state)
         if not self.__actuators_config[actuator_name]['strategy']:
             return
