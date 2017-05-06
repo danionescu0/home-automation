@@ -1,13 +1,16 @@
-from communication.encriptors.BaseEncriptor import BaseEncriptor
+from typeguard import typechecked
 from Crypto.Cipher import AES
 
-class AesEncriptor(BaseEncriptor):
+from communication.encriptors.BaseEncriptor import BaseEncriptor
 
-    def __init__(self, key):
+class AesEncriptor(BaseEncriptor):
+    @typechecked()
+    def __init__(self, key: str):
         self.__key = key
         self.__encriptor = None
 
-    def encrypt(self, text):
+    @typechecked()
+    def encrypt(self, text: str) -> str:
         if len(text) > 16:
             raise RuntimeError("Aes encription is not ment to handle more than 16 characters")
         padded_text = text.ljust(16, ' ')
@@ -15,10 +18,12 @@ class AesEncriptor(BaseEncriptor):
 
         return encripted
 
-    def decrypt(self, text):
+    @typechecked()
+    def decrypt(self, text: str) -> str:
         return self.__get_encriptor().decrypt(text)
 
-    def get_name(self):
+    @typechecked()
+    def get_name(self) -> str:
         return 'aes'
 
     def __get_encriptor(self):

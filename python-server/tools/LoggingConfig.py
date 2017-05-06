@@ -1,6 +1,6 @@
 import logging
 import logging.handlers
-
+import traceback
 class LoggingConfig():
     def __init__(self, filename, max_bytes):
         self.__filename = filename
@@ -28,3 +28,4 @@ class LoggingConfig():
 
     def set_error_hadler(self, type, value, tb):
         self.__root_logger.exception("Uncaught exception: {0}".format(str(value)))
+        self.__root_logger.exception("Uncaught exception: {0}".format(traceback.format_tb(tb)))

@@ -1,3 +1,5 @@
+from typeguard import typechecked
+
 class Token:
     TYPE_BOOLEAN_AND = 'and'
     TYPE_BOOLEAN_OR = 'or'
@@ -13,11 +15,13 @@ class Token:
     TYPE_TIME = 'time'
     TYPE_ACTUATOR = 'actuator'
 
-    def __init__(self, type, value):
+    @typechecked()
+    def __init__(self, type: str, value):
         self.__type = type
         self.__value = value
 
-    def get_type(self):
+    @typechecked()
+    def get_type(self) -> str:
         return self.__type
 
     def get_value(self):

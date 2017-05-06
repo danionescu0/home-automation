@@ -1,4 +1,7 @@
 import abc
+from typing import Callable
+from typeguard import typechecked
+from logging import RootLogger
 
 class Base(metaclass=abc.ABCMeta):
     def __init__(self):
@@ -6,30 +9,37 @@ class Base(metaclass=abc.ABCMeta):
         self.__callback = None
         self.__logger = None
 
+    @typechecked()
     @abc.abstractmethod
-    def send(self, which, value):
+    def send(self, which: str, value: str) -> bool:
         pass
 
+    @typechecked()
     @abc.abstractmethod
-    def listen(self, complete_message_callback, receive_message_callback):
+    def listen(self, complete_message_callback: Callable[[str], bool], receive_message_callback: Callable[[str], None]):
         pass
 
     @abc.abstractmethod
     def connect(self):
         pass
 
+    @typechecked()
     @abc.abstractmethod
-    def disconnect(self):
+    def disconnect(self) -> None:
         pass
 
-    def set_receive_message_callback(self, callback):
+    @typechecked()
+    def set_receive_message_callback(self, callback: Callable[[str], bool]) -> None:
         self.__callback = callback
 
-    def get_receive_message_callback(self):
+    @typechecked()
+    def get_receive_message_callback(self) -> Callable[[str], None]:
         return self.__callback
 
-    def set_logger(self, logger):
+    @typechecked()
+    def set_logger(self, logger: RootLogger):
         self.__logger = logger
 
-    def get_logger(self):
+    @typechecked()
+    def get_logger(self) -> RootLogger:
         return self.__logger

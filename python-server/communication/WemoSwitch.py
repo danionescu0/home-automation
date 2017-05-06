@@ -1,9 +1,14 @@
-from .Base import Base
+from typeguard import typechecked
+from typing import Callable
 from ouimeaux.environment import Environment
 from ouimeaux.environment import UnknownDevice
 
+from .Base import Base
+
 class WemoSwitch(Base):
-    def send(self, which, value):
+
+    @typechecked()
+    def send(self, which: str, value: str):
         env = Environment()
         try:
             env.start()
@@ -21,8 +26,10 @@ class WemoSwitch(Base):
     def connect(self):
         pass
 
-    def disconnect(self):
+    @typechecked()
+    def disconnect(self) -> None:
         pass
 
-    def listen(self, complete_message_callback, receive_message_callback):
+    @typechecked()
+    def listen(self, complete_message_callback: Callable[[str], bool], receive_message_callback: Callable[[str], None]):
         pass

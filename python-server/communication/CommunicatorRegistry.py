@@ -1,9 +1,14 @@
+from typeguard import typechecked
+
+from communication.Base import Base
 from communication.SerialBluetooth import SerialBluetooth
 from communication.Serial import Serial
 from communication.WemoSwitch import WemoSwitch
+from logging import RootLogger
 
 class CommunicatorRegistry:
-    def __init__(self, configuration, logger):
+    @typechecked()
+    def __init__(self, configuration, logger: RootLogger):
         self.__configuration = configuration
         self.__logger = logger
         self.__communicators = {}
@@ -22,5 +27,6 @@ class CommunicatorRegistry:
         wemo_switch.connect()
         self.__communicators.update({'wemo_switch': wemo_switch})
 
-    def get_communicator(self, type):
+    @typechecked()
+    def get_communicator(self, type: str) -> Base:
         return self.__communicators[type]

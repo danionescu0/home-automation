@@ -1,13 +1,19 @@
 import bluetooth
+from typing import Callable
+from typeguard import typechecked
+from communication.Base import Base
+
 from .Base import Base
 
 class SerialBluetooth(Base):
     RESOURCE_TEMPORARILY_UNAVAILABLE = '11'
 
-    def __init__(self, endpoint):
+    @typechecked()
+    def __init__(self, endpoint: dict):
         self.__endpoint = endpoint
 
-    def send(self, which, value):
+    @typechecked()
+    def send(self, which: str, value: str) -> bool:
         try:
             self.__connections[which].send(value)
         except bluetooth.btcommon.BluetoothError:
@@ -15,7 +21,8 @@ class SerialBluetooth(Base):
 
         return True
 
-    def listen(self, complete_message_callback, receive_message_callback):
+    @typechecked()
+    def listen(self, complete_message_callback: Callable[[str], bool], receive_message_callback: Callable[[str], None]):
         for name, bluetooth_address in self.connection_mapping.items():
             data = self.__receive(name, 10)
             if data == False:
@@ -71,7 +78,8 @@ class SerialBluetooth(Base):
 
         return connection
 
-    def disconnect(self):
+    @typechecked()
+    def disconnect(self) -> None:
         self.get_logger().debug("Disconnecting all bluetooth devices")
         for name, connection in self.__connections.items():
             connection.close()

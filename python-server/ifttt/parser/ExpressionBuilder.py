@@ -1,3 +1,4 @@
+from typeguard import typechecked
 from datetime import datetime
 from dateutil import tz
 
@@ -10,17 +11,23 @@ from ifttt.interpretter.GreaterThanExpression import GreaterThanExpression
 from ifttt.interpretter.LessThanExpression import LessThanExpression
 from ifttt.interpretter.BetweenExpression import BetweenExpression
 from ifttt.parser.Token import Token
+from ifttt.parser.Tokenizer import Tokenizer
+from repository.Sensors import Sensors
+from repository.Actuators import Actuators
+from ifttt.interpretter.Expression import Expression
 
 class ExpressionBuilder:
     current_token_index = 0
 
-    def __init__(self, tokenizer, sensors_repo, actuators_repo):
+    @typechecked()
+    def __init__(self, tokenizer: Tokenizer, sensors_repo: Sensors, actuators_repo: Actuators):
         self.__tokenizer = tokenizer
         self.__sensors_repo = sensors_repo
         self.__actuators_repo = actuators_repo
         self.__current_token_index = 0
 
-    def set_text(self, text):
+    @typechecked()
+    def set_text(self, text: str) -> None:
         self.__text = text
         self.__expression = None
 
@@ -31,7 +38,8 @@ class ExpressionBuilder:
         self.__sensors = self.__sensors_repo.get_sensors()
         self.__expression = self.__evaluate()
 
-    def get_expression(self):
+    @typechecked()
+    def get_expression(self) -> Expression:
         return self.__expression
 
     def __evaluate(self):

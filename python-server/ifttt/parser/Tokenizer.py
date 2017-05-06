@@ -1,5 +1,6 @@
 import re
-
+from typeguard import typechecked
+from typing import List
 from ifttt.parser.Token import Token
 from ifttt.parser.ParseException import ParseException
 
@@ -21,7 +22,8 @@ class Tokenizer:
             ('\d+', Token.TYPE_LITERAL_INT),
         ]
 
-    def tokenize(self, text):
+    @typechecked()
+    def tokenize(self, text:str) -> List[Token]:
         cleanned_text = self.__get_cleanned_text(text)
         tokens = []
         for token_text in cleanned_text.split():

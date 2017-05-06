@@ -1,17 +1,21 @@
 from blinker import signal
+from typeguard import typechecked
 
 class SensorUpdateEvent:
-    def send(self, type, location, new_value):
+    @typechecked()
+    def send(self, type: str, location: str, new_value):
         event = signal("sensor_update")
         self.__type = type
         self.__location = location
         self.__new_value = new_value
         event.send(self)
 
-    def get_type(self):
+    @typechecked()
+    def get_type(self) -> str:
         return self.__type
 
-    def get_location(self):
+    @typechecked()
+    def get_location(self) -> str:
         return self.__location
 
     def get_new_value(self):

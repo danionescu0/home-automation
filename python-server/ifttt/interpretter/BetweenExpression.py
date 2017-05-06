@@ -1,13 +1,18 @@
+from typeguard import typechecked
+
 from ifttt.interpretter.Expression import Expression
+from ifttt.interpretter.InterpretterContext import InterpretterContext
 
 class BetweenExpression(Expression):
-    def __init__(self, reference, left_operator, right_operator):
+    @typechecked()
+    def __init__(self, reference: Exception, left_operator: Expression, right_operator: Expression):
         super(BetweenExpression, self).__init__()
         self.__reference = reference
         self.__left_operator = left_operator
         self.__right_operator = right_operator
 
-    def interpret(self, context):
+    @typechecked()
+    def interpret(self, context: InterpretterContext):
         self.__reference.interpret(context)
         self.__left_operator.interpret(context)
         self.__right_operator.interpret(context)

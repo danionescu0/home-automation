@@ -1,14 +1,19 @@
+from typeguard import typechecked
 from blinker import signal
 
 class ChangeActuatorRequestEvent:
-    def send(self, name, newState):
+
+    @typechecked()
+    def send(self, name: str, new_state: bool) -> None:
         event = signal("change_actuator_request")
         self.__name = name
-        self.__newState = newState
+        self.__new_state = new_state
         event.send(self)
 
-    def get_name(self):
+    @typechecked()
+    def get_name(self) -> str:
         return self.__name
 
-    def getNewState(self):
-        return self.__newState
+    @typechecked()
+    def get_new_state(self) -> bool:
+        return self.__new_state

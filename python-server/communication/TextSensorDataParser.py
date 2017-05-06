@@ -1,18 +1,22 @@
 import re
+from typeguard import typechecked
 
 from communication.SensorsParseException import SensorsParseException
 
 class TextSensorDataParser:
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'
 
-    def __init__(self, sensors_conf):
+    @typechecked()
+    def __init__(self, sensors_conf: list):
         self.__sensors_conf = sensors_conf
         self.__sensor_separator = '|'
 
-    def is_buffer_parsable(self, buffer):
+    @typechecked()
+    def is_buffer_parsable(self, buffer: str) -> bool:
         return buffer.endswith(self.__sensor_separator)
 
-    def parse(self, text_buffer):
+    @typechecked()
+    def parse(self, text_buffer: str) -> list:
         text_buffer = text_buffer[:-1]
         sensors = []
         for sensor in text_buffer.split('|'):
