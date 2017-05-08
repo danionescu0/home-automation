@@ -1,12 +1,20 @@
 import jwt
 from dateutil.relativedelta import relativedelta
 import datetime, time
+from logging import RootLogger
+from typeguard import typechecked
 
 from web.BaseHandler import BaseHandler
 from event.LocationEvent import LocationEvent
+from tools.Authentication import Authentication
+from tools.VoiceCommands import VoiceCommands
+
 
 class ApiHandler(BaseHandler):
-    def initialize(self, authentication, api_token_secret, voice_commands, logging):
+    @typechecked()
+    def initialize(self, authentication: Authentication, api_token_secret: str, voice_commands: VoiceCommands,
+                   logging: RootLogger):
+
         self.__authentication = authentication
         self.__api_token_secret = api_token_secret
         self.__voice_commands = voice_commands

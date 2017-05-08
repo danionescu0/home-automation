@@ -1,9 +1,17 @@
-from web.BaseHandler import BaseHandler
 from tornado.web import authenticated
+from typeguard import typechecked
+from logging import RootLogger
+
 from repository.IftttRules import IftttRules
+from web.BaseHandler import BaseHandler
+from repository.Actuators import Actuators
+from ifttt.ExpressionValidator import ExpressionValidator
 
 class IftttHandler(BaseHandler):
-    def initialize(self, actuators_repo, ifttt_rules, ifttt_expression_validator, logging):
+    @typechecked()
+    def initialize(self, actuators_repo: Actuators, ifttt_rules: IftttRules,
+                   ifttt_expression_validator: ExpressionValidator, logging: RootLogger):
+
         self.__actuators_repo = actuators_repo
         self.__ifttt_rules = ifttt_rules
         self.__ifttt_expression_validator = ifttt_expression_validator
@@ -37,6 +45,7 @@ class IftttHandler(BaseHandler):
     def post(self, *args, **kwargs):
         rule_name = self.get_argument("rule_name", None, True)
         if (self.get_argument("type", None, True) == 'delete'):
+            print(rule_name)
             self.__ifttt_rules.delete(rule_name)
 
         trigger_rules = self.get_argument("trigger_rules", None, True)

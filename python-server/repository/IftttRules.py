@@ -1,4 +1,5 @@
 import json
+from typeguard import typechecked
 
 from repository.AbstractRedis import AbstractRedis
 
@@ -11,11 +12,13 @@ class IftttRules(AbstractRedis):
     COMMAND_VOICE = 'voice'
     __REDIS_KEY = 'rules'
 
-    def __init__(self, configuration):
+    @typechecked()
+    def __init__(self, configuration: dict):
         AbstractRedis.__init__(self, configuration)
         self.keys = {self.__REDIS_KEY: {}}
 
-    def upsert(self, name, trigger_rules, active, commands):
+    @typechecked()
+    def upsert(self, name: str, trigger_rules: str, active: bool, commands: list):
         rules = self.get(self.__REDIS_KEY)
         rules[name] = {
             self.TRIGGER_RULES : trigger_rules,
@@ -25,20 +28,23 @@ class IftttRules(AbstractRedis):
 
         return self.client.set(self.__REDIS_KEY, json.dumps(rules))
 
-    def delete(self, name):
+    @typechecked()
+    def delete(self, name: str):
         rules = self.get(self.__REDIS_KEY)
         rules.pop(name, None)
 
         return self.client.set(self.__REDIS_KEY, json.dumps(rules))
 
-    def get_all(self):
+    @typechecked()
+    def get_all(self) -> dict:
         rules = self.get(self.__REDIS_KEY)
         if not rules:
             return {}
 
         return rules
 
-    def get_all_active(self):
+    @typechecked()
+    def get_all_active(self) -> dict:
         active = {}
         for key, rule in self.get_all().items():
             if rule[self.ACTIVE]:

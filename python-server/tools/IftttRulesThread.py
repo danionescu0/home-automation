@@ -1,16 +1,24 @@
 import threading
 import time
+from typeguard import typechecked
 
 from ifttt.parser.ExpressionBuilder import ExpressionBuilder
 from ifttt.parser.Tokenizer import Tokenizer
 from ifttt.interpretter.InterpretterContext import InterpretterContext
-from repository.IftttRules import IftttRules
 from ifttt.parser.ParseException import ParseException
+from ifttt.command.CommandExecutor import CommandExecutor
+from repository.IftttRules import IftttRules
+from repository.Sensors import Sensors
+from repository.Actuators import Actuators
+from logging import RootLogger
 
 class IftttRulesThread(threading.Thread):
     ITERATE_INTERVAL = 60
 
-    def __init__(self, ifttt_rules, command_executor, sensors_repo, actuators_repo, logging):
+    @typechecked()
+    def __init__(self, ifttt_rules: IftttRules, command_executor: CommandExecutor, sensors_repo: Sensors,
+                 actuators_repo: Actuators, logging: RootLogger):
+
         threading.Thread.__init__(self)
         self.__ifttt_rules = ifttt_rules
         self.__command_executor = command_executor

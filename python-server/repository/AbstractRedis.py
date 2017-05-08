@@ -6,12 +6,13 @@ from datetime import datetime
 from typeguard import typechecked
 
 class AbstractRedis:
-    def __init__(self, configuration):
+    @typechecked()
+    def __init__(self, configuration: dict):
         self.client = redis.StrictRedis(**configuration)
 
-    def add_to_list(self, key, data, timestamp):
-        if timestamp == None:
-            timestamp = calendar.timegm(datetime.now().timetuple())
+    @typechecked()
+    def add_to_list(self, key: str, data):
+        timestamp = calendar.timegm(datetime.now().timetuple())
         data["randomize"] = random.randint(0, 999999999)
         self.client.zadd(key, timestamp, json.dumps(data))
 

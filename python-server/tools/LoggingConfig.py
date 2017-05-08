@@ -1,12 +1,18 @@
 import logging
 import logging.handlers
+from logging import RootLogger
 import traceback
+from typeguard import typechecked
+
+
 class LoggingConfig():
-    def __init__(self, filename, max_bytes):
+    @typechecked()
+    def __init__(self, filename: str, max_bytes: int):
         self.__filename = filename
         self.__max_bytes = max_bytes
 
-    def get_logger(self):
+    @typechecked()
+    def get_logger(self) -> RootLogger:
         formatter = logging.Formatter(fmt='%(levelname)s (%(threadName)-10s) :%(name)s: %(message)s '
                                   '(%(asctime)s; %(filename)s:%(lineno)d)',
                               datefmt="%Y-%m-%d %H:%M:%S")

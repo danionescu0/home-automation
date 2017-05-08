@@ -1,8 +1,14 @@
-from tornado.web import  authenticated
+from tornado.web import authenticated
+from typeguard import typechecked
+
 from web.BaseHandler import BaseHandler
+from tools.JobControl import JobControll
+from repository.Actuators import Actuators
+from repository.Sensors import Sensors
 
 class MainHandler(BaseHandler):
-    def initialize(self, job_controll, actuators_repo, sensors_repo):
+    @typechecked()
+    def initialize(self, job_controll: JobControll, actuators_repo: Actuators, sensors_repo: Sensors):
         self.job_controll = job_controll
         self.__actuators_repo = actuators_repo
         self.__sensors_repo = sensors_repo

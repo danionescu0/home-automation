@@ -1,7 +1,9 @@
 import subprocess
+from typeguard import typechecked
 
 class TextToSpeech:
-    def say(self, text, nr_times = 1):
+    @typechecked()
+    def say(self, text: str, nr_times = 1) -> None:
         for i in range(0, nr_times):
             self.__say_once(text)
 

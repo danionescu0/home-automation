@@ -2,12 +2,16 @@ import json
 from tornado.web import  authenticated
 from datetime import datetime, timedelta
 from dateutil import tz
+from typeguard import typechecked
+
 from web.BaseHandler import BaseHandler
+from repository.Sensors import Sensors
 
 class GraphsBuilderHandler(BaseHandler):
     __DEFAULT_SELECTED_SENSOR = 'light:living'
 
-    def initialize(self, sensors_repo, sensors_config):
+    @typechecked()
+    def initialize(self, sensors_repo: Sensors, sensors_config: list):
         self.__sensors_repo = sensors_repo
         self.__sensors_config = sensors_config
 

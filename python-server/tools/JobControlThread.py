@@ -1,11 +1,18 @@
 import threading
 import json
 import time
+from typeguard import typechecked
+
+from tools.JobControl import JobControll
+from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
+from logging import RootLogger
 
 class JobControlThread(threading.Thread):
     LISTEN_DELAY = 0.01
 
-    def __init__(self, job_controll, change_actuator_request_event, logging):
+    @typechecked()
+    def __init__(self, job_controll: JobControll, change_actuator_request_event: ChangeActuatorRequestEvent,
+                 logging: RootLogger):
         threading.Thread.__init__(self)
         self.__job_controll = job_controll
         self.__change_actuator_request_event = change_actuator_request_event

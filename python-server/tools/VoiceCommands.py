@@ -2,13 +2,18 @@ import re
 
 from adapt.intent import IntentBuilder
 from adapt.engine import IntentDeterminationEngine
+from typeguard import typechecked
+
+from tools.JobControl import JobControll
+from logging import RootLogger
 
 class VoiceCommands:
     ACTIONS = 'Action'
     NAME = 'Name'
     ACTUATOR_TYPE = 'ActuatorType'
 
-    def __init__(self, job_controll, logging):
+    @typechecked()
+    def __init__(self, job_controll: JobControll, logging: RootLogger):
         self.__job_controll = job_controll
         self.__logging = logging
 
@@ -36,7 +41,8 @@ class VoiceCommands:
 
         return self
 
-    def execute(self, command):
+    @typechecked()
+    def execute(self, command: str) -> None:
         command = self.__normalize_command(command)
         for intent in self.__engine.determine_intent(command):
             if intent and intent.get('confidence') > 0:

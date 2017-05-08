@@ -1,12 +1,19 @@
+from typeguard import typechecked
 from blinker import signal
 
+from repository.Actuators import Actuators
+from tools.EmailNotifier import EmailNotifier
+from event.SensorUpdateEvent import SensorUpdateEvent
+
 class IntruderAlertListener:
-    def __init__(self, actuators_repo, email_notificator):
+    @typechecked()
+    def __init__(self, actuators_repo: Actuators, email_notificator: EmailNotifier):
         self.__actuators_repo = actuators_repo
         self.__email_notificator = email_notificator
         signal("sensor_update").connect(self.callback)
 
-    def callback(self, sensor_update):
+    @typechecked()
+    def callback(self, sensor_update: SensorUpdateEvent) -> None:
         if self.__should_send_alert(sensor_update):
             self.__email_notificator.send_alert("Alert", "Somebody entered the house")
 

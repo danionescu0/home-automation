@@ -4,6 +4,7 @@ import math
 from collections import Counter
 from datetime import datetime
 from typeguard import typechecked
+from typing import Any
 
 from repository.AbstractRedis import AbstractRedis
 
@@ -24,7 +25,8 @@ class Sensors(AbstractRedis):
     def get_sensors(self) -> list:
         return self.get(self.REDIS_SENSORS_KEY)
 
-    def set_sensor(self, type, location, value):
+    @typechecked()
+    def set_sensor(self, type: str, location: Any, value: Any) -> None:
         self.current_timestamp = calendar.timegm(datetime.now().timetuple())
         self.__set(type, location, value)
         self.__add_last_sensor_averages_in_history(type, location, value)
@@ -50,7 +52,7 @@ class Sensors(AbstractRedis):
 
         self.sensors_last_updated[name] = self.current_timestamp
         sensor_average_value = int(math.ceil(float(sum(self.last_averages[name])) / len(self.last_averages[name])))
-        self.add_to_list(self.__get_sensor_key(type, location), {'value': sensor_average_value}, None)
+        self.add_to_list(self.__get_sensor_key(type, location), {'value': sensor_average_value})
         self.last_averages[name] = []
 
     @typechecked()

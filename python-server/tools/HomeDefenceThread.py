@@ -1,10 +1,14 @@
 import threading
 import time
+from typeguard import typechecked
+
+from tools.HomeDefence import HomeDefence
 
 class HomeDefenceThread(threading.Thread):
     ITERATE_INTERVAL = 60
 
-    def __init__(self, home_defence):
+    @typechecked()
+    def __init__(self, home_defence: HomeDefence):
         threading.Thread.__init__(self)
         self.__home_defence = home_defence
         self.shutdown = False

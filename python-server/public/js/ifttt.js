@@ -49,7 +49,7 @@ ifttt = {
             url: this.actionsURL,
             data: {
                 type: 'delete',
-                rule: trElem.find("input[name='rule_name']").val()
+                rule_name: trElem.find("input[name='rule_name']").val()
             },
             method: 'POST',
             complete: function() {

@@ -1,24 +1,25 @@
 import json
+from typeguard import typechecked
 
 from repository.AbstractRedis import AbstractRedis
 
 class LocationTracker(AbstractRedis):
-    def __init__(self, configuration):
+    @typechecked()
+    def __init__(self, configuration: dict):
         AbstractRedis.__init__(self, configuration)
         self.location_key = 'location'
 
-    def set(self, key, name, value):
+    @typechecked()
+    def set(self, key: str, name: str, value) -> None:
         data = self.get(key)
-        if (key == self.sensorsKey):
-            data[name] = value
-        else:
-            data[name]['state'] = value
+        data[name]['state'] = value
         self.client.set(key, json.dumps(data))
 
-    def add_location_point(self, username, latitude, longitude):
+    @typechecked()
+    def add_location_point(self, username: str, latitude: float, longitude: float) -> None:
         data = {
             'username' : username,
             'lat' : latitude,
             'lng' : longitude
         }
-        self.add_to_list(self.location_key, data, None)
+        self.add_to_list(self.location_key, data)

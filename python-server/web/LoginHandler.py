@@ -1,8 +1,11 @@
+from typeguard import typechecked
+
 from web.BaseHandler import BaseHandler
 from tools.Authentication import Authentication
 
 class LoginHandler(BaseHandler):
-    def initialize(self, authentication):
+    @typechecked()
+    def initialize(self, authentication: Authentication):
         self.__authentication = authentication
 
     def get(self):

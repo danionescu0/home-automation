@@ -1,28 +1,31 @@
 import collections
 import json
+from typeguard import typechecked
 
 from repository.AbstractRedis import AbstractRedis
 
 class Actuators(AbstractRedis):
     REDIS_KEY = 'actuators'
 
-    def __init__(self, redis_configuration, actuators_config):
+    @typechecked()
+    def __init__(self, redis_configuration: dict, actuators_config: dict):
         AbstractRedis.__init__(self, redis_configuration)
         self.keys = {self.REDIS_KEY: actuators_config}
 
-    def get_actuators(self, justNames = False):
-        if not justNames:
+    def get_actuators(self, just_names = False):
+        if not just_names:
             actuators = self.get(self.REDIS_KEY)
             return collections.OrderedDict(sorted(actuators.items()))
 
         actuators = self.get(self.REDIS_KEY)
-        actuatorNames = []
+        actuator_names = []
         for name, data in actuators.items():
-            actuatorNames.append(name)
+            actuator_names.append(name)
 
-        return actuatorNames
+        return actuator_names
 
-    def set_actuator(self, name, value):
+    @typechecked()
+    def set_actuator(self, name: str, value) -> None:
         return self.__set(self.REDIS_KEY, name, value)
 
     def __set(self, key, name, value):

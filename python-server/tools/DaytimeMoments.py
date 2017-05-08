@@ -1,11 +1,12 @@
 import datetime
-
 from pytz import timezone
 from astral import Astral
+from typeguard import typechecked
 
 class DaytimeMoments:
     @staticmethod
-    def is_over_sunset():
+    @typechecked()
+    def is_over_sunset() -> bool:
         astral = Astral()
         astral.solar_depression = 'civil'
         sun = astral['Bucharest'].sun(date=datetime.datetime.now(), local=True)

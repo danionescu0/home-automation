@@ -1,6 +1,7 @@
 import serial
 from typing import Callable
 from typeguard import typechecked
+
 from communication.Base import Base
 
 class Serial(Base):

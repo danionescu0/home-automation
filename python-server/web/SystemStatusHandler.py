@@ -1,12 +1,15 @@
-from tornado.web import  authenticated
+from tornado.web import authenticated
 from datetime import datetime
 from operator import itemgetter
 from dateutil import tz
-from web.BaseHandler import BaseHandler
+from typeguard import typechecked
 
+from web.BaseHandler import BaseHandler
+from repository.Sensors import Sensors
 
 class SystemStatusHandler(BaseHandler):
-    def initialize(self,  sensors_repo):
+    @typechecked()
+    def initialize(self,  sensors_repo: Sensors):
         self.__sensors_repo = sensors_repo
 
     @authenticated
