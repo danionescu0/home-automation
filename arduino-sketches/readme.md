@@ -1,5 +1,8 @@
 ### Arduino sketches explained ###
 
+Note: The bluetooth HC-05 device can be replace with any other serial wireless
+communication device lice HC-12 with greater range
+
 **ACMotorCourtains**
 
 * Description: controlls an AC window exterior courtain, the switching is done through relays and it involves switching phase through one of the two wires for either opening 
@@ -9,8 +12,12 @@ The sensor will report to the main unit, and the default behavior is close the c
 
 **DoorController**
 
-* Description: controlls the 12V electromagnetic door lock (sends a current for a short time to unlock the door), also the device has a human presence sensors and report to the main unit 
-* Parts: case, 12 V 2 A power supply, arduino nano, HC-05 bluetooth, l7805cv 5V regulator, passive IR presence sensor
+* Description: controlls the 12V electromagnetic door lock (sends a current for a short time to unlock the door), 
+also the device senses humain presence, and measures electricity consumption 
+* Parts: case, 12 V 2 A power supply, arduino nano, HC-05 bluetooth, l7805cv 5V regulator, passive IR presence sensor,
+  10 uF capacitor, 2 x 470kOhm rezistor, 33 Ohm rezistor, 100A SCT-013-000 current senzor
+* Motivation: merging the door lock and the sensors togeather was done because the
+odds are the main door sits next to the main power supply cable
 
 **MultiSensors** 
 

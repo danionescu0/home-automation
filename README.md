@@ -1,7 +1,8 @@
 # Home automation project #
 
 Yet another home automation project. The main concern of the project is keeping price down and maximizing customizability, 
-it's a DIY project for makers and hacker and it's based on a raspberry pi (or another linux compatible board) and arduino boards.
+it's a DIY project for makers and hacker and it's based on a raspberry pi (or another linux compatible board), arduino boards
+IOT devices and other electronics.
 
 
 **Summary**
@@ -100,19 +101,22 @@ so i've implemented a communication strategy in paralel using HC-12 serial modul
 
 This project uses the following technollogies, concepts and tools: 
 
-python 3x, arduino, redis, pubsub, raspberryPi, bluetooth, raspian (basic linux configuration), arduino IDE, electronics
+python 3x with tornado web framework, arduino, redis, pubsub, raspberryPi, bluetooth, raspian (basic linux configuration),
+ arduino IDE, electronics
 
 To get started you'll need a background in programming, electronics and thinkering. For more technical configuration
-please visit python-server, and arduino-sketches folders.
+please visit [python server](https://github.com/danionescu0/home-automation/tree/master/python-server), and 
+[arduino sketches](https://github.com/danionescu0/home-automation/tree/master/arduino-sketches) folders.
 
 
 **ToDo list:**
 
-* migrate to python 3.5 and use type hinting
-* integrate air conditioning system
 * integrate / build a music & voice player over http to sound alarms, play notifications etc
+* unit tests
+* integrate air conditioning system
 * integrate more IOT devices available on the market
 * water consumption monitoring
 * mailbox senzor with email notification
 * user permissions, user management
 * SMS notifications
+

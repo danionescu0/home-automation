@@ -1,6 +1,38 @@
+# Questions
+* Q: Why python?
+
+  A: It integrates well with raspberry pi and other development boards, 
+  easy to code 
+
+* Q: Why python 3.5 with type hinting?
+
+  A: As the project grew larger type hinting proved a big help in a better 
+  understanding the proeject and code with eas
+
+* Q: Why arduino?
+
+  A: Being an open platform it's easy & fun to code and use. Also there are 
+     a huge number of sensors and devices that integrates with ease.
+     
+* Q: What is the best way of communicating between devices?
+  
+  A: There is no best way. I've started with simple 433 MHZ receivers & transmitters 
+  , migrated to bluetooth and then added HC-12 serial module and IOT devices. 
+  All devices have strong and week points, it's up to you to decide what suits best.
+  In the communication part of the project i've tried to abstract things away, so anyonce
+  can write a communication adapter for an IOT device or a custom one.
+
+* Q: Why using redis of all the databases out there?
+
+  A: Redis is actually an all in one database, i'm using the key-value storage, 
+  the ordered sets (check this [link](https://redis.io/topics/data-types)) and the [pub-sub](https://redis.io/topics/pubsub) 
+  to communicate from the web interface to the separate process that controlls 
+  all the things. 
+  Also redis is very easy to install and configure, just apt-get and it's ready to go.
+
 # Requirements
 * python 3.5
-* redis server 
+* redis server running
 * bluetooth configured
 
 # Install: 
@@ -10,7 +42,7 @@
 * in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
 
 # Linux packages
-* sudo apt-get install screen redis-server festival
+* apt-get install screen redis-server festival
 * pybluez requires the following linux packages: libbluetooth-dev, python-dev
 
 # Running the servers
@@ -82,7 +114,8 @@ sudo hciconfig hci0 up
 
 # Extending the code
 
-##create a listener to respond to events
+**Create a listener to respond to events**
+
 * available events to subscribe: ChangeActuatorRequestEvent, LocationEvent, SensorUpdateEvent
 the events are located in /events folder
 * first create a file in /listener folder, the file name should end up in "Listener"
