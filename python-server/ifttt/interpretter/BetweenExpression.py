@@ -5,7 +5,7 @@ from ifttt.interpretter.InterpretterContext import InterpretterContext
 
 class BetweenExpression(Expression):
     @typechecked()
-    def __init__(self, reference: Exception, left_operator: Expression, right_operator: Expression):
+    def __init__(self, reference: Exception, left_operator, right_operator):
         super(BetweenExpression, self).__init__()
         self.__reference = reference
         self.__left_operator = left_operator

@@ -4,7 +4,7 @@ from typeguard import typechecked
 class BaseEncriptor(metaclass=abc.ABCMeta):
     @typechecked()
     @abc.abstractmethod
-    def encrypt(self, text: str) -> str:
+    def encrypt(self, text: str) -> bytes:
         pass
 
     @typechecked()

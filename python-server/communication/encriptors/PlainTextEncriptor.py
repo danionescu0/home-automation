@@ -3,8 +3,8 @@ from communication.encriptors.BaseEncriptor import BaseEncriptor
 
 class PlainTextEncriptor(BaseEncriptor):
     @typechecked()
-    def encrypt(self, text: str) -> str:
-        return text
+    def encrypt(self, text: str) -> bytes:
+        return str.encode(text)
 
     @typechecked()
     def decrypt(self, text: str) -> str:

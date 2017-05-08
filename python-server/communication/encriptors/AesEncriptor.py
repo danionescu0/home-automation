@@ -10,7 +10,7 @@ class AesEncriptor(BaseEncriptor):
         self.__encriptor = None
 
     @typechecked()
-    def encrypt(self, text: str) -> str:
+    def encrypt(self, text: str) -> bytes:
         if len(text) > 16:
             raise RuntimeError("Aes encription is not ment to handle more than 16 characters")
         padded_text = text.ljust(16, ' ')

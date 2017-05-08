@@ -20,7 +20,7 @@ class Serial(Base):
         self.__serial.close()
 
     @typechecked()
-    def send(self, which: str, value: str) -> bool:
+    def send(self, which: str, value: bytes) -> bool:
         self.__serial.write(which.encode('ascii'))
         self.__serial.write(':'.encode('ascii'))
         self.__serial.write(value)

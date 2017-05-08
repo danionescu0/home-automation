@@ -5,8 +5,7 @@ from ifttt.interpretter.Expression import Expression
 from ifttt.interpretter.InterpretterContext import InterpretterContext
 
 class OperatorExpression(Expression):
-    @typechecked()
-    def __init__(self, left_operator: Expression, right_operator: Expression):
+    def __init__(self, left_operator, right_operator):
         super(OperatorExpression, self).__init__()
         self.__left_operator = left_operator
         self.__right_operator = right_operator
@@ -21,5 +20,5 @@ class OperatorExpression(Expression):
 
     @typechecked()
     @abc.abstractmethod
-    def do_interpret(self, context: InterpretterContext, left_result: Expression, right_result: Expression) -> None:
+    def do_interpret(self, context: InterpretterContext, left_result, right_result) -> None:
         pass

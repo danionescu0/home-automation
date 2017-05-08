@@ -11,7 +11,7 @@ class Base(metaclass=abc.ABCMeta):
 
     @typechecked()
     @abc.abstractmethod
-    def send(self, which: str, value: str) -> bool:
+    def send(self, which: str, value: bytes) -> bool:
         pass
 
     @typechecked()

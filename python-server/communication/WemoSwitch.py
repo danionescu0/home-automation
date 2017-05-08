@@ -8,13 +8,13 @@ from .Base import Base
 class WemoSwitch(Base):
 
     @typechecked()
-    def send(self, which: str, value: str):
+    def send(self, which: str, value: bytes):
         env = Environment()
         try:
             env.start()
             env.discover(seconds=1)
             switch = env.get_switch(which)
-            if (value):
+            if (value.decode('utf-8')):
                 switch.on()
             else:
                 switch.off()

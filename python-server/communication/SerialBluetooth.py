@@ -13,7 +13,7 @@ class SerialBluetooth(Base):
         self.__endpoint = endpoint
 
     @typechecked()
-    def send(self, which: str, value: str) -> bool:
+    def send(self, which: str, value: bytes) -> bool:
         try:
             self.__connections[which].send(value)
         except bluetooth.btcommon.BluetoothError:
