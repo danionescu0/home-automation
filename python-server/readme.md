@@ -1,10 +1,10 @@
 # Requirements
-* python 3.4
+* python 3.5
 * redis server 
 * bluetooth configured
 
 # Install: 
-## python libs  with pip3:
+## python libs with pip3:
 * install python packages using "pip3 install -r requirements.txt"
 * tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
 * in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
@@ -83,7 +83,7 @@ sudo hciconfig hci0 up
 # Extending the code
 
 ##create a listener to respond to events
-* available events to subscribe: ChangeActuatorRequest, Location, SensorUpdate
+* available events to subscribe: ChangeActuatorRequestEvent, LocationEvent, SensorUpdateEvent
 the events are located in /events folder
 * first create a file in /listener folder, the file name should end up in "Listener"
 the file name should describe what the listener does not on what it subscribes
@@ -92,4 +92,21 @@ the file name should describe what the listener does not on what it subscribes
 * in the constructor subscribe to the event like this "signal("sensor_update").connect(self.callback)"
 in this exampled we subscribed to "sensor_update" event and we'll receive the event in the "callback" method
 inside the class
+````
+# Example:
+
+from typeguard import typechecked
+from blinker import signal
+
+from event.SensorUpdateEvent import SensorUpdateEvent
+
+class SomeListener:
+    @typechecked()
+    def __init__(self):
+        signal("sensor_update").connect(self.callback)
+
+    @typechecked()
+    def callback(self, sensor_update: SensorUpdateEvent) -> None:
+        # do something usefull 
+````
 

@@ -26,7 +26,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Conditions</th>
-                    <th>Is active</th>
+                    <th>On/Off</th>
                     <th>Command</th>
                     <th>Actions</th>
                 </tr>
@@ -44,8 +44,8 @@
                 </td>
                 <td data-title="Active">
                     <select name="active">
-                        <option value="True" {% if rules[rule]['active'] == True %}SELECTED=SELECTED{% end %}>True</option>
-                        <option value="False" {% if rules[rule]['active'] == False %}SELECTED=SELECTED{% end %}>False</option>
+                        <option value="True" {% if rules[rule]['active'] == True %}SELECTED=SELECTED{% end %}>On</option>
+                        <option value="False" {% if rules[rule]['active'] == False %}SELECTED=SELECTED{% end %}>Off</option>
                     </select>
                 </td>
                 <td data-title="Command">
