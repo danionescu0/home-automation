@@ -1,7 +1,6 @@
 import bluetooth
 from typing import Callable
 from typeguard import typechecked
-from communication.Base import Base
 
 from .Base import Base
 
@@ -81,8 +80,7 @@ class SerialBluetooth(Base):
     @typechecked()
     def disconnect(self) -> None:
         self.get_logger().debug("Disconnecting all bluetooth devices")
-        for name, connection in self.__connections.items():
-            connection.close()
+        [connection.close() for name, connection in self.__connections.items()]
 
     def __get_endpoint(self):
         return self.__endpoint

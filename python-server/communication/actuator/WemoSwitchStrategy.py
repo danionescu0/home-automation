@@ -16,4 +16,4 @@ class WemoSwitchStrategy(BaseStrategy):
     @typechecked()
     def toggle(self, actuator_name: str, state: bool) -> bool:
         return self.__communication_registry.get_communicator('wemo_switch').\
-            send(self.actuators_config[actuator_name]['send_to_device'], state)
+            send(self.actuators_config[actuator_name]['send_to_device'], str(state).encode())

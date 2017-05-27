@@ -34,11 +34,10 @@ class ActuatorCommands:
         return success
 
     def __get_strategy(self, actuator_name):
-        for strategy in self.__get_actuator_strategies():
-            if strategy.supports(actuator_name):
-                return strategy
-
-        raise NotImplementedError('Actuator {0} does not have a strategy associated'.format(actuator_name))
+        try:
+            return [strategy for strategy in self.__get_actuator_strategies() if strategy.supports(actuator_name)][0]
+        except IndexError:
+            raise NotImplementedError('Actuator {0} does not have a strategy associated'.format(actuator_name))
 
     def __configure_encription(self, strategy, actuator_name):
         if 'encription' in self.__actuators_config[actuator_name]:
@@ -46,11 +45,11 @@ class ActuatorCommands:
         else:
             encription_strategy_type = 'plain'
 
-        for encription_strategy in self.__get_encription_strategies():
-            if encription_strategy.get_name() == encription_strategy_type:
-                return strategy.set_encription(encription_strategy)
-
-        raise NotImplementedError('Actuator {0} does not have a strategy associated'.format(actuator_name))
+        try:
+            return [strategy.set_encription(encription_strategy) for encription_strategy in self.__get_encription_strategies()
+                    if encription_strategy.get_name() == encription_strategy_type][0]
+        except IndexError:
+            raise NotImplementedError('Actuator {0} does not have a strategy associated'.format(actuator_name))
 
     def __get_actuator_strategies(self):
         strategies = []

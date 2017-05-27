@@ -25,11 +25,7 @@ class Tokenizer:
     @typechecked()
     def tokenize(self, text:str) -> List[Token]:
         cleanned_text = self.__get_cleanned_text(text)
-        tokens = []
-        for token_text in cleanned_text.split():
-            tokens.append(self.__get_token(token_text))
-
-        return tokens
+        return [self.__get_token(token_text) for token_text in cleanned_text.split()]
 
     def __get_cleanned_text(self, text):
         return re.sub('[(),]', ' ', text)

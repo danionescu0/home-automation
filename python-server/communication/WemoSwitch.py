@@ -14,7 +14,7 @@ class WemoSwitch(Base):
             env.start()
             env.discover(seconds=1)
             switch = env.get_switch(which)
-            if (value.decode('utf-8')):
+            if (value.decode('utf-8') == 'True'):
                 switch.on()
             else:
                 switch.off()

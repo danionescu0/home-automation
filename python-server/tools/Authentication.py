@@ -9,16 +9,13 @@ class Authentication:
 
     @typechecked()
     def verify_credentials(self, username: str, password: str) -> bool:
-        for i, user in enumerate(self.__credentials):
-            if user['username'] == username and user['password'] == password:
-                return True
+        found = [user for i, user in enumerate(self.__credentials)
+                 if user['username'] == username and user['password'] == password]
 
-        return False
+        return bool(found)
 
     @typechecked()
     def verify_fingerprint_code(self, code: str) -> bool:
-        for i, user in enumerate(self.__credentials):
-            if user['fingerprint_code'] == code:
-                return True
+        found = [user for i, user in enumerate(self.__credentials) if user['fingerprint_code'] == code]
 
-        return False
+        return bool(found)

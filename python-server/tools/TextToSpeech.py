@@ -4,8 +4,7 @@ from typeguard import typechecked
 class TextToSpeech:
     @typechecked()
     def say(self, text: str, nr_times = 1) -> None:
-        for i in range(0, nr_times):
-            self.__say_once(text)
+        [self.__say_once(text) for i in range(0, nr_times)]
 
     def __say_once(self, text):
         echo = subprocess.Popen(['echo', '"' + text + '"'],

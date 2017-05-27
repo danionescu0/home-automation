@@ -18,9 +18,7 @@ class Actuators(AbstractRedis):
             return collections.OrderedDict(sorted(actuators.items()))
 
         actuators = self.get(self.REDIS_KEY)
-        actuator_names = []
-        for name, data in actuators.items():
-            actuator_names.append(name)
+        actuator_names = [name for name, data in actuators.items()]
 
         return actuator_names
 
