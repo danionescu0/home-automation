@@ -2,7 +2,6 @@ from typeguard import typechecked
 
 from ifttt.interpretter.OperatorExpression import OperatorExpression
 from ifttt.interpretter.InterpretterContext import InterpretterContext
-from ifttt.interpretter.Expression import Expression
 
 class LessThanExpression(OperatorExpression):
     @typechecked()

@@ -1,6 +1,7 @@
 import re
 from typeguard import typechecked
 from typing import List
+
 from ifttt.parser.Token import Token
 from ifttt.parser.ParseException import ParseException
 

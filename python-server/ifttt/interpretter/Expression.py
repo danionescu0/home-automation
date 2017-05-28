@@ -1,8 +1,6 @@
 import abc
 from typeguard import typechecked
 
-from ifttt.interpretter.InterpretterContext import InterpretterContext
-
 class Expression(metaclass=abc.ABCMeta):
     keycount = 0
 
@@ -11,7 +9,7 @@ class Expression(metaclass=abc.ABCMeta):
 
     @typechecked()
     @abc.abstractmethod
-    def interpret(self, context: InterpretterContext) -> None:
+    def interpret(self, context) -> None:
         pass
 
     def get_key(self):

@@ -30,7 +30,7 @@ IOT devices and other electronics.
 * multiple action switches (configurable and extendable) ex: "_toggle all lights off_"
 * available environment sensors: temperature, humidity, light level, air quality, air pressure
 * presence monitoring with infrared PIR sensors
-* house power monitoring 
+* power monitoring for the whole house 
 * the sensors modules can be installed in many rooms and outside (i also have a special weather sensor module)
 * display charts with sensors data
 * email notifications if the alarm is set and someone enters the house
@@ -94,7 +94,7 @@ the time is greater than 8:45 or temperature in living is between 21 and 22 degr
 
 * The current bluetooth communication method has a limitation to 7 connected devices, 
 so i've implemented a communication strategy in paralel using HC-12 serial module
-* Light switches and remote wall socket do not have built in security, the signal can be sniffed and clonned easily
+* Light switches and remote wall socket do not have built in security, the signal can be clonned
 
 
 **Technical overwiew**
@@ -111,8 +111,9 @@ please visit [python server](https://github.com/danionescu0/home-automation/tree
 
 **ToDo list:**
 
+* integrate Z-wave devices
 * integrate / build a music & voice player over http to sound alarms, play notifications etc
-* unit tests
+* more unit tests
 * integrate air conditioning system
 * integrate more IOT devices available on the market
 * water consumption monitoring

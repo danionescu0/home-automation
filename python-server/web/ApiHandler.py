@@ -9,7 +9,6 @@ from event.LocationEvent import LocationEvent
 from tools.Authentication import Authentication
 from tools.VoiceCommands import VoiceCommands
 
-
 class ApiHandler(BaseHandler):
     @typechecked()
     def initialize(self, authentication: Authentication, api_token_secret: str, voice_commands: VoiceCommands,
