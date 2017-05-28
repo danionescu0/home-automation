@@ -1,11 +1,12 @@
 import json
-from tornado.web import  authenticated
+from tornado.web import authenticated
 from datetime import datetime, timedelta
 from dateutil import tz
 from typeguard import typechecked
 
 from web.BaseHandler import BaseHandler
 from repository.Sensors import Sensors
+from tools.DateUtils import DateUtils
 
 class GraphsBuilderHandler(BaseHandler):
     __DEFAULT_SELECTED_SENSOR = 'light:living'
@@ -58,7 +59,7 @@ class GraphsBuilderHandler(BaseHandler):
         datetime_list = []
         datapoint_values = []
         from_zone = tz.gettz('UTC')
-        to_zone = tz.gettz('Europe/Bucharest')
+        to_zone = tz.gettz(DateUtils.get_timezone())
 
         for datapoint in data:
             initial_date = datetime.fromtimestamp(int(datapoint['timestamp'])).replace(tzinfo=from_zone)

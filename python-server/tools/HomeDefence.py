@@ -3,7 +3,7 @@ import datetime
 from pytz import timezone
 from typeguard import typechecked
 
-from tools.DaytimeMoments import DaytimeMoments
+from tools.DateUtils import DateUtils
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from repository.Actuators import Actuators
 
@@ -21,7 +21,7 @@ class HomeDefence:
 
     @typechecked()
     def iterate_burgler_mode(self) -> None:
-        currentTime = datetime.datetime.now(timezone('Europe/Bucharest')).time()
+        currentTime = datetime.datetime.now(timezone(DateUtils.get_timezone())).time()
         if self.__should_random_skip_iteration() or not self.__is_alarm_set():
             return
 
@@ -29,7 +29,7 @@ class HomeDefence:
         if currentTime > datetime.time(22, 30, 00):
             return
 
-        if not DaytimeMoments.is_over_sunset():
+        if not DateUtils.is_over_sunset():
             return
 
         self.__toggle_lights()

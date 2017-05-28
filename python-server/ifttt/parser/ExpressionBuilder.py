@@ -15,6 +15,7 @@ from ifttt.parser.Tokenizer import Tokenizer
 from repository.Sensors import Sensors
 from repository.Actuators import Actuators
 from ifttt.interpretter.Expression import Expression
+from tools.DateUtils import DateUtils
 
 class ExpressionBuilder:
     current_token_index = 0
@@ -101,7 +102,7 @@ class ExpressionBuilder:
 
     def __get_time_value(self):
         from_zone = tz.gettz('UTC')
-        to_zone = tz.gettz('Europe/Bucharest')
+        to_zone = tz.gettz(DateUtils.get_timezone())
         initial_date = datetime.now().replace(tzinfo=from_zone)
         local_date = initial_date.astimezone(to_zone)
 

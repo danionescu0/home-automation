@@ -3,6 +3,7 @@ from datetime import datetime
 from operator import itemgetter
 from dateutil import tz
 from typeguard import typechecked
+from tools.DateUtils import DateUtils
 
 from web.BaseHandler import BaseHandler
 from repository.Sensors import Sensors
@@ -23,7 +24,7 @@ class SystemStatusHandler(BaseHandler):
     def __get_formated_data(self):
         data = self.__sensors_repo.get_sensors()
         from_zone = tz.gettz('UTC')
-        to_zone = tz.gettz('Europe/Bucharest')
+        to_zone = tz.gettz(DateUtils.get_timezone())
         current_time = datetime.now(to_zone)
         sensors_list = []
 

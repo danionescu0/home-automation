@@ -1,7 +1,7 @@
 from typeguard import typechecked
 from blinker import signal
 
-from tools.DaytimeMoments import DaytimeMoments
+from tools.DateUtils import DateUtils
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from event.SensorUpdateEvent import SensorUpdateEvent
 from tools.Authentication import Authentication
@@ -30,4 +30,4 @@ class FingerprintDoorUnlockListener:
         return sensor_type == 'fingerprint' and self.__authentication.verify_fingerprint_code(fingerprint_code)
 
     def __should_open_lights(self):
-        return DaytimeMoments.is_over_sunset()
+        return DateUtils.is_over_sunset()
