@@ -1,0 +1,10 @@
+[Unit]
+Description=Starts remote speaker
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python "/root/projects/remote-speaker/server.py"
+
+[Install]
+WantedBy=multi-user.target
