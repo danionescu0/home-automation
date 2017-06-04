@@ -1,17 +1,25 @@
-import subprocess
 from sound.SoundApi import SoundApi
-
+import requests
+import urllib
 from typeguard import typechecked
 
-class TextToSpeech(SoundApi):
-    @typechecked()
-    def say(self, text: str, nr_times = 1) -> None:
-        [self.__say_once(text) for i in range(0, nr_times)]
+class RemoteSpeaker(SoundApi):
+    SAY_URL = '{0}/api/tts'
 
-    def __say_once(self, text):
-        echo = subprocess.Popen(['echo', '"' + text + '"'],
-                               stdout=subprocess.PIPE,
-                               )
-        festival = subprocess.Popen(["festival", "--tts"], stdin=echo.stdout, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-        festival.communicate()
+    def __init__(self, host, secret) -> None:
+        self.__host = host
+        self.__secret = secret
+
+    @typechecked()
+    def say(self, text: str, nr_times = 1) -> bool:
+        params = (('text', text), ('times', nr_times), ('secret', self.__secret))
+        say_url = self.__get_say_url() + "?" + urllib.parse.urlencode(params)
+        try:
+            requests.get(say_url, timeout = 1)
+        except Exception:
+            return False
+
+        return True
+
+    def __get_say_url(self):
+        return self.SAY_URL.format(self.__host)

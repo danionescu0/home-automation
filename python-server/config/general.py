@@ -28,7 +28,11 @@ email = {
     'password': '', # sender password
     'notifiedAddress': '' # receiving email
 }
-burgler_sounds_folder = '' # absoluth path to burgler sounds folder like: /home/pi/burglerSounds
+
+remote_speaker = {
+    'host': 'http://your_host_here:80',
+    'secret': 'the_secret'
+}
 
 timezone = 'Europe/Bucharest'
 
