@@ -31,7 +31,8 @@ email = {
 
 remote_speaker = {
     'host': 'http://your_host_here:80',
-    'secret': 'the_secret'
+    'user': 'test_user',
+    'password' : 'test_pass'
 }
 
 timezone = 'Europe/Bucharest'

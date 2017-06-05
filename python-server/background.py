@@ -35,7 +35,7 @@ sys.excepthook = logging_config.set_error_hadler
 comm_registry = CommunicatorRegistry(communication, logging)
 comm_registry.configure_communicators()
 
-sound_api = RemoteSpeaker(general.remote_speaker['host'], general.remote_speaker['secret'])
+sound_api = RemoteSpeaker(general.remote_speaker['host'], general.remote_speaker['user'], general.remote_speaker['password'])
 actuators_repo = Actuators(general.redis_config, actuators.conf)
 sensors_repo = Sensors(general.redis_config, sensors.conf)
 ifttt_rules = IftttRules(general.redis_config)

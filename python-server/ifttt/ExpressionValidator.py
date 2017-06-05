@@ -30,4 +30,4 @@ class ExpressionValidator:
     def get_error(self, rule: str) -> str:
         self.is_valid(rule)
 
-        return self.__error.message
+        return str(self.__error)
