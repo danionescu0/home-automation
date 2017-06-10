@@ -14,7 +14,8 @@ class IftttRulesThread(threading.Thread):
     ITERATE_INTERVAL = 60
 
     @typechecked()
-    def __init__(self, ifttt_rules: IftttRules, command_executor: CommandExecutor, tokenizer: Tokenizer, logging: RootLogger):
+    def __init__(self, ifttt_rules: IftttRules, command_executor: CommandExecutor,
+                 tokenizer: Tokenizer, logging: RootLogger):
         threading.Thread.__init__(self)
         self.__ifttt_rules = ifttt_rules
         self.__command_executor = command_executor

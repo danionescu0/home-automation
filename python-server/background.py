@@ -13,6 +13,7 @@ from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
 from ifttt.command.CommandExecutor import CommandExecutor
 from ifttt.parser.Tokenizer import Tokenizer
+from ifttt.command.TextCommunicationEnhancer import TextCommunicationEnhancer
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
@@ -53,7 +54,8 @@ fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(actuator_comman
 intruder_alert_listener = IntruderAlertListener(actuators_repo, email_notificator)
 change_actuator_request_event = ChangeActuatorRequestEvent()
 sensor_update_event = SensorUpdateEvent()
-command_executor = CommandExecutor(change_actuator_request_event, sound_api, logging)
+text_communication_enhancer = TextCommunicationEnhancer(tokenizer)
+command_executor = CommandExecutor(change_actuator_request_event, text_communication_enhancer, sound_api, logging)
 
 def main():
     threads = []

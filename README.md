@@ -52,7 +52,7 @@ which can enable or disables various thisgs like the fingerprint scanner.
 
 **IFTTT**
 
-With this module complex rules can be added in the web-interface to be executed by actuators.
+With this module complex rules can be added in the web-interface to be executed by actuators or / and enable voice alerts.
 
 For example, if i want to open the courtains at 7:12 AM only if they are closed the following rule will do:
 "_and  ( eq(A[livingCourtains], On), eq(TIME, 07:12))_"
@@ -63,6 +63,9 @@ For example the following rule(fictive) will check if the actuator "livingCourta
 the time is greater than 8:45 or temperature in living is between 21 and 22 degreeds
 "_and  ( eq(A[livingCourtains], Off), or(gt(TIME, 08:45), btw(S[temperature:living], 21, 22) )_"
 
+Voice alerts are text to speech blocks of text, beside that actuator and sensors values cand be mixer or the current time,
+for example : "Wake up sir, the temperature outside is S[temperature:outside] and humidity is S[humidity:outside]" this
+block of text will announce the temperature and humidity outside
 
 **Screenshots** 
 

@@ -83,7 +83,7 @@ node number
 * last_updated is a timestamp and it denotes the last sensor updated time
 ## communication.py
 * bluetooth connection strings for the devices
-* serial port and baud rat
+* serial port and baud rate
 * aes key for encripted communication with the serial devices
 ## bluetooth
 To pair a bluetooth device:
