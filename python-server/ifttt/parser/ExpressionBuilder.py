@@ -1,6 +1,4 @@
 from typeguard import typechecked
-from datetime import datetime
-from dateutil import tz
 
 from ifttt.parser.ParseException import ParseException
 from ifttt.interpretter.EqualsExpression import EqualsExpression
@@ -12,19 +10,14 @@ from ifttt.interpretter.LessThanExpression import LessThanExpression
 from ifttt.interpretter.BetweenExpression import BetweenExpression
 from ifttt.parser.Token import Token
 from ifttt.parser.Tokenizer import Tokenizer
-from repository.Sensors import Sensors
-from repository.Actuators import Actuators
 from ifttt.interpretter.Expression import Expression
-from tools.DateUtils import DateUtils
 
 class ExpressionBuilder:
     current_token_index = 0
 
     @typechecked()
-    def __init__(self, tokenizer: Tokenizer, sensors_repo: Sensors, actuators_repo: Actuators):
+    def __init__(self, tokenizer: Tokenizer):
         self.__tokenizer = tokenizer
-        self.__sensors_repo = sensors_repo
-        self.__actuators_repo = actuators_repo
         self.__current_token_index = 0
 
     @typechecked()
@@ -35,8 +28,6 @@ class ExpressionBuilder:
     def build(self):
         ExpressionBuilder.current_token_index = 0
         self.__tokens = self.__tokenizer.tokenize(self.__text)
-        self.__actuators = self.__actuators_repo.get_actuators()
-        self.__sensors = self.__sensors_repo.get_sensors()
         self.__expression = self.__evaluate()
 
     @typechecked()
@@ -50,17 +41,17 @@ class ExpressionBuilder:
         if token_type in [Token.TYPE_LITERAL_BOOLEAN, Token.TYPE_LITERAL_INT, Token.TYPE_LITERAL_TIME, Token.TYPE_ACTUATOR_STATE]:
             return LiteralExpression(token.get_value())
         elif token_type == Token.TYPE_SENSOR:
-            return LiteralExpression(self.__get_senzor_value(token.get_value()))
+            return LiteralExpression(token.get_value())
         elif token_type == Token.TYPE_ACTUATOR:
-            return LiteralExpression(self.__get_actuator_value(token.get_value()))
-        elif token_type == Token.TYPE_TIME:
-            return LiteralExpression(self.__get_time_value())
+            return LiteralExpression(token.get_value())
+        elif token_type == Token.TYPE_CURRENT_TIME:
+            return LiteralExpression(token.get_value())
 
         left_expr = self.__evaluate()
         right_expr = self.__evaluate()
         if token_type == Token.TYPE_EXPR_BETWEEN:
             third_expr = self.__evaluate()
-            return  BetweenExpression(left_expr, right_expr, third_expr)
+            return BetweenExpression(left_expr, right_expr, third_expr)
         if token_type == Token.TYPE_EXPR_EQUAL:
             return EqualsExpression(left_expr, right_expr)
         elif token_type == Token.TYPE_BOOLEAN_AND:
@@ -72,38 +63,10 @@ class ExpressionBuilder:
         elif token_type == Token.TYPE_EXPR_LESS:
             return LessThanExpression(left_expr, right_expr)
 
-        raise  ParseException("Token type {0} not implemented".format(token_type))
+        raise ParseException("Token type {0} not implemented".format(token_type))
 
     def __get_current_token(self):
         return self.__tokens[ExpressionBuilder.current_token_index]
 
     def __next_token(self):
         ExpressionBuilder.current_token_index += 1
-
-    def __get_senzor_value(self, senzor_data):
-        data = senzor_data.split(':')
-        senzor_type = data[0]
-        senzor_location = data[1]
-        for senzor in self.__sensors:
-            if senzor['location'] and senzor['location'] != senzor_location:
-                continue
-            if senzor['type'] != senzor_type:
-                continue
-
-            return senzor['value']
-
-        raise  ParseException("Sensor with name {0} not found".format(senzor_data))
-
-    def __get_actuator_value(self, actuator_name):
-        if actuator_name not in self.__actuators:
-            raise  ParseException("Actuator with name {0} not found".format(actuator_name))
-
-        return self.__actuators[actuator_name]['state']
-
-    def __get_time_value(self):
-        from_zone = tz.gettz('UTC')
-        to_zone = tz.gettz(DateUtils.get_timezone())
-        initial_date = datetime.now().replace(tzinfo=from_zone)
-        local_date = initial_date.astimezone(to_zone)
-
-        return local_date.strftime('%H:%M')

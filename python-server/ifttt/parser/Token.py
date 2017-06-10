@@ -12,7 +12,7 @@ class Token:
     TYPE_LITERAL_INT = 'literal_int'
     TYPE_LITERAL_TIME = 'literal_time'
     TYPE_SENSOR = 'sensor'
-    TYPE_TIME = 'time'
+    TYPE_CURRENT_TIME = 'time'
     TYPE_ACTUATOR = 'actuator'
 
     @typechecked()

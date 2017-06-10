@@ -24,6 +24,7 @@ from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
 from web.SystemStatusHandler import SystemStatusHandler
 from ifttt.ExpressionValidator import ExpressionValidator
+from ifttt.parser.Tokenizer import Tokenizer
 
 authentication = Authentication(general.credentials)
 actuators_repo = Actuators(general.redis_config, actuators.conf)
@@ -38,7 +39,8 @@ sys.excepthook = logging_config.set_error_hadler
 
 saveLocationListener = SaveLocationListener(location_tracker)
 set_phone_is_home_listener = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
-ifttt_expression_validator = ExpressionValidator(sensors_repo, actuators_repo)
+tokenizer = Tokenizer(sensors_repo, actuators_repo)
+ifttt_expression_validator = ExpressionValidator(tokenizer)
 voice_commands = VoiceCommands(job_controll, logging).configure()
 
 def make_app():

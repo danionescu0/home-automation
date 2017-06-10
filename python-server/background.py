@@ -12,6 +12,7 @@ from config import sensors
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
 from ifttt.command.CommandExecutor import CommandExecutor
+from ifttt.parser.Tokenizer import Tokenizer
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
@@ -45,6 +46,7 @@ actuator_commands = ActuatorCommands(comm_registry, actuators_repo, actuators.co
 text_sensor_data_parser = TextSensorDataParser(sensors.conf)
 home_defence = HomeDefence(actuator_commands, sound_api, actuators_repo)
 authentication = Authentication(general.credentials)
+tokenizer = Tokenizer(sensors_repo, actuators_repo)
 
 change_actuator_listener = ChangeActuatorListener(actuator_commands)
 fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(actuator_commands, authentication)
@@ -60,7 +62,7 @@ def main():
     threads.append(IncommingCommunicationThread(text_sensor_data_parser, sensors_repo, sensor_update_event,
                                                 comm_registry.get_communicator('serial')))
     threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
-    threads.append(IftttRulesThread(ifttt_rules, command_executor, sensors_repo, actuators_repo, logging))
+    threads.append(IftttRulesThread(ifttt_rules, command_executor, tokenizer, logging))
     threads.append(HomeDefenceThread(home_defence))
     def handler(signum, frame):
         for thread in threads:

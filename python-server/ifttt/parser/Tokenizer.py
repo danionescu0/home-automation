@@ -1,30 +1,43 @@
 import re
+from datetime import datetime
+from dateutil import tz
 from typeguard import typechecked
 from typing import List
+from tools.DateUtils import DateUtils
 
 from ifttt.parser.Token import Token
 from ifttt.parser.ParseException import ParseException
+from repository.Sensors import Sensors
+from repository.Actuators import Actuators
 
 class Tokenizer:
-    def __init__(self):
-        self.__token_rules = [
-            ('A\[(\w+)\]', Token.TYPE_ACTUATOR),
-            ('S\[(\w+\:\w+)\]', Token.TYPE_SENSOR),
-            ('TIME', Token.TYPE_TIME),
-            ('gt', Token.TYPE_EXPR_GREATER),
-            ('lt', Token.TYPE_EXPR_LESS),
-            ('btw', Token.TYPE_EXPR_BETWEEN),
-            ('eq', Token.TYPE_EXPR_EQUAL),
-            ('and', Token.TYPE_BOOLEAN_AND),
-            ('or', Token.TYPE_BOOLEAN_OR),
-            ('True|False', Token.TYPE_LITERAL_BOOLEAN),
-            ('On|Off', Token.TYPE_ACTUATOR_STATE),
-            ('[0-9]{1,2}\:[0-9]{1,2}', Token.TYPE_LITERAL_TIME),
-            ('\d+', Token.TYPE_LITERAL_INT),
-        ]
+    __token_rules = [
+        ('A\[(\w+)\]', Token.TYPE_ACTUATOR),
+        ('S\[(\w+\:\w+)\]', Token.TYPE_SENSOR),
+        ('TIME', Token.TYPE_CURRENT_TIME),
+        ('gt', Token.TYPE_EXPR_GREATER),
+        ('lt', Token.TYPE_EXPR_LESS),
+        ('btw', Token.TYPE_EXPR_BETWEEN),
+        ('eq', Token.TYPE_EXPR_EQUAL),
+        ('and', Token.TYPE_BOOLEAN_AND),
+        ('or', Token.TYPE_BOOLEAN_OR),
+        ('True|False', Token.TYPE_LITERAL_BOOLEAN),
+        ('On|Off', Token.TYPE_ACTUATOR_STATE),
+        ('[0-9]{1,2}\:[0-9]{1,2}', Token.TYPE_LITERAL_TIME),
+        ('\d+', Token.TYPE_LITERAL_INT),
+    ]
+
+    def __init__(self, sensors_repo: Sensors, actuators_repo: Actuators):
+        self.__sensors_repo = sensors_repo
+        self.__actuators_repo = actuators_repo
+        self.__actuators = None
+        self.__sensors = None
 
     @typechecked()
     def tokenize(self, text:str) -> List[Token]:
+        if self.__actuators == None:
+            self.__actuators = self.__actuators_repo.get_actuators()
+            self.__sensors = self.__sensors_repo.get_sensors()
         cleanned_text = self.__get_cleanned_text(text)
         return [self.__get_token(token_text) for token_text in cleanned_text.split()]
 
@@ -47,6 +60,40 @@ class Tokenizer:
             return {'On' : True, 'Off' : False}[literal_value]
         elif token_type == Token.TYPE_LITERAL_INT:
             return int(literal_value)
+        elif token_type == Token.TYPE_ACTUATOR:
+            return self.__get_actuator_value(literal_value)
+        elif token_type == Token.TYPE_SENSOR:
+            return self.__get_senzor_value(literal_value)
+        elif token_type == Token.TYPE_CURRENT_TIME:
+            return self.__get_current_time()
 
         return literal_value
+
+    def __get_senzor_value(self, senzor_data):
+        data = senzor_data.split(':')
+        senzor_type = data[0]
+        senzor_location = data[1]
+        for senzor in self.__sensors:
+            if senzor['location'] and senzor['location'] != senzor_location:
+                continue
+            if senzor['type'] != senzor_type:
+                continue
+
+            return senzor['value']
+
+        raise ParseException("Sensor with name {0} not found".format(senzor_data))
+
+    def __get_actuator_value(self, actuator_name):
+        if actuator_name not in self.__actuators:
+            raise ParseException("Actuator with name {0} not found".format(actuator_name))
+
+        return self.__actuators[actuator_name]['state']
+
+    def __get_current_time(self):
+        from_zone = tz.gettz('UTC')
+        to_zone = tz.gettz(DateUtils.get_timezone())
+        initial_date = datetime.now().replace(tzinfo=from_zone)
+        local_date = initial_date.astimezone(to_zone)
+
+        return local_date.strftime('%H:%M')
 

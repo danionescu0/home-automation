@@ -9,20 +9,16 @@ from ifttt.interpretter.InterpretterContext import InterpretterContext
 from ifttt.parser.ParseException import ParseException
 from ifttt.command.CommandExecutor import CommandExecutor
 from repository.IftttRules import IftttRules
-from repository.Sensors import Sensors
-from repository.Actuators import Actuators
 
 class IftttRulesThread(threading.Thread):
     ITERATE_INTERVAL = 60
 
     @typechecked()
-    def __init__(self, ifttt_rules: IftttRules, command_executor: CommandExecutor, sensors_repo: Sensors,
-                 actuators_repo: Actuators, logging: RootLogger):
+    def __init__(self, ifttt_rules: IftttRules, command_executor: CommandExecutor, tokenizer: Tokenizer, logging: RootLogger):
         threading.Thread.__init__(self)
         self.__ifttt_rules = ifttt_rules
         self.__command_executor = command_executor
-        self.__sensors_repo = sensors_repo
-        self.__actuators_repo = actuators_repo
+        self.__tokenizer = tokenizer
         self.__logging = logging
         self.shutdown = False
 
@@ -42,7 +38,7 @@ class IftttRulesThread(threading.Thread):
 
     def __check_rule(self, rule):
         context = InterpretterContext()
-        expression_builder = ExpressionBuilder(Tokenizer(), self.__sensors_repo, self.__actuators_repo)
+        expression_builder = ExpressionBuilder(self.__tokenizer)
         expression_builder.set_text(rule)
         try:
             expression_builder.build()
