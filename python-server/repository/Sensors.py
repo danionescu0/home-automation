@@ -6,16 +6,16 @@ from datetime import datetime
 from typeguard import typechecked
 from typing import Any
 
-from repository.AbstractRedis import AbstractRedis
+from repository.AbstractRepository import AbstractRepository
 
-class Sensors(AbstractRedis):
+class Sensors(AbstractRepository):
     REDIS_SENSORS_KEY = 'sensors'
     REDIS_SENSORS_HISTORY_KEY = 'sensors_history_{0}'
     SENSORS_UPDATE_INTERVAL_IN_HISTORY = 300
 
     @typechecked()
     def __init__(self, redis_configuration: dict, sensors_configuration: list):
-        AbstractRedis.__init__(self, redis_configuration)
+        AbstractRepository.__init__(self, redis_configuration)
         self.keys = {self.REDIS_SENSORS_KEY: sensors_configuration}
         self.last_averages = {}
         self.sensors_last_updated = {}

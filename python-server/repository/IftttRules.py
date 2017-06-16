@@ -1,9 +1,9 @@
 import json
 from typeguard import typechecked
 
-from repository.AbstractRedis import AbstractRedis
+from repository.AbstractRepository import AbstractRepository
 
-class IftttRules(AbstractRedis):
+class IftttRules(AbstractRepository):
     TRIGGER_RULES = 'trigger-rules'
     ACTIVE = 'active'
     COMMANDS = 'commands'
@@ -14,7 +14,7 @@ class IftttRules(AbstractRedis):
 
     @typechecked()
     def __init__(self, configuration: dict):
-        AbstractRedis.__init__(self, configuration)
+        AbstractRepository.__init__(self, configuration)
         self.keys = {self.__REDIS_KEY: {}}
 
     @typechecked()

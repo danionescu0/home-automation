@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 from typeguard import typechecked
 
-class AbstractRedis:
+class AbstractRepository:
     @typechecked()
     def __init__(self, configuration: dict):
         self.client = redis.StrictRedis(**configuration)

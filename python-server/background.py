@@ -5,6 +5,8 @@ from communication.CommunicatorRegistry import CommunicatorRegistry
 from communication.IncommingCommunicationThread import IncommingCommunicationThread
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.actuator.ActuatorCommands import ActuatorCommands
+from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
+from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 from config import actuators
 from config import communication
 from config import general
@@ -43,7 +45,9 @@ sensors_repo = Sensors(general.redis_config, sensors.conf)
 ifttt_rules = IftttRules(general.redis_config)
 job_controll = JobControll(general.redis_config)
 email_notificator = EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
-actuator_commands = ActuatorCommands(comm_registry, actuators_repo, actuators.conf, communication.aes_key, job_controll)
+encriptiors_builder = EncriptorsBuilder(communication.aes_key)
+actuator_strategies_builder = ActuatorStrategiesBuilder(comm_registry, actuators_repo, actuators.conf, job_controll)
+actuator_commands = ActuatorCommands(actuator_strategies_builder, encriptiors_builder, actuators_repo, actuators.conf)
 text_sensor_data_parser = TextSensorDataParser(sensors.conf)
 home_defence = HomeDefence(actuator_commands, sound_api, actuators_repo)
 authentication = Authentication(general.credentials)

@@ -21,3 +21,10 @@ class BetweenExpression(Expression):
         right_result = context.lookup(self.__right_operator)
 
         context.set(self, left_result <= reference <= right_result)
+
+    def __eq__(self, other):
+        return self.__left_operator == other.__left_operator and self.__right_operator == other.__right_operator \
+               and self.__reference == other.__reference
+
+    def __repr__(self):
+        return 'Between ({0}) and ({1})'.format(self.__left_operator, self.__right_operator)

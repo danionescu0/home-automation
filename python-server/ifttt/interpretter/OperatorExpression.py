@@ -22,3 +22,6 @@ class OperatorExpression(Expression):
     @abc.abstractmethod
     def do_interpret(self, context: InterpretterContext, left_result, right_result) -> None:
         pass
+
+    def __eq__(self, other):
+        return self.__left_operator == other.__left_operator and self.__right_operator == other.__right_operator

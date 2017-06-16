@@ -1,23 +1,17 @@
-from communication.actuator.SerialSendStrategy import SerialSendStrategy
-from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
-from communication.actuator.GroupStrategy import GroupStrategy
-from communication.encriptors.AesEncriptor import AesEncriptor
-from communication.encriptors.PlainTextEncriptor import PlainTextEncriptor
-from communication.CommunicatorRegistry import CommunicatorRegistry
-from repository.Actuators import Actuators
-from tools.JobControl import JobControll
 from typeguard import typechecked
 
-class ActuatorCommands:
+from repository.Actuators import Actuators
+from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
+from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 
+class ActuatorCommands:
     @typechecked()
-    def __init__(self, communicator_registry: CommunicatorRegistry, actuators_repo: Actuators,
-                 actuators_config: dict, aes_key: str, job_controll: JobControll):
-        self.__communicator_registry = communicator_registry
+    def __init__(self, actuator_strategy_builder: ActuatorStrategiesBuilder,
+                 encriptors_builder: EncriptorsBuilder, actuators_repo: Actuators, actuators_config: dict):
+        self.__actuator_strategy_builder = actuator_strategy_builder
+        self.__encriptors_builder = encriptors_builder
         self.__actuators_repo = actuators_repo
         self.__actuators_config = actuators_config
-        self.__aes_key = aes_key
-        self.__job_controll = job_controll
 
     @typechecked()
     def change_actuator(self, actuator_name: str, state: bool):
@@ -34,8 +28,9 @@ class ActuatorCommands:
         return success
 
     def __get_strategy(self, actuator_name):
+        strategies = self.__actuator_strategy_builder.build().get_strategies()
         try:
-            return [strategy for strategy in self.__get_actuator_strategies() if strategy.supports(actuator_name)][0]
+            return [strategy for strategy in strategies if strategy.supports(actuator_name)][0]
         except IndexError:
             raise NotImplementedError('Actuator {0} does not have a strategy associated'.format(actuator_name))
 
@@ -46,22 +41,9 @@ class ActuatorCommands:
             encription_strategy_type = 'plain'
 
         try:
-            return [strategy.set_encription(encription_strategy) for encription_strategy in self.__get_encription_strategies()
+            encription_strategies = self.__encriptors_builder.build().get_encriptors()
+
+            return [strategy.set_encription(encription_strategy) for encription_strategy in encription_strategies
                     if encription_strategy.get_name() == encription_strategy_type][0]
         except IndexError:
             raise NotImplementedError('Actuator {0} does not have a strategy associated'.format(actuator_name))
-
-    def __get_actuator_strategies(self):
-        strategies = []
-        strategies.append(SerialSendStrategy(self.__communicator_registry, self.__actuators_config, self.__actuators_repo))
-        strategies.append(WemoSwitchStrategy(self.__actuators_config, self.__communicator_registry))
-        strategies.append(GroupStrategy(self.__actuators_config, self.__job_controll))
-
-        return strategies
-
-    def __get_encription_strategies(self):
-        encription_strategies = []
-        encription_strategies.append(PlainTextEncriptor())
-        encription_strategies.append(AesEncriptor(self.__aes_key))
-
-        return encription_strategies

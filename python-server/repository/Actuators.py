@@ -2,14 +2,14 @@ import collections
 import json
 from typeguard import typechecked
 
-from repository.AbstractRedis import AbstractRedis
+from repository.AbstractRepository import AbstractRepository
 
-class Actuators(AbstractRedis):
+class Actuators(AbstractRepository):
     REDIS_KEY = 'actuators'
 
     @typechecked()
     def __init__(self, redis_configuration: dict, actuators_config: dict):
-        AbstractRedis.__init__(self, redis_configuration)
+        AbstractRepository.__init__(self, redis_configuration)
         self.keys = {self.REDIS_KEY: actuators_config}
 
     def get_actuators(self, just_names = False):

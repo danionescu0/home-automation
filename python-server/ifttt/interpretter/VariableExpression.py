@@ -16,3 +16,9 @@ class VariableExpression(Expression):
 
     def get_key(self):
         return self.__name
+
+    def __eq__(self, other):
+        return self.__name == other.name and self.__value == other.__value
+
+    def __repr__(self):
+        return 'Variable {0}({1})'.format(self.__name, self.__value)

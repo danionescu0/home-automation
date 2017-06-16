@@ -35,9 +35,8 @@ class Tokenizer:
 
     @typechecked()
     def tokenize(self, text:str) -> List[Token]:
-        if self.__actuators == None:
-            self.__actuators = self.__actuators_repo.get_actuators()
-            self.__sensors = self.__sensors_repo.get_sensors()
+        self.__actuators = self.__actuators_repo.get_actuators()
+        self.__sensors = self.__sensors_repo.get_sensors()
         cleanned_text = self.__get_cleanned_text(text)
 
         return [self.__get_token(token_text) for token_text in cleanned_text.split()]

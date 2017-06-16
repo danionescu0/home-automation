@@ -144,10 +144,11 @@ class SomeListener:
 ````
 
 # Unit tests
-Unittests are using python default unit testing method: [unittest](https://docs.python.org/3/library/unittest.html)
+Unittests are using [nose2](http://nose2.readthedocs.io/en/latest/index.html)
 
 In console run with:
 ````
-python3.5 unit_tests.py
+cd python_server
+nose2
 ````
 

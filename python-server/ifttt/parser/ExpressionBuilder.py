@@ -28,6 +28,8 @@ class ExpressionBuilder:
     def build(self):
         ExpressionBuilder.current_token_index = 0
         self.__tokens = self.__tokenizer.tokenize(self.__text)
+        for token in self.__tokens:
+            print('Token type: {0} , token value: {1}: '.format(token.get_type(), token.get_value()))
         self.__expression = self.__evaluate()
 
     @typechecked()

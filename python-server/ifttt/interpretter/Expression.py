@@ -12,6 +12,14 @@ class Expression(metaclass=abc.ABCMeta):
     def interpret(self, context) -> None:
         pass
 
+    @abc.abstractmethod
+    def __eq__(self, other):
+        pass
+
+    @abc.abstractmethod
+    def __repr__(self):
+        pass
+
     def get_key(self):
         if self.__key is 0:
             Expression.keycount += 1
