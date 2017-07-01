@@ -42,14 +42,14 @@
 * in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
 
 # Linux packages
-* apt-get install screen redis-server festival
-* pybluez requires the following linux packages: libbluetooth-dev, python-dev
+* apt-get install screen redis-server 
 
 # Running the servers
 * in a screen or background process run: "python background.py"
 * in other screen or background process run: "python webserver.py"
 
 # Configuration 
+
 ## general.py
 * in credentials add as many usernames/passwords as you wish
 * web_server contains a dictionary with: 
@@ -61,17 +61,25 @@
 * in email, sending email with password and receiving email for notifications
 * path for burgler alarm sounds
 * in logging_config dictionary you can configure the log file and max entries
+* timezone is self explanatory
+* remote_speaker you cand configure the host, user and password for 
+the remote_speaker, more details []here](https://github.com/danionescu0/home-automation/tree/master/remote-speaker)
+
 ## actuators.py
 * conf is a dictionary with every available actuator
-* an actuator has the following propreties: state, type, device_type, communicator, send_to_device, command
+* an actuator has the following propreties: 
 * the 'state' can be True or False, defaults with the given value
 * the 'type' can be 'bi', 'single' and it corresponds to the values that an actuator can have
 a 'single' type can only have one state: False, the 'bi' type can have True or False
 * the 'device_type' can be: door, courtain, light. powerSocket etc
+* the 'room' is the room name
 * the 'communicator' can be : 'bluetooth' or 'serial' and it corresopond with the 
 communication method
 * the 'send_to_device' is the name of the device that the commands will be sent to
+* the 'encription' can be 'plain' or 'aes' and it's used to encript serial communication
+between central server and peripherial arduinos
 * the 'command' is a dictionary with values for each state ex: {False: '3C|', True: '3O|'}
+
 ## sensors.py
 * the 'type' can be 'humidity', 'temperature', 'presence', 'light', 'rain', 'fingerprint',
 'phoneIsHome'
@@ -81,10 +89,12 @@ communication method
 * communication_code is a touple with communication incomming code and
 node number
 * last_updated is a timestamp and it denotes the last sensor updated time
+
 ## communication.py
 * bluetooth connection strings for the devices
 * serial port and baud rate
 * aes key for encripted communication with the serial devices
+
 ## bluetooth
 To pair a bluetooth device:
 ```` 

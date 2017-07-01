@@ -22,9 +22,9 @@ Raspberry pi can be used too.
 * [festival](http://festvox.org/festival/) installed
 * to start the service run python server.py
 
-* copy the files in systemctl folder to /etc/systemd/system/
+* copy remote-speaker.service to /etc/systemd/system/
 
-* enable services:
+* enable service:
 ````
 sudo systemctl enable remote-speaker.service
 ````

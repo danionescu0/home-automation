@@ -1,7 +1,8 @@
-from sound.SoundApi import SoundApi
 import requests
 import urllib
 from typeguard import typechecked
+
+from sound.SoundApi import SoundApi
 
 class RemoteSpeaker(SoundApi):
     SAY_URL = '{0}/api/tts'
