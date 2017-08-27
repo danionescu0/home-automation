@@ -65,9 +65,9 @@ command_executor = CommandExecutor(change_actuator_request_event, text_communica
 def main():
     threads = []
     threads.append(IncommingCommunicationThread(text_sensor_data_parser, sensors_repo, sensor_update_event,
-                                                comm_registry.get_communicator('bluetooth')))
+                                                comm_registry.get_communicator('bluetooth'), logging))
     threads.append(IncommingCommunicationThread(text_sensor_data_parser, sensors_repo, sensor_update_event,
-                                                comm_registry.get_communicator('serial')))
+                                                comm_registry.get_communicator('serial'), logging))
     threads.append(AsyncJobsThread(async_jobs, change_actuator_request_event, logging))
     threads.append(IftttRulesThread(ifttt_rules, command_executor, tokenizer, logging))
     threads.append(HomeDefenceThread(home_defence))

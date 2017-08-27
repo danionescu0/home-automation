@@ -1,11 +1,13 @@
 import threading
 import json
 import time
+
 from typeguard import typechecked
+from logging import RootLogger
 
 from tools.AsyncJobs import AsyncJobs
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
-from logging import RootLogger
+
 
 class AsyncJobsThread(threading.Thread):
     LISTEN_DELAY = 0.01
@@ -27,5 +29,5 @@ class AsyncJobsThread(threading.Thread):
     def __job_callback(self, job_data):
         self.__logging.debug('Incomming job data: {0}' .format(job_data))
         job_data = json.loads(job_data)
-        if job_data["job_name"] == "actuators":
+        if job_data["job_name"] == AsyncJobs.JOB_ACTUATORS:
             self.__change_actuator_request_event.send(job_data["actuator"], job_data["state"])

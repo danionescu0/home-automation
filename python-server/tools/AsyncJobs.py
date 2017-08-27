@@ -1,11 +1,13 @@
 import redis
 import json
-from typeguard import typechecked
 from typing import Callable
+
+from typeguard import typechecked
 
 
 class AsyncJobs:
     CHANNEL_NAME = 'jobs'
+    JOB_ACTUATORS = 'actuators'
 
     @typechecked()
     def __init__(self, configuration: dict):
@@ -28,4 +30,4 @@ class AsyncJobs:
 
     @typechecked()
     def change_actuator(self, name: str, state: bool) -> None:
-        self.__add_job(json.dumps({"job_name": "actuators", "actuator": name, "state": state}))
+        self.__add_job(json.dumps({"job_name": self.JOB_ACTUATORS, "actuator": name, "state": state}))
