@@ -1,6 +1,7 @@
 from blinker import signal
 from typeguard import typechecked
 
+
 class SensorUpdateEvent:
     @typechecked()
     def send(self, type: str, location: str, new_value):

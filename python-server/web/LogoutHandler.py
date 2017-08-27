@@ -3,6 +3,7 @@ from tornado.web import  authenticated
 from tools.Authentication import Authentication
 from web.BaseHandler import BaseHandler
 
+
 class LogoutHandler(BaseHandler):
     @authenticated
     def get(self):

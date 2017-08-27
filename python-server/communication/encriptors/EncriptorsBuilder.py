@@ -1,9 +1,11 @@
 from typing import List
+
 from typeguard import typechecked
 
 from communication.encriptors.AesEncriptor import AesEncriptor
 from communication.encriptors.PlainTextEncriptor import PlainTextEncriptor
 from communication.encriptors.BaseEncriptor import BaseEncriptor
+
 
 class EncriptorsBuilder():
     @typechecked()

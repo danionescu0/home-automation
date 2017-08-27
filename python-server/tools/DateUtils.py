@@ -1,9 +1,11 @@
 import datetime
 from pytz import timezone
+
 from astral import Astral
 from typeguard import typechecked
 
 from config import general
+
 
 class DateUtils:
     @staticmethod

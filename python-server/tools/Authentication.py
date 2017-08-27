@@ -1,5 +1,6 @@
 from typeguard import typechecked
 
+
 class Authentication:
     AUTHENTICATION_COOKIE_NAME = 'user'
 

@@ -1,5 +1,7 @@
 import abc
+
 from typeguard import typechecked
+
 
 class SoundApi(metaclass=abc.ABCMeta):
     @typechecked()

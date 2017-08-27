@@ -1,6 +1,7 @@
 from blinker import signal
 from typeguard import typechecked
 
+
 class LocationEvent:
     @typechecked()
     def send(self, device_name: str, latitude: float, longitude: float):

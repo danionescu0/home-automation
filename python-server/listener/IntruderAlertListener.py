@@ -5,6 +5,7 @@ from repository.Actuators import Actuators
 from tools.EmailNotifier import EmailNotifier
 from event.SensorUpdateEvent import SensorUpdateEvent
 
+
 class IntruderAlertListener:
     @typechecked()
     def __init__(self, actuators_repo: Actuators, email_notificator: EmailNotifier):

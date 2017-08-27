@@ -1,8 +1,10 @@
 import threading
 import time
+
 from typeguard import typechecked
 
 from tools.HomeDefence import HomeDefence
+
 
 class HomeDefenceThread(threading.Thread):
     ITERATE_INTERVAL = 60

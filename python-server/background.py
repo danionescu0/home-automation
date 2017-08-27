@@ -1,16 +1,18 @@
 import signal
 import sys
 
+from config import actuators
+from config import communication
+from config import general
+from config import sensors
+
 from communication.CommunicatorRegistry import CommunicatorRegistry
 from communication.IncommingCommunicationThread import IncommingCommunicationThread
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
 from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
-from config import actuators
-from config import communication
-from config import general
-from config import sensors
+
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
 from ifttt.command.CommandExecutor import CommandExecutor
@@ -54,9 +56,10 @@ home_defence = HomeDefence(actuator_commands, sound_api, actuators_repo)
 authentication = Authentication(general.credentials)
 tokenizer = Tokenizer(sensors_repo, actuators_repo)
 
-change_actuator_listener = ChangeActuatorListener(actuator_commands)
-fingerprint_door_unlock_listener = FingerprintDoorUnlockListener(actuator_commands, authentication)
-intruder_alert_listener = IntruderAlertListener(actuators_repo, email_notificator)
+e1 = ChangeActuatorListener(actuator_commands)
+e2 = FingerprintDoorUnlockListener(actuator_commands, authentication)
+e3 = IntruderAlertListener(actuators_repo, email_notificator)
+
 change_actuator_request_event = ChangeActuatorRequestEvent()
 sensor_update_event = SensorUpdateEvent()
 text_communication_enhancer = TextCommunicationEnhancer(tokenizer)

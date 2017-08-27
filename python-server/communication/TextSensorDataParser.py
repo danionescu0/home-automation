@@ -1,7 +1,9 @@
 import re
+
 from typeguard import typechecked
 
 from communication.SensorsParseException import SensorsParseException
+
 
 class TextSensorDataParser:
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'

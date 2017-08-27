@@ -1,8 +1,8 @@
 from typeguard import typechecked
 from blinker import signal
 
-class ChangeActuatorRequestEvent:
 
+class ChangeActuatorRequestEvent:
     @typechecked()
     def send(self, name: str, new_state: bool) -> None:
         event = signal("change_actuator_request")

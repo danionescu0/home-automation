@@ -3,6 +3,7 @@ from typeguard import typechecked
 from .BaseStrategy import BaseStrategy
 from communication.CommunicatorRegistry import CommunicatorRegistry
 
+
 class WemoSwitchStrategy(BaseStrategy):
     @typechecked()
     def __init__(self, actuators_config: dict, communication_registry: CommunicatorRegistry):

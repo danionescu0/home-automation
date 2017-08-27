@@ -1,7 +1,8 @@
 import threading
 import time
-from typeguard import typechecked
 from logging import RootLogger
+
+from typeguard import typechecked
 
 from ifttt.parser.ExpressionBuilder import ExpressionBuilder
 from ifttt.parser.Tokenizer import Tokenizer
@@ -9,6 +10,7 @@ from ifttt.interpretter.InterpretterContext import InterpretterContext
 from ifttt.parser.ParseException import ParseException
 from ifttt.command.CommandExecutor import CommandExecutor
 from repository.IftttRules import IftttRules
+
 
 class IftttRulesThread(threading.Thread):
     ITERATE_INTERVAL = 60

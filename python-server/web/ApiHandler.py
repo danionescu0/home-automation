@@ -2,12 +2,14 @@ import jwt
 from dateutil.relativedelta import relativedelta
 import datetime, time
 from logging import RootLogger
+
 from typeguard import typechecked
 
 from web.BaseHandler import BaseHandler
 from event.LocationEvent import LocationEvent
 from tools.Authentication import Authentication
 from tools.VoiceCommands import VoiceCommands
+
 
 class ApiHandler(BaseHandler):
     @typechecked()

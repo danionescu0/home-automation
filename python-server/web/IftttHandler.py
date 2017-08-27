@@ -1,6 +1,7 @@
-from tornado.web import authenticated
-from typeguard import typechecked
 from logging import RootLogger
+
+from typeguard import typechecked
+from tornado.web import authenticated
 
 from repository.IftttRules import IftttRules
 from web.BaseHandler import BaseHandler

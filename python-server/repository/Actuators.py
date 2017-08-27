@@ -1,8 +1,10 @@
 import collections
 import json
+
 from typeguard import typechecked
 
 from repository.AbstractRepository import AbstractRepository
+
 
 class Actuators(AbstractRepository):
     REDIS_KEY = 'actuators'

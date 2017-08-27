@@ -1,12 +1,14 @@
-from tornado.web import authenticated
 from datetime import datetime
 from operator import itemgetter
 from dateutil import tz
+
+from tornado.web import authenticated
 from typeguard import typechecked
 from tools.DateUtils import DateUtils
 
 from web.BaseHandler import BaseHandler
 from repository.Sensors import Sensors
+
 
 class SystemStatusHandler(BaseHandler):
     @typechecked()

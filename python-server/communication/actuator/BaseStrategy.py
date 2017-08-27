@@ -1,7 +1,9 @@
 import abc
+
 from typeguard import typechecked
 
 from communication.encriptors.BaseEncriptor import BaseEncriptor
+
 
 class BaseStrategy(metaclass=abc.ABCMeta):
     def __init__(self, actuators_config: dict):

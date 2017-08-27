@@ -1,5 +1,6 @@
-import serial
 from typing import Callable
+
+import serial
 from typeguard import typechecked
 
 from communication.Base import Base

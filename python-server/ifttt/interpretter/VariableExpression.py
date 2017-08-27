@@ -3,6 +3,7 @@ from typeguard import typechecked
 from ifttt.interpretter.Expression import Expression
 from ifttt.interpretter.InterpretterContext import InterpretterContext
 
+
 class VariableExpression(Expression):
     @typechecked()
     def __init__(self, name: str, value):

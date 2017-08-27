@@ -1,8 +1,10 @@
 import abc
+
 from typeguard import typechecked
 
 from ifttt.interpretter.Expression import Expression
 from ifttt.interpretter.InterpretterContext import InterpretterContext
+
 
 class OperatorExpression(Expression):
     def __init__(self, left_operator, right_operator):

@@ -6,6 +6,7 @@ from tools.AsyncJobs import AsyncJobs
 from repository.Actuators import Actuators
 from repository.Sensors import Sensors
 
+
 class MainHandler(BaseHandler):
     @typechecked()
     def initialize(self, job_controll: AsyncJobs, actuators_repo: Actuators, sensors_repo: Sensors):

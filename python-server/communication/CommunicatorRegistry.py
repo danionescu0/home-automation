@@ -1,10 +1,12 @@
+from logging import RootLogger
+
 from typeguard import typechecked
 
 from communication.Base import Base
 from communication.SerialBluetooth import SerialBluetooth
 from communication.Serial import Serial
 from communication.WemoSwitch import WemoSwitch
-from logging import RootLogger
+
 
 class CommunicatorRegistry:
     @typechecked()

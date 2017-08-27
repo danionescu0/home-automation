@@ -3,6 +3,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from typeguard import typechecked
 
+
 class EmailNotifier:
     @typechecked()
     def __init__(self, address: str, password: str, notified_address: str):

@@ -1,5 +1,7 @@
 import abc
+
 from typeguard import typechecked
+
 
 class Expression(metaclass=abc.ABCMeta):
     keycount = 0

@@ -7,6 +7,7 @@ from repository.LocationTracker import LocationTracker
 from repository.Sensors import Sensors
 from event.LocationEvent import LocationEvent
 
+
 class SetPhoneIsHomeListener:
     HOME_RADIUS = 0.5
 

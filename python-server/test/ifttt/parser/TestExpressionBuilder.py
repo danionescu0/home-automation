@@ -10,8 +10,8 @@ from ifttt.interpretter.LiteralExpression import LiteralExpression
 from ifttt.interpretter.GreaterThanExpression import GreaterThanExpression
 from ifttt.interpretter.InterpretterContext import InterpretterContext
 
-class TestExpressionBuilder(unittest.TestCase):
 
+class TestExpressionBuilder(unittest.TestCase):
     def __get_tokenizer(self, rule):
         tokens = {
                 'eq(TIME, 20:26)' :
@@ -72,4 +72,3 @@ class TestExpressionBuilder(unittest.TestCase):
         expression_builder.build()
 
         return expression_builder.get_expression()
-

@@ -1,5 +1,7 @@
 import abc
+
 from typeguard import typechecked
+
 
 class BaseEncriptor(metaclass=abc.ABCMeta):
     @typechecked()

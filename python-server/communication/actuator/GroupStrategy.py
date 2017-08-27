@@ -1,7 +1,8 @@
 from typeguard import typechecked
-from .BaseStrategy import BaseStrategy
 
+from .BaseStrategy import BaseStrategy
 from tools.AsyncJobs import AsyncJobs
+
 
 class GroupStrategy(BaseStrategy):
     @typechecked()

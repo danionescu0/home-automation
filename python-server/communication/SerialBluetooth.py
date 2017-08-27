@@ -1,8 +1,10 @@
-import bluetooth
 from typing import Callable
+
+import bluetooth
 from typeguard import typechecked
 
 from .Base import Base
+
 
 class SerialBluetooth(Base):
     RESOURCE_TEMPORARILY_UNAVAILABLE = '11'
@@ -50,7 +52,7 @@ class SerialBluetooth(Base):
 
         return False
 
-    def connect(self):
+    def connect(self) -> None:
         self.connection_mapping = self.__get_endpoint()
         self.__connections = {}
         for name, bluetooth_address in self.connection_mapping.items():

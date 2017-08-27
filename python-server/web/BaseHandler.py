@@ -1,5 +1,6 @@
 from tornado.web import RequestHandler
 
+
 class BaseHandler(RequestHandler):
     def render(self, template, **kwargs):
         kwargs['username'] = self.get_secure_cookie("user")

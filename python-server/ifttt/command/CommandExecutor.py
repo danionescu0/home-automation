@@ -1,6 +1,6 @@
 from logging import RootLogger
-from typeguard import typechecked
 
+from typeguard import typechecked
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from repository.IftttRules import IftttRules
 from sound.SoundApi import SoundApi

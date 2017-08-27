@@ -4,6 +4,7 @@ from repository.Actuators import Actuators
 from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
 from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 
+
 class ActuatorCommands:
     @typechecked()
     def __init__(self, actuator_strategy_builder: ActuatorStrategiesBuilder,

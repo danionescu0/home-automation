@@ -3,6 +3,7 @@ from typeguard import typechecked
 from web.BaseHandler import BaseHandler
 from tools.Authentication import Authentication
 
+
 class LoginHandler(BaseHandler):
     @typechecked()
     def initialize(self, authentication: Authentication):

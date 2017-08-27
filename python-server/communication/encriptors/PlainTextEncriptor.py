@@ -1,5 +1,7 @@
 from typeguard import typechecked
+
 from communication.encriptors.BaseEncriptor import BaseEncriptor
+
 
 class PlainTextEncriptor(BaseEncriptor):
     @typechecked()

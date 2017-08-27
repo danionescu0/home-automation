@@ -1,9 +1,11 @@
-import redis
 import calendar
 import random
 import json
 from datetime import datetime
+
+import redis
 from typeguard import typechecked
+
 
 class AbstractRepository:
     @typechecked()

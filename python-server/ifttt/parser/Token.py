@@ -1,5 +1,6 @@
 from typeguard import typechecked
 
+
 class Token:
     TYPE_BOOLEAN_AND = 'and'
     TYPE_BOOLEAN_OR = 'or'

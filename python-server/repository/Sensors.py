@@ -3,10 +3,12 @@ import json
 import math
 from collections import Counter
 from datetime import datetime
-from typeguard import typechecked
 from typing import Any
 
+from typeguard import typechecked
+
 from repository.AbstractRepository import AbstractRepository
+
 
 class Sensors(AbstractRepository):
     REDIS_SENSORS_KEY = 'sensors'

@@ -12,6 +12,7 @@ from ifttt.parser.Token import Token
 from ifttt.parser.Tokenizer import Tokenizer
 from ifttt.interpretter.Expression import Expression
 
+
 class ExpressionBuilder:
     current_token_index = 0
 

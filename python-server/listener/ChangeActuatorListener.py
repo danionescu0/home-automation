@@ -4,6 +4,7 @@ from typeguard import typechecked
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 
+
 class ChangeActuatorListener:
     @typechecked()
     def __init__(self, actuator_commands: ActuatorCommands):

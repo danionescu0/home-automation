@@ -6,6 +6,7 @@ from communication.actuator.ActuatorCommands import ActuatorCommands
 from event.SensorUpdateEvent import SensorUpdateEvent
 from tools.Authentication import Authentication
 
+
 class FingerprintDoorUnlockListener:
     @typechecked()
     def __init__(self, actuator_commands: ActuatorCommands, authentication: Authentication):

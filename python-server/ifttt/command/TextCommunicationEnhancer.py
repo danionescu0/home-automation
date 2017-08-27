@@ -1,7 +1,9 @@
 import re
+
 from typeguard import typechecked
 
 from ifttt.parser.Tokenizer import Tokenizer
+
 
 class TextCommunicationEnhancer:
     __clusters = [

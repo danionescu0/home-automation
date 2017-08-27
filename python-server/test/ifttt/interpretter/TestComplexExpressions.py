@@ -10,6 +10,7 @@ from ifttt.interpretter.LessThanExpression import LessThanExpression
 from ifttt.interpretter.EqualsExpression import EqualsExpression
 from ifttt.interpretter.BetweenExpression import BetweenExpression
 
+
 class TestComplexExpressions(unittest.TestCase):
     def test_complex1(self):
         context = InterpretterContext()

@@ -1,9 +1,11 @@
 import time
+
 from typeguard import typechecked
 
 from .BaseStrategy import BaseStrategy
 from communication.CommunicatorRegistry import CommunicatorRegistry
 from repository.Actuators import Actuators
+
 
 class SerialSendStrategy(BaseStrategy):
     @typechecked()

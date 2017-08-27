@@ -1,7 +1,9 @@
 import json
+
 from typeguard import typechecked
 
 from repository.AbstractRepository import AbstractRepository
+
 
 class IftttRules(AbstractRepository):
     TRIGGER_RULES = 'trigger-rules'

@@ -6,6 +6,7 @@ from tornado.web import Application, url, StaticFileHandler
 from config import actuators
 from config import general
 from config import sensors
+
 from listener.SaveLocationListener import SaveLocationListener
 from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
 from repository.LocationTracker import LocationTracker
@@ -38,8 +39,8 @@ logging_config = LoggingConfig(general.logging['log_file'], general.logging['log
 logging = logging_config.get_logger()
 sys.excepthook = logging_config.set_error_hadler
 
-saveLocationListener = SaveLocationListener(location_tracker)
-set_phone_is_home_listener = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
+e1 = SaveLocationListener(location_tracker)
+e2 = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
 tokenizer = Tokenizer(sensors_repo, actuators_repo)
 ifttt_expression_validator = ExpressionValidator(tokenizer)
 voice_commands = VoiceCommands(async_jobs, logging).configure()
@@ -54,10 +55,10 @@ def make_app():
             url(
                 r"/",
                 MainHandler,
-                dict(job_controll=async_jobs, actuators_repo = actuators_repo, sensors_repo = sensors_repo),
+                dict(job_controll=async_jobs, actuators_repo=actuators_repo, sensors_repo=sensors_repo),
                 name="actuator-states"
             ),
-            url(r'/login', LoginHandler, dict(authentication = authentication), name='login'),
+            url(r'/login', LoginHandler, dict(authentication=authentication), name='login'),
             url(r'/public/(.*)', StaticFileHandler, {
                 'path': general.web_server['static_path']
             }),
@@ -79,7 +80,7 @@ def make_app():
                 ApiHandler,
                 dict(
                     authentication=authentication,
-                    api_token_secret = general.web_server['api_token_secret'],
+                    api_token_secret=general.web_server['api_token_secret'],
                     voice_commands=voice_commands,
                     logging=logging
                 ),

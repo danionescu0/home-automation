@@ -1,14 +1,16 @@
 import re
+from typing import List
 from datetime import datetime
 from dateutil import tz
+
 from typeguard import typechecked
-from typing import List
 from tools.DateUtils import DateUtils
 
 from ifttt.parser.Token import Token
 from ifttt.parser.ParseException import ParseException
 from repository.Sensors import Sensors
 from repository.Actuators import Actuators
+
 
 class Tokenizer:
     __token_rules = [

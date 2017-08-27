@@ -4,6 +4,7 @@ from blinker import signal
 from event.LocationEvent import LocationEvent
 from repository.LocationTracker import LocationTracker
 
+
 class SaveLocationListener:
     @typechecked()
     def __init__(self, location_tracker : LocationTracker):

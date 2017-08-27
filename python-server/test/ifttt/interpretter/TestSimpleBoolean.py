@@ -6,6 +6,7 @@ from ifttt.interpretter.BooleanOrExpression import BooleanOrExpression
 from ifttt.interpretter.BooleanAndExpression import BooleanAndExpression
 from ifttt.interpretter.LiteralExpression import LiteralExpression
 
+
 class TestSimpleBoolean(unittest.TestCase):
     def test_with_logical_and_true(self):
         context = InterpretterContext()

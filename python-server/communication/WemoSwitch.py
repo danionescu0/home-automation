@@ -1,9 +1,11 @@
-from typeguard import typechecked
 from typing import Callable
+
+from typeguard import typechecked
 from ouimeaux.environment import Environment
 from ouimeaux.environment import UnknownDevice
 
 from .Base import Base
+
 
 class WemoSwitch(Base):
 

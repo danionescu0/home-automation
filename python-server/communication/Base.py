@@ -1,7 +1,9 @@
 import abc
 from typing import Callable
-from typeguard import typechecked
 from logging import RootLogger
+
+from typeguard import typechecked
+
 
 class Base(metaclass=abc.ABCMeta):
     def __init__(self):

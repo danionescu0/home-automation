@@ -3,6 +3,7 @@ from Crypto.Cipher import AES
 
 from communication.encriptors.BaseEncriptor import BaseEncriptor
 
+
 class AesEncriptor(BaseEncriptor):
     @typechecked()
     def __init__(self, key: str):

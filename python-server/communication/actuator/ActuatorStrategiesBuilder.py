@@ -1,4 +1,5 @@
 from typing import List
+
 from typeguard import typechecked
 
 from communication.actuator.SerialSendStrategy import SerialSendStrategy
@@ -8,6 +9,7 @@ from communication.actuator.GroupStrategy import GroupStrategy
 from communication.CommunicatorRegistry import CommunicatorRegistry
 from repository.Actuators import Actuators
 from tools.AsyncJobs import AsyncJobs
+
 
 class ActuatorStrategiesBuilder():
     @typechecked()

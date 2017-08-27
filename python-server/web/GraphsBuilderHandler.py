@@ -1,12 +1,14 @@
 import json
-from tornado.web import authenticated
 from datetime import datetime, timedelta
 from dateutil import tz
+
 from typeguard import typechecked
+from tornado.web import authenticated
 
 from web.BaseHandler import BaseHandler
 from repository.Sensors import Sensors
 from tools.DateUtils import DateUtils
+
 
 class GraphsBuilderHandler(BaseHandler):
     __DEFAULT_SELECTED_SENSOR = 'light:living'
