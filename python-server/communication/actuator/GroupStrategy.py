@@ -1,11 +1,11 @@
 from typeguard import typechecked
 from .BaseStrategy import BaseStrategy
 
-from tools.JobControl import JobControll
+from tools.AsyncJobs import AsyncJobs
 
 class GroupStrategy(BaseStrategy):
     @typechecked()
-    def __init__(self, actuators_config: dict, job_controll: JobControll):
+    def __init__(self, actuators_config: dict, job_controll: AsyncJobs):
         super(GroupStrategy, self).__init__(actuators_config)
         self.__job_controll = job_controll
 

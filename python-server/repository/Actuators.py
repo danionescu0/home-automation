@@ -12,15 +12,10 @@ class Actuators(AbstractRepository):
         AbstractRepository.__init__(self, redis_configuration)
         self.keys = {self.REDIS_KEY: actuators_config}
 
-    def get_actuators(self, just_names = False):
-        if not just_names:
-            actuators = self.get(self.REDIS_KEY)
-            return collections.OrderedDict(sorted(actuators.items()))
-
+    def get_actuators(self):
         actuators = self.get(self.REDIS_KEY)
-        actuator_names = [name for name, data in actuators.items()]
 
-        return actuator_names
+        return collections.OrderedDict(sorted(actuators.items()))
 
     @typechecked()
     def set_actuator(self, name: str, value) -> None:

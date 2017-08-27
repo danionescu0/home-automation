@@ -1,11 +1,11 @@
 from typeguard import typechecked
 
 from logging import RootLogger
-from tools.JobControl import JobControll
+from tools.AsyncJobs import AsyncJobs
 
 class CommandRunner:
     @typechecked()
-    def __init__(self, job_controll: JobControll, logging: RootLogger):
+    def __init__(self, job_controll: AsyncJobs, logging: RootLogger):
         self.__job_controll = job_controll
         self.__logging = logging
 

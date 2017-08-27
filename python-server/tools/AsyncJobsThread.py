@@ -3,25 +3,25 @@ import json
 import time
 from typeguard import typechecked
 
-from tools.JobControl import JobControll
+from tools.AsyncJobs import AsyncJobs
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from logging import RootLogger
 
-class JobControlThread(threading.Thread):
+class AsyncJobsThread(threading.Thread):
     LISTEN_DELAY = 0.01
 
     @typechecked()
-    def __init__(self, job_controll: JobControll, change_actuator_request_event: ChangeActuatorRequestEvent,
+    def __init__(self, async_jobs: AsyncJobs, change_actuator_request_event: ChangeActuatorRequestEvent,
                  logging: RootLogger):
         threading.Thread.__init__(self)
-        self.__job_controll = job_controll
+        self.__async_jobs = async_jobs
         self.__change_actuator_request_event = change_actuator_request_event
         self.__logging = logging
         self.shutdown = False
 
     def run(self):
         while not self.shutdown:
-            self.__job_controll.listen(self.__job_callback)
+            self.__async_jobs.listen(self.__job_callback)
             time.sleep(self.LISTEN_DELAY)
 
     def __job_callback(self, job_data):

@@ -13,7 +13,7 @@ from repository.IftttRules import IftttRules
 from repository.Actuators import Actuators
 from repository.Sensors import Sensors
 from tools.Authentication import Authentication
-from tools.JobControl import JobControll
+from tools.AsyncJobs import AsyncJobs
 from tools.VoiceCommands import VoiceCommands
 from tools.LoggingConfig import LoggingConfig
 from web.MainHandler import MainHandler
@@ -31,7 +31,8 @@ actuators_repo = Actuators(general.redis_config, actuators.conf)
 sensors_repo = Sensors(general.redis_config, sensors.conf)
 ifttt_rules = IftttRules(general.redis_config)
 location_tracker = LocationTracker(general.redis_config)
-job_controll = JobControll(general.redis_config)
+async_jobs = AsyncJobs(general.redis_config)
+async_jobs.connect()
 
 logging_config = LoggingConfig(general.logging['log_file'], general.logging['log_entries'])
 logging = logging_config.get_logger()
@@ -41,7 +42,7 @@ saveLocationListener = SaveLocationListener(location_tracker)
 set_phone_is_home_listener = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
 tokenizer = Tokenizer(sensors_repo, actuators_repo)
 ifttt_expression_validator = ExpressionValidator(tokenizer)
-voice_commands = VoiceCommands(job_controll, logging).configure()
+voice_commands = VoiceCommands(async_jobs, logging).configure()
 
 def make_app():
     settings = {
@@ -53,7 +54,7 @@ def make_app():
             url(
                 r"/",
                 MainHandler,
-                dict(job_controll=job_controll, actuators_repo = actuators_repo, sensors_repo = sensors_repo),
+                dict(job_controll=async_jobs, actuators_repo = actuators_repo, sensors_repo = sensors_repo),
                 name="actuator-states"
             ),
             url(r'/login', LoginHandler, dict(authentication = authentication), name='login'),

@@ -3,12 +3,16 @@ import json
 from typeguard import typechecked
 from typing import Callable
 
-class JobControll:
+
+class AsyncJobs:
     CHANNEL_NAME = 'jobs'
 
     @typechecked()
     def __init__(self, configuration: dict):
-        self.client = redis.StrictRedis(**configuration)
+        self.__configuration = configuration
+
+    def connect(self):
+        self.client = redis.StrictRedis(**self.__configuration)
         self.pubsub = self.client.pubsub()
         self.pubsub.subscribe(self.CHANNEL_NAME)
 

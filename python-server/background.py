@@ -28,8 +28,8 @@ from tools.EmailNotifier import EmailNotifier
 from tools.HomeDefence import HomeDefence
 from tools.HomeDefenceThread import HomeDefenceThread
 from tools.IftttRulesThread import IftttRulesThread
-from tools.JobControl import JobControll
-from tools.JobControlThread import JobControlThread
+from tools.AsyncJobs import AsyncJobs
+from tools.AsyncJobsThread import AsyncJobsThread
 from tools.LoggingConfig import LoggingConfig
 
 logging_config = LoggingConfig(general.logging['log_file'], general.logging['log_entries'])
@@ -43,10 +43,11 @@ sound_api = RemoteSpeaker(general.remote_speaker['host'], general.remote_speaker
 actuators_repo = Actuators(general.redis_config, actuators.conf)
 sensors_repo = Sensors(general.redis_config, sensors.conf)
 ifttt_rules = IftttRules(general.redis_config)
-job_controll = JobControll(general.redis_config)
+async_jobs = AsyncJobs(general.redis_config)
+async_jobs.connect()
 email_notificator = EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
 encriptiors_builder = EncriptorsBuilder(communication.aes_key)
-actuator_strategies_builder = ActuatorStrategiesBuilder(comm_registry, actuators_repo, actuators.conf, job_controll)
+actuator_strategies_builder = ActuatorStrategiesBuilder(comm_registry, actuators_repo, actuators.conf, async_jobs)
 actuator_commands = ActuatorCommands(actuator_strategies_builder, encriptiors_builder, actuators_repo, actuators.conf)
 text_sensor_data_parser = TextSensorDataParser(sensors.conf)
 home_defence = HomeDefence(actuator_commands, sound_api, actuators_repo)
@@ -67,7 +68,7 @@ def main():
                                                 comm_registry.get_communicator('bluetooth')))
     threads.append(IncommingCommunicationThread(text_sensor_data_parser, sensors_repo, sensor_update_event,
                                                 comm_registry.get_communicator('serial')))
-    threads.append(JobControlThread(job_controll, change_actuator_request_event, logging))
+    threads.append(AsyncJobsThread(async_jobs, change_actuator_request_event, logging))
     threads.append(IftttRulesThread(ifttt_rules, command_executor, tokenizer, logging))
     threads.append(HomeDefenceThread(home_defence))
     def handler(signum, frame):

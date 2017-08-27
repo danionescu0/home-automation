@@ -7,6 +7,7 @@ from web.BaseHandler import BaseHandler
 from repository.Actuators import Actuators
 from ifttt.ExpressionValidator import ExpressionValidator
 
+
 class IftttHandler(BaseHandler):
     @typechecked()
     def initialize(self, actuators_repo: Actuators, ifttt_rules: IftttRules,
@@ -19,7 +20,7 @@ class IftttHandler(BaseHandler):
 
     @authenticated
     def get(self):
-        actuator_list = self.__actuators_repo.get_actuators(True)
+        actuator_list = [name for name, data in self.__actuators_repo.get_actuators().items()]
         all_rules = self.__ifttt_rules.get_all()
         all_rules['test_rule'] =\
             {
@@ -44,7 +45,7 @@ class IftttHandler(BaseHandler):
     @authenticated
     def post(self, *args, **kwargs):
         rule_name = self.get_argument("rule_name", None, True)
-        if (self.get_argument("type", None, True) == 'delete'):
+        if self.get_argument("type", None, True) == 'delete':
             print(rule_name)
             self.__ifttt_rules.delete(rule_name)
 
