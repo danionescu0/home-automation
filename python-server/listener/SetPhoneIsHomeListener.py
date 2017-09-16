@@ -20,7 +20,7 @@ class SetPhoneIsHomeListener:
 
     @typechecked()
     def callback(self, location: LocationEvent) -> None:
-        currentCoordonates = (location.get_latitude(), location.get_longitude())
-        distance_from_home = vincenty(self.__home_coordonates, currentCoordonates).km
+        current_coordonates = (location.get_latitude(), location.get_longitude())
+        distance_from_home = vincenty(self.__home_coordonates, current_coordonates).km
         phone_is_home = distance_from_home < self.HOME_RADIUS
         self.__sensors_repo.set_sensor('phoneIsHome', False, phone_is_home)

@@ -1,9 +1,9 @@
-import jwt
 from dateutil.relativedelta import relativedelta
 import datetime, time
 from logging import RootLogger
-
 from typeguard import typechecked
+
+import jwt
 
 from web.BaseHandler import BaseHandler
 from event.LocationEvent import LocationEvent
@@ -15,7 +15,6 @@ class ApiHandler(BaseHandler):
     @typechecked()
     def initialize(self, authentication: Authentication, api_token_secret: str, voice_commands: VoiceCommands,
                    logging: RootLogger):
-
         self.__authentication = authentication
         self.__api_token_secret = api_token_secret
         self.__voice_commands = voice_commands
@@ -36,7 +35,7 @@ class ApiHandler(BaseHandler):
             self.write({'status': False, 'error': 'bad credentials'})
 
     def execute_command(self):
-        username = self.__check_token()
+        username = self.check_token()
         if not username:
             return False
         command = self.get_argument('command', None, True)
@@ -46,7 +45,7 @@ class ApiHandler(BaseHandler):
         return True
 
     def record_location(self):
-        username = self.__check_token()
+        username = self.check_token()
         if not username:
             return False
         latitude = float(self.get_argument('latitude', None, True))
@@ -69,14 +68,3 @@ class ApiHandler(BaseHandler):
         self.write(token)
 
         return True
-
-    def __check_token(self):
-        auth_header = self.request.headers.get("Authorization")
-        if not auth_header:
-            return False
-        auth_header = auth_header.split()
-        if auth_header[0] != 'Bearer':
-            return False
-        decoded_token_data = jwt.decode(auth_header[1], self.__api_token_secret, algorithm='HS256')
-
-        return decoded_token_data['sub']

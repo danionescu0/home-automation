@@ -18,7 +18,8 @@ from tools.AsyncJobs import AsyncJobs
 from tools.VoiceCommands import VoiceCommands
 from tools.LoggingConfig import LoggingConfig
 from web.MainHandler import MainHandler
-from web.ApiHandler import ApiHandler
+from web.ApiTokenAuthHandler import ApiTokenHandler
+from web.ApiLocationHandler import ApiLocationHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
@@ -76,22 +77,26 @@ def make_app():
                 ),
                 name='ifttt'),
             url(
-                r'/api/(.*)',
-                ApiHandler,
+                r'/api/user/token',
+                ApiTokenHandler,
                 dict(
                     authentication=authentication,
-                    api_token_secret=general.web_server['api_token_secret'],
-                    voice_commands=voice_commands,
-                    logging=logging
+                    api_token_secret=general.web_server['api_token_secret']
                 ),
-                name='api'
+                name='api_token_login'
+            ),
+            url(
+                r'/api/location',
+                ApiLocationHandler,
+                dict(
+                    api_token_secret=general.web_server['api_token_secret']
+                ),
+                name='api_location'
             ),
             url(
                 r'/system-status',
                 SystemStatusHandler,
-                dict(
-                    sensors_repo=sensors_repo,
-                ),
+                dict(sensors_repo=sensors_repo,),
                 name='systemStatus'
             ),
             url(r'/logout', LogoutHandler, name='logout')
