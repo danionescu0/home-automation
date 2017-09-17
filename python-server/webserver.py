@@ -20,11 +20,13 @@ from tools.LoggingConfig import LoggingConfig
 from web.MainHandler import MainHandler
 from web.ApiTokenAuthHandler import ApiTokenHandler
 from web.ApiLocationHandler import ApiLocationHandler
+from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
 from web.SystemStatusHandler import SystemStatusHandler
+from web.security.JwtTokenFactory import JwtTokenFactory
 from ifttt.ExpressionValidator import ExpressionValidator
 from ifttt.parser.Tokenizer import Tokenizer
 
@@ -75,31 +77,32 @@ def make_app():
                     ifttt_expression_validator=ifttt_expression_validator,
                     logging=logging
                 ),
-                name='ifttt'),
+                name='ifttt'
+                ),
+            url(
+                r'/system-status',
+                SystemStatusHandler,
+                dict(sensors_repo=sensors_repo),
+                name='systemStatus'
+            ),
+            url(r'/logout', LogoutHandler, name='logout'),
             url(
                 r'/api/user/token',
                 ApiTokenHandler,
-                dict(
-                    authentication=authentication,
-                    api_token_secret=general.web_server['api_token_secret']
-                ),
+                dict(authentication=authentication),
                 name='api_token_login'
             ),
             url(
                 r'/api/location',
                 ApiLocationHandler,
-                dict(
-                    api_token_secret=general.web_server['api_token_secret']
-                ),
                 name='api_location'
             ),
             url(
-                r'/system-status',
-                SystemStatusHandler,
-                dict(sensors_repo=sensors_repo,),
-                name='systemStatus'
-            ),
-            url(r'/logout', LogoutHandler, name='logout')
+                r'/api/voice-command',
+                ApiVoiceCommandHandler,
+                dict(voice_commands=voice_commands),
+                name='api_voice_command'
+            )
         ], **settings)
 
 app = make_app()
