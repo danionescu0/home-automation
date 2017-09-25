@@ -2,7 +2,6 @@ import signal
 import sys
 
 from config import actuators
-from config import communication
 from config import general
 from config import sensors
 
@@ -38,7 +37,7 @@ logging_config = LoggingConfig(general.logging['log_file'], general.logging['log
 logging = logging_config.get_logger()
 sys.excepthook = logging_config.set_error_hadler
 
-comm_registry = CommunicatorRegistry(communication, logging)
+comm_registry = CommunicatorRegistry(general.communication, logging)
 comm_registry.configure_communicators()
 
 sound_api = RemoteSpeaker(general.remote_speaker['host'], general.remote_speaker['user'], general.remote_speaker['password'])
@@ -48,7 +47,7 @@ ifttt_rules = IftttRules(general.redis_config)
 async_jobs = AsyncJobs(general.redis_config)
 async_jobs.connect()
 email_notificator = EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
-encriptiors_builder = EncriptorsBuilder(communication.aes_key)
+encriptiors_builder = EncriptorsBuilder(general.communication['aes_key'])
 actuator_strategies_builder = ActuatorStrategiesBuilder(comm_registry, actuators_repo, actuators.conf, async_jobs)
 actuator_commands = ActuatorCommands(actuator_strategies_builder, encriptiors_builder, actuators_repo, actuators.conf)
 text_sensor_data_parser = TextSensorDataParser(sensors.conf)

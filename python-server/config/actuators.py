@@ -25,9 +25,10 @@ conf = {
         'device_type': 'courtains',
         'room' : 'living',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'balcony',
-        'command': {True: 'C3;'}
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L2',
+        'command': {True: 'C3|'}
     },
     'livingCourtainsUp': {
         'state': False,
@@ -35,9 +36,10 @@ conf = {
         'device_type': 'courtains',
         'room' : 'living',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'balcony',
-        'command': {True: 'O3;'}
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L2',
+        'command': {True: 'O3|'}
     },
     'closeAllLights': {
         'state': False,
@@ -57,9 +59,10 @@ conf = {
         'device_type': 'courtains',
         'room' : 'living',
         'strategy': 'send',
-        'communicator': 'bluetooth',
-        'send_to_device': 'balcony',
-        'command': {False: 'O50;', True: 'C50;'}
+        'communicator': 'serial',
+        'encription': 'aes',
+        'send_to_device': 'L2',
+        'command': {False: 'O90|', True: 'C90|'}
     },
     'livingLight': {
         'state': False,

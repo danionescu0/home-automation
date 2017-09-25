@@ -5,6 +5,7 @@ from typeguard import typechecked
 
 from communication.Base import Base
 
+
 class Serial(Base):
     @typechecked()
     def __init__(self, endpoint: dict):

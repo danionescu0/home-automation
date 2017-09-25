@@ -41,3 +41,20 @@ logging = {
     'log_file': 'log.txt',
     'log_entries': 20000000
 }
+
+communication = {
+    'bluetooth' : {
+        'connections' :
+            {
+                'holway' : '',
+                'fingerprint': ''
+            }
+    },
+
+    'serial' : {
+        'port' : '/dev/ttyUSB0',
+        'baud_rate' : '9600'
+    },
+
+    'aes_key' : '' # 16 characters key
+}

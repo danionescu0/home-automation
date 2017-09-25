@@ -16,11 +16,12 @@ class CommunicatorRegistry:
         self.__communicators = {}
 
     def configure_communicators(self):
-        serial = Serial(self.__configuration.serial)
+        serial = Serial(self.__configuration['serial'])
         serial.set_logger(self.__logger)
         serial.connect()
         self.__communicators.update({'serial': serial})
-        bluetooth = SerialBluetooth(self.__configuration.bluetooth['connections'])
+        print(self.__configuration['bluetooth']['connections'])
+        bluetooth = SerialBluetooth(self.__configuration['bluetooth']['connections'])
         bluetooth.set_logger(self.__logger)
         bluetooth.connect()
         self.__communicators.update({'bluetooth' : bluetooth})
