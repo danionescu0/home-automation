@@ -1,45 +1,51 @@
 #include <SoftwareSerial.h>
+#include <AESLib.h>
+#include <EncryptedSoftwareSerial.h>
+
+
 
 const byte pwmPower = 160;
 const byte powerPwmPin = 9;
 const byte relay1StatePin = 8;
 const byte relay2StatePin = 7;
+const String DEVICE_CODE = "L2";// this will be used to identify incomming commands
+uint8_t key[] = {48, 48, 48 , 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48};
 
-SoftwareSerial bluetooth(10, 11); // RX, TX
-char buffer[] = {' ',' ',' '};
+
+EncryptedSoftwareSerial encryptedCommunicator = EncryptedSoftwareSerial(10, 11, 9600, key, DEVICE_CODE);
 
 void setup() 
 {
     Serial.begin(9600);
-    bluetooth.begin(9600);
     pinMode(powerPwmPin, OUTPUT);
     pinMode(relay1StatePin , OUTPUT);
     pinMode(relay2StatePin, OUTPUT);
     digitalWrite(powerPwmPin, LOW);
     digitalWrite(relay1StatePin, LOW);
-    digitalWrite(relay2StatePin, LOW);   
+    digitalWrite(relay2StatePin, LOW);  
+    Serial.println("done init"); 
 }
 
 void loop() 
 {
-  if (bluetooth.available() > 0) {   
-      bluetooth.readBytesUntil(';', buffer, 4);
-      toggleState(getState(), getDuration());
-      clearBuffer();  
-  } 
+    if (encryptedCommunicator.parseIncomming()) {
+        String command = encryptedCommunicator.getDecrypted();
+        Serial.println(command);
+        Serial.print("decripted:");Serial.println(command);
+        toggleState(getState(command), getNumber(command));
+    }
 }
 
-boolean getState()
+byte getNumber(String command)
 {
-    return buffer[0] == 'C' ? false : true;
+    return command.substring(1, command.length()).toInt();
 }
 
-byte getDuration()
+boolean getState(String command)
 {
-    String value = "";
-    value += String(buffer[1]) + String(buffer[2]);
+    String state = command.substring(0, 1);
 
-    return (byte) value.toInt();
+    return state == "O" ? true : false;
 }
 
 void toggleState(boolean state, byte duration)
@@ -57,12 +63,5 @@ void toggleState(boolean state, byte duration)
     long millisecondsSleep = (long) duration * 1000;
     delay(millisecondsSleep);
     digitalWrite(powerPwmPin, LOW);
-}
-
-void clearBuffer()
-{
-    for (int i=0; i<=2; i++) {
-        buffer[i] = ' ';
-    }
 }
 
