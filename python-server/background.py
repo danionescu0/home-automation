@@ -20,9 +20,9 @@ from ifttt.command.TextCommunicationEnhancer import TextCommunicationEnhancer
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
-from repository.Actuators import Actuators
-from repository.IftttRules import IftttRules
-from repository.Sensors import Sensors
+from repository.ActuatorsRepository import ActuatorsRepository
+from repository.IftttRulesRepository import IftttRulesRepository
+from repository.SensorsRepository import SensorsRepository
 from sound.RemoteSpeaker import RemoteSpeaker
 from tools.Authentication import Authentication
 from tools.EmailNotifier import EmailNotifier
@@ -41,16 +41,16 @@ comm_registry = CommunicatorRegistry(general.communication, logging)
 comm_registry.configure_communicators()
 
 sound_api = RemoteSpeaker(general.remote_speaker['host'], general.remote_speaker['user'], general.remote_speaker['password'])
-actuators_repo = Actuators(general.redis_config, actuators.conf)
-sensors_repo = Sensors(general.redis_config, sensors.conf)
-ifttt_rules = IftttRules(general.redis_config)
+actuators_repo = ActuatorsRepository(general.redis_config, actuators.conf)
+sensors_repo = SensorsRepository(general.redis_config, sensors.conf)
+ifttt_rules = IftttRulesRepository(general.redis_config)
 async_jobs = AsyncJobs(general.redis_config)
 async_jobs.connect()
 email_notificator = EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
 encriptiors_builder = EncriptorsBuilder(general.communication['aes_key'])
 actuator_strategies_builder = ActuatorStrategiesBuilder(comm_registry, actuators_repo, actuators.conf, async_jobs)
 actuator_commands = ActuatorCommands(actuator_strategies_builder, encriptiors_builder, actuators_repo, actuators.conf)
-text_sensor_data_parser = TextSensorDataParser(sensors.conf)
+text_sensor_data_parser = TextSensorDataParser(sensors_repo)
 home_defence = HomeDefence(actuator_commands, sound_api, actuators_repo)
 authentication = Authentication(general.credentials)
 tokenizer = Tokenizer(sensors_repo, actuators_repo)

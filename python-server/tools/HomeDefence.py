@@ -6,14 +6,14 @@ from typeguard import typechecked
 
 from tools.DateUtils import DateUtils
 from communication.actuator.ActuatorCommands import ActuatorCommands
-from repository.Actuators import Actuators
+from repository.ActuatorsRepository import ActuatorsRepository
 from sound.SoundApi import SoundApi
 
 
 class HomeDefence:
     # @ToDo move magic numbers to config
     @typechecked()
-    def __init__(self, actuator_commands: ActuatorCommands, sound_api: SoundApi, actuators_repo: Actuators):
+    def __init__(self, actuator_commands: ActuatorCommands, sound_api: SoundApi, actuators_repo: ActuatorsRepository):
         self.__actuator_commands = actuator_commands
         self.__sound_api = sound_api
         self.__actuators_repo = actuators_repo

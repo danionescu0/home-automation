@@ -3,13 +3,13 @@ from typeguard import typechecked
 
 from web.BaseHandler import BaseHandler
 from tools.AsyncJobs import AsyncJobs
-from repository.Actuators import Actuators
-from repository.Sensors import Sensors
+from repository.ActuatorsRepository import ActuatorsRepository
+from repository.SensorsRepository import SensorsRepository
 
 
 class MainHandler(BaseHandler):
     @typechecked()
-    def initialize(self, job_controll: AsyncJobs, actuators_repo: Actuators, sensors_repo: Sensors):
+    def initialize(self, job_controll: AsyncJobs, actuators_repo: ActuatorsRepository, sensors_repo: SensorsRepository):
         self.job_controll = job_controll
         self.__actuators_repo = actuators_repo
         self.__sensors_repo = sensors_repo
@@ -17,7 +17,6 @@ class MainHandler(BaseHandler):
     @authenticated
     def get(self):
         actuators = self.__actuators_repo.get_actuators()
-
         self.render(
             "./template/main.html",
             actuators = self.__group_actuators(actuators, 'room'),

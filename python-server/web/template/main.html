@@ -16,10 +16,10 @@
       <div class="jumbotron">
         <p class="lead">
             {% for sensor in sensors %}
-                {% if 'homepage' in sensor['visible'] %}
-                    <img src="/public/img/sensors/{{ sensor['type'] }}.png" title = "{{ sensor['type'].capitalize() }}" />
-                {% if sensor['location'] != False %} <sub>{{ sensor['location'] }}</sub> {% end %}
-                = {{ sensor['value'] }}             &nbsp;&nbsp;&nbsp;&nbsp;
+                {% if 'homepage' in sensor.visible %}
+                    <img src="/public/img/sensors/{{ sensor.type }}.png" title = "{{ sensor.type.capitalize() }}" />
+                {% if sensor.location != False %} <sub>{{ sensor.location }}</sub> {% end %}
+                = {{ sensor.value }}             &nbsp;&nbsp;&nbsp;&nbsp;
                 {% end %}
             {% end %}
         </p>

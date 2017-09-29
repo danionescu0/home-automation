@@ -4,12 +4,12 @@ from typeguard import typechecked
 
 from .BaseStrategy import BaseStrategy
 from communication.CommunicatorRegistry import CommunicatorRegistry
-from repository.Actuators import Actuators
+from repository.ActuatorsRepository import ActuatorsRepository
 
 
 class SerialSendStrategy(BaseStrategy):
     @typechecked()
-    def __init__(self, communicator_registry: CommunicatorRegistry, actuators_config: dict, actuators_repo: Actuators):
+    def __init__(self, communicator_registry: CommunicatorRegistry, actuators_config: dict, actuators_repo: ActuatorsRepository):
         super(SerialSendStrategy, self).__init__(actuators_config)
         self.__communicator_registry = communicator_registry
         self.__actuators_repo = actuators_repo

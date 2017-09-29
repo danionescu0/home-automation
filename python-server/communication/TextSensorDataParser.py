@@ -1,24 +1,26 @@
 import re
+from typing import List
 
 from typeguard import typechecked
 
 from communication.SensorsParseException import SensorsParseException
-
+from repository.SensorsRepository import SensorsRepository
+from model.Sensor import Sensor
 
 class TextSensorDataParser:
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'
+    SENSOR_SEPARATOR = '|'
 
     @typechecked()
-    def __init__(self, sensors_conf: list):
-        self.__sensors_conf = sensors_conf
-        self.__sensor_separator = '|'
+    def __init__(self, sensors_repo: SensorsRepository):
+        self.__sensors_repo = sensors_repo
 
     @typechecked()
     def is_buffer_parsable(self, buffer: str) -> bool:
-        return buffer.endswith(self.__sensor_separator)
+        return buffer.endswith(self.SENSOR_SEPARATOR)
 
     @typechecked()
-    def parse(self, text_buffer: str) -> list:
+    def parse(self, text_buffer: str) -> List[Sensor]:
         text_buffer = text_buffer[:-1]
         sensors = []
         for sensor in text_buffer.split('|'):
@@ -29,21 +31,20 @@ class TextSensorDataParser:
 
         return sensors
 
-    def __get_sensor(self, sensor_components):
+    def __get_sensor(self, sensor_components) -> Sensor:
         code = sensor_components[0]
         if sensor_components[1] == '':
             location = False
         else:
             location = sensor_components[1]
         value = sensor_components[2]
-        for sensor in self.__sensors_conf:
-            if sensor['communication_code'][0] == code and sensor['communication_code'][1] == location:
-                found_sensor = sensor
+        for sensor in self.__sensors_repo.get_sensors():
+            if sensor.communication_code[0] == code and sensor.communication_code[1] == location:
                 try:
-                    found_sensor['value'] = int(value)
+                    sensor.value = int(value)
                 except ValueError as e:
                     raise SensorsParseException(
                         'Badly formatted sensor value: {0}, error: {1})'.format(value, e.message))
-                return found_sensor
+                return sensor
 
         raise SensorsParseException('Sensor with code: {0} and location {1} not found!'.format(code, location))

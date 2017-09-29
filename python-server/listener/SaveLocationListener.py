@@ -2,12 +2,12 @@ from typeguard import typechecked
 from blinker import signal
 
 from event.LocationEvent import LocationEvent
-from repository.LocationTracker import LocationTracker
+from repository.LocationTrackerRepository import LocationTrackerRepository
 
 
 class SaveLocationListener:
     @typechecked()
-    def __init__(self, location_tracker : LocationTracker):
+    def __init__(self, location_tracker : LocationTrackerRepository):
         self.location_tracker = location_tracker
         signal("location").connect(self.callback)
 

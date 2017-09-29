@@ -9,10 +9,10 @@ from config import sensors
 
 from listener.SaveLocationListener import SaveLocationListener
 from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
-from repository.LocationTracker import LocationTracker
-from repository.IftttRules import IftttRules
-from repository.Actuators import Actuators
-from repository.Sensors import Sensors
+from repository.LocationTrackerRepository import LocationTrackerRepository
+from repository.IftttRulesRepository import IftttRulesRepository
+from repository.ActuatorsRepository import ActuatorsRepository
+from repository.SensorsRepository import SensorsRepository
 from tools.Authentication import Authentication
 from tools.AsyncJobs import AsyncJobs
 from tools.VoiceCommands import VoiceCommands
@@ -31,10 +31,10 @@ from ifttt.ExpressionValidator import ExpressionValidator
 from ifttt.parser.Tokenizer import Tokenizer
 
 authentication = Authentication(general.credentials)
-actuators_repo = Actuators(general.redis_config, actuators.conf)
-sensors_repo = Sensors(general.redis_config, sensors.conf)
-ifttt_rules = IftttRules(general.redis_config)
-location_tracker = LocationTracker(general.redis_config)
+actuators_repo = ActuatorsRepository(general.redis_config, actuators.conf)
+sensors_repo = SensorsRepository(general.redis_config, sensors.conf)
+ifttt_rules = IftttRulesRepository(general.redis_config)
+location_tracker = LocationTrackerRepository(general.redis_config)
 async_jobs = AsyncJobs(general.redis_config)
 async_jobs.connect()
 

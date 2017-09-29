@@ -8,8 +8,8 @@ from tools.DateUtils import DateUtils
 
 from ifttt.parser.Token import Token
 from ifttt.parser.ParseException import ParseException
-from repository.Sensors import Sensors
-from repository.Actuators import Actuators
+from repository.SensorsRepository import SensorsRepository
+from repository.ActuatorsRepository import ActuatorsRepository
 
 
 class Tokenizer:
@@ -29,7 +29,7 @@ class Tokenizer:
         ('\d+', Token.TYPE_LITERAL_INT),
     ]
 
-    def __init__(self, sensors_repo: Sensors, actuators_repo: Actuators):
+    def __init__(self, sensors_repo: SensorsRepository, actuators_repo: ActuatorsRepository):
         self.__sensors_repo = sensors_repo
         self.__actuators_repo = actuators_repo
         self.__actuators = None
@@ -65,25 +65,25 @@ class Tokenizer:
         elif token_type == Token.TYPE_ACTUATOR:
             return self.__get_actuator_value(literal_value)
         elif token_type == Token.TYPE_SENSOR:
-            return self.__get_senzor_value(literal_value)
+            return self.__get_sensor_value(literal_value)
         elif token_type == Token.TYPE_CURRENT_TIME:
             return self.__get_current_time()
 
         return literal_value
 
-    def __get_senzor_value(self, senzor_data):
-        data = senzor_data.split(':')
-        senzor_type = data[0]
-        senzor_location = data[1]
-        for senzor in self.__sensors:
-            if senzor['location'] and senzor['location'] != senzor_location:
+    def __get_sensor_value(self, sensor_data):
+        data = sensor_data.split(':')
+        sensor_type = data[0]
+        sensor_location = data[1]
+        for sensor in self.__sensors:
+            if sensor.location and sensor.location != sensor_location:
                 continue
-            if senzor['type'] != senzor_type:
+            if sensor.type != sensor_type:
                 continue
 
-            return senzor['value']
+            return sensor.value
 
-        raise ParseException("Sensor with name {0} not found".format(senzor_data))
+        raise ParseException("Sensor with name {0} not found".format(sensor_data))
 
     def __get_actuator_value(self, actuator_name):
         if actuator_name not in self.__actuators:
@@ -98,4 +98,3 @@ class Tokenizer:
         local_date = initial_date.astimezone(to_zone)
 
         return local_date.strftime('%H:%M')
-

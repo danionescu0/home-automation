@@ -1,6 +1,6 @@
 from typeguard import typechecked
 
-from repository.Actuators import Actuators
+from repository.ActuatorsRepository import ActuatorsRepository
 from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
 from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 
@@ -8,7 +8,7 @@ from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 class ActuatorCommands:
     @typechecked()
     def __init__(self, actuator_strategy_builder: ActuatorStrategiesBuilder,
-                 encriptors_builder: EncriptorsBuilder, actuators_repo: Actuators, actuators_config: dict):
+                 encriptors_builder: EncriptorsBuilder, actuators_repo: ActuatorsRepository, actuators_config: dict):
         self.__actuator_strategy_builder = actuator_strategy_builder
         self.__encriptors_builder = encriptors_builder
         self.__actuators_repo = actuators_repo

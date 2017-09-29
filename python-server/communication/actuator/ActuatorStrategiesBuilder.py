@@ -7,13 +7,13 @@ from communication.actuator.BaseStrategy import BaseStrategy
 from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
 from communication.actuator.GroupStrategy import GroupStrategy
 from communication.CommunicatorRegistry import CommunicatorRegistry
-from repository.Actuators import Actuators
+from repository.ActuatorsRepository import ActuatorsRepository
 from tools.AsyncJobs import AsyncJobs
 
 
 class ActuatorStrategiesBuilder():
     @typechecked()
-    def __init__(self, communicator_registry: CommunicatorRegistry, actuators_repo: Actuators,
+    def __init__(self, communicator_registry: CommunicatorRegistry, actuators_repo: ActuatorsRepository,
                  actuators_config: dict, job_controll: AsyncJobs):
         self.__communicator_registry = communicator_registry
         self.__actuators_repo = actuators_repo

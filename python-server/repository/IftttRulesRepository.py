@@ -5,7 +5,7 @@ from typeguard import typechecked
 from repository.AbstractRepository import AbstractRepository
 
 
-class IftttRules(AbstractRepository):
+class IftttRulesRepository(AbstractRepository):
     TRIGGER_RULES = 'trigger-rules'
     ACTIVE = 'active'
     COMMANDS = 'commands'

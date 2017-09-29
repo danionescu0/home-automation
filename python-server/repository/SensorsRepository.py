@@ -3,14 +3,15 @@ import json
 import math
 from collections import Counter
 from datetime import datetime
-from typing import Any
+from typing import List
 
 from typeguard import typechecked
 
 from repository.AbstractRepository import AbstractRepository
+from model.Sensor import Sensor
 
 
-class Sensors(AbstractRepository):
+class SensorsRepository(AbstractRepository):
     REDIS_SENSORS_KEY = 'sensors'
     REDIS_SENSORS_HISTORY_KEY = 'sensors_history_{0}'
     SENSORS_UPDATE_INTERVAL_IN_HISTORY = 300
@@ -24,29 +25,42 @@ class Sensors(AbstractRepository):
         self.current_timestamp = 0
 
     @typechecked()
-    def get_sensors(self) -> list:
+    def get_sensors2(self) -> list:
         return self.get(self.REDIS_SENSORS_KEY)
 
     @typechecked()
-    def set_sensor(self, type: str, location: Any, value: Any) -> None:
-        self.current_timestamp = calendar.timegm(datetime.now().timetuple())
-        self.__set(type, location, value)
-        self.__add_last_sensor_averages_in_history(type, location, value)
+    def get_sensors(self) -> List[Sensor]:
+        sensors_data = self.get(self.REDIS_SENSORS_KEY)
+        sensors = []
+        for sensor_data in sensors_data:
+            sensor = Sensor(sensor_data['type'], sensor_data['location'], sensor_data['value'])
+            sensor.communication_code = sensor_data['communication_code']
+            sensor.visible = sensor_data['visible']
+            sensor.last_updated = sensor_data['last_updated']
+            sensors.append(sensor)
 
-    def __set(self, type, location, value):
+        return sensors
+
+    @typechecked()
+    def set_sensor(self, sensor: Sensor) -> None:
+        self.current_timestamp = calendar.timegm(datetime.now().timetuple())
+        self.__set(sensor)
+        self.__add_last_sensor_averages_in_history(sensor)
+
+    def __set(self, sensor: Sensor):
         sensors = self.get(self.REDIS_SENSORS_KEY)
-        for sensor in sensors:
-            if sensor['type'] == type and sensor['location'] == location:
-                sensor['value'] = value
-                sensor['last_updated'] = self.current_timestamp
+        for redis_sensor in sensors:
+            if redis_sensor['type'] == sensor.type and redis_sensor['location'] == sensor.location:
+                redis_sensor['value'] = sensor.value
+                redis_sensor['last_updated'] = self.current_timestamp
 
         self.client.set(self.REDIS_SENSORS_KEY, json.dumps(sensors))
 
-    def __add_last_sensor_averages_in_history(self, type, location, value):
-        name = self.__get_sensor_key(type, location)
+    def __add_last_sensor_averages_in_history(self, sensor: Sensor):
+        name = self.__get_sensor_key(sensor.type, sensor.location)
         if name not in list(self.last_averages.keys()):
             self.last_averages[name] = []
-        self.last_averages[name].append(value)
+        self.last_averages[name].append(sensor.value)
         if name not in self.sensors_last_updated:
             self.sensors_last_updated[name] = 0
         if (self.current_timestamp - self.sensors_last_updated[name] < self.SENSORS_UPDATE_INTERVAL_IN_HISTORY):
@@ -54,7 +68,7 @@ class Sensors(AbstractRepository):
 
         self.sensors_last_updated[name] = self.current_timestamp
         sensor_average_value = int(math.ceil(float(sum(self.last_averages[name])) / len(self.last_averages[name])))
-        self.add_to_list(self.__get_sensor_key(type, location), {'value': sensor_average_value})
+        self.add_to_list(self.__get_sensor_key(sensor.type, sensor.location), {'value': sensor_average_value})
         self.last_averages[name] = []
 
     @typechecked()

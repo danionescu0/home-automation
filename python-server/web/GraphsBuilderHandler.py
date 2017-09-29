@@ -6,7 +6,7 @@ from typeguard import typechecked
 from tornado.web import authenticated
 
 from web.BaseHandler import BaseHandler
-from repository.Sensors import Sensors
+from repository.SensorsRepository import SensorsRepository
 from tools.DateUtils import DateUtils
 
 
@@ -14,7 +14,7 @@ class GraphsBuilderHandler(BaseHandler):
     __DEFAULT_SELECTED_SENSOR = 'light:living'
 
     @typechecked()
-    def initialize(self, sensors_repo: Sensors, sensors_config: list):
+    def initialize(self, sensors_repo: SensorsRepository, sensors_config: list):
         self.__sensors_repo = sensors_repo
         self.__sensors_config = sensors_config
 

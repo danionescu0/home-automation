@@ -6,7 +6,7 @@ from typeguard import typechecked
 
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.Base import Base
-from repository.Sensors import Sensors
+from repository.SensorsRepository import SensorsRepository
 from event.SensorUpdateEvent import SensorUpdateEvent
 from communication.SensorsParseException import SensorsParseException
 
@@ -15,7 +15,7 @@ class IncommingCommunicationThread(threading.Thread):
     LISTEN_DELAY = 0.01
 
     @typechecked()
-    def __init__(self, text_sensor_data_parser: TextSensorDataParser, sensors_repo: Sensors,
+    def __init__(self, text_sensor_data_parser: TextSensorDataParser, sensors_repo: SensorsRepository,
                  sensor_update_event: SensorUpdateEvent, communicator: Base, logger: RootLogger):
         threading.Thread.__init__(self)
         self.__text_sensor_data_parser = text_sensor_data_parser
@@ -41,5 +41,5 @@ class IncommingCommunicationThread(threading.Thread):
             return
 
         for sensor in sensors:
-            self.__sensors_repo.set_sensor(sensor['type'], sensor['location'], sensor['value'])
-            self.__sensor_update_event.send(sensor['type'], sensor['location'], sensor['value'])
+            self.__sensors_repo.set_sensor(sensor)
+            self.__sensor_update_event.send(sensor.type, sensor.location, sensor.value)

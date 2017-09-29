@@ -6,7 +6,7 @@ from typeguard import typechecked
 from repository.AbstractRepository import AbstractRepository
 
 
-class Actuators(AbstractRepository):
+class ActuatorsRepository(AbstractRepository):
     REDIS_KEY = 'actuators'
 
     @typechecked()

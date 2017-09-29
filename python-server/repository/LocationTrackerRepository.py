@@ -5,7 +5,7 @@ from typeguard import typechecked
 from repository.AbstractRepository import AbstractRepository
 
 
-class LocationTracker(AbstractRepository):
+class LocationTrackerRepository(AbstractRepository):
     @typechecked()
     def __init__(self, configuration: dict):
         AbstractRepository.__init__(self, configuration)

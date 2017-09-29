@@ -3,15 +3,15 @@ from logging import RootLogger
 from typeguard import typechecked
 from tornado.web import authenticated
 
-from repository.IftttRules import IftttRules
+from repository.IftttRulesRepository import IftttRulesRepository
 from web.BaseHandler import BaseHandler
-from repository.Actuators import Actuators
+from repository.ActuatorsRepository import ActuatorsRepository
 from ifttt.ExpressionValidator import ExpressionValidator
 
 
 class IftttHandler(BaseHandler):
     @typechecked()
-    def initialize(self, actuators_repo: Actuators, ifttt_rules: IftttRules,
+    def initialize(self, actuators_repo: ActuatorsRepository, ifttt_rules: IftttRulesRepository,
                    ifttt_expression_validator: ExpressionValidator, logging: RootLogger):
 
         self.__actuators_repo = actuators_repo
@@ -66,8 +66,8 @@ class IftttHandler(BaseHandler):
         actuator_state = (False, True)[self.get_argument("actuator_state", None, 'On') == 'On']
         voice = self.get_argument("voice", "", True)
         commands = [{
-            IftttRules.COMMAND_ACTUATOR_NAME : actuator_name,
-            IftttRules.COMMAND_ACTUATOR_STATE : actuator_state,
-            IftttRules.COMMAND_VOICE : voice
+            IftttRulesRepository.COMMAND_ACTUATOR_NAME : actuator_name,
+            IftttRulesRepository.COMMAND_ACTUATOR_STATE : actuator_state,
+            IftttRulesRepository.COMMAND_VOICE : voice
         }]
         self.__ifttt_rules.upsert(rule_name, trigger_rules, active, commands)

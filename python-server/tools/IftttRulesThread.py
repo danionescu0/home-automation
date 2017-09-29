@@ -9,14 +9,14 @@ from ifttt.parser.Tokenizer import Tokenizer
 from ifttt.interpretter.InterpretterContext import InterpretterContext
 from ifttt.parser.ParseException import ParseException
 from ifttt.command.CommandExecutor import CommandExecutor
-from repository.IftttRules import IftttRules
+from repository.IftttRulesRepository import IftttRulesRepository
 
 
 class IftttRulesThread(threading.Thread):
     ITERATE_INTERVAL = 60
 
     @typechecked()
-    def __init__(self, ifttt_rules: IftttRules, command_executor: CommandExecutor,
+    def __init__(self, ifttt_rules: IftttRulesRepository, command_executor: CommandExecutor,
                  tokenizer: Tokenizer, logging: RootLogger):
         threading.Thread.__init__(self)
         self.__ifttt_rules = ifttt_rules
@@ -34,9 +34,9 @@ class IftttRulesThread(threading.Thread):
         rules = self.__ifttt_rules.get_all_active()
         for key, rule in rules.items():
             self.__logging.debug('Checking rule {0}'.format(key))
-            if not self.__check_rule(rule[IftttRules.TRIGGER_RULES]):
+            if not self.__check_rule(rule[IftttRulesRepository.TRIGGER_RULES]):
                 continue
-            for command in rule[IftttRules.COMMANDS]:
+            for command in rule[IftttRulesRepository.COMMANDS]:
                 self.__command_executor.execute(command)
 
     def __check_rule(self, rule):
