@@ -23,4 +23,4 @@ class IntruderAlertListener:
         sensor_type = sensor_update.get_type()
         sensor_value = sensor_update.get_new_value()
 
-        return actuators['homeAlarm']['state'] == True and sensor_type == 'presence' and sensor_value == 1
+        return actuators['homeAlarm'].state == True and sensor_type == 'presence' and sensor_value == 1

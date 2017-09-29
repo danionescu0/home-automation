@@ -7,6 +7,7 @@ conf = {
         'strategy' : 'send',
         'communicator': 'bluetooth',
         'send_to_device': 'holway',
+        'encription': False,
         'command': {True: 'O'}
     },
     'homeAlarm': {
@@ -17,6 +18,7 @@ conf = {
         'strategy' : False,
         'communicator': False,
         'send_to_device': False,
+        'encription': False,
         'command': False
     },
     'livingCourtainsDwn': {
@@ -51,7 +53,8 @@ conf = {
         'actuators' : ['livingLight', 'bedroomLight', 'kitchenLight', 'holwayLight', 'closetLight', 'balconyLight'],
         'communicator': False,
         'send_to_device': False,
-        'command': False
+        'command': False,
+        'encription': False,
     },
     'livingCourtains': {
         'state': False,
@@ -149,5 +152,7 @@ conf = {
         'strategy': 'wemo-switch',
         'communicator': 'wemoSwitch',
         'send_to_device': 'DanSwitch1',
+        'command': False,
+        'encription': False,
     }
 }

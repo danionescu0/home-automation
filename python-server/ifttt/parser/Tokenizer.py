@@ -36,7 +36,7 @@ class Tokenizer:
         self.__sensors = None
 
     @typechecked()
-    def tokenize(self, text:str) -> List[Token]:
+    def tokenize(self, text: str) -> List[Token]:
         self.__actuators = self.__actuators_repo.get_actuators()
         self.__sensors = self.__sensors_repo.get_sensors()
         cleanned_text = self.__get_cleanned_text(text)
@@ -85,11 +85,11 @@ class Tokenizer:
 
         raise ParseException("Sensor with name {0} not found".format(sensor_data))
 
-    def __get_actuator_value(self, actuator_name):
+    def __get_actuator_value(self, actuator_name: str):
         if actuator_name not in self.__actuators:
             raise ParseException("Actuator with name {0} not found".format(actuator_name))
 
-        return self.__actuators[actuator_name]['state']
+        return self.__actuators[actuator_name].state
 
     def __get_current_time(self):
         from_zone = tz.gettz('UTC')

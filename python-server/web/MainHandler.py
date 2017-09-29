@@ -16,10 +16,9 @@ class MainHandler(BaseHandler):
 
     @authenticated
     def get(self):
-        actuators = self.__actuators_repo.get_actuators()
         self.render(
             "./template/main.html",
-            actuators = self.__group_actuators(actuators, 'room'),
+            actuators = self.__group_actuators(),
             sensors = self.__sensors_repo.get_sensors(),
             selected_menu_item="home"
         )
@@ -30,14 +29,14 @@ class MainHandler(BaseHandler):
         actuator_value = self.get_argument("actuator_value", None, True)
         self.job_controll.change_actuator(actuator_name, {'false' : False, 'true': True}[actuator_value])
 
-    def __group_actuators(self, actuators, by):
+    def __group_actuators(self):
+        actuators = self.__actuators_repo.get_actuators()
         grouped_actuators = {}
-        for actuator_name, actuator_properties in actuators.items():
-            group_key = actuator_properties[by]
+        for name, actuator in actuators.items():
+            group_key = actuator.room
             if not group_key in grouped_actuators:
                 grouped_actuators[group_key] = []
-            actuator_data = actuators[actuator_name]
-            actuator_data['name'] = actuator_name
+            actuator_data = actuators[name]
             grouped_actuators[group_key].append(actuator_data)
 
         return grouped_actuators

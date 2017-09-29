@@ -44,7 +44,7 @@ class HomeDefence:
     def __is_alarm_set(self):
         actuators = self.__actuators_repo.get_actuators()
 
-        return actuators['homeAlarm']['state'] == True
+        return actuators['homeAlarm'].state == True
 
     def __toggle_lights(self):
         if self.__last_burgler_light is not None:
