@@ -31,15 +31,15 @@ class IftttRulesThread(threading.Thread):
             time.sleep(self.ITERATE_INTERVAL)
 
     def __do_run(self):
-        rules = self.__ifttt_rules.get_all_active()
-        for key, rule in rules.items():
-            self.__logging.debug('Checking rule {0}'.format(key))
-            if not self.__check_rule(rule[IftttRulesRepository.TRIGGER_RULES]):
+        rules = self.__ifttt_rules.get_all()
+        for name, rule in rules.items():
+            if not rule.active or not self.__check_rule(rule.text):
                 continue
-            for command in rule[IftttRulesRepository.COMMANDS]:
+            self.__logging.debug('Checking rule with name: {0}'.format(name))
+            for command in rule.rule_commands:
                 self.__command_executor.execute(command)
 
-    def __check_rule(self, rule):
+    def __check_rule(self, rule: str) -> bool:
         context = InterpretterContext()
         expression_builder = ExpressionBuilder(self.__tokenizer)
         expression_builder.set_text(rule)

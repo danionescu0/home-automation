@@ -26,14 +26,13 @@ from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
 from web.SystemStatusHandler import SystemStatusHandler
-from web.security.JwtTokenFactory import JwtTokenFactory
 from ifttt.ExpressionValidator import ExpressionValidator
 from ifttt.parser.Tokenizer import Tokenizer
 
 authentication = Authentication(general.credentials)
 actuators_repo = ActuatorsRepository(general.redis_config, actuators.conf)
 sensors_repo = SensorsRepository(general.redis_config, sensors.conf)
-ifttt_rules = IftttRulesRepository(general.redis_config)
+rules_repository = IftttRulesRepository(general.redis_config)
 location_tracker = LocationTrackerRepository(general.redis_config)
 async_jobs = AsyncJobs(general.redis_config)
 async_jobs.connect()
@@ -73,9 +72,8 @@ def make_app():
                 IftttHandler,
                 dict(
                     actuators_repo=actuators_repo,
-                    ifttt_rules=ifttt_rules,
+                    rules_repository=rules_repository,
                     ifttt_expression_validator=ifttt_expression_validator,
-                    logging=logging
                 ),
                 name='ifttt'
                 ),

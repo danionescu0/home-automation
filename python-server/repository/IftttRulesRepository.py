@@ -1,9 +1,11 @@
 import json
+from typing import Dict
 
 from typeguard import typechecked
 
 from repository.AbstractRepository import AbstractRepository
-
+from model.Rule import Rule
+from model.RuleCommand import RuleCommand
 
 class IftttRulesRepository(AbstractRepository):
     TRIGGER_RULES = 'trigger-rules'
@@ -37,19 +39,16 @@ class IftttRulesRepository(AbstractRepository):
 
         return self.client.set(self.__REDIS_KEY, json.dumps(rules))
 
-    @typechecked()
-    def get_all(self) -> dict:
-        rules = self.get(self.__REDIS_KEY)
-        if not rules:
+    def get_all(self) -> Dict[str, Rule]:
+        rules_data = self.get(self.__REDIS_KEY)
+        if not rules_data:
             return {}
+        rules = {}
+        for name, rule_data in rules_data.items():
+            commands = [RuleCommand(data['actuator_name'], data['actuator_state'], data['voice'])
+                        for data in rule_data['commands']]
+            rule = Rule(name, rule_data['trigger-rules'], rule_data['active'])
+            rule.add_commands(commands)
+            rules[name] = rule
 
         return rules
-
-    @typechecked()
-    def get_all_active(self) -> dict:
-        active = {}
-        for key, rule in self.get_all().items():
-            if rule[self.ACTIVE]:
-                active[key] = rule
-
-        return  active

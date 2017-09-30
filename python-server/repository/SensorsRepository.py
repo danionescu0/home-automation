@@ -25,10 +25,6 @@ class SensorsRepository(AbstractRepository):
         self.current_timestamp = 0
 
     @typechecked()
-    def get_sensors2(self) -> list:
-        return self.get(self.REDIS_SENSORS_KEY)
-
-    @typechecked()
     def get_sensors(self) -> List[Sensor]:
         sensors_data = self.get(self.REDIS_SENSORS_KEY)
         sensors = []
