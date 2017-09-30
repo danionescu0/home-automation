@@ -14,7 +14,8 @@ class SetPhoneIsHomeListener:
     HOME_RADIUS = 0.5
 
     @typechecked()
-    def __init__(self, home_coordonates: Tuple[float, float], sensors_repo: SensorsRepository, location_tracker: LocationTrackerRepository):
+    def __init__(self, home_coordonates: Tuple[float, float], sensors_repo: SensorsRepository,
+                 location_tracker: LocationTrackerRepository):
         self.__home_coordonates = home_coordonates
         self.__location_tracker = location_tracker
         self.__sensors_repo = sensors_repo

@@ -1,22 +1,9 @@
-import sys
-
 from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
 
-from config import actuators
 from config import general
 from config import sensors
 
-from listener.SaveLocationListener import SaveLocationListener
-from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
-from repository.LocationTrackerRepository import LocationTrackerRepository
-from repository.IftttRulesRepository import IftttRulesRepository
-from repository.ActuatorsRepository import ActuatorsRepository
-from repository.SensorsRepository import SensorsRepository
-from tools.Authentication import Authentication
-from tools.AsyncJobs import AsyncJobs
-from tools.VoiceCommands import VoiceCommands
-from tools.LoggingConfig import LoggingConfig
 from web.MainHandler import MainHandler
 from web.ApiTokenAuthHandler import ApiTokenHandler
 from web.ApiLocationHandler import ApiLocationHandler
@@ -26,26 +13,22 @@ from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
 from web.SystemStatusHandler import SystemStatusHandler
-from ifttt.ExpressionValidator import ExpressionValidator
-from ifttt.parser.Tokenizer import Tokenizer
+from container import Container
 
-authentication = Authentication(general.credentials)
-actuators_repo = ActuatorsRepository(general.redis_config, actuators.conf)
-sensors_repo = SensorsRepository(general.redis_config, sensors.conf)
-rules_repository = IftttRulesRepository(general.redis_config)
-location_tracker = LocationTrackerRepository(general.redis_config)
-async_jobs = AsyncJobs(general.redis_config)
+container = Container()
+
+root_logger = container.root_logger()
+authentication = container.authentication()
+actuators_repo = container.actuators_repository()
+sensors_repo = container.sensors_repository()
+async_jobs = container.async_jobs()
+root_logger = container.root_logger()
+
+
+save_location_listener = container.save_location_listener()
+set_phone_is_home_listener = container.set_phone_is_home_listener()
 async_jobs.connect()
 
-logging_config = LoggingConfig(general.logging['log_file'], general.logging['log_entries'])
-logging = logging_config.get_logger()
-sys.excepthook = logging_config.set_error_hadler
-
-e1 = SaveLocationListener(location_tracker)
-e2 = SetPhoneIsHomeListener(general.home_coordonates, sensors_repo, location_tracker)
-tokenizer = Tokenizer(sensors_repo, actuators_repo)
-ifttt_expression_validator = ExpressionValidator(tokenizer)
-voice_commands = VoiceCommands(async_jobs, logging).configure()
 
 def make_app():
     settings = {
@@ -72,8 +55,8 @@ def make_app():
                 IftttHandler,
                 dict(
                     actuators_repo=actuators_repo,
-                    rules_repository=rules_repository,
-                    ifttt_expression_validator=ifttt_expression_validator,
+                    rules_repository=container.ifttt_rules_repository(),
+                    expression_validator=container.expression_validator(),
                 ),
                 name='ifttt'
                 ),
@@ -98,7 +81,7 @@ def make_app():
             url(
                 r'/api/voice-command',
                 ApiVoiceCommandHandler,
-                dict(voice_commands=voice_commands),
+                dict(voice_commands=container.voice_commands()),
                 name='api_voice_command'
             )
         ], **settings)

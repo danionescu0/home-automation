@@ -14,11 +14,11 @@ from model.RuleCommand import RuleCommand
 class IftttHandler(BaseHandler):
     @typechecked()
     def initialize(self, actuators_repo: ActuatorsRepository, rules_repository: IftttRulesRepository,
-                   ifttt_expression_validator: ExpressionValidator):
+                   expression_validator: ExpressionValidator):
 
         self.__actuators_repo = actuators_repo
         self.__rules_repository = rules_repository
-        self.__ifttt_expression_validator = ifttt_expression_validator
+        self.__expression_validator = expression_validator
 
     @authenticated
     def get(self):
@@ -39,8 +39,8 @@ class IftttHandler(BaseHandler):
             self.__rules_repository.delete(rule_name)
 
         trigger_rules = self.get_argument("trigger_rules", None, True)
-        if (not self.__ifttt_expression_validator.is_valid(trigger_rules)):
-            self.write(self.__ifttt_expression_validator.get_error(trigger_rules))
+        if (not self.__expression_validator.is_valid(trigger_rules)):
+            self.write(self.__expression_validator.get_error(trigger_rules))
             self.set_status(406)
             return
         if (self.get_argument("type", None, True) == 'update'):
