@@ -1,5 +1,4 @@
 from typing import Callable
-import signal
 import sys
 
 from config import actuators
@@ -18,7 +17,12 @@ from ifttt.command.CommandExecutor import CommandExecutor
 from ifttt.parser.Tokenizer import Tokenizer
 from ifttt.command.TextCommunicationEnhancer import TextCommunicationEnhancer
 from ifttt.ExpressionValidator import ExpressionValidator
-
+from ifttt.parser.ActuatorTokenConverter import ActuatorTokenConverter
+from ifttt.parser.SensorTokenConverter import SensorTokenConverter
+from ifttt.parser.CurrentTimeTokenConverter import CurrentTimeTokenConverter
+from ifttt.parser.ActuatorStateTokenConverter import ActuatorStateTokenConverter
+from ifttt.parser.BooleanTokenConverter import BooleanTokenConverter
+from ifttt.parser.IntTokenConverter import IntTokenConverter
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
@@ -42,13 +46,10 @@ from logging import RootLogger
 def singleton(function: Callable):
     caching = {}
     def wrapper(*args, **kwargs):
-        print (function)
         if function.__name__ in caching:
-            print('hit for method:' + function.__name__)
             return caching[function.__name__]
         caching[function.__name__] = function(*args, **kwargs)
 
-        print('miss for method:' + function.__name__)
         return caching[function.__name__]
 
     return wrapper
@@ -122,8 +123,24 @@ class Container:
         return Authentication(general.credentials)
 
     @singleton
+    def actuator_token_converter(self) -> ActuatorTokenConverter:
+        return ActuatorTokenConverter(self.actuators_repository())
+
+    @singleton
+    def sensors_token_converter(self) -> SensorTokenConverter:
+        return SensorTokenConverter(self.sensors_repository())
+
+    @singleton
     def tokenizer(self) -> Tokenizer:
-        return Tokenizer(self.sensors_repository(), self.actuators_repository())
+        tokenizer = Tokenizer(self.root_logger())
+        tokenizer.add_token_converter(self.actuator_token_converter())
+        tokenizer.add_token_converter(self.sensors_token_converter())
+        tokenizer.add_token_converter(CurrentTimeTokenConverter())
+        tokenizer.add_token_converter(ActuatorStateTokenConverter())
+        tokenizer.add_token_converter(BooleanTokenConverter())
+        tokenizer.add_token_converter(IntTokenConverter())
+
+        return tokenizer
 
     @singleton
     def change_actuator_listener(self) -> ChangeActuatorListener:
