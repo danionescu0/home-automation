@@ -40,6 +40,8 @@ from tools.HomeDefence import HomeDefence
 from tools.AsyncJobs import AsyncJobs
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
+from locking.TimedLock import TimedLock
+from locking.HomeAlarmLock import HomeAlarmLock
 from logging import RootLogger
 
 
@@ -116,7 +118,8 @@ class Container:
 
     @singleton
     def home_defence(self) -> HomeDefence:
-        return HomeDefence(self.actuator_commands(), self.sound_api(), self.actuators_repository())
+        return HomeDefence(self.actuator_commands(), self.sound_api(), self.actuators_repository(),
+                           general.home_defence['burgler_lights'], general.home_defence['burgler_time_between_actions'])
 
     @singleton
     def authentication(self) -> Authentication:
@@ -152,7 +155,7 @@ class Container:
 
     @singleton
     def intruder_alert_listener(self) -> IntruderAlertListener:
-        return IntruderAlertListener(self.actuators_repository(), self.email_notificator())
+        return IntruderAlertListener(self.actuators_repository(), self.email_notificator(), self.home_alarm_lock())
 
     @singleton
     def save_location_listener(self) -> SaveLocationListener:
@@ -187,3 +190,11 @@ class Container:
     @singleton
     def voice_commands(self) -> VoiceCommands:
         return VoiceCommands(self.async_jobs(), self.root_logger()).configure()
+
+    @singleton
+    def timed_lock(self) -> TimedLock:
+        return TimedLock(general.redis_config)
+
+    @singleton
+    def home_alarm_lock(self) -> HomeAlarmLock:
+        return HomeAlarmLock(self.timed_lock(), general.home_defence['alarm_lock'])

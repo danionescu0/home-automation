@@ -42,6 +42,12 @@ logging = {
     'log_entries': 20000000
 }
 
+home_defence = {
+    'alarm_lock': 360,
+    'burgler_lights' : ['livingLight', 'kitchenLight', 'holwayLight'],
+    'burgler_time_between_actions' : 3
+}
+
 communication = {
     'bluetooth' : {
         'connections' :

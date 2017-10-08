@@ -10,16 +10,17 @@ from repository.ActuatorsRepository import ActuatorsRepository
 from sound.SoundApi import SoundApi
 
 
+# Todo split this class into multiple components like burgler light toggler, speech playing
 class HomeDefence:
-    # @ToDo move magic numbers to config
     @typechecked()
-    def __init__(self, actuator_commands: ActuatorCommands, sound_api: SoundApi, actuators_repo: ActuatorsRepository):
+    def __init__(self, actuator_commands: ActuatorCommands, sound_api: SoundApi,
+                 actuators_repo: ActuatorsRepository, burgler_lights: list, wait_between_actions: int):
         self.__actuator_commands = actuator_commands
         self.__sound_api = sound_api
         self.__actuators_repo = actuators_repo
         self.__last_burgler_light = None
-        self.__burgler_lights = ['livingLight', 'kitchenLight', 'holwayLight']
-        self._max_wait_between_actions = 3
+        self.__burgler_lights = burgler_lights
+        self.__wait_between_actions = wait_between_actions
 
     @typechecked()
     def iterate_burgler_mode(self) -> None:
@@ -37,9 +38,9 @@ class HomeDefence:
         self.__toggle_lights()
 
     def __should_random_skip_iteration(self):
-        act = random.randint(0, self._max_wait_between_actions)
+        act = random.randint(0, self.__wait_between_actions)
 
-        return act != self._max_wait_between_actions
+        return act != self.__wait_between_actions
 
     def __is_alarm_set(self):
         actuators = self.__actuators_repo.get_actuators()
