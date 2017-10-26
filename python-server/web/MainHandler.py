@@ -1,15 +1,15 @@
 from tornado.web import authenticated
 from typeguard import typechecked
 
-from web.BaseHandler import BaseHandler
-from tools.AsyncJobs import AsyncJobs
+from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 from repository.ActuatorsRepository import ActuatorsRepository
 from repository.SensorsRepository import SensorsRepository
+from web.BaseHandler import BaseHandler
 
 
 class MainHandler(BaseHandler):
     @typechecked()
-    def initialize(self, job_controll: AsyncJobs, actuators_repo: ActuatorsRepository, sensors_repo: SensorsRepository):
+    def initialize(self, job_controll: AsyncActuatorCommands, actuators_repo: ActuatorsRepository, sensors_repo: SensorsRepository):
         self.job_controll = job_controll
         self.__actuators_repo = actuators_repo
         self.__sensors_repo = sensors_repo

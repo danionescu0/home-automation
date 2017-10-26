@@ -21,7 +21,7 @@ root_logger = container.root_logger()
 authentication = container.authentication()
 actuators_repo = container.actuators_repository()
 sensors_repo = container.sensors_repository()
-async_jobs = container.async_jobs()
+async_jobs = container.async_actuator_commands()
 root_logger = container.root_logger()
 
 

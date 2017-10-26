@@ -2,13 +2,12 @@ from logging import RootLogger
 
 from typeguard import typechecked
 
-from communication.Base import Base
+from communication.BaseSerial import BaseSerial
 from communication.SerialBluetooth import SerialBluetooth
 from communication.Serial import Serial
-from communication.WemoSwitch import WemoSwitch
 
 
-class CommunicatorRegistry:
+class SerialCommunicatorRegistry:
     @typechecked()
     def __init__(self, configuration, logger: RootLogger):
         self.__configuration = configuration
@@ -20,16 +19,11 @@ class CommunicatorRegistry:
         serial.set_logger(self.__logger)
         serial.connect()
         self.__communicators.update({'serial': serial})
-        print(self.__configuration['bluetooth']['connections'])
         bluetooth = SerialBluetooth(self.__configuration['bluetooth']['connections'])
         bluetooth.set_logger(self.__logger)
         bluetooth.connect()
         self.__communicators.update({'bluetooth' : bluetooth})
-        wemo_switch = WemoSwitch()
-        wemo_switch.set_logger(self.__logger)
-        wemo_switch.connect()
-        self.__communicators.update({'wemo_switch': wemo_switch})
 
     @typechecked()
-    def get_communicator(self, type: str) -> Base:
+    def get_communicator(self, type: str) -> BaseSerial:
         return self.__communicators[type]

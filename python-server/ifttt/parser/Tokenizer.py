@@ -8,6 +8,7 @@ from ifttt.parser.Token import Token
 from ifttt.parser.ParseException import ParseException
 from ifttt.parser.TokenConverter import TokenConverter
 
+
 class Tokenizer:
     __token_rules = [
         ('A\[(\w+)\]', Token.TYPE_ACTUATOR),

@@ -1,12 +1,12 @@
 from typeguard import typechecked
 
+from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 from .BaseStrategy import BaseStrategy
-from tools.AsyncJobs import AsyncJobs
 
 
 class GroupStrategy(BaseStrategy):
     @typechecked()
-    def __init__(self, actuators_config: dict, job_controll: AsyncJobs):
+    def __init__(self, actuators_config: dict, job_controll: AsyncActuatorCommands):
         super(GroupStrategy, self).__init__(actuators_config)
         self.__job_controll = job_controll
 

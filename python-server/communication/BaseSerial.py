@@ -5,7 +5,7 @@ from logging import RootLogger
 from typeguard import typechecked
 
 
-class Base(metaclass=abc.ABCMeta):
+class BaseSerial(metaclass=abc.ABCMeta):
     def __init__(self):
         self.__endpoint = None
         self.__callback = None

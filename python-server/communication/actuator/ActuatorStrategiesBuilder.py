@@ -2,23 +2,25 @@ from typing import List
 
 from typeguard import typechecked
 
-from communication.actuator.SerialSendStrategy import SerialSendStrategy
+from communication.SerialCommunicatorRegistry import SerialCommunicatorRegistry
+from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 from communication.actuator.BaseStrategy import BaseStrategy
-from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
 from communication.actuator.GroupStrategy import GroupStrategy
-from communication.CommunicatorRegistry import CommunicatorRegistry
+from communication.actuator.SerialSendStrategy import SerialSendStrategy
+from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
+from communication.WemoSwitch import WemoSwitch
 from repository.ActuatorsRepository import ActuatorsRepository
-from tools.AsyncJobs import AsyncJobs
 
 
 class ActuatorStrategiesBuilder():
     @typechecked()
-    def __init__(self, communicator_registry: CommunicatorRegistry, actuators_repo: ActuatorsRepository,
-                 actuators_config: dict, job_controll: AsyncJobs):
+    def __init__(self, communicator_registry: SerialCommunicatorRegistry, actuators_repo: ActuatorsRepository,
+                 actuators_config: dict, async_actuator_commands: AsyncActuatorCommands, wemo_switch: WemoSwitch):
         self.__communicator_registry = communicator_registry
         self.__actuators_repo = actuators_repo
         self.__actuators_config = actuators_config
-        self.__job_controll = job_controll
+        self.__async_actuator_commands = async_actuator_commands
+        self.__wemo_switch = wemo_switch
         self.__strategies = None
 
     def build(self):
@@ -27,8 +29,8 @@ class ActuatorStrategiesBuilder():
         self.__strategies = []
         self.__strategies.append(
             SerialSendStrategy(self.__communicator_registry, self.__actuators_config, self.__actuators_repo))
-        self.__strategies.append(WemoSwitchStrategy(self.__actuators_config, self.__communicator_registry))
-        self.__strategies.append(GroupStrategy(self.__actuators_config, self.__job_controll))
+        self.__strategies.append(WemoSwitchStrategy(self.__actuators_config, self.__wemo_switch))
+        self.__strategies.append(GroupStrategy(self.__actuators_config, self.__async_actuator_commands))
 
         return self
 

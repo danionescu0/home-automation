@@ -3,10 +3,10 @@ from typing import Callable
 import bluetooth
 from typeguard import typechecked
 
-from .Base import Base
+from .BaseSerial import BaseSerial
 
 
-class SerialBluetooth(Base):
+class SerialBluetooth(BaseSerial):
     RESOURCE_TEMPORARILY_UNAVAILABLE = '11'
 
     @typechecked()

@@ -3,10 +3,10 @@ from typing import Callable
 import serial
 from typeguard import typechecked
 
-from communication.Base import Base
+from communication.BaseSerial import BaseSerial
 
 
-class Serial(Base):
+class Serial(BaseSerial):
     @typechecked()
     def __init__(self, endpoint: dict):
         self.__endpoint = endpoint

@@ -5,7 +5,7 @@ from logging import RootLogger
 from typeguard import typechecked
 
 from communication.TextSensorDataParser import TextSensorDataParser
-from communication.Base import Base
+from communication.BaseSerial import BaseSerial
 from repository.SensorsRepository import SensorsRepository
 from event.SensorUpdateEvent import SensorUpdateEvent
 from communication.SensorsParseException import SensorsParseException
@@ -16,7 +16,7 @@ class IncommingCommunicationThread(threading.Thread):
 
     @typechecked()
     def __init__(self, text_sensor_data_parser: TextSensorDataParser, sensors_repo: SensorsRepository,
-                 sensor_update_event: SensorUpdateEvent, communicator: Base, logger: RootLogger):
+                 sensor_update_event: SensorUpdateEvent, communicator: BaseSerial, logger: RootLogger):
         threading.Thread.__init__(self)
         self.__text_sensor_data_parser = text_sensor_data_parser
         self.__sensors_repo = sensors_repo

@@ -15,7 +15,7 @@ class ActuatorCommands:
         self.__actuators = None
 
     @typechecked()
-    def change_actuator(self, actuator_name: str, state: bool):
+    def change_actuator(self, actuator_name: str, state):
         self.__actuators = self.__actuators_repo.get_actuators()
         self.__actuators_repo.set_actuator(actuator_name, state)
         if not self.__actuators[actuator_name].strategy:

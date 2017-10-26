@@ -1,18 +1,20 @@
 # Home automation project #
 
-Yet another home automation project. The main concern of the project is keeping price down and maximizing customizability, 
-it's a DIY project for makers and hacker and it's based on a raspberry pi (or another linux compatible board), arduino boards
+This project will give you more controll over your house and you'll going to have fun building it.
+It's strong points are easy integration of very custom hardware which you can build yourself, and also keep the price down,
+and a very strong programming IFTTT interface that can be access in the web interface (no coding).
+
+It's a DIY project for makers and hacker and it's based on a raspberry pi (or another linux compatible board), arduino boards
 IOT devices and other electronics.
 
 
 **Summary**
 
 * Feature list ?
-* Project review
+* Project overview
 * IFTTT
 * Screenshots
 * Component prices
-* Limitations
 * Technical overwiew
 * Further improvements
 
@@ -22,15 +24,15 @@ IOT devices and other electronics.
 
 * (IFTTT) ability to activate an actuator (light, courtain etc) on a time schedule and based on sensors data and actuators states
 * unlock a electromagnetic door through the press of a button on the app or through *fingerprint*
-* control various types of electric curtains (open / close)
+* open / closes various types of electric curtains 
 * control remote wall sockets (433 mhz versions by clonning their signal), and WeMo siwtches
-* use a speaker to emit alerts and statuses
+* use a speaker to emit voice alerts and statuses
 * supports voice remote controll from the [android](https://github.com/danionescu0/android-home-automation-support) application
 * toggle lights on / off (Livolo switches (check the product [here](https://www.aliexpress.com/item/Free-Shipping-Livolo-EU-Standard-Remote-Switch-White-Crystal-Glass-Panel-110-250V-Wall-Light-Remote/629004768.html?spm=2114.13010608.0.126.Mt7G6z)))
 * multiple action switches (configurable and extendable) ex: "_toggle all lights off_"
-* available environment sensors: temperature, humidity, light level, air quality, air pressure
+* available environment sensors: temperature, humidity, light level, air quality, air pressure and more
 * presence monitoring with infrared PIR sensors
-* power monitoring for the whole house 
+* power consumption monitoring for the whole house 
 * the sensors modules can be installed in many rooms and outside (i also have a special weather sensor module)
 * display charts with sensors data
 * email notifications if the alarm is set and someone enters the house
@@ -93,13 +95,6 @@ block of text will announce the temperature and humidity outside
 * An electric roller blade will start from 50$ [here](http://www.ebay.com/sch/i.html?_odkw=electric+courtains&_osacat=0&_from=R40&_trksid=p2045573.m570.l1313.TR0.TRC0.H0.Xelectric+roller+blinds.TRS0&_nkw=electric+roller+blinds&_sacat=0)
 
 
-**Limitations:**
-
-* The current bluetooth communication method has a limitation to 7 connected devices, 
-so i've implemented a communication strategy in paralel using HC-12 serial module
-* Light switches and remote wall socket do not have built in security, the signal can be clonned
-
-
 **Technical overwiew**
 
 This project uses the following technollogies, concepts and tools: 
@@ -115,12 +110,8 @@ please visit [python server](https://github.com/danionescu0/home-automation/tree
 **ToDo list:**
 
 * integrate Z-wave devices
-* integrate / build a music & voice player over http to sound alarms, play notifications etc
-* more unit tests
 * integrate air conditioning system
-* integrate more IOT devices available on the market
 * water consumption monitoring
 * mailbox senzor with email notification
 * user permissions, user management
-* SMS notifications
 

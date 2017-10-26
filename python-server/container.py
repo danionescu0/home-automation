@@ -1,48 +1,47 @@
-from typing import Callable
 import sys
+from logging import RootLogger
+from typing import Callable
 
-from config import actuators
-from config import general
-from config import sensors
-
-from communication.CommunicatorRegistry import CommunicatorRegistry
+from communication.SerialCommunicatorRegistry import SerialCommunicatorRegistry
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
+from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
-
+from communication.WemoSwitch import WemoSwitch
+from config import actuators
+from config import general
+from config import sensors
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
-from ifttt.command.CommandExecutor import CommandExecutor
-from ifttt.parser.Tokenizer import Tokenizer
-from ifttt.command.TextCommunicationEnhancer import TextCommunicationEnhancer
 from ifttt.ExpressionValidator import ExpressionValidator
-from ifttt.parser.ActuatorTokenConverter import ActuatorTokenConverter
-from ifttt.parser.SensorTokenConverter import SensorTokenConverter
-from ifttt.parser.CurrentTimeTokenConverter import CurrentTimeTokenConverter
+from ifttt.command.CommandExecutor import CommandExecutor
+from ifttt.command.TextCommunicationEnhancer import TextCommunicationEnhancer
 from ifttt.parser.ActuatorStateTokenConverter import ActuatorStateTokenConverter
+from ifttt.parser.ActuatorTokenConverter import ActuatorTokenConverter
 from ifttt.parser.BooleanTokenConverter import BooleanTokenConverter
+from ifttt.parser.CurrentTimeTokenConverter import CurrentTimeTokenConverter
 from ifttt.parser.IntTokenConverter import IntTokenConverter
+from ifttt.parser.SensorTokenConverter import SensorTokenConverter
+from ifttt.parser.Tokenizer import Tokenizer
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
 from listener.SaveLocationListener import SaveLocationListener
 from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
+from locking.HomeAlarmLock import HomeAlarmLock
+from locking.TimedLock import TimedLock
 from repository.ActuatorsRepository import ActuatorsRepository
 from repository.IftttRulesRepository import IftttRulesRepository
-from repository.SensorsRepository import SensorsRepository
 from repository.LocationTrackerRepository import LocationTrackerRepository
+from repository.SensorsRepository import SensorsRepository
 from sound.RemoteSpeaker import RemoteSpeaker
 from sound.SoundApi import SoundApi
 from tools.Authentication import Authentication
 from tools.EmailNotifier import EmailNotifier
 from tools.HomeDefence import HomeDefence
-from tools.AsyncJobs import AsyncJobs
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
-from locking.TimedLock import TimedLock
-from locking.HomeAlarmLock import HomeAlarmLock
-from logging import RootLogger
 
 
 def singleton(function: Callable):
@@ -66,8 +65,12 @@ class Container:
         return logging_config.get_logger()
 
     @singleton
-    def communicator_registry(self) -> CommunicatorRegistry:
-        return CommunicatorRegistry(general.communication, self.root_logger())
+    def serial_communicator_registry(self) -> SerialCommunicatorRegistry:
+        return SerialCommunicatorRegistry(general.communication, self.root_logger())
+
+    @singleton
+    def wemo_switch(self) -> WemoSwitch:
+        return WemoSwitch(self.root_logger())
 
     @singleton
     def sound_api(self) -> SoundApi:
@@ -89,11 +92,6 @@ class Container:
     @singleton
     def ifttt_rules_repository(self) -> IftttRulesRepository:
         return IftttRulesRepository(general.redis_config)
-
-    @singleton
-    def async_jobs(self) -> AsyncJobs:
-        return AsyncJobs(general.redis_config)
-
     @singleton
     def email_notificator(self) -> EmailNotifier:
         return EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
@@ -104,13 +102,17 @@ class Container:
 
     @singleton
     def actuator_strategies_builder(self) -> ActuatorStrategiesBuilder:
-        return ActuatorStrategiesBuilder(self.communicator_registry(), self.actuators_repository(),
-                                         actuators.conf, self.async_jobs())
+        return ActuatorStrategiesBuilder(self.serial_communicator_registry(), self.actuators_repository(),
+                                         actuators.conf, self.async_actuator_commands(), self.wemo_switch())
 
     @singleton
     def actuator_commands(self) -> ActuatorCommands:
         return ActuatorCommands(self.actuator_strategies_builder(), self.encriptors_builder(),
                                 self.actuators_repository())
+
+    @singleton
+    def async_actuator_commands(self) -> AsyncActuatorCommands:
+        return AsyncActuatorCommands(general.redis_config)
 
     @singleton
     def text_sensor_data_parser(self) -> TextSensorDataParser:
@@ -189,7 +191,7 @@ class Container:
 
     @singleton
     def voice_commands(self) -> VoiceCommands:
-        return VoiceCommands(self.async_jobs(), self.root_logger()).configure()
+        return VoiceCommands(self.async_actuator_commands(), self.root_logger()).configure()
 
     @singleton
     def timed_lock(self) -> TimedLock:

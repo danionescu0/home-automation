@@ -1,11 +1,12 @@
 import re
+from logging import RootLogger
 
-from adapt.intent import IntentBuilder
 from adapt.engine import IntentDeterminationEngine
+from adapt.intent import IntentBuilder
 from typeguard import typechecked
 
-from tools.AsyncJobs import AsyncJobs
-from logging import RootLogger
+from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
+
 
 class VoiceCommands:
     ACTIONS = 'Action'
@@ -13,7 +14,7 @@ class VoiceCommands:
     ACTUATOR_TYPE = 'ActuatorType'
 
     @typechecked()
-    def __init__(self, job_controll: AsyncJobs, logging: RootLogger):
+    def __init__(self, job_controll: AsyncActuatorCommands, logging: RootLogger):
         self.__job_controll = job_controll
         self.__logging = logging
 
