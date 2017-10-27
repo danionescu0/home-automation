@@ -1,15 +1,15 @@
 from typeguard import typechecked
 
 from repository.ActuatorsRepository import ActuatorsRepository
-from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
+from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 
 
 class ActuatorCommands:
     @typechecked()
-    def __init__(self, actuator_strategy_builder: ActuatorStrategiesBuilder,
+    def __init__(self, actuator_strategies: ActuatorStrategies,
                  encriptors_builder: EncriptorsBuilder, actuators_repo: ActuatorsRepository):
-        self.__actuator_strategy_builder = actuator_strategy_builder
+        self.__actuator_strategies = actuator_strategies
         self.__encriptors_builder = encriptors_builder
         self.__actuators_repo = actuators_repo
         self.__actuators = None
@@ -30,7 +30,7 @@ class ActuatorCommands:
         return success
 
     def __get_strategy(self, actuator_name):
-        strategies = self.__actuator_strategy_builder.build().get_strategies()
+        strategies = self.__actuator_strategies.get_strategies()
         try:
             return [strategy for strategy in strategies if strategy.supports(actuator_name)][0]
         except IndexError:

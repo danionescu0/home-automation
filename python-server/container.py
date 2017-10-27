@@ -5,10 +5,15 @@ from typing import Callable
 from communication.SerialCommunicatorRegistry import SerialCommunicatorRegistry
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.actuator.ActuatorCommands import ActuatorCommands
-from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
+from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 from communication.WemoSwitch import WemoSwitch
+from communication.ZWaveDevice import ZWaveDevice
+from communication.actuator.SerialSendStrategy import SerialSendStrategy
+from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
+from communication.actuator.GroupStrategy import GroupStrategy
+from communication.actuator.ZWaveStrategy import ZWaveStrategy
 from config import actuators
 from config import general
 from config import sensors
@@ -92,6 +97,7 @@ class Container:
     @singleton
     def ifttt_rules_repository(self) -> IftttRulesRepository:
         return IftttRulesRepository(general.redis_config)
+
     @singleton
     def email_notificator(self) -> EmailNotifier:
         return EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
@@ -101,13 +107,24 @@ class Container:
         return EncriptorsBuilder(general.communication['aes_key'])
 
     @singleton
-    def actuator_strategies_builder(self) -> ActuatorStrategiesBuilder:
-        return ActuatorStrategiesBuilder(self.serial_communicator_registry(), self.actuators_repository(),
-                                         actuators.conf, self.async_actuator_commands(), self.wemo_switch())
+    def zwave_device(self) -> ZWaveDevice:
+        return ZWaveDevice(self.root_logger(), general.communication['zwave']['port'],
+                           general.communication['zwave']['openzwave_config_path'])
+
+    @singleton
+    def actuator_strategies(self) -> ActuatorStrategies:
+        actuator_strategies = ActuatorStrategies()
+        actuator_strategies.add_strategy(SerialSendStrategy(self.serial_communicator_registry(), actuators.conf,
+                                                  self.actuators_repository()))
+        actuator_strategies.add_strategy(WemoSwitchStrategy(actuators.conf, self.wemo_switch()))
+        actuator_strategies.add_strategy(GroupStrategy(actuators.conf, self.async_actuator_commands()))
+        actuator_strategies.add_strategy(ZWaveStrategy(actuators.conf, self.zwave_device()))
+
+        return actuator_strategies
 
     @singleton
     def actuator_commands(self) -> ActuatorCommands:
-        return ActuatorCommands(self.actuator_strategies_builder(), self.encriptors_builder(),
+        return ActuatorCommands(self.actuator_strategies(), self.encriptors_builder(),
                                 self.actuators_repository())
 
     @singleton

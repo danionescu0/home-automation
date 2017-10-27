@@ -58,8 +58,12 @@ communication = {
     },
 
     'serial' : {
-        'port' : '/dev/ttyUSB0',
+        'port' : '/dev/ttyACM0',
         'baud_rate' : '9600'
+    },
+    'zwave' : {
+        'port' : '/dev/ttyUSB0',
+        'openzwave_config_path' : '/your/openzwave/config/path/here'
     },
 
     'aes_key' : '' # 16 characters key

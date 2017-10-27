@@ -1,7 +1,7 @@
 import unittest
 
 from repository.ActuatorsRepository import ActuatorsRepository
-from communication.actuator.ActuatorStrategiesBuilder import ActuatorStrategiesBuilder
+from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 
 

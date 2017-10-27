@@ -20,6 +20,8 @@ serial_communicator_registry.configure_communicators()
 async_actuator_commands.connect()
 wemo_switch = container.wemo_switch()
 wemo_switch.connect()
+zwave_device = container.zwave_device()
+zwave_device.connect()
 
 
 def main():

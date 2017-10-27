@@ -154,5 +154,16 @@ conf = {
         'send_to_device': 'DanSwitch1',
         'command': False,
         'encription': False,
+    },
+    'zwaveSwitch1': {
+        'state': False,
+        'type': 'bi',
+        'device_type': 'powerSocket',
+        'room': 'living',
+        'strategy': 'zwave-switch',
+        'communicator' : 'wemoSwitch',
+        'send_to_device': '0184f904.2.25.1.0',
+        'command': False,
+        'encription': False
     }
 }
