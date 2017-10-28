@@ -6,8 +6,7 @@ from communication.encriptors.BaseEncriptor import BaseEncriptor
 
 
 class BaseStrategy(metaclass=abc.ABCMeta):
-    def __init__(self, actuators_config: dict):
-        self.actuators_config = actuators_config
+    def __init__(self):
         self.__encriptor = None
 
     @abc.abstractmethod

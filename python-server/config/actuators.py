@@ -1,6 +1,6 @@
 conf = {
     'door': {
-        'state': False,
+        'value': False,
         'type': 'single',
         'room' : 'holway',
         'device_type': 'door',
@@ -11,7 +11,7 @@ conf = {
         'command': {True: 'O'}
     },
     'homeAlarm': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'action',
         'room' : 'general',
@@ -22,7 +22,7 @@ conf = {
         'command': False
     },
     'livingCourtainsDwn': {
-        'state': False,
+        'value': False,
         'type': 'single',
         'device_type': 'courtains',
         'room' : 'living',
@@ -33,7 +33,7 @@ conf = {
         'command': {True: 'C3|'}
     },
     'livingCourtainsUp': {
-        'state': False,
+        'value': False,
         'type': 'single',
         'device_type': 'courtains',
         'room' : 'living',
@@ -44,7 +44,7 @@ conf = {
         'command': {True: 'O3|'}
     },
     'closeAllLights': {
-        'state': False,
+        'value': False,
         'type': 'single',
         'device_type': 'action',
         'room' : 'general',
@@ -57,7 +57,7 @@ conf = {
         'encription': False,
     },
     'livingCourtains': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'courtains',
         'room' : 'living',
@@ -68,7 +68,7 @@ conf = {
         'command': {False: 'O90|', True: 'C90|'}
     },
     'livingLight': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'light',
         'room' : 'living',
@@ -79,7 +79,7 @@ conf = {
         'command': {False: '1C|', True: '1O|'}
     },
     'bedroomLight': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'light',
         'room' : 'bedroom',
@@ -90,7 +90,7 @@ conf = {
         'command': {False: '2C|', True: '2O|'}
     },
     'kitchenLight': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'light',
         'room' : 'kitchen',
@@ -101,7 +101,7 @@ conf = {
         'command': {False: '4C|', True: '4O|'}
     },
     'holwayLight': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'light',
         'room': 'holway',
@@ -112,7 +112,7 @@ conf = {
         'command': {False: '3C|', True: '3O|'}
     },
     'closetLight': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'light',
         'room': 'closet',
@@ -123,7 +123,7 @@ conf = {
         'command': {False: '5C|', True: '5O|'}
     },
     'balconyLight': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'light',
         'room': 'balcony',
@@ -134,7 +134,7 @@ conf = {
         'command': {False: '6C|', True: '6O|'}
     },
     'powerSocket1': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'powerSocket',
         'room': 'living',
@@ -145,7 +145,7 @@ conf = {
         'command': {False: '8C|', True: '8O|'}
     },
     'wemoSwitch1': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'powerSocket',
         'room': 'holway',
@@ -156,7 +156,7 @@ conf = {
         'encription': False,
     },
     'zwaveSwitch1': {
-        'state': False,
+        'value': False,
         'type': 'bi',
         'device_type': 'powerSocket',
         'room': 'living',

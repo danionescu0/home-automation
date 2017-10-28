@@ -1,7 +1,7 @@
 class Actuator:
-    def __init__(self, name: str, state: bool, device_type: str) -> None:
+    def __init__(self, name: str, value, device_type: str) -> None:
         self.name = name
-        self.state = state
+        self.value = value
         self.device_type = device_type
         self._type = None
         self._room = None
@@ -68,8 +68,8 @@ class Actuator:
         self._encription = value
 
     def __repr__(self) -> str:
-        return "Actuator: name({0}), state({1}), device_type({2}), type({3}), room({4})," \
+        return "Actuator: name({0}), value({1}), device_type({2}), type({3}), room({4})," \
                " strategy({5}), communicator({6}), send_to_device({7}), command({8})," \
-               " encription({9})".format(self.name, self.state, self.device_type, self._type
-                                                          ,self._room, self._strategy, self._communicator,
-                                                          self._send_to_device, self._command, self._encription)
+               " encription({9})".format(self.name, self.value, self.device_type, self._type
+                                         , self._room, self._strategy, self._communicator,
+                                         self._send_to_device, self._command, self._encription)

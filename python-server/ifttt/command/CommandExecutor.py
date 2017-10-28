@@ -24,6 +24,6 @@ class CommandExecutor:
             self.__sound_api.say(enhanced_text)
             self.__logging.debug('Speaking text: {0}'.format(command.voice_text))
         if command.actuator_name != '':
-            self.__logging.debug('Changing actuator {0} to state {1}'
+            self.__logging.debug('Changing actuator: {0} to new value: {1}'
                                  .format(command.actuator_name, command.actuator_state))
             self.__change_actuator_request_event.send(command.actuator_name, command.actuator_state)

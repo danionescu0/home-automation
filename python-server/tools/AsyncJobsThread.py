@@ -27,4 +27,4 @@ class AsyncJobsThread(threading.Thread):
 
     def __job_callback(self, job_data):
         self.__logging.debug('Incomming job data: {0}' .format(job_data))
-        self.__change_actuator_request_event.send(job_data["actuator"], job_data["state"])
+        self.__change_actuator_request_event.send(job_data["actuator"], job_data["value"])

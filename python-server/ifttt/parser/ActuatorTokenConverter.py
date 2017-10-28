@@ -13,7 +13,7 @@ class ActuatorTokenConverter(TokenConverter):
         if token_raw_value not in actuators:
             raise ParseException("Actuator with name {0} not found".format(token_raw_value))
 
-        return actuators[token_raw_value].state
+        return actuators[token_raw_value].value
 
     def get_supported_token(self) -> str:
         return Token.TYPE_ACTUATOR

@@ -45,7 +45,7 @@ class HomeDefence:
     def __is_alarm_set(self):
         actuators = self.__actuators_repo.get_actuators()
 
-        return actuators['homeAlarm'].state == True
+        return actuators['homeAlarm'].value == True
 
     def __toggle_lights(self):
         if self.__last_burgler_light is not None:
@@ -62,4 +62,4 @@ class HomeDefence:
             'Is anybody there'
         ]
         sound_nr = random.randint(0, len(sounds) - 1)
-        self.__sound_api.say[sounds[sound_nr]]
+        self.__sound_api.say(sounds[sound_nr])

@@ -7,7 +7,7 @@
 * Q: Why python 3.5 with type hinting?
 
   A: As the project grew larger type hinting proved a big help in a better 
-  understanding the proeject and code with eas
+  understanding the project and code with easy debugging
 
 * Q: Why arduino?
 
@@ -40,13 +40,16 @@
 * install python packages using "pip3 install -r requirements.txt"
 * tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
 * in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
+* installing Zwave: https://github.com/OpenZWave/python-openzwave/blob/master/INSTALL_ARCH.rst
+and https://github.com/OpenZWave/python-openzwave
 
 # Linux packages
 * apt-get install screen redis-server 
 
 # Running the servers
-* in a screen or background process run: "python background.py"
-* in other screen or background process run: "python webserver.py"
+* start the virtual environment if you're using that
+* Start Background process: "python background.py"
+* Start UI process: "python webserver.py"
 
 # Configuration 
 
@@ -152,6 +155,7 @@ class SomeListener:
     def callback(self, sensor_update: SensorUpdateEvent) -> None:
         # do something usefull 
 ````
+
 
 # Unit tests
 Unittests are using [nose2](http://nose2.readthedocs.io/en/latest/index.html)

@@ -119,11 +119,11 @@ class Container:
     @singleton
     def actuator_strategies(self) -> ActuatorStrategies:
         actuator_strategies = ActuatorStrategies()
-        actuator_strategies.add_strategy(SerialSendStrategy(self.serial_communicator_registry(), actuators.conf,
-                                                  self.actuators_repository()))
-        actuator_strategies.add_strategy(WemoSwitchStrategy(actuators.conf, self.wemo_switch()))
-        actuator_strategies.add_strategy(GroupStrategy(actuators.conf, self.async_actuator_commands()))
-        actuator_strategies.add_strategy(ZWaveStrategy(actuators.conf, self.zwave_device()))
+        actuator_strategies.add_strategy(SerialSendStrategy(self.serial_communicator_registry(),
+                                                            self.actuators_repository()))
+        actuator_strategies.add_strategy(WemoSwitchStrategy(self.actuators_repository(), self.wemo_switch()))
+        actuator_strategies.add_strategy(GroupStrategy(self.actuators_repository(), self.async_actuator_commands()))
+        actuator_strategies.add_strategy(ZWaveStrategy(self.actuators_repository(), self.zwave_device()))
 
         return actuator_strategies
 

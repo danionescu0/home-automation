@@ -7,6 +7,7 @@ from typeguard import typechecked
 from repository.AbstractRepository import AbstractRepository
 from model.Actuator import Actuator
 
+
 class ActuatorsRepository(AbstractRepository):
     REDIS_KEY = 'actuators'
 
@@ -19,7 +20,7 @@ class ActuatorsRepository(AbstractRepository):
         actuators_data = self.get(self.REDIS_KEY)
         actuators = {}
         for name, data in actuators_data.items():
-            actuator = Actuator(name, data['state'], data['device_type'])
+            actuator = Actuator(name, data['value'], data['device_type'])
             actuator.type = data['type']
             actuator.room = data['room']
             actuator.strategy = data['strategy']
@@ -37,5 +38,5 @@ class ActuatorsRepository(AbstractRepository):
 
     def __set(self, key, name, value):
         data = self.get(key)
-        data[name]['state'] = value
+        data[name]['value'] = value
         self.client.set(key, json.dumps(data))
