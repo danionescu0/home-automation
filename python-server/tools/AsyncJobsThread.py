@@ -9,7 +9,7 @@ from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 
 
 class AsyncJobsThread(threading.Thread):
-    LISTEN_DELAY = 0.01
+    LISTEN_DELAY = 0.03
 
     @typechecked()
     def __init__(self, async_jobs: AsyncActuatorCommands, change_actuator_request_event: ChangeActuatorRequestEvent,

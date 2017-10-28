@@ -4,8 +4,10 @@ from logging import RootLogger
 
 from typeguard import typechecked
 
+from communication.DeviceLifetimeCycles import DeviceLifetimeCycles
 
-class BaseSerial(metaclass=abc.ABCMeta):
+
+class BaseSerial(DeviceLifetimeCycles, metaclass=abc.ABCMeta):
     def __init__(self):
         self.__endpoint = None
         self.__callback = None
@@ -19,15 +21,6 @@ class BaseSerial(metaclass=abc.ABCMeta):
     @typechecked()
     @abc.abstractmethod
     def listen(self, complete_message_callback: Callable[[str], bool], receive_message_callback: Callable[[str], None]):
-        pass
-
-    @abc.abstractmethod
-    def connect(self):
-        pass
-
-    @typechecked()
-    @abc.abstractmethod
-    def disconnect(self) -> None:
         pass
 
     @typechecked()

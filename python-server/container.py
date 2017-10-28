@@ -14,6 +14,7 @@ from communication.actuator.SerialSendStrategy import SerialSendStrategy
 from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
 from communication.actuator.GroupStrategy import GroupStrategy
 from communication.actuator.ZWaveStrategy import ZWaveStrategy
+from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from config import actuators
 from config import general
 from config import sensors
@@ -110,6 +111,10 @@ class Container:
     def zwave_device(self) -> ZWaveDevice:
         return ZWaveDevice(self.root_logger(), general.communication['zwave']['port'],
                            general.communication['zwave']['openzwave_config_path'])
+
+    @singleton
+    def device_lifetime_manager(self) -> DeviceLifetimeManager:
+        return DeviceLifetimeManager()
 
     @singleton
     def actuator_strategies(self) -> ActuatorStrategies:

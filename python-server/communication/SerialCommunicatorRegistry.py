@@ -21,7 +21,7 @@ class SerialCommunicatorRegistry:
         self.__communicators.update({'serial': serial})
         bluetooth = SerialBluetooth(self.__configuration['bluetooth']['connections'])
         bluetooth.set_logger(self.__logger)
-        bluetooth.connect()
+        # bluetooth.connect()
         self.__communicators.update({'bluetooth' : bluetooth})
 
     @typechecked()

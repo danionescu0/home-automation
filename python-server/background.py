@@ -19,10 +19,12 @@ intruder_alert_listener = container.intruder_alert_listener()
 serial_communicator_registry.configure_communicators()
 async_actuator_commands.connect()
 wemo_switch = container.wemo_switch()
-wemo_switch.connect()
 zwave_device = container.zwave_device()
-zwave_device.connect()
-
+device_lifetime_manager = container.device_lifetime_manager()
+device_lifetime_manager\
+    .add_device(wemo_switch)\
+    .add_device(zwave_device)\
+    .connect()
 
 def main():
     threads = []
@@ -40,6 +42,7 @@ def main():
     def handler(signum, frame):
         for thread in threads:
             thread.shutdown = True
+        device_lifetime_manager.disconnect()
 
     signal.signal(signal.SIGINT, handler)
     signal.signal(signal.SIGTERM, handler)

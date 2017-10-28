@@ -4,8 +4,10 @@ from openzwave.network import ZWaveNetwork
 from openzwave.option import ZWaveOption
 from pydispatch import dispatcher
 
+from communication.DeviceLifetimeCycles import DeviceLifetimeCycles
 
-class ZWaveDevice:
+
+class ZWaveDevice(DeviceLifetimeCycles):
     def __init__(self, root_logger: RootLogger, port: str, openzwave_config_path: str) -> None:
         self.__root_logger = root_logger
         self.__port = port
@@ -19,12 +21,8 @@ class ZWaveDevice:
         options.set_logging(True)
         options.lock()
 
-        def louie_network_started(network):
-            print("Hello from network : I'm started : homeid {:08x} - {} nodes were found.".format(network.home_id,
-                                                                                                   network.nodes_count))
-
         def louie_network_failed(network):
-            print("Hello from network : can't load :(.")
+            self.__root_logger.debug('Zwave network failed loading')
 
         def louie_network_ready(network):
             print("Hello from network : I'm ready : {} nodes were found.".format(network.nodes_count))
@@ -39,18 +37,20 @@ class ZWaveDevice:
             print("Hello from value : {}.".format(value))
 
         self.__network = ZWaveNetwork(options, autostart=False)
-        dispatcher.connect(louie_network_started, ZWaveNetwork.SIGNAL_NETWORK_STARTED)
         dispatcher.connect(louie_network_failed, ZWaveNetwork.SIGNAL_NETWORK_FAILED)
         dispatcher.connect(louie_network_ready, ZWaveNetwork.SIGNAL_NETWORK_READY)
-
         self.__network.start()
 
+    def disconnect(self) -> None:
+        self.__root_logger.debug('Disconnectiong Zwave device')
+        self.__network.stop()
+
     def change_bistate_actuator(self, actuator_name: str, state: bool):
-        self.__root_logger.debug("Switching:" + actuator_name)
+        if self.__network.state < self.__network.STATE_READY:
+            return
         for node in self.__network.nodes:
             for val in self.__network.nodes[node].get_switches():
                 self.__root_logger.debug(self.__network.nodes[node].values[val].id_on_network)
-
                 if self.__network.nodes[node].values[val].id_on_network != actuator_name:
                     continue
                 self.__network.nodes[node].set_switch(val, state)
