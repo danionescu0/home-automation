@@ -41,6 +41,7 @@ from repository.ActuatorsRepository import ActuatorsRepository
 from repository.IftttRulesRepository import IftttRulesRepository
 from repository.LocationTrackerRepository import LocationTrackerRepository
 from repository.SensorsRepository import SensorsRepository
+from repository.RoomsRepository import RoomsRepository
 from sound.RemoteSpeaker import RemoteSpeaker
 from sound.SoundApi import SoundApi
 from tools.Authentication import Authentication
@@ -48,6 +49,7 @@ from tools.EmailNotifier import EmailNotifier
 from tools.HomeDefence import HomeDefence
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
+from web.formatter.RoomsFormatter import RoomsFormatter
 
 
 def singleton(function: Callable):
@@ -98,6 +100,14 @@ class Container:
     @singleton
     def ifttt_rules_repository(self) -> IftttRulesRepository:
         return IftttRulesRepository(general.redis_config)
+
+    @singleton
+    def rooms_repository(self) -> RoomsRepository:
+        return RoomsRepository(self.sensors_repository(), self.actuators_repository())
+
+    @singleton
+    def rooms_formatter(self) -> RoomsFormatter:
+        return RoomsFormatter(self.rooms_repository())
 
     @singleton
     def email_notificator(self) -> EmailNotifier:

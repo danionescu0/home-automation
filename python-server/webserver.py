@@ -8,6 +8,7 @@ from web.MainHandler import MainHandler
 from web.ApiTokenAuthHandler import ApiTokenHandler
 from web.ApiLocationHandler import ApiLocationHandler
 from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
+from web.ApiRoomsHandler import ApiRoomsHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
@@ -83,6 +84,12 @@ def make_app():
                 ApiVoiceCommandHandler,
                 dict(voice_commands=container.voice_commands()),
                 name='api_voice_command'
+            ),
+            url(
+                r'/api/rooms',
+                ApiRoomsHandler,
+                dict(rooms_formatter=container.rooms_formatter()),
+                name='api_rooms'
             )
         ], **settings)
 
