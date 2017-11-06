@@ -5,7 +5,7 @@ from config import general
 from config import sensors
 
 from web.MainHandler import MainHandler
-from web.ApiTokenAuthHandler import ApiTokenHandler
+from web.ApiTokenAuthHandler import ApiTokenAuthHandler
 from web.ApiLocationHandler import ApiLocationHandler
 from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
 from web.ApiRoomsHandler import ApiRoomsHandler
@@ -70,8 +70,8 @@ def make_app():
             url(r'/logout', LogoutHandler, name='logout'),
             url(
                 r'/api/user/token',
-                ApiTokenHandler,
-                dict(authentication=authentication),
+                ApiTokenAuthHandler,
+                dict(authentication=authentication, jwt_token_factory=container.jwt_token_factory()),
                 name='api_token_login'
             ),
             url(

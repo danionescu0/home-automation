@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import jwt
 
+
 class JwtTokenFactory:
     def __init__(self, secret: str) -> None:
         self.__secret = secret

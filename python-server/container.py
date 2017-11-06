@@ -50,6 +50,7 @@ from tools.HomeDefence import HomeDefence
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
 from web.formatter.RoomsFormatter import RoomsFormatter
+from web.security.JwtTokenFactory import JwtTokenFactory
 
 
 def singleton(function: Callable):
@@ -108,6 +109,10 @@ class Container:
     @singleton
     def rooms_formatter(self) -> RoomsFormatter:
         return RoomsFormatter(self.rooms_repository())
+
+    @singleton
+    def jwt_token_factory(self) -> JwtTokenFactory:
+        return JwtTokenFactory(general.web_server['api_token_secret'])
 
     @singleton
     def email_notificator(self) -> EmailNotifier:
