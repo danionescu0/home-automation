@@ -31,6 +31,7 @@ class RoomsFormatter:
         for actuator in actuators:
             formatted.append({
                 'type' : {'bi' : 'switch', 'single': 'pushbutton'}[actuator.type],
+                'id' : actuator.name,
                 'name' : actuator.name,
                 'value' : actuator.value
             })
@@ -42,6 +43,7 @@ class RoomsFormatter:
         for sensor in sensors:
             formatted.append({
                 'type' : sensor.type,
+                'id' : sensor.type + ' ' + sensor.location,
                 'name' : sensor.type + ' ' + sensor.location,
                 'value' : sensor.value
             })
