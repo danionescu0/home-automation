@@ -9,8 +9,9 @@ from web.BaseHandler import BaseHandler
 
 class MainHandler(BaseHandler):
     @typechecked()
-    def initialize(self, job_controll: AsyncActuatorCommands, actuators_repo: ActuatorsRepository, sensors_repo: SensorsRepository):
-        self.job_controll = job_controll
+    def initialize(self, async_actuator_commands: AsyncActuatorCommands, actuators_repo: ActuatorsRepository,
+                   sensors_repo: SensorsRepository):
+        self.__async_actuator_commands = async_actuator_commands
         self.__actuators_repo = actuators_repo
         self.__sensors_repo = sensors_repo
 
@@ -27,7 +28,7 @@ class MainHandler(BaseHandler):
     def post(self, *args, **kwargs):
         actuator_name = self.get_argument("actuator_name", None, True)
         actuator_value = self.get_argument("actuator_value", None, True)
-        self.job_controll.change_actuator(actuator_name, {'false' : False, 'true': True}[actuator_value])
+        self.__async_actuator_commands.change_actuator(actuator_name, {'false' : False, 'true': True}[actuator_value])
 
     def __group_actuators(self):
         actuators = self.__actuators_repo.get_actuators()

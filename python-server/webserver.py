@@ -9,6 +9,7 @@ from web.ApiTokenAuthHandler import ApiTokenAuthHandler
 from web.ApiLocationHandler import ApiLocationHandler
 from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
 from web.ApiRoomsHandler import ApiRoomsHandler
+from web.ApiActuatorHandler import ApiActuatorHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
@@ -22,13 +23,13 @@ root_logger = container.root_logger()
 authentication = container.authentication()
 actuators_repo = container.actuators_repository()
 sensors_repo = container.sensors_repository()
-async_jobs = container.async_actuator_commands()
+async_actuator_commands = container.async_actuator_commands()
 root_logger = container.root_logger()
 
 
 save_location_listener = container.save_location_listener()
 set_phone_is_home_listener = container.set_phone_is_home_listener()
-async_jobs.connect()
+async_actuator_commands.connect()
 
 
 def make_app():
@@ -41,7 +42,7 @@ def make_app():
             url(
                 r"/",
                 MainHandler,
-                dict(job_controll=async_jobs, actuators_repo=actuators_repo, sensors_repo=sensors_repo),
+                dict(async_actuator_commands=async_actuator_commands, actuators_repo=actuators_repo, sensors_repo=sensors_repo),
                 name="actuator-states"
             ),
             url(r'/login', LoginHandler, dict(authentication=authentication), name='login'),
@@ -90,6 +91,12 @@ def make_app():
                 ApiRoomsHandler,
                 dict(rooms_formatter=container.rooms_formatter()),
                 name='api_rooms'
+            ),
+            url(
+                r'/api/actuator',
+                ApiActuatorHandler,
+                dict(async_actuator_commands=async_actuator_commands),
+                name='api_actuator'
             )
         ], **settings)
 
