@@ -17,8 +17,8 @@ const Actuators = ({actuators, pushButtonClicked}) => {
         var actuatorHtml = "";
         if (actuator.type == ACTUATOR_TYPES.SWITCH) {
             var input = actuator.value == true ?
-                (<Input type="checkbox" className="switch-input" defaultChecked/>) :
-                (<Input type="checkbox" className="switch-input" />);
+                (<Input id={actuator.id} type="checkbox" className="switch-input" onClick={pushButtonClicked} defaultChecked/>) :
+                (<Input id={actuator.id} type="checkbox" className="switch-input" onClick={pushButtonClicked} />);
             actuatorHtml = (
                 <Label className="switch switch-text switch-pill switch-primary">
                     {input}
@@ -28,7 +28,7 @@ const Actuators = ({actuators, pushButtonClicked}) => {
             );
         } else if (actuator.type == ACTUATOR_TYPES.PUSHBUTTON) {
             actuatorHtml = (
-                <Button outline color="primary" size="sm" onClick={() => pushButtonClicked(actuator.id)}>Activate</Button>
+                <Button outline color="primary" size="sm" onClick={pushButtonClicked}>Activate</Button>
             )
         }
 

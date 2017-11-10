@@ -12,24 +12,8 @@ import {
 import {renderSensors} from './Sensors'
 import Actuators from './Actuators'
 
-const RoomList = ({room_data}) => {
-    return (
-        <div className="animated fadeIn">
-            <Row>
-                {doRenderRooms(room_data)}
-            </Row>
-        </div>
-    )
-};
-
-
-const pushButtonClicked = (id)  => {
-    console.log("button clicked:" + id);
-};
-
-
-const doRenderRooms = room_data => {
-    return room_data.map((room, index) => {
+const RoomList = ({room_data, pushButtonClicked}) => {
+    var roomData = room_data.map((room, index) => {
         return (
             <Col key={index} xs="12" lg="6">
                 <Card>
@@ -49,8 +33,15 @@ const doRenderRooms = room_data => {
                 </Card>
             </Col>
         )
-    })
-};
+    });
 
+    return (
+        <div className="animated fadeIn">
+            <Row>
+                {roomData}
+            </Row>
+        </div>
+    )
+};
 
 export default RoomList;
