@@ -44,4 +44,4 @@ export const doFetch = (path, request) => {
     return fetch(API_ENDPOINT + path, request);
 };
 
-const API_ENDPOINT = 'http://danionescu0.go.ro:8080';
+const API_ENDPOINT = 'http://endpoint_api';

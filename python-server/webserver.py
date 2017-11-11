@@ -10,6 +10,7 @@ from web.ApiLocationHandler import ApiLocationHandler
 from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
 from web.ApiRoomsHandler import ApiRoomsHandler
 from web.ApiActuatorHandler import ApiActuatorHandler
+from web.ApiSensorHandler import ApiSensorHandler
 from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
@@ -56,12 +57,12 @@ def make_app():
             url(r'/ifttt',
                 IftttHandler,
                 dict(
-                    actuators_repo=actuators_repo,
-                    rules_repository=container.ifttt_rules_repository(),
-                    expression_validator=container.expression_validator(),
-                ),
+                        actuators_repo=actuators_repo,
+                        rules_repository=container.ifttt_rules_repository(),
+                        expression_validator=container.expression_validator(),
+                    ),
                 name='ifttt'
-                ),
+            ),
             url(
                 r'/system-status',
                 SystemStatusHandler,
@@ -97,6 +98,12 @@ def make_app():
                 ApiActuatorHandler,
                 dict(async_actuator_commands=async_actuator_commands),
                 name='api_actuator'
+            ),
+            url(
+                r'/api/sensor/(\w*)',
+                ApiSensorHandler,
+                dict(sensors_formatter=container.sensors_formatter()),
+                name='api_sensor'
             )
         ], **settings)
 

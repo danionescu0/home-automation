@@ -43,7 +43,7 @@ class RoomsFormatter:
         for sensor in sensors:
             formatted.append({
                 'type' : sensor.type,
-                'id' : sensor.type + ' ' + sensor.location,
+                'id' : sensor.id,
                 'name' : sensor.type + ' ' + sensor.location,
                 'value' : sensor.value
             })

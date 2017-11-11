@@ -8,6 +8,7 @@ import Login from './login-page'
 import secure from '../utils/secure'
 
 import MainPage from './main-page';
+import DisplaySensorPage from './display-sensor-page'
 
 
 class App extends Component {
@@ -17,10 +18,12 @@ class App extends Component {
         <Header />
         <div className="app-body">
           <Sidebar {...this.props}/>
+
           <main className="main">
             <Container fluid>
               <Switch>
                 <Route path="/main-page" name="MainPage" component={secure(MainPage)}/>
+                <Route path="/display-sensor/:id" name="DisplaySensorPage" component={secure(DisplaySensorPage)}/>
                 <Route path="/login" name="Login" component={Login}/>
                 <Redirect from="/" to="/main-page"/>
               </Switch>

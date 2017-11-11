@@ -1,5 +1,6 @@
 conf = [
     {
+        'id' : 'humidity_living',
         'type' : 'humidity',
         'value' : 0,
         'visible' : ['graphs', 'homepage'],
@@ -8,6 +9,7 @@ conf = [
         'last_updated' : 0
     },
     {
+        'id' : 'humidity_outside',
         'type': 'humidity',
         'value': 0,
         'visible' : ['graphs'],
@@ -16,6 +18,7 @@ conf = [
         'last_updated' : 0
     },
     {
+        'id' : 'temperature_living',
         'type' : 'temperature',
         'value' : 0,
         'visible' : ['graphs', 'homepage'],
@@ -24,6 +27,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'temperature_outside',
         'type' : 'temperature',
         'value' : 0,
         'visible' : ['graphs', 'homepage'],
@@ -33,6 +37,7 @@ conf = [
 
     },
     {
+        'id' : 'airPressure_outside',
         'type': 'airPressure',
         'value': 0,
         'visible' : ['graphs', 'homepage'],
@@ -41,6 +46,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'light_living',
         'type' : 'light',
         'value' : 0,
         'visible' : ['graphs', 'homepage'],
@@ -49,6 +55,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'light_outside',
         'type': 'light',
         'value': 0,
         'visible': ['graphs'],
@@ -57,6 +64,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'voltage_outside',
         'type': 'voltage',
         'value': 0,
         'visible': ['graphs'],
@@ -65,6 +73,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'rain_outside',
         'type' : 'rain',
         'value' : 0,
         'visible' : ['graphs'],
@@ -73,6 +82,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'presence_holway',
         'type' : 'presence',
         'value' : 0,
         'visible' : ['graphs', 'homepage'],
@@ -81,6 +91,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'airPollution_living',
         'type' : 'airPollution',
         'value' : 0,
         'visible' : ['graphs', 'homepage'],
@@ -89,6 +100,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'fingerprint_outside',
         'type' : 'fingerprint',
         'value' : 0,
         'visible' : [],
@@ -97,6 +109,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'phoneIsHome',
         'type' : 'phoneIsHome',
         'value' : False,
         'visible' : ['homepage'],
@@ -105,6 +118,7 @@ conf = [
         'last_updated': 0
     },
     {
+        'id' : 'power_holway',
         'type' : 'power',
         'value': 0,
         'visible' : ['graphs'],

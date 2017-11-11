@@ -50,6 +50,7 @@ from tools.HomeDefence import HomeDefence
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
 from web.formatter.RoomsFormatter import RoomsFormatter
+from web.formatter.SensorsFormatter import SensorsFormatter
 from web.security.JwtTokenFactory import JwtTokenFactory
 
 
@@ -109,6 +110,10 @@ class Container:
     @singleton
     def rooms_formatter(self) -> RoomsFormatter:
         return RoomsFormatter(self.rooms_repository())
+
+    @singleton
+    def sensors_formatter(self) -> SensorsFormatter:
+        return SensorsFormatter(self.sensors_repository())
 
     @singleton
     def jwt_token_factory(self) -> JwtTokenFactory:

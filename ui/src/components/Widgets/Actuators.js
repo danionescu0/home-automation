@@ -1,24 +1,37 @@
 import React, {Component} from 'react';
-
+import Slider from 'rc-slider';
 import {
     Label,
     Input,
     Button
 } from 'reactstrap';
-const ACTUATOR_TYPES = {
+import 'rc-slider/assets/index.css';
+
+
+export const ACTUATOR_TYPE = {
     SWITCH: 'switch',
     PUSHBUTTON: 'pushbutton',
     SLIDER: 'slider'
 };
 
+const Actuators = ({actuators, actuatorHandler}) => {
+    const pushButtonHandler = (event) => {
+        actuatorHandler(event.target.id, true)
+    };
+    const switchHandler = (event) => {
+        actuatorHandler(event.target.id, event.target.checked)
+    };
+    const sliderHandler = (event) => {
+        console.log("switch", event.id, event.value());
+        // actuatorHandler(event.target.id, event.target.value)
+    };
 
-const Actuators = ({actuators, pushButtonClicked}) => {
     return actuators.map((actuator, index) => {
         var actuatorHtml = "";
-        if (actuator.type == ACTUATOR_TYPES.SWITCH) {
+        if (actuator.type == ACTUATOR_TYPE.SWITCH) {
             var input = actuator.value == true ?
-                (<Input id={actuator.id} type="checkbox" className="switch-input" onClick={pushButtonClicked} defaultChecked/>) :
-                (<Input id={actuator.id} type="checkbox" className="switch-input" onClick={pushButtonClicked} />);
+                (<Input id={actuator.id} type="checkbox" className="switch-input" onClick={switchHandler} defaultChecked/>) :
+                (<Input id={actuator.id} type="checkbox" className="switch-input" onClick={switchHandler} />);
             actuatorHtml = (
                 <Label className="switch switch-text switch-pill switch-primary">
                     {input}
@@ -26,9 +39,13 @@ const Actuators = ({actuators, pushButtonClicked}) => {
                     <span className="switch-handle"></span>
                 </Label>
             );
-        } else if (actuator.type == ACTUATOR_TYPES.PUSHBUTTON) {
+        } else if (actuator.type == ACTUATOR_TYPE.PUSHBUTTON) {
             actuatorHtml = (
-                <Button outline color="primary" size="sm" onClick={pushButtonClicked}>Activate</Button>
+                <Button  id={actuator.id}outline color="primary" size="sm" onClick={pushButtonHandler}>Activate</Button>
+            )
+        } else if (actuator.type == ACTUATOR_TYPE.SLIDER) {
+            actuatorHtml = (
+                <Slider id={actuator.id} min={0} max={50} defaultValue={actuator.value} onChange={sliderHandler} />
             )
         }
 
@@ -42,5 +59,6 @@ const Actuators = ({actuators, pushButtonClicked}) => {
         )
     })
 };
+
 
 export default Actuators;

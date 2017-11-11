@@ -31,7 +31,7 @@ class GraphsBuilderHandler(BaseHandler):
                     selectedGroupedByHours =  0
                     )
 
-    # @authenticated
+    @authenticated
     def post(self, *args, **kwargs):
         selected_sensor = self.__get_selected_sensor_data()
         group_by_hours = int(self.get_argument("group_by_hours", None, True))

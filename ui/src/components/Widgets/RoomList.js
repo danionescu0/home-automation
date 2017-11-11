@@ -9,10 +9,10 @@ import {
   Table,
 } from 'reactstrap';
 
-import {renderSensors} from './Sensors'
+import Sensors from './Sensors'
 import Actuators from './Actuators'
 
-const RoomList = ({room_data, pushButtonClicked}) => {
+const RoomList = ({room_data, actuatorHandler}) => {
     var roomData = room_data.map((room, index) => {
         return (
             <Col key={index} xs="12" lg="6">
@@ -21,12 +21,12 @@ const RoomList = ({room_data, pushButtonClicked}) => {
                         <i className="fa fa-align-justify"></i>
                         {room.name}
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        {renderSensors(room.sensors)}
+                        <Sensors sensors={room.sensors} />
                     </CardHeader>
                     <CardBody>
                         <Table responsive striped>
                             <tbody>
-                                <Actuators actuators={room.actuators} pushButtonClicked={pushButtonClicked} />
+                                <Actuators actuators={room.actuators} actuatorHandler={actuatorHandler} />
                             </tbody>
                         </Table>
                     </CardBody>

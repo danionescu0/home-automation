@@ -1,7 +1,8 @@
 from typing import Tuple
 
 class Sensor:
-    def __init__(self, type: str, location: str, value) -> None:
+    def __init__(self, id: str, type: str, location: str, value) -> None:
+        self.id = id
         self.type = type
         self.location = location
         self.value = value
