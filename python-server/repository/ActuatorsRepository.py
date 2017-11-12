@@ -19,16 +19,14 @@ class ActuatorsRepository(AbstractRepository):
     def get_actuators(self) -> Dict[str, Actuator]:
         actuators_data = self.get(self.REDIS_KEY)
         actuators = {}
-        for name, data in actuators_data.items():
-            actuator = Actuator(name, data['value'], data['device_type'])
-            actuator.type = data['type']
-            actuator.room = data['room']
+        for id, data in actuators_data.items():
+            actuator = Actuator(id, data['name'], data['value'], data['type'], data['room'])
             actuator.strategy = data['strategy']
             actuator.communicator = data['communicator']
             actuator.send_to_device = data['send_to_device']
             actuator.command = data['command']
             actuator.encription = data['encription']
-            actuators[name] = actuator
+            actuators[id] = actuator
 
         return collections.OrderedDict(sorted(actuators.items()))
 

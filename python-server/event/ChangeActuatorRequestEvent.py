@@ -14,6 +14,5 @@ class ChangeActuatorRequestEvent:
     def get_name(self) -> str:
         return self.__name
 
-    @typechecked()
     def get_new_state(self):
         return self.__new_state

@@ -3,6 +3,7 @@ from typeguard import typechecked
 from repository.ActuatorsRepository import ActuatorsRepository
 from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
+from model.ActuatorType import ActuatorType
 
 
 class ActuatorCommands:
@@ -24,7 +25,7 @@ class ActuatorCommands:
         strategy = self.__get_strategy(actuator_name)
         strategy = self.__configure_encription(strategy, actuator_name)
         success = strategy.set_state(actuator_name, state)
-        if not success and self.__actuators[actuator_name].type == 'bi':
+        if not success and self.__actuators[actuator_name].type == ActuatorType.SWITCH.value:
             self.__actuators_repo.set_actuator(actuator_name, not state)
 
         return success

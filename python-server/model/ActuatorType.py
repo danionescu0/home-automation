@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class ActuatorType(Enum):
-    PUSHBUTTON = 'single'
-    SWITCH = 'bi'
+    PUSHBUTTON = 'pushbutton'
+    SWITCH = 'switch'
     DIMMER = 'dimmer'

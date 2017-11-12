@@ -37,8 +37,8 @@
                 <div class="row">
                     {% for current_actuator in actuators[actuator_name] %}
                     <div class="col-md-4">
-                        {% if current_actuator.type == 'bi' %}
-                        <input data-label-text="{{ current_actuator.name.capitalize() }}" type="checkbox" name="{{ current_actuator.name }}" {% if current_actuator.value %}checked{% end %}/>
+                        {% if current_actuator.type == 'switch' %}
+                        <input data-label-text="{{ current_actuator.name.capitalize() }}" type="checkbox" name="{{ current_actuator.id }}" {% if current_actuator.value %}checked{% end %}/>
                         {% else %}
                         <button type="button" class="btn btn-default" rel="{{ current_actuator.name }}">{{ current_actuator.name.capitalize() }}</button>
                         {% end %}

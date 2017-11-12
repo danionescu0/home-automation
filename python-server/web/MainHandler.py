@@ -33,11 +33,11 @@ class MainHandler(BaseHandler):
     def __group_actuators(self):
         actuators = self.__actuators_repo.get_actuators()
         grouped_actuators = {}
-        for name, actuator in actuators.items():
+        for id, actuator in actuators.items():
             group_key = actuator.room
             if not group_key in grouped_actuators:
                 grouped_actuators[group_key] = []
-            actuator_data = actuators[name]
+            actuator_data = actuators[id]
             grouped_actuators[group_key].append(actuator_data)
 
         return grouped_actuators

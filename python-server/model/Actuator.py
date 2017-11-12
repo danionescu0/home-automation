@@ -1,31 +1,16 @@
 class Actuator:
-    def __init__(self, name: str, value, device_type: str) -> None:
+    def __init__(self, id: str, name: str, value, type: str, room: str) -> None:
+        self.id = id
         self.name = name
         self.value = value
-        self.device_type = device_type
+        self.type = type
+        self.room = room
         self._type = None
-        self._room = None
         self._strategy = None
         self._communicator = None
         self._send_to_device = None
         self._command = None
         self._encription = None
-
-    @property
-    def type(self):
-        return self._type
-
-    @type.setter
-    def type(self, value : str):
-        self._type = value
-
-    @property
-    def room(self):
-        return self._room
-
-    @room.setter
-    def room(self, value : str):
-        self._room = value
 
     @property
     def strategy(self):
@@ -68,8 +53,8 @@ class Actuator:
         self._encription = value
 
     def __repr__(self) -> str:
-        return "Actuator: name({0}), value({1}), device_type({2}), type({3}), room({4})," \
+        return "Actuator: id({0}), name({1}), value({2}), type({3}), room({4})," \
                " strategy({5}), communicator({6}), send_to_device({7}), command({8})," \
-               " encription({9})".format(self.name, self.value, self.device_type, self._type
+               " encription({9})".format(self.id, self.name, self.value, self._type
                                          , self._room, self._strategy, self._communicator,
                                          self._send_to_device, self._command, self._encription)
