@@ -25,5 +25,5 @@ class BaseStrategy(metaclass=abc.ABCMeta):
 
     @typechecked()
     @abc.abstractmethod
-    def toggle(self, actuator_name: str, state: bool) -> bool:
+    def set_state(self, actuator_name: str, state) -> bool:
         pass

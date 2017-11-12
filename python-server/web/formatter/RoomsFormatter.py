@@ -30,7 +30,8 @@ class RoomsFormatter:
         formatted = []
         for actuator in actuators:
             formatted.append({
-                'type' : {'bi' : 'switch', 'single': 'pushbutton'}[actuator.type],
+                #todo normalize this hack
+                'type' : {'bi' : 'switch', 'single': 'pushbutton', 'dimmer' : 'dimmer'}[actuator.type],
                 'id' : actuator.name,
                 'name' : actuator.name,
                 'value' : actuator.value

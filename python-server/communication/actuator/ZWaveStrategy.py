@@ -3,6 +3,7 @@ from typeguard import typechecked
 from communication.ZWaveDevice import ZWaveDevice
 from .BaseStrategy import BaseStrategy
 from repository.ActuatorsRepository import ActuatorsRepository
+from model.ActuatorType import ActuatorType
 
 
 class ZWaveStrategy(BaseStrategy):
@@ -14,6 +15,9 @@ class ZWaveStrategy(BaseStrategy):
     def supports(self, actuator_name: str) -> bool:
         return self.__actuators_repo.get_actuators()[actuator_name].strategy == 'zwave-switch'
 
-    def toggle(self, actuator_name: str, state: bool) -> bool:
-        return self.__zwave_device.change_bistate_actuator(
-            self.__actuators_repo.get_actuators()[actuator_name].send_to_device, state)
+    def set_state(self, actuator_name: str, state) -> bool:
+        actuator = self.__actuators_repo.get_actuators()[actuator_name]
+        if actuator.type == ActuatorType.SWITCH.value:
+            return self.__zwave_device.change_bistate_actuator(actuator.send_to_device, state)
+        elif actuator.type == ActuatorType.DIMMER.value:
+            return self.__zwave_device.change_dimmer(actuator.send_to_device, state)

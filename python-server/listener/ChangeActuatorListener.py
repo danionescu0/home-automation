@@ -13,4 +13,6 @@ class ChangeActuatorListener:
 
     @typechecked()
     def callback(self, change_actuator_request: ChangeActuatorRequestEvent) -> None:
-        self.__actuator_commands.change_actuator(change_actuator_request.get_name(), change_actuator_request.get_new_state())
+        self.__actuator_commands.change_actuator(
+            change_actuator_request.get_name(), change_actuator_request.get_new_state()
+        )

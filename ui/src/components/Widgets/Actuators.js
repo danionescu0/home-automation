@@ -11,19 +11,26 @@ import 'rc-slider/assets/index.css';
 export const ACTUATOR_TYPE = {
     SWITCH: 'switch',
     PUSHBUTTON: 'pushbutton',
-    SLIDER: 'slider'
+    DIMMER: 'dimmer'
 };
 
 const Actuators = ({actuators, actuatorHandler}) => {
+    console.log(actuators);
+    var executeInFuture;
     const pushButtonHandler = (event) => {
         actuatorHandler(event.target.id, true)
     };
     const switchHandler = (event) => {
         actuatorHandler(event.target.id, event.target.checked)
     };
-    const sliderHandler = (event) => {
-        console.log("switch", event.id, event.value());
-        // actuatorHandler(event.target.id, event.target.value)
+    const sliderHandler = (actuatorId, value) => {
+        clearTimeout(executeInFuture);
+        executeInFuture = setTimeout(
+          function () {
+              actuatorHandler(actuatorId, value)
+          }.bind(this),
+          500
+        );
     };
 
     return actuators.map((actuator, index) => {
@@ -43,9 +50,10 @@ const Actuators = ({actuators, actuatorHandler}) => {
             actuatorHtml = (
                 <Button  id={actuator.id}outline color="primary" size="sm" onClick={pushButtonHandler}>Activate</Button>
             )
-        } else if (actuator.type == ACTUATOR_TYPE.SLIDER) {
+        } else if (actuator.type == ACTUATOR_TYPE.DIMMER) {
             actuatorHtml = (
-                <Slider id={actuator.id} min={0} max={50} defaultValue={actuator.value} onChange={sliderHandler} />
+                <Slider id={actuator.id} min={0} max={255} defaultValue={actuator.value}
+                        onChange={sliderHandler.bind(this, actuator.id)} />
             )
         }
 

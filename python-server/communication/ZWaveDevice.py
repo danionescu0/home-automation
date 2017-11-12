@@ -34,15 +34,35 @@ class ZWaveDevice(DeviceLifetimeCycles):
         self.__state_change_callback = callback
 
     def change_bistate_actuator(self, actuator_name: str, state: bool):
+        node, val = self.__get_node(actuator_name)
+        node.set_switch(val, state)
+
+    def change_dimmer(self, actuator_name: str, state: int):
+        node, val = self.__get_node(actuator_name)
+        node.set_dimmer(val, state)
+
+    def __get_node(self, actuator_name: str):
         if self.__network.state < self.__network.STATE_READY:
             return
         for node in self.__network.nodes:
             for val in self.__network.nodes[node].get_switches():
-                self.__root_logger.debug(self.__network.nodes[node].values[val].id_on_network)
+                self.__root_logger.debug('Zwave node: {0}'.format(
+                    self.__network.nodes[node].values[val].id_on_network)
+                )
                 if self.__network.nodes[node].values[val].id_on_network != actuator_name:
                     continue
                 self.__root_logger.debug('Changing zwave switch: {0}'.format(actuator_name))
-                self.__network.nodes[node].set_switch(val, state)
+                return self.__network.nodes[node], val
+            for val in self.__network.nodes[node].get_dimmers():
+                self.__root_logger.debug('Zwave node: {0}'.format(
+                    self.__network.nodes[node].values[val].id_on_network)
+                )
+                if self.__network.nodes[node].values[val].id_on_network != actuator_name:
+                    continue
+                self.__root_logger.debug('Changing zwave switch: {0}'.format(actuator_name))
+                return self.__network.nodes[node], val
+
+        raise Exception('Zwave node with id {0} not found'.format(actuator_name))
 
     def __network_failed(self, network):
         self.__root_logger.debug('Zwave network failed loading')

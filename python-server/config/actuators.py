@@ -150,7 +150,7 @@ conf = {
         'device_type': 'powerSocket',
         'room': 'holway',
         'strategy': 'wemo-switch',
-        'communicator': 'wemoSwitch',
+        'communicator': False,
         'send_to_device': 'DanSwitch1',
         'command': False,
         'encription': False,
@@ -161,8 +161,30 @@ conf = {
         'device_type': 'powerSocket',
         'room': 'living',
         'strategy': 'zwave-switch',
-        'communicator' : 'wemoSwitch',
+        'communicator' : False,
         'send_to_device': '0184f904.2.25.1.0',
+        'command': False,
+        'encription': False
+    },
+    'fibaroGreen' : {
+        'value': False,
+        'type': 'dimmer',
+        'device_type': 'dimmer',
+        'room': 'living',
+        'strategy': 'zwave-switch',
+        'communicator': False,
+        'send_to_device': '0184f904.3.26.4.0',
+        'command': False,
+        'encription': False
+    },
+    'fibaroBlue' : {
+        'value': False,
+        'type': 'dimmer',
+        'device_type': 'dimmer',
+        'room': 'living',
+        'strategy': 'zwave-switch',
+        'communicator': False,
+        'send_to_device': '0184f904.3.26.5.0',
         'command': False,
         'encription': False
     }

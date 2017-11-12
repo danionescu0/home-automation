@@ -23,7 +23,7 @@ class ActuatorCommands:
 
         strategy = self.__get_strategy(actuator_name)
         strategy = self.__configure_encription(strategy, actuator_name)
-        success = strategy.toggle(actuator_name, state)
+        success = strategy.set_state(actuator_name, state)
         if not success and self.__actuators[actuator_name].type == 'bi':
             self.__actuators_repo.set_actuator(actuator_name, not state)
 

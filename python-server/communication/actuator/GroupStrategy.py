@@ -16,7 +16,7 @@ class GroupStrategy(BaseStrategy):
         return self.__actuators_repo.get_actuators()[actuator_name].strategy == 'group'
 
     @typechecked()
-    def toggle(self, actuator_name: str, state: bool) -> bool:
+    def set_state(self, actuator_name: str, state) -> bool:
         raise Exception("Not implemented")
         toggle_actuators = self.actuators_config[actuator_name]['actuators']
         future_state = self.actuators_config[actuator_name]['futureState']

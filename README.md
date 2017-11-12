@@ -1,8 +1,10 @@
 # Home automation project #
 
 This project will give you more controll over your house and you'll going to have fun building it.
-It's strong points are easy integration of very custom hardware which you can build yourself, and also keep the price down,
-and a very strong programming IFTTT interface that can be access in the web interface (no coding).
+It's strong points are easy integration of very custom hardware which you can build yourself and keep the price down and
+Integration with ready made devices like ZWave and WeMo.
+
+Also a strong programming IFTTT interface that can trigger actuators and emit alerts. (see below)
 
 It's a DIY project for makers and hacker and it's based on a raspberry pi (or another linux compatible board), arduino boards
 IOT devices and other electronics.
@@ -16,7 +18,6 @@ IOT devices and other electronics.
 * Screenshots
 * Component prices
 * Technical overwiew
-* Further improvements
 
 
 
@@ -69,7 +70,7 @@ Voice alerts are text to speech blocks of text, beside that actuator and sensors
 for example : "Wake up sir, the temperature outside is S[temperature:outside] and humidity is S[humidity:outside]" this
 block of text will announce the temperature and humidity outside
 
-**Screenshots** 
+**Screenshots from old UI** 
 
  * The main menu which contains the sensors listings, and all the "switches" 
  
@@ -89,7 +90,7 @@ block of text will announce the temperature and humidity outside
 * The PI, case, SD card and power adapter will be around 70 dollars
 * Each controller composed of arduino, case, bluetooth device, power adapter, sensors etc will be around 20-30 $ each
 * The fingerprind module will make an exception and will cost around 70 dollars.
-* A Livolo ligt switch will be around 20$ on [here](https://www.aliexpress.com/premium/livolo-eu.html?ltype=wholesale&d=y&origin=y&isViewCP=y&catId=0&initiative_id=SB_20161208130911&SearchText=livolo+eu&blanktest=0)
+* A Livolo light switch will be around 20$ on [here](https://www.aliexpress.com/premium/livolo-eu.html?ltype=wholesale&d=y&origin=y&isViewCP=y&catId=0&initiative_id=SB_20161208130911&SearchText=livolo+eu&blanktest=0)
 * An electric strike lock starts from 23$ [here](http://www.ebay.com/sch/i.html?_odkw=electric+door+lock&_osacat=0&_from=R40&_trksid=p2045573.m570.l1313.TR0.TRC0.H0.Xelectric+strike+lock.TRS0&_nkw=electric+strike+lock&_sacat=0)
 * A WeMo power socker is about 40$ [here](http://www.belkin.com/us/Products/home-automation/c/wemo-home-automation/) 
 * An electric roller blade will start from 50$ [here](http://www.ebay.com/sch/i.html?_odkw=electric+courtains&_osacat=0&_from=R40&_trksid=p2045573.m570.l1313.TR0.TRC0.H0.Xelectric+roller+blinds.TRS0&_nkw=electric+roller+blinds&_sacat=0)
@@ -99,19 +100,14 @@ block of text will announce the temperature and humidity outside
 
 This project uses the following technollogies, concepts and tools: 
 
-python 3x with tornado web framework, arduino, redis, pubsub, raspberryPi, bluetooth, raspian (basic linux configuration),
+python 3x with tornado web framework, reactJs, coreUI, arduino, redis, pubsub, raspberryPi, bluetooth, raspian (basic linux configuration),
  arduino IDE, electronics
 
-To get started you'll need a background in programming, electronics and thinkering. For more technical configuration
-please visit [python server](https://github.com/danionescu0/home-automation/tree/master/python-server), and 
-[arduino sketches](https://github.com/danionescu0/home-automation/tree/master/arduino-sketches) folders.
+To get started you'll need a background in programming, electronics and thinkering. 
 
-
-**ToDo list:**
-
-* integrate Z-wave devices
-* integrate air conditioning system
-* water consumption monitoring
-* mailbox senzor with email notification
-* user permissions, user management
+For more technical configuration please visit:
+[New onepageapp User Interface](https://github.com/danionescu0/home-automation/tree/master/ui) 
+[Python server](https://github.com/danionescu0/home-automation/tree/master/python-server)
+[Arduino sketches](https://github.com/danionescu0/home-automation/tree/master/arduino-sketches)
+[Remote speaker](https://github.com/danionescu0/home-automation/tree/master/remote-speaker)
 

@@ -4,6 +4,8 @@
 
 This is a remote speaker that has the ability to play text to speech. 
 
+For a full tutorial on this subject visit this [instructable](http://www.instructables.com/id/How-to-Build-a-Text-to-Speech-IOT-Speaker/)
+
 ** Components **
 
 * linux comatible development board with WIFI access, i've used [C.H.I.P.](https://getchip.com/pages/chip), 

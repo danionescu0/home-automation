@@ -44,4 +44,4 @@ export const doFetch = (path, request) => {
     return fetch(API_ENDPOINT + path, request);
 };
 
-const API_ENDPOINT = 'http://endpoint_api';
+const API_ENDPOINT = 'http://endpoint';

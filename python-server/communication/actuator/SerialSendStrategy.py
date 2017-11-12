@@ -6,6 +6,7 @@ from .BaseStrategy import BaseStrategy
 from communication.SerialCommunicatorRegistry import SerialCommunicatorRegistry
 from repository.ActuatorsRepository import ActuatorsRepository
 from model.Actuator import Actuator
+from model.ActuatorType import ActuatorType
 
 
 class SerialSendStrategy(BaseStrategy):
@@ -16,10 +17,14 @@ class SerialSendStrategy(BaseStrategy):
 
     @typechecked()
     def supports(self, actuator_name: str) -> bool:
-        return self.__actuators_repo.get_actuators()[actuator_name].strategy == 'send'
+        actuator = self.__actuators_repo.get_actuators()[actuator_name]
+        print(actuator_name, actuator.type, [ActuatorType.SWITCH.value, ActuatorType.PUSHBUTTON.value])
+
+        return actuator.strategy == 'send' \
+               and actuator.type in [ActuatorType.SWITCH.value, ActuatorType.PUSHBUTTON.value]
 
     @typechecked()
-    def toggle(self, actuator_name:str , state: bool):
+    def set_state(self, actuator_name:str, state):
         actuator = self.__actuators_repo.get_actuators()[actuator_name]
         command = self.get_encriptor().encrypt(self.__calculate_actuator_command(actuator, state))
         self.__communicator_registry. \
@@ -34,9 +39,9 @@ class SerialSendStrategy(BaseStrategy):
         actuator_type = actuator.type
         actuator_command = actuator.command
         print(actuator_command)
-        if actuator_type == 'bi':
+        if actuator_type == ActuatorType.SWITCH.value:
             return actuator_command[{True: 'true', False: 'false'}[state]]
-        elif actuator_type == 'single':
+        elif actuator_type == ActuatorType.PUSHBUTTON.value:
             return actuator_command['true']
         else:
             raise Exception('Unimplemented actuator type: %s'.format(actuator_type))
