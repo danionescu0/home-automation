@@ -6,6 +6,7 @@ from typeguard import typechecked
 
 from repository.AbstractRepository import AbstractRepository
 from model.Actuator import Actuator
+from model.ActuatorProperties import ActuatorProperties
 
 
 class ActuatorsRepository(AbstractRepository):
@@ -20,12 +21,8 @@ class ActuatorsRepository(AbstractRepository):
         actuators_data = self.get(self.REDIS_KEY)
         actuators = {}
         for id, data in actuators_data.items():
-            actuator = Actuator(id, data['name'], data['value'], data['type'], data['room'])
-            actuator.strategy = data['strategy']
-            actuator.communicator = data['communicator']
-            actuator.send_to_device = data['send_to_device']
-            actuator.command = data['command']
-            actuator.encription = data['encription']
+            actuator = Actuator(id, data['name'], data['value'], data['type'], data['room'], data['device_type'])
+            actuator.properties = self.__get_actuator_properties(data['properties'])
             actuators[id] = actuator
 
         return collections.OrderedDict(sorted(actuators.items()))
@@ -38,3 +35,10 @@ class ActuatorsRepository(AbstractRepository):
         data = self.get(key)
         data[name]['value'] = value
         self.client.set(key, json.dumps(data))
+
+    def __get_actuator_properties(self, properties: dict) -> ActuatorProperties:
+        actuator_properties = ActuatorProperties()
+        for name, value in properties.items():
+            actuator_properties.set(name, value)
+
+        return actuator_properties

@@ -1,10 +1,8 @@
 from typeguard import typechecked
 from Crypto.Cipher import AES
 
-from communication.encriptors.BaseEncriptor import BaseEncriptor
 
-
-class AesEncriptor(BaseEncriptor):
+class AesEncriptor:
     @typechecked()
     def __init__(self, key: str):
         self.__key = key

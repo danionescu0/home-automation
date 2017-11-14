@@ -10,3 +10,6 @@ redis==2.10.5
 pyserial==3.3
 tornado==4.5.1
 pydispatch
+typeguard
+pybluez
+python-openzwave

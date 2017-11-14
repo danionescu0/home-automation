@@ -7,6 +7,7 @@ from communication.SensorsParseException import SensorsParseException
 from repository.SensorsRepository import SensorsRepository
 from model.Sensor import Sensor
 
+
 class TextSensorDataParser:
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'
     SENSOR_SEPARATOR = '|'

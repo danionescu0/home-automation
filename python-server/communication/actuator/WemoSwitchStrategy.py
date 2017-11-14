@@ -4,6 +4,8 @@ from .BaseStrategy import BaseStrategy
 from communication.WemoSwitch import WemoSwitch
 from repository.ActuatorsRepository import ActuatorsRepository
 from model.ActuatorType import ActuatorType
+from model.Actuator import Actuator
+from model.ActuatorProperties import ActuatorProperties
 
 
 class WemoSwitchStrategy(BaseStrategy):
@@ -16,9 +18,10 @@ class WemoSwitchStrategy(BaseStrategy):
     def supports(self, actuator_name: str) -> bool:
         actuator = self.__actuators_repo.get_actuators()[actuator_name]
 
-        return actuator.strategy == 'wemo-switch' and actuator.type == ActuatorType.SWITCH.value
+        return actuator.device_type == Actuator.DeviceType.WEMO.value and actuator.device_type == ActuatorType.SWITCH.value
 
     @typechecked()
     def set_state(self, actuator_name: str, state) -> bool:
         return self.__wemo_switch.change_state(
-            self.__actuators_repo.get_actuators()[actuator_name].send_to_device, state)
+            self.__actuators_repo.get_actuators()[actuator_name].properties.get(ActuatorProperties.SEND_TO_DEVICE), state
+        )

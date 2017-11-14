@@ -7,7 +7,6 @@ from communication.TextSensorDataParser import TextSensorDataParser
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
-from communication.encriptors.EncriptorsBuilder import EncriptorsBuilder
 from communication.WemoSwitch import WemoSwitch
 from communication.ZWaveDevice import ZWaveDevice
 from communication.actuator.SerialSendStrategy import SerialSendStrategy
@@ -15,6 +14,7 @@ from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
 from communication.actuator.GroupStrategy import GroupStrategy
 from communication.actuator.ZWaveStrategy import ZWaveStrategy
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
+from communication.encriptors.AesEncriptor import AesEncriptor
 from config import actuators
 from config import general
 from config import sensors
@@ -124,8 +124,8 @@ class Container:
         return EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
 
     @singleton
-    def encriptors_builder(self) -> EncriptorsBuilder:
-        return EncriptorsBuilder(general.communication['aes_key'])
+    def aes_encriptor(self) -> AesEncriptor:
+        return AesEncriptor(general.communication['aes_key'])
 
     @singleton
     def zwave_device(self) -> ZWaveDevice:
@@ -140,7 +140,7 @@ class Container:
     def actuator_strategies(self) -> ActuatorStrategies:
         actuator_strategies = ActuatorStrategies()
         actuator_strategies.add_strategy(SerialSendStrategy(self.serial_communicator_registry(),
-                                                            self.actuators_repository()))
+                                                            self.actuators_repository(), self.aes_encriptor()))
         actuator_strategies.add_strategy(WemoSwitchStrategy(self.actuators_repository(), self.wemo_switch()))
         actuator_strategies.add_strategy(GroupStrategy(self.actuators_repository(), self.async_actuator_commands()))
         actuator_strategies.add_strategy(ZWaveStrategy(self.actuators_repository(), self.zwave_device()))
@@ -149,8 +149,7 @@ class Container:
 
     @singleton
     def actuator_commands(self) -> ActuatorCommands:
-        return ActuatorCommands(self.actuator_strategies(), self.encriptors_builder(),
-                                self.actuators_repository())
+        return ActuatorCommands(self.actuator_strategies(), self.actuators_repository(), self.root_logger())
 
     @singleton
     def async_actuator_commands(self) -> AsyncActuatorCommands:
