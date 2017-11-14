@@ -1,4 +1,5 @@
 import Auth from "../utils/auth";
+import {API_ENDPOINT} from "../../config"
 
 export const postJson = (path, body, method) => {
     return new Promise((resolve, reject) => {
@@ -43,5 +44,3 @@ export const getJson = (path) => {
 export const doFetch = (path, request) => {
     return fetch(API_ENDPOINT + path, request);
 };
-
-const API_ENDPOINT = 'http://endpoint';

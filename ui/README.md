@@ -6,7 +6,7 @@ This UI is powered by [CoreUI](http://coreui.io/)
 
 Configuration:
 
-Edit /src/utils/fetch.js and set the api endpoint 
+Edit confi.js and set the api endpoint 
 ````
 const API_ENDPOINT = 'your_enpoint_here'
 ````

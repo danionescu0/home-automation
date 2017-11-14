@@ -36,18 +36,36 @@
 * bluetooth configured
 
 # Install: 
-## python libs with pip3:
-* install python packages using "pip3 install -r requirements.txt"
-* tips for installing ouimeaux: http://ouimeaux.readthedocs.io/en/latest/installation.html
-* in python server folder run: pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
-* installing Zwave: https://github.com/OpenZWave/python-openzwave/blob/master/INSTALL_ARCH.rst
-and https://github.com/OpenZWave/python-openzwave
+## virtual environment
+````
+virtualenv -p /path/to/python3/executable home
+source ./home/bin/activate
+pip install -r /home-automation_path/python-server/requirements.txt
+cd /home-automation_path/python-server/
+pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
+````
+
+## other 
+* clone open-zwave repository and modify config/general.py to point to the config path
+````
+git clone https://github.com/OpenZWave/open-zwave.git
+````
+
 
 
 # Running the servers
-* start the virtual environment if you're using that
-* Start Background process: "python background.py"
-* Start webserver process: "python webserver.py"
+* Start Background process:
+````
+virtualenv -p /path/to/python3/executable home
+source ./home/bin/activate
+python /home-automation_path/python-server/background.py
+````
+* Start webserver process: 
+````
+virtualenv -p /path/to/python3/executable home
+source ./home/bin/activate
+python /home-automation_path/python-server/webserver.py
+````
 
 # Configuration 
 

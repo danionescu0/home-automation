@@ -53,7 +53,7 @@ class SerialSendStrategy(BaseStrategy):
     def __encrypt(self, text: str, actuator: Actuator):
         encription = actuator.properties.get(ActuatorProperties.ENCRIPTION)
         if None == encription:
-            return text
+            return str.encode(text)
 
         return self.__encriptor.encrypt(text)
 
