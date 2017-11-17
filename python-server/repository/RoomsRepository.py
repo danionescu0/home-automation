@@ -18,16 +18,10 @@ class RoomsRepository:
         rooms = []
         sensors_by_room = self.__group_sensors()
         actuators_by_room = self.__group_actuators()
-
-        for room_name, actuators in actuators_by_room.items():
-            sensors = None
-            if room_name in sensors_by_room:
-                sensors = sensors_by_room[room_name]
-            rooms.append(Room(room_name, room_name, sensors, actuators))
-        for room_name, sensors in sensors_by_room.items():
-            actuators = None
-            if room_name in actuators_by_room:
-                actuators = actuators_by_room[room_name]
+        room_names = set(list(sensors_by_room.keys()) + list(actuators_by_room.keys()))
+        for room_name in room_names:
+            sensors = sensors_by_room[room_name] if room_name in sensors_by_room else []
+            actuators = actuators_by_room[room_name] if room_name in actuators_by_room else []
             rooms.append(Room(room_name, room_name, sensors, actuators))
 
         return rooms

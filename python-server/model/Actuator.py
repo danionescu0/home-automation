@@ -2,7 +2,14 @@ from enum import Enum
 
 from model.ActuatorProperties import ActuatorProperties
 
+
 class Actuator:
+    class ActuatorType(Enum):
+        PUSHBUTTON = 'pushbutton'
+        SWITCH = 'switch'
+        DIMMER = 'dimmer'
+        MAX_DIMMER_VALUE = 255
+
     class DeviceType(Enum):
         SERIAL = 'serial'
         GROUP = 'group'
@@ -35,4 +42,4 @@ class Actuator:
     def __repr__(self) -> str:
         return "Actuator: id({0}), name({1}), value({2}), type({3}), room({4})," \
                " communicator({5}), properties({6})".\
-                format(self.id, self.name, self.value, self._type, self._room, self.device_type, self.properties)
+                format(self.id, self.name, self.value, self.type, self.room, self.device_type, self.properties)

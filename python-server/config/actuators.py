@@ -188,6 +188,7 @@ conf = {
         'device_type': 'zwave',
         'properties': {
             'send_to_device': '0184f904.3.26.4.0',
+            'max_value': 150
         }
     },
     'fibaroBlue' : {
@@ -198,6 +199,7 @@ conf = {
         'device_type': 'zwave',
         'properties': {
             'send_to_device': '0184f904.3.26.5.0',
+            'max_value': 150
         }
     },
     'fibaroWhite' : {
@@ -208,6 +210,7 @@ conf = {
         'device_type': 'zwave',
         'properties': {
             'send_to_device': '0184f904.3.26.6.0',
+            'max_value': 150
         }
     },
     'fibaroRed' : {
@@ -218,6 +221,7 @@ conf = {
         'device_type': 'zwave',
         'properties': {
             'send_to_device': '0184f904.3.26.3.0',
+            'max_value' : 150
         }
     }
 }

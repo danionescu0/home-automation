@@ -3,6 +3,7 @@ class ActuatorProperties:
     SEND_TO_DEVICE = 'send_to_device'
     COMMAND = 'command'
     ENCRIPTION = 'encription'
+    MAX_VALUE = 'max_value'
 
     def __init__(self) -> None:
         self.__properties = {}
@@ -19,6 +20,6 @@ class ActuatorProperties:
     def __repr__(self) -> str:
         description = "ActuatorProperties:"
         for key, value in self.__properties.items():
-            description += '{0}: ({2}), '.format(key, value)
+            description += '{0}: ({1}), '.format(key, value)
 
         return description

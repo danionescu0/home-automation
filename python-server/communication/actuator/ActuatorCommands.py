@@ -4,7 +4,6 @@ from typeguard import typechecked
 
 from repository.ActuatorsRepository import ActuatorsRepository
 from communication.actuator.ActuatorStrategies import ActuatorStrategies
-from model.ActuatorType import ActuatorType
 from model.Actuator import Actuator
 
 
@@ -22,12 +21,12 @@ class ActuatorCommands:
         self.__actuators = self.__actuators_repo.get_actuators()
         self.__actuators_repo.set_actuator(actuator_name, state)
         #todo remove this return hack
-        if self.__actuators[actuator_name].device_type == Actuator.DeviceType.ACTION:
+        if self.__actuators[actuator_name].device_type == Actuator.DeviceType.ACTION.value:
             return
 
         strategy = self.__get_strategy(actuator_name)
         success = strategy.set_state(actuator_name, state)
-        if not success and self.__actuators[actuator_name].type == ActuatorType.SWITCH.value:
+        if not success and self.__actuators[actuator_name].type == Actuator.ActuatorType.SWITCH.value:
             self.__actuators_repo.set_actuator(actuator_name, not state)
 
         return success
@@ -37,4 +36,4 @@ class ActuatorCommands:
         try:
             return [strategy for strategy in strategies if strategy.supports(actuator_name)][0]
         except IndexError:
-            raise NotImplementedError('Actuator {0} does not have a strategy associated. Check "device-type"'.format(actuator_name))
+            raise NotImplementedError('Actuator {0} does not have a strategy associated. Check "device_type"'.format(actuator_name))

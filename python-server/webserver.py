@@ -2,16 +2,13 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
 
 from config import general
-from config import sensors
 
-from web.MainHandler import MainHandler
 from web.ApiTokenAuthHandler import ApiTokenAuthHandler
 from web.ApiLocationHandler import ApiLocationHandler
 from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
 from web.ApiRoomsHandler import ApiRoomsHandler
 from web.ApiActuatorHandler import ApiActuatorHandler
 from web.ApiSensorHandler import ApiSensorHandler
-from web.GraphsBuilderHandler import GraphsBuilderHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
@@ -40,21 +37,11 @@ def make_app():
     }
 
     return Application([
-            url(
-                r"/",
-                MainHandler,
-                dict(async_actuator_commands=async_actuator_commands, actuators_repo=actuators_repo, sensors_repo=sensors_repo),
-                name="actuator-states"
-            ),
             url(r'/login', LoginHandler, dict(authentication=authentication), name='login'),
             url(r'/public/(.*)', StaticFileHandler, {
                 'path': general.web_server['static_path']
             }),
-            url(r'/graphs', GraphsBuilderHandler, dict(
-                sensors_repo=sensors_repo,
-                sensors_config=sensors.conf
-            ), name='graphs'),
-            url(r'/ifttt',
+            url(r'/',
                 IftttHandler,
                 dict(
                         actuators_repo=actuators_repo,

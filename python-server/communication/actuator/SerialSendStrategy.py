@@ -6,7 +6,6 @@ from .BaseStrategy import BaseStrategy
 from communication.SerialCommunicatorRegistry import SerialCommunicatorRegistry
 from repository.ActuatorsRepository import ActuatorsRepository
 from model.Actuator import Actuator
-from model.ActuatorType import ActuatorType
 from model.ActuatorProperties import ActuatorProperties
 from communication.encriptors.AesEncriptor import AesEncriptor
 
@@ -24,7 +23,7 @@ class SerialSendStrategy(BaseStrategy):
         actuator = self.__actuators_repo.get_actuators()[actuator_name]
 
         return actuator.device_type == Actuator.DeviceType.SERIAL.value \
-               and actuator.type in [ActuatorType.SWITCH.value, ActuatorType.PUSHBUTTON.value]
+               and actuator.type in [Actuator.ActuatorType.SWITCH.value, Actuator.ActuatorType.PUSHBUTTON.value]
 
     @typechecked()
     def set_state(self, actuator_name: str, state):
@@ -43,9 +42,9 @@ class SerialSendStrategy(BaseStrategy):
     def __calculate_actuator_command(self, actuator: Actuator, state: bool):
         actuator_type = actuator.type
         actuator_command = actuator.properties.get(ActuatorProperties.COMMAND)
-        if actuator_type == ActuatorType.SWITCH.value:
+        if actuator_type == Actuator.ActuatorType.SWITCH.value:
             return actuator_command[{True: 'true', False: 'false'}[state]]
-        elif actuator_type == ActuatorType.PUSHBUTTON.value:
+        elif actuator_type == Actuator.ActuatorType.PUSHBUTTON.value:
             return actuator_command['true']
         else:
             raise Exception('Unimplemented actuator type: %s'.format(actuator_type))

@@ -3,7 +3,6 @@ from typeguard import typechecked
 from .BaseStrategy import BaseStrategy
 from communication.WemoSwitch import WemoSwitch
 from repository.ActuatorsRepository import ActuatorsRepository
-from model.ActuatorType import ActuatorType
 from model.Actuator import Actuator
 from model.ActuatorProperties import ActuatorProperties
 
@@ -18,7 +17,7 @@ class WemoSwitchStrategy(BaseStrategy):
     def supports(self, actuator_name: str) -> bool:
         actuator = self.__actuators_repo.get_actuators()[actuator_name]
 
-        return actuator.device_type == Actuator.DeviceType.WEMO.value and actuator.device_type == ActuatorType.SWITCH.value
+        return actuator.device_type == Actuator.DeviceType.WEMO.value and actuator.type == Actuator.ActuatorType.SWITCH.value
 
     @typechecked()
     def set_state(self, actuator_name: str, state) -> bool:
