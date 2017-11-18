@@ -22,6 +22,7 @@ class RoomsRepository:
         for room_name in room_names:
             sensors = sensors_by_room[room_name] if room_name in sensors_by_room else []
             actuators = actuators_by_room[room_name] if room_name in actuators_by_room else []
+
             rooms.append(Room(room_name, room_name, sensors, actuators))
 
         return rooms
@@ -40,13 +41,11 @@ class RoomsRepository:
 
         return grouped_actuators
 
-    #Todo eliminate hack: type(sensor.location) != 'str'
     def __group_sensors(self):
         sensors = self.__sensors_repository.get_sensors()
+
         grouped_sensors = {}
         for sensor in sensors:
-            if not isinstance(sensor.location, str):
-                continue
             group_key = sensor.location
             if not group_key in grouped_sensors:
                 grouped_sensors[group_key] = []

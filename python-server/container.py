@@ -51,6 +51,7 @@ from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
 from web.formatter.RoomsFormatter import RoomsFormatter
 from web.formatter.SensorsFormatter import SensorsFormatter
+from web.formatter.IftttFormatter import IftttFormatter
 from web.security.JwtTokenFactory import JwtTokenFactory
 
 
@@ -114,6 +115,10 @@ class Container:
     @singleton
     def sensors_formatter(self) -> SensorsFormatter:
         return SensorsFormatter(self.sensors_repository())
+
+    @singleton
+    def ifttt_formatter(self) -> IftttFormatter:
+        return IftttFormatter(self.ifttt_rules_repository())
 
     @singleton
     def jwt_token_factory(self) -> JwtTokenFactory:

@@ -43,11 +43,11 @@ class Header extends Component {
           <NavItem className="px-3">
             <Link to="/main-page">Rooms</Link>
           </NavItem>
+          <NavItem className="px-3">
+            <Link to="/ifttt-list">Rules</Link>
+          </NavItem>
           <NavLink className="px-3">
-            <NavLink href="#">IFTTT</NavLink>
-          </NavLink>
-          <NavLink className="px-3">
-            <NavLink href="#">Settings</NavLink>
+            <NavLink href="#">Logout</NavLink>
           </NavLink>
         </Nav>
         <Nav className="ml-auto" navbar>

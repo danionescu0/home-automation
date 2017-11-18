@@ -61,7 +61,7 @@ class IftttHandler(BaseHandler):
         self.__rules_repository.upsert(rule_name, trigger_rules, active, commands)
 
     def __get_demo_rule(self):
-        rule = Rule('demo_rule',
+        rule = Rule('demo_rule', 'demo_rule',
                     'and  ( eq(A[homeAlarm], False), or(gt(TIME, 08:45), btw(S[temperature:living], 21, 22) )',
                     True)
         rule.add_command(RuleCommand('powerSocket1', True, 'Demo voice'))

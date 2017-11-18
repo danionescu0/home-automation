@@ -6,9 +6,30 @@ export default {
       icon: 'fa-building-o'
     },
     {
-      name: 'IFTTT',
-      url: '/pages',
+      name: 'Rules',
+      url: '/ifttt-list',
       icon: 'fa-cubes',
+    },
+    {
+      name: 'Settings',
+      icon: 'fa-cubes',
+      children: [
+            {
+              name: 'General',
+              url: '/general-settings',
+              icon: 'fa-cubes'
+            },
+            {
+              name: 'Actuators',
+              url: '/actuators-list',
+              icon: 'fa-cubes'
+            },
+            {
+              name: 'Sensors',
+              url: '/sensors-list',
+              icon: 'fa-cubes'
+            }
+        ]
     }
   ]
 };

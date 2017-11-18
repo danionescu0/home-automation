@@ -7,6 +7,7 @@ from repository.AbstractRepository import AbstractRepository
 from model.Rule import Rule
 from model.RuleCommand import RuleCommand
 
+
 class IftttRulesRepository(AbstractRepository):
     TRIGGER_RULES = 'trigger-rules'
     ACTIVE = 'active'
@@ -22,9 +23,9 @@ class IftttRulesRepository(AbstractRepository):
         self.keys = {self.__REDIS_KEY: {}}
 
     @typechecked()
-    def upsert(self, name: str, trigger_rules: str, active: bool, commands: list):
+    def upsert(self, id: str, trigger_rules: str, active: bool, commands: list):
         rules = self.get(self.__REDIS_KEY)
-        rules[name] = {
+        rules[id] = {
             self.TRIGGER_RULES : trigger_rules,
             self.ACTIVE: active,
             self.COMMANDS: commands
@@ -33,9 +34,9 @@ class IftttRulesRepository(AbstractRepository):
         return self.client.set(self.__REDIS_KEY, json.dumps(rules))
 
     @typechecked()
-    def delete(self, name: str):
+    def delete(self, id: str):
         rules = self.get(self.__REDIS_KEY)
-        rules.pop(name, None)
+        rules.pop(id, None)
 
         return self.client.set(self.__REDIS_KEY, json.dumps(rules))
 
@@ -44,11 +45,11 @@ class IftttRulesRepository(AbstractRepository):
         if not rules_data:
             return {}
         rules = {}
-        for name, rule_data in rules_data.items():
+        for id, rule_data in rules_data.items():
             commands = [RuleCommand(data['actuator_name'], data['actuator_state'], data['voice'])
                         for data in rule_data['commands']]
-            rule = Rule(name, rule_data['trigger-rules'], rule_data['active'])
+            rule = Rule(id, id, rule_data['trigger-rules'], rule_data['active'])
             rule.add_commands(commands)
-            rules[name] = rule
+            rules[id] = rule
 
         return rules

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
 import {Line} from 'react-chartjs-2';
 import {CardColumns, Card, CardHeader, CardBody} from 'reactstrap';
 import {getJson} from '../utils/fetch'
@@ -38,11 +37,20 @@ class DisplaySensorPage extends Component {
                 <CardColumns className="cols-2">
                   <Card>
                     <CardHeader>
-                        {this.state.graphName}
+                        {this.state.graphName} last day
                       <div className="card-actions">
-                        <Link to={`/main-page`}>
-                          <small className="text-muted">Rooms</small>
-                        </Link>
+                      </div>
+                    </CardHeader>
+                    <CardBody>
+                      <div className="chart-wrapper">
+                        <Line data={this.state.lineGraph} options={{maintainAspectRatio: false}} />
+                      </div>
+                    </CardBody>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                        {this.state.graphName} last 7 days
+                      <div className="card-actions">
                       </div>
                     </CardHeader>
                     <CardBody>

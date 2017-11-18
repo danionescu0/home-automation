@@ -15,7 +15,6 @@ export const ACTUATOR_TYPE = {
 };
 
 const Actuators = ({actuators, actuatorHandler}) => {
-    console.log(actuators);
     var executeInFuture;
     const pushButtonHandler = (event) => {
         actuatorHandler(event.target.id, true)

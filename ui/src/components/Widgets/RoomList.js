@@ -13,7 +13,7 @@ import Sensors from './Sensors'
 import Actuators from './Actuators'
 
 const RoomList = ({room_data, actuatorHandler}) => {
-    var roomData = room_data.map((room, index) => {
+    var roomContent = room_data.map((room, index) => {
         return (
             <Col key={index} xs="12" lg="6">
                 <Card>
@@ -38,7 +38,7 @@ const RoomList = ({room_data, actuatorHandler}) => {
     return (
         <div className="animated fadeIn">
             <Row>
-                {roomData}
+                {roomContent}
             </Row>
         </div>
     )

@@ -9,6 +9,7 @@ from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
 from web.ApiRoomsHandler import ApiRoomsHandler
 from web.ApiActuatorHandler import ApiActuatorHandler
 from web.ApiSensorHandler import ApiSensorHandler
+from web.ApiIftttHandler import ApiIftttHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
@@ -78,6 +79,12 @@ def make_app():
                 r'/api/rooms',
                 ApiRoomsHandler,
                 dict(rooms_formatter=container.rooms_formatter()),
+                name='api_rooms'
+            ),
+            url(
+                r'/api/ifttt',
+                ApiIftttHandler,
+                dict(ifttt_formatter=container.ifttt_formatter()),
                 name='api_rooms'
             ),
             url(

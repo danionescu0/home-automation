@@ -1,5 +1,5 @@
 ifttt = {
-    actionsURL: '/ifttt',
+    actionsURL: '/',
 
     init: function() {
         $( ".action-update" ).click(function() {

@@ -34,7 +34,6 @@ conf = [
         'location' : 'outside',
         'communication_code': ('T', '1'),
         'last_updated': 0
-
     },
     {
         'id' : 'airPressure_outside',
@@ -113,7 +112,7 @@ conf = [
         'type' : 'phoneIsHome',
         'value' : False,
         'visible' : ['homepage'],
-        'location': False,
+        'location': 'outside',
         'communication_code': (False, False),
         'last_updated': 0
     },

@@ -9,6 +9,7 @@ import secure from '../utils/secure'
 
 import MainPage from './main-page';
 import DisplaySensorPage from './display-sensor-page'
+import IftttList from './ifttt-list-page'
 
 
 class App extends Component {
@@ -23,6 +24,7 @@ class App extends Component {
             <Container fluid>
               <Switch>
                 <Route path="/main-page" name="MainPage" component={secure(MainPage)}/>
+                <Route path="/ifttt-list" name="IftttPage" component={secure(IftttList)}/>
                 <Route path="/display-sensor/:id" name="DisplaySensorPage" component={secure(DisplaySensorPage)}/>
                 <Route path="/login" name="Login" component={Login}/>
                 <Redirect from="/" to="/main-page"/>
