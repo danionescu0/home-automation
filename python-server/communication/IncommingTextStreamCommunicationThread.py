@@ -11,7 +11,7 @@ from event.SensorUpdateEvent import SensorUpdateEvent
 from communication.SensorsParseException import SensorsParseException
 
 
-class IncommingCommunicationThread(threading.Thread):
+class IncommingTextStreamCommunicationThread(threading.Thread):
     LISTEN_DELAY = 0.01
 
     @typechecked()

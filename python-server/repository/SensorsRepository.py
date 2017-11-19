@@ -30,8 +30,14 @@ class SensorsRepository(AbstractRepository):
         sensors = []
         for sensor_data in sensors_data:
             sensor = Sensor(sensor_data['id'], sensor_data['type'], sensor_data['location'], sensor_data['value'])
-            sensor.communication_code = sensor_data['communication_code']
-            sensor.last_updated = sensor_data['last_updated']
+            if 'communication_code' in sensor_data:
+                sensor.communication_code = sensor_data['communication_code']
+            else:
+                sensor.communication_code = (False, False)
+            if 'last_updated' in sensor_data:
+                sensor.last_updated = sensor_data['last_updated']
+            else:
+                sensor.last_updated = 0
             sensors.append(sensor)
 
         return sensors

@@ -1,6 +1,6 @@
 import signal
 
-from communication.IncommingCommunicationThread import IncommingCommunicationThread
+from communication.IncommingTextStreamCommunicationThread import IncommingTextStreamCommunicationThread
 from tools.HomeDefenceThread import HomeDefenceThread
 from tools.IftttRulesThread import IftttRulesThread
 from tools.AsyncJobsThread import AsyncJobsThread
@@ -28,12 +28,13 @@ device_lifetime_manager\
 
 def main():
     threads = []
-    threads.append(IncommingCommunicationThread(container.text_sensor_data_parser(),
-                                                sensors_repo, container.sensor_update_event(),
-                                                serial_communicator_registry.get_communicator('bluetooth'), root_logger))
-    threads.append(IncommingCommunicationThread(container.text_sensor_data_parser(), sensors_repo,
-                                                container.sensor_update_event(),
-                                                serial_communicator_registry.get_communicator('serial'), root_logger))
+    threads.append(IncommingTextStreamCommunicationThread(container.text_sensor_data_parser(),
+                                                          sensors_repo, container.sensor_update_event(),
+                                                          serial_communicator_registry.get_communicator('bluetooth'), root_logger))
+    threads.append(IncommingTextStreamCommunicationThread(container.text_sensor_data_parser(), sensors_repo,
+                                                          container.sensor_update_event(),
+                                                          serial_communicator_registry.get_communicator('serial'), root_logger))
+    threads.append(container.incomming_zwave_communication_thread())
     threads.append(AsyncJobsThread(async_actuator_commands, container.change_actuator_request_event(), root_logger))
     threads.append(IftttRulesThread(container.ifttt_rules_repository(), container.command_executor(),
                                     container.tokenizer(), root_logger))

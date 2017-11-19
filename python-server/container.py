@@ -15,6 +15,7 @@ from communication.actuator.GroupStrategy import GroupStrategy
 from communication.actuator.ZWaveStrategy import ZWaveStrategy
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from communication.encriptors.AesEncriptor import AesEncriptor
+from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
 from config import actuators
 from config import general
 from config import sensors
@@ -119,6 +120,11 @@ class Container:
     @singleton
     def ifttt_formatter(self) -> IftttFormatter:
         return IftttFormatter(self.ifttt_rules_repository())
+
+    @singleton
+    def incomming_zwave_communication_thread(self) -> IncommingZwaveCommunicationThread:
+        return IncommingZwaveCommunicationThread(self.sensor_update_event(), self.sensors_repository(),
+                                                 self.zwave_device(), self.root_logger())
 
     @singleton
     def jwt_token_factory(self) -> JwtTokenFactory:

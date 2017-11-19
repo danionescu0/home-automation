@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
-const SENSOR_TYPES_IMAGE = {
+const SENSOR_TYPES_TO_IMAGE = {
     power: (<img src="../img/sensors/power.png" />),
     temperature: (<i className="fa fa-thermometer-full fa-lg mt-4"></i>),
     humidity: (<img src="../img/sensors/humidity.png" />),
@@ -22,7 +22,7 @@ const Sensors = ({sensors}) => {
         return (
             <span key = {index}>
                 <Link to={`/display-sensor/${sensor.id}`}>
-                    {SENSOR_TYPES_IMAGE[sensor.type]}
+                    {SENSOR_TYPES_TO_IMAGE[sensor.type]}
                 </Link>
                 {sensor.value}&nbsp;&nbsp;
             </span>

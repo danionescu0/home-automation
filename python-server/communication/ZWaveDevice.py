@@ -1,5 +1,7 @@
+from typing import Callable
 from logging import RootLogger
 
+from typeguard import typechecked
 from openzwave.network import ZWaveNetwork
 from openzwave.option import ZWaveOption
 from pydispatch import dispatcher
@@ -8,6 +10,7 @@ from communication.DeviceLifetimeCycles import DeviceLifetimeCycles
 
 
 class ZWaveDevice(DeviceLifetimeCycles):
+    @typechecked()
     def __init__(self, root_logger: RootLogger, port: str, openzwave_config_path: str) -> None:
         self.__root_logger = root_logger
         self.__port = port
@@ -30,9 +33,11 @@ class ZWaveDevice(DeviceLifetimeCycles):
         self.__root_logger.debug('Disconnectiong Zwave device')
         self.__network.stop()
 
-    def attach_state_change_callback(self, callback):
+    @typechecked()
+    def attach_state_change_callback(self, callback: Callable[[str, float], None]):
         self.__state_change_callback = callback
 
+    @typechecked()
     def change_switch(self, actuator_name: str, state: bool) -> bool:
         node, val = self.__get_node(actuator_name, 'switch')
         try:
@@ -41,6 +46,7 @@ class ZWaveDevice(DeviceLifetimeCycles):
             return False
         return True
 
+    @typechecked()
     def change_dimmer(self, actuator_name: str, state: int) -> bool:
         node, val = self.__get_node(actuator_name, 'dimmer')
         try:
@@ -49,6 +55,7 @@ class ZWaveDevice(DeviceLifetimeCycles):
             return False
         return True
 
+    @typechecked()
     def __get_node(self, actuator_name: str, type: str):
         if self.__network.state < self.__network.STATE_READY:
             return
@@ -64,6 +71,7 @@ class ZWaveDevice(DeviceLifetimeCycles):
 
         raise Exception('Zwave node with id {0} not found'.format(actuator_name))
 
+    @typechecked()
     def __get_device_by_type(self, node, type: str):
         if type == 'switch':
             return node.get_switches()
@@ -78,4 +86,5 @@ class ZWaveDevice(DeviceLifetimeCycles):
         dispatcher.connect(self.__value_update, ZWaveNetwork.SIGNAL_VALUE)
 
     def __value_update(self, network, node, value):
-        self.__root_logger.debug('Value {0} for node: {1}'.format(value, node))
+        self.__root_logger.debug('Id {0} for value: {1}'.format(value.id_on_network, value.data))
+        self.__state_change_callback(value.id_on_network, value.data)

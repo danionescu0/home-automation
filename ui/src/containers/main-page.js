@@ -10,11 +10,16 @@ class MainPage extends Component {
         this.state = {
             errorMessage: null,
             room_data: [],
+            periodicallyLoader: null
         }
     }
 
   componentDidMount() {
-      this.loadData();
+      this.state.periodicallyLoader = setInterval(this.loadData.bind(this), 7000);
+  }
+
+  componentWillUnmount() {
+      clearInterval(this.state.periodicallyLoader);
   }
 
   actuatorHandler(id, value) {
@@ -30,9 +35,11 @@ class MainPage extends Component {
   }
 
   loadData() {
+        console.log('getting json');
         getJson(`/api/rooms`).then(data => {
+            console.log('fetched data', data);
             this.setState({room_data: data});
-        });
+        })
   }
 
   render() {
