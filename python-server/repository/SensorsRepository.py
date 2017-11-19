@@ -1,7 +1,6 @@
 import calendar
 import json
 import math
-from collections import Counter
 from datetime import datetime
 from typing import List
 
@@ -32,7 +31,6 @@ class SensorsRepository(AbstractRepository):
         for sensor_data in sensors_data:
             sensor = Sensor(sensor_data['id'], sensor_data['type'], sensor_data['location'], sensor_data['value'])
             sensor.communication_code = sensor_data['communication_code']
-            sensor.visible = sensor_data['visible']
             sensor.last_updated = sensor_data['last_updated']
             sensors.append(sensor)
 
@@ -52,39 +50,6 @@ class SensorsRepository(AbstractRepository):
         range = self.client.zrangebyscore(redis_key, start_timestamp, end_timestamp, withscores=True)
 
         return [SensorDataPoint(json.loads(datapoint[0].decode("utf-8"))['value'], datapoint[1]) for datapoint in range]
-
-    #deprecated will be deleted when one page app will replace the old MVC
-    @typechecked()
-    def get_sensor_values_in_interval(self, type: str, location: str, start_date: datetime, end_date: datetime) -> list:
-        start_timestamp = calendar.timegm(start_date.timetuple())
-        end_timestamp = calendar.timegm(end_date.timetuple())
-        range = self.client.zrangebyscore(self.__get_sensor_key(type, location), start_timestamp, end_timestamp, withscores=True)
-        for index, element in enumerate(range):
-            timestamp = range[index][1]
-            range[index] = json.loads(range[index][0].decode("utf-8"))
-            range[index]['timestamp'] = timestamp
-
-        return range
-
-    #deprecated will be refactored using a view formatter
-    def get_hourly_sensor_values_in_interval(self, type, location, start_date, end_date):
-        range = self.get_sensor_values_in_interval(type, location, start_date, end_date)
-        last_hour = datetime.fromtimestamp(int(range[0]['timestamp'])).hour
-        counter = 0
-        average_date = range[0]
-        grouped_range = []
-        for datapoint in range:
-            extracted_hour = datetime.fromtimestamp(int(datapoint['timestamp'])).hour
-            counter += 1
-            if extracted_hour != last_hour:
-                last_hour = extracted_hour
-                average_date.update((x, y / counter) for x, y in list(average_date.items()))
-                grouped_range.append(average_date)
-                counter = 0
-            else:
-                average_date = dict(Counter(average_date) + Counter(datapoint))
-
-        return grouped_range
 
     def __set(self, sensor: Sensor):
         sensors = self.get(self.REDIS_SENSORS_KEY)

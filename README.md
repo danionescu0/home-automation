@@ -12,29 +12,49 @@ IOT devices and other electronics.
 
 **Summary**
 
-* Feature list ?
+* Screenshots
+* Feature list
 * Project overview
 * IFTTT
-* Screenshots
 * Component prices
 * Technical overwiew
 
 
+**Screenshots** 
 
-**Feature list ?**
+ * The rooms page
+ 
+![home_automation_main.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/onepageapp/rooms.png)
 
-* (IFTTT) ability to activate an actuator (light, courtain etc) on a time schedule and based on sensors data and actuators states
+ * Sensors graphs 
+ 
+![sensors.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/onepageapp/graphs.png)
+
+ * Rules 
+ 
+![ifttt.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/onepageapp/rules.png)
+
+ * Login 
+ 
+![ifttt.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/onepageapp/login.png)
+
+
+
+**Feature list**
+
+* Supports customizable rules from the UI. For example let's say you want in the morning to open the courtains, and 
+if your're home to hear what's the weather outside. Or maybe if the air quality dropped and somebody is home open an
+electric fan to get fresh air from outside
+* Supports custom hardware (over bluetooth or serial) and commercial hardware: WeMo devices, Zwave devices
+* New devices can be added by extending the code
 * unlock a electromagnetic door through the press of a button on the app or through *fingerprint*
 * open / closes various types of electric curtains 
-* control remote wall sockets (433 mhz versions by clonning their signal), and WeMo siwtches
-* use a speaker to emit voice alerts and statuses
+* control remote wall sockets 
+* use a speaker to emit voice alerts
 * supports voice remote controll from the [android](https://github.com/danionescu0/android-home-automation-support) application
-* toggle lights on / off (Livolo switches (check the product [here](https://www.aliexpress.com/item/Free-Shipping-Livolo-EU-Standard-Remote-Switch-White-Crystal-Glass-Panel-110-250V-Wall-Light-Remote/629004768.html?spm=2114.13010608.0.126.Mt7G6z)))
-* multiple action switches (configurable and extendable) ex: "_toggle all lights off_"
-* available environment sensors: temperature, humidity, light level, air quality, air pressure and more
-* presence monitoring with infrared PIR sensors
-* power consumption monitoring for the whole house 
-* the sensors modules can be installed in many rooms and outside (i also have a special weather sensor module)
+* open / close lights
+* monitor with different sensors: temperature, humidity, light level, air quality, PIR sensors, air pressure and more
+* power consumption monitoring for the house
 * display charts with sensors data
 * email notifications if the alarm is set and someone enters the house
 * burgler mode (lights are randomly toggled on and off and voices are played)
@@ -49,9 +69,13 @@ For more configuration of the server check the link.
 The sketches are for custom devices that control various actuators and collect data from sensors.
 Some sketches have skematics.
 
-* Third and optional an android application located [here](https://github.com/danionescu0/android-home-automation-support). 
-The application is a webview and besides that it sends from time to time your location the server, 
-which can enable or disables various thisgs like the fingerprint scanner.
+* The UI located [here](https://github.com/danionescu0/home-automation/tree/master/ui)
+
+* The android application located [here](https://github.com/danionescu0/android-home-automation-support). 
+
+* A text to speech server [here](https://github.com/danionescu0/home-automation/tree/master/remote-speaker)
+
+
 
 **IFTTT**
 
@@ -70,31 +94,21 @@ Voice alerts are text to speech blocks of text, beside that actuator and sensors
 for example : "Wake up sir, the temperature outside is S[temperature:outside] and humidity is S[humidity:outside]" this
 block of text will announce the temperature and humidity outside
 
-**Screenshots from old UI** 
-
- * The main menu which contains the sensors listings, and all the "switches" 
- 
-![home_automation_main.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/home_automation_hp.png)
-
- * The sensors graphs menu 
- 
-![sensors.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/home_automation_graphs.png)
-
- * If this than that 
- 
-![ifttt.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/home_automation_ifttt.png)
 
 
 **Component prices:**
 
 * The PI, case, SD card and power adapter will be around 70 dollars
-* Each controller composed of arduino, case, bluetooth device, power adapter, sensors etc will be around 20-30 $ each
-* The fingerprind module will make an exception and will cost around 70 dollars.
+* Custom made. 
+Each custom made  controller composed of arduino, case, bluetooth device or HC-12 device, power adapter, sensors etc and will be around 20-30$
+
+- The custom fingerprind sensor will cost around 70 dollars.
+
 * A Livolo light switch will be around 20$ on [here](https://www.aliexpress.com/premium/livolo-eu.html?ltype=wholesale&d=y&origin=y&isViewCP=y&catId=0&initiative_id=SB_20161208130911&SearchText=livolo+eu&blanktest=0)
 * An electric strike lock starts from 23$ [here](http://www.ebay.com/sch/i.html?_odkw=electric+door+lock&_osacat=0&_from=R40&_trksid=p2045573.m570.l1313.TR0.TRC0.H0.Xelectric+strike+lock.TRS0&_nkw=electric+strike+lock&_sacat=0)
 * A WeMo power socker is about 40$ [here](http://www.belkin.com/us/Products/home-automation/c/wemo-home-automation/) 
 * An electric roller blade will start from 50$ [here](http://www.ebay.com/sch/i.html?_odkw=electric+courtains&_osacat=0&_from=R40&_trksid=p2045573.m570.l1313.TR0.TRC0.H0.Xelectric+roller+blinds.TRS0&_nkw=electric+roller+blinds&_sacat=0)
-
+* Some Zwave devices prices [here](http://z-wavelab.com/)
 
 **Technical overwiew**
 

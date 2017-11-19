@@ -39,10 +39,7 @@ def make_app():
 
     return Application([
             url(r'/login', LoginHandler, dict(authentication=authentication), name='login'),
-            url(r'/public/(.*)', StaticFileHandler, {
-                'path': general.web_server['static_path']
-            }),
-            url(r'/',
+            url(r'/ifttt',
                 IftttHandler,
                 dict(
                         actuators_repo=actuators_repo,
@@ -98,7 +95,10 @@ def make_app():
                 ApiSensorHandler,
                 dict(sensors_formatter=container.sensors_formatter()),
                 name='api_sensor'
-            )
+            ),
+            url(r'/(.*)', StaticFileHandler, {
+                'path': general.web_server['static_path']
+            }),
         ], **settings)
 
 app = make_app()

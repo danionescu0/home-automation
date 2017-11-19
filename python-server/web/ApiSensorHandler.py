@@ -14,7 +14,7 @@ class ApiSensorHandler(CorsHandler):
 
     @secure
     def get(self, id):
-        nr_days_behind = 1
+        nr_days_behind = 7
         start_date = datetime.today() - timedelta(days=nr_days_behind)
         end_date = datetime.today()
         self.write(json.dumps(self.__sensors_formatter.get_sensor_values(id, start_date, end_date)))

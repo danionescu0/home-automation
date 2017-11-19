@@ -1,22 +1,14 @@
 from typing import Tuple
 
+
 class Sensor:
     def __init__(self, id: str, type: str, location: str, value) -> None:
         self.id = id
         self.type = type
         self.location = location
         self.value = value
-        self._visible = None
         self._communication_code = None
         self._last_updated = None
-
-    @property
-    def visible(self):
-        return self._visible
-
-    @visible.setter
-    def visible(self, state : bool):
-        self._visible = state
 
     @property
     def communication_code(self) -> Tuple:
@@ -35,7 +27,6 @@ class Sensor:
         self._last_updated = value
 
     def __repr__(self) -> str:
-        return "Sensor: type({0}), location({1}), value({2}), visible({3})," \
-               " communication_code({4}), last_updated({5})".format(self.type, self.location, self.value,
-                                                                    self._visible, self._communication_code,
-                                                                    self._last_updated)
+        return "Sensor: type({0}), location({1}), value({2})," \
+               " communication_code({3}), last_updated({4})".format(self.type, self.location, self.value,
+                                                                     self._communication_code, self._last_updated)

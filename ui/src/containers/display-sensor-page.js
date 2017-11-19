@@ -8,7 +8,8 @@ class DisplaySensorPage extends Component {
         super(props);
         this.state = {
             errorMessage: null,
-            lineGraph: lineGraph,
+            firstLineGraph: lineGraph,
+            secondLineGraph: lineGraph,
             graphName: null
         }
     }
@@ -21,14 +22,21 @@ class DisplaySensorPage extends Component {
         const sensorId = this.props.match.params.id;
         this.setState({graphName:  this.props.match.params.id});
         getJson(`/api/sensor/${sensorId}`).then(data => {
-            var newDatasetTemplate = datasetTemplate;
-            datasetTemplate.label = sensorId;
-            datasetTemplate.data = data.map(datapoint => datapoint.value);
-            var newLineGraph = lineGraph;
-            lineGraph.datasets = [newDatasetTemplate];
-            lineGraph.labels = data.map(datapoint => datapoint.date);
-            this.setState({lineGraph: newLineGraph});
+            this.setState({firstLineGraph: this.getGraphDetails(sensorId, data, 200)});
+            this.setState({secondLineGraph: this.getGraphDetails(sensorId, data, data.length)});
         });
+    }
+
+    getGraphDetails(sensorId, data, showNr) {
+        data = data.slice(-showNr);
+        var newDatasetTemplate = Object.assign({}, datasetTemplate);
+        newDatasetTemplate.label = sensorId;
+        newDatasetTemplate.data = data.map(datapoint => datapoint.value);
+        var newLineGraph = Object.assign({}, lineGraph);
+        newLineGraph.datasets = [newDatasetTemplate];
+        newLineGraph.labels = data.map(datapoint => datapoint.date);
+
+        return newLineGraph;
     }
 
     render() {
@@ -43,7 +51,7 @@ class DisplaySensorPage extends Component {
                     </CardHeader>
                     <CardBody>
                       <div className="chart-wrapper">
-                        <Line data={this.state.lineGraph} options={{maintainAspectRatio: false}} />
+                        <Line data={this.state.firstLineGraph} options={{maintainAspectRatio: false}} />
                       </div>
                     </CardBody>
                   </Card>
@@ -55,7 +63,7 @@ class DisplaySensorPage extends Component {
                     </CardHeader>
                     <CardBody>
                       <div className="chart-wrapper">
-                        <Line data={this.state.lineGraph} options={{maintainAspectRatio: false}} />
+                        <Line data={this.state.secondLineGraph} options={{maintainAspectRatio: false}} />
                       </div>
                     </CardBody>
                   </Card>
