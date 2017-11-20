@@ -1,1 +1,1 @@
-export const API_ENDPOINT = 'http://someurl';
+export const API_ENDPOINT = 'http://host:port';

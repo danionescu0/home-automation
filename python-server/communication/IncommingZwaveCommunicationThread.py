@@ -26,6 +26,7 @@ class IncommingZwaveCommunicationThread(threading.Thread):
         sensors = self.__sensors_repository.get_sensors()
         filtered = [sensor for sensor in sensors if sensor.id == id]
         if 0 == len(filtered):
+            self.__logger.debug('device with id {0} not found'.format(id));
             return
         sensor = filtered[0]
         self.__logger.debug(sensor)

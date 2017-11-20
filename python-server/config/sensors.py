@@ -102,5 +102,35 @@ conf = [
         'type': 'power',
         'value': 0,
         'location': 'living',
-    }
+    },
+    {
+        'id': '0184f904.4.31.1.5',
+        'type': 'humidity',
+        'value': 0,
+        'location': 'bedroom',
+    },
+    {
+        'id': '0184f904.4.31.1.3',
+        'type': 'light',
+        'value': 0,
+        'location': 'bedroom',
+    },
+    {
+        'id': '0184f904.4.31.1.1',
+        'type': 'temperature',
+        'value': 0,
+        'location': 'bedroom',
+    },
+    {
+        'id': '0184f904.4.80.1.0',
+        'type': 'voltage',
+        'value': 0,
+        'location': 'bedroom',
+    },
+    {
+        'id': '0184f904.4.30.1.0',
+        'type': 'presence',
+        'value': 0,
+        'location': 'bedroom',
+    },
 ]

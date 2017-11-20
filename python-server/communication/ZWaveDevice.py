@@ -27,6 +27,7 @@ class ZWaveDevice(DeviceLifetimeCycles):
         self.__network = ZWaveNetwork(options, autostart=False)
         dispatcher.connect(self.__network_failed, ZWaveNetwork.SIGNAL_NETWORK_FAILED)
         dispatcher.connect(self.__network_ready, ZWaveNetwork.SIGNAL_NETWORK_READY)
+        dispatcher.connect(self.__value_update, ZWaveNetwork.SIGNAL_VALUE)
         self.__network.start()
 
     def disconnect(self) -> None:
@@ -48,8 +49,8 @@ class ZWaveDevice(DeviceLifetimeCycles):
 
     @typechecked()
     def change_dimmer(self, actuator_name: str, state: int) -> bool:
-        node, val = self.__get_node(actuator_name, 'dimmer')
         try:
+            node, val = self.__get_node(actuator_name, 'dimmer')
             node.set_dimmer(val, state)
         except Exception as e:
             return False
@@ -57,8 +58,6 @@ class ZWaveDevice(DeviceLifetimeCycles):
 
     @typechecked()
     def __get_node(self, actuator_name: str, type: str):
-        if self.__network.state < self.__network.STATE_READY:
-            return
         for node in self.__network.nodes:
             for val in self.__get_device_by_type(self.__network.nodes[node], type):
                 self.__root_logger.debug('Zwave node: {0}'.format(
@@ -83,7 +82,6 @@ class ZWaveDevice(DeviceLifetimeCycles):
 
     def __network_ready(self, network):
         self.__root_logger.debug('Zwave network ready, contoller name: {0}'.format(network.controller))
-        dispatcher.connect(self.__value_update, ZWaveNetwork.SIGNAL_VALUE)
 
     def __value_update(self, network, node, value):
         self.__root_logger.debug('Id {0} for value: {1}'.format(value.id_on_network, value.data))
