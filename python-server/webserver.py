@@ -91,7 +91,7 @@ def make_app():
                 name='api_actuator'
             ),
             url(
-                r'/api/sensor/(\w*)',
+                r'/api/sensor/(.*)',
                 ApiSensorHandler,
                 dict(sensors_formatter=container.sensors_formatter()),
                 name='api_sensor'

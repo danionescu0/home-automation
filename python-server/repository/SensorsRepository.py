@@ -67,7 +67,7 @@ class SensorsRepository(AbstractRepository):
         self.client.set(self.REDIS_SENSORS_KEY, json.dumps(sensors))
 
     def __add_last_sensor_averages_in_history(self, sensor: Sensor):
-        name = self.__get_sensor_key(sensor.type, sensor.location)
+        name = self.__get_sensor_key(sensor.id)
         if name not in list(self.last_averages.keys()):
             self.last_averages[name] = []
         self.last_averages[name].append(sensor.value)
@@ -78,11 +78,8 @@ class SensorsRepository(AbstractRepository):
 
         self.sensors_last_updated[name] = self.current_timestamp
         sensor_average_value = int(math.ceil(float(sum(self.last_averages[name])) / len(self.last_averages[name])))
-        self.add_to_list(self.__get_sensor_key(sensor.type, sensor.location), {'value': sensor_average_value})
+        self.add_to_list(self.__get_sensor_key(sensor.id), {'value': sensor_average_value})
         self.last_averages[name] = []
 
-    def __get_sensor_key(self, type, location):
-        return self.REDIS_SENSORS_HISTORY_KEY.format(self.__get_sensor_name(type, location))
-
-    def __get_sensor_name(self, type, location):
-        return '{0}_{1}'.format(type, location)
+    def __get_sensor_key(self, id: str) -> str:
+        return self.REDIS_SENSORS_HISTORY_KEY.format(id)
