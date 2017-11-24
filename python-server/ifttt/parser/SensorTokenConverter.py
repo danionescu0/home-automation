@@ -9,18 +9,14 @@ class SensorTokenConverter(TokenConverter):
         self.__sensors_repository = sensors_repository
 
     def get_value(self, token_raw_value: str):
-        data = token_raw_value.split(':')
         sensors = self.__sensors_repository.get_sensors()
-        sensor_type, sensor_location = data
         for sensor in sensors:
-            if sensor.location and sensor.location != sensor_location:
-                continue
-            if sensor.type != sensor_type:
+            if sensor.id != token_raw_value:
                 continue
 
             return sensor.value
 
-        raise ParseException("Sensor with name {0} not found".format(token_raw_value))
+        raise ParseException("Sensor with id {0} not found".format(token_raw_value))
 
     def get_supported_token(self) -> str:
         return Token.TYPE_SENSOR

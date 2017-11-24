@@ -12,7 +12,7 @@ from ifttt.parser.TokenConverter import TokenConverter
 class Tokenizer:
     __token_rules = [
         ('A\[(\w+)\]', Token.TYPE_ACTUATOR),
-        ('S\[(\w+\:\w+)\]', Token.TYPE_SENSOR),
+        ('S\[(\w+)\]', Token.TYPE_SENSOR),
         ('TIME', Token.TYPE_CURRENT_TIME),
         ('gt', Token.TYPE_EXPR_GREATER),
         ('lt', Token.TYPE_EXPR_LESS),

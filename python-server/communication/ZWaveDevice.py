@@ -85,4 +85,6 @@ class ZWaveDevice(DeviceLifetimeCycles):
 
     def __value_update(self, network, node, value):
         self.__root_logger.debug('Id {0} for value: {1}'.format(value.id_on_network, value.data))
+        if None == self.__state_change_callback:
+            return
         self.__state_change_callback(value.id_on_network, value.data)
