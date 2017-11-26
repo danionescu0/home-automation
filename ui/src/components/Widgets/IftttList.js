@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 
 import {
   Row,
@@ -34,7 +35,9 @@ const IftttList = ({rules_data}) => {
                     <td>
                         <StatusBadge status={rule.active} />
                     </td>
-                    <td>Delete, Edit</td>
+                    <td>Delete,
+                        <Link to={"/ifttt-edit/" + rule.id}>Edit</Link>
+                    </td>
                 </tr>
         )
     });

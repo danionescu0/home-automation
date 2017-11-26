@@ -15,6 +15,5 @@ class ApiActuatorHandler(CorsHandler):
     @secure
     def post(self):
         data = json.loads(self.request.body.decode("utf-8"))
-        print(data, data['id'], data['value'])
         self.__async_actuator_commands.change_actuator(data['id'], data['value'])
         self.set_status(200)

@@ -13,24 +13,24 @@ class IftttListPage extends Component {
         }
     }
 
-  componentDidMount() {
+    componentDidMount() {
       this.loadData();
-  }
+    }
 
-  loadData() {
+    loadData() {
         getJson(`/api/ifttt`).then(data => {
             this.setState({rules: data});
             console.log(data);
         });
-  }
+    }
 
-  render() {
-    return (
-      <div className="animated fadeIn">
-          <IftttList rules_data={this.state.rules} />
-      </div>
-    )
-  }
+    render() {
+        return (
+          <div className="animated fadeIn">
+              <IftttList rules_data={this.state.rules} />
+          </div>
+        )
+    }
 }
 
 export default IftttListPage;

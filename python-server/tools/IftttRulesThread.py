@@ -33,9 +33,11 @@ class IftttRulesThread(threading.Thread):
     def __do_run(self):
         rules = self.__ifttt_rules.get_all()
         for name, rule in rules.items():
-            if not rule.active or not self.__check_rule(rule.text):
+            should_execute = self.__check_rule(rule.text)
+            self.__logging.debug('Checking rule: {0}, status is: {1}'
+                                 .format(rule.text, {True: 'Ok', False: 'Not ok'}[should_execute]))
+            if not rule.active or not should_execute:
                 continue
-            self.__logging.debug('Checking rule with name: {0}'.format(name))
             for command in rule.rule_commands:
                 self.__command_executor.execute(command)
 

@@ -9,7 +9,8 @@ from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
 from web.ApiRoomsHandler import ApiRoomsHandler
 from web.ApiActuatorHandler import ApiActuatorHandler
 from web.ApiSensorHandler import ApiSensorHandler
-from web.ApiIftttHandler import ApiIftttHandler
+from web.ApiIftttMultipleHandler import ApiIftttMultipleHandler
+from web.ApiIftttSingleHandler import ApiIftttSingleHandler
 from web.LoginHandler import LoginHandler
 from web.LogoutHandler import LogoutHandler
 from web.IftttHandler import IftttHandler
@@ -80,9 +81,15 @@ def make_app():
             ),
             url(
                 r'/api/ifttt',
-                ApiIftttHandler,
+                ApiIftttMultipleHandler,
                 dict(ifttt_formatter=container.ifttt_formatter()),
-                name='api_rooms'
+                name='api_rooms_multiple'
+            ),
+            url(
+                r'/api/ifttt/(.*)',
+                ApiIftttSingleHandler,
+                dict(ifttt_rules_repository=container.ifttt_rules_repository()),
+                name='api_rooms_single'
             ),
             url(
                 r'/api/actuator',

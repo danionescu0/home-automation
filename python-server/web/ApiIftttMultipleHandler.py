@@ -7,7 +7,7 @@ from web.security.secure import secure
 from web.formatter.IftttFormatter import IftttFormatter
 
 
-class ApiIftttHandler(CorsHandler):
+class ApiIftttMultipleHandler(CorsHandler):
     @typechecked()
     def initialize(self, ifttt_formatter: IftttFormatter):
         self.__ifttt_formatter = ifttt_formatter

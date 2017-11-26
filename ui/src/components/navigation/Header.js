@@ -5,7 +5,6 @@ import {
   Nav,
   NavbarToggler,
   NavItem,
-  NavLink,
 } from 'reactstrap';
 
 class Header extends Component {
@@ -46,9 +45,9 @@ class Header extends Component {
           <NavItem className="px-3">
             <Link to="/ifttt-list">Rules</Link>
           </NavItem>
-          <NavLink className="px-3">
-            <NavLink href="#">Logout</NavLink>
-          </NavLink>
+          <NavItem className="px-3">
+            Logout
+          </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
         </Nav>

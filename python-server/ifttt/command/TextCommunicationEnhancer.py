@@ -8,7 +8,7 @@ from ifttt.parser.Tokenizer import Tokenizer
 class TextCommunicationEnhancer:
     __clusters = [
             'A\[(\w+)\]',
-            'S\[(\w+\:\w+)\]',
+            'S\[(\w+)\]',
             'TIME',
         ]
     @typechecked()

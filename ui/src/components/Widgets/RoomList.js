@@ -12,6 +12,7 @@ import {
 import Sensors from './Sensors'
 import Actuators from './Actuators'
 
+
 const RoomList = ({room_data, actuatorHandler}) => {
     var roomContent = room_data.map((room, index) => {
         return (

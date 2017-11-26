@@ -9,6 +9,8 @@ const withForm = WrapperComponent => class extends Component {
     }
 
     handleInputChange(event) {
+        this.setState({value: event.target.value});
+        console.log('handle input change');
         const target = event.target;
         const name = target.name;
 
