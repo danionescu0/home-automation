@@ -53,7 +53,9 @@ from tools.VoiceCommands import VoiceCommands
 from web.formatter.RoomsFormatter import RoomsFormatter
 from web.formatter.SensorsFormatter import SensorsFormatter
 from web.formatter.IftttFormatter import IftttFormatter
+from web.formatter.ActuatorsFormatter import ActuatorsFormatter
 from web.security.JwtTokenFactory import JwtTokenFactory
+from web.factory.RuleFactory import RuleFactory
 
 
 def singleton(function: Callable):
@@ -120,6 +122,14 @@ class Container:
     @singleton
     def ifttt_formatter(self) -> IftttFormatter:
         return IftttFormatter(self.ifttt_rules_repository())
+
+    @singleton
+    def actuators_formatter(self) -> ActuatorsFormatter:
+        return ActuatorsFormatter(self.actuators_repository())
+
+    @singleton
+    def rule_factory(self) -> RuleFactory:
+        return RuleFactory()
 
     @singleton
     def incomming_zwave_communication_thread(self) -> IncommingZwaveCommunicationThread:

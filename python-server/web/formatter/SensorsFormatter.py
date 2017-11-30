@@ -20,7 +20,7 @@ class SensorsFormatter:
         for datapoint in sensor_data_points:
             initial_date = datetime.fromtimestamp(int(datapoint.timestamp)).replace(tzinfo=from_zone)
             local_date = initial_date.astimezone(to_zone)
-            datetime_text = local_date.strftime('%Y-%m-%d %H:%M:%S')
+            datetime_text = local_date.strftime('%m-%d %H:%M')
             formatted.append({'date' : datetime_text, 'value': datapoint.value})
 
         return formatted

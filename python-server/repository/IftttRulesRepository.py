@@ -9,12 +9,6 @@ from model.RuleCommand import RuleCommand
 
 
 class IftttRulesRepository(AbstractRepository):
-    TRIGGER_RULES = 'trigger-rules'
-    ACTIVE = 'active'
-    COMMANDS = 'commands'
-    COMMAND_ACTUATOR_NAME = 'actuator_name'
-    COMMAND_ACTUATOR_STATE = 'actuator_state'
-    COMMAND_VOICE = 'voice'
     __REDIS_KEY = 'rules'
 
     @typechecked()
@@ -23,12 +17,18 @@ class IftttRulesRepository(AbstractRepository):
         self.keys = {self.__REDIS_KEY: {}}
 
     @typechecked()
-    def upsert(self, id: str, trigger_rules: str, active: bool, commands: list):
+    def upsert(self, rule: Rule):
         rules = self.get(self.__REDIS_KEY)
-        rules[id] = {
-            self.TRIGGER_RULES : trigger_rules,
-            self.ACTIVE: active,
-            self.COMMANDS: commands
+        rules[rule.id] = {
+            'id' : rule.id,
+            'name' : rule.name,
+            'text' : rule.text,
+            'active': rule.active,
+            'rule_commands': [
+                {'actuator_id' : command.actuator_id,
+                 'actuator_state': command.actuator_state,
+                 'voice_text': command.voice_text}
+                for command in rule.rule_commands]
         }
 
         return self.client.set(self.__REDIS_KEY, json.dumps(rules))
@@ -46,9 +46,9 @@ class IftttRulesRepository(AbstractRepository):
             return {}
         rules = {}
         for id, rule_data in rules_data.items():
-            commands = [RuleCommand(data['actuator_name'], data['actuator_state'], data['voice'])
-                        for data in rule_data['commands']]
-            rule = Rule(id, id, rule_data['trigger-rules'], rule_data['active'])
+            commands = [RuleCommand(data['actuator_id'], data['actuator_state'], data['voice_text'])
+                        for data in rule_data['rule_commands']]
+            rule = Rule(rule_data['id'], rule_data['name'], rule_data['text'], rule_data['active'])
             rule.add_commands(commands)
             rules[id] = rule
 

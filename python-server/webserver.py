@@ -8,13 +8,10 @@ from web.ApiLocationHandler import ApiLocationHandler
 from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
 from web.ApiRoomsHandler import ApiRoomsHandler
 from web.ApiActuatorHandler import ApiActuatorHandler
+from web.ApiActuatorsHandler import ApiActuatorsHandler
 from web.ApiSensorHandler import ApiSensorHandler
 from web.ApiIftttMultipleHandler import ApiIftttMultipleHandler
 from web.ApiIftttSingleHandler import ApiIftttSingleHandler
-from web.LoginHandler import LoginHandler
-from web.LogoutHandler import LogoutHandler
-from web.IftttHandler import IftttHandler
-from web.SystemStatusHandler import SystemStatusHandler
 from container import Container
 
 container = Container()
@@ -33,40 +30,15 @@ async_actuator_commands.connect()
 
 
 def make_app():
-    settings = {
-        'cookie_secret': general.web_server['cookie_secret'],
-        'login_url': '/login',
-    }
 
     return Application([
-            url(r'/login', LoginHandler, dict(authentication=authentication), name='login'),
-            url(r'/ifttt',
-                IftttHandler,
-                dict(
-                        actuators_repo=actuators_repo,
-                        rules_repository=container.ifttt_rules_repository(),
-                        expression_validator=container.expression_validator(),
-                    ),
-                name='ifttt'
-            ),
-            url(
-                r'/system-status',
-                SystemStatusHandler,
-                dict(sensors_repo=sensors_repo),
-                name='systemStatus'
-            ),
-            url(r'/logout', LogoutHandler, name='logout'),
             url(
                 r'/api/user/token',
                 ApiTokenAuthHandler,
                 dict(authentication=authentication, jwt_token_factory=container.jwt_token_factory()),
                 name='api_token_login'
             ),
-            url(
-                r'/api/location',
-                ApiLocationHandler,
-                name='api_location'
-            ),
+            url(r'/api/location', ApiLocationHandler, name='api_location'),
             url(
                 r'/api/voice-command',
                 ApiVoiceCommandHandler,
@@ -74,39 +46,38 @@ def make_app():
                 name='api_voice_command'
             ),
             url(
-                r'/api/rooms',
-                ApiRoomsHandler,
-                dict(rooms_formatter=container.rooms_formatter()),
-                name='api_rooms'
+                r'/api/rooms', ApiRoomsHandler,
+                dict(rooms_formatter=container.rooms_formatter()), name='api_rooms'
             ),
             url(
-                r'/api/ifttt',
-                ApiIftttMultipleHandler,
+                r'/api/ifttt', ApiIftttMultipleHandler,
                 dict(ifttt_formatter=container.ifttt_formatter()),
                 name='api_rooms_multiple'
             ),
             url(
-                r'/api/ifttt/(.*)',
-                ApiIftttSingleHandler,
-                dict(ifttt_rules_repository=container.ifttt_rules_repository()),
+                r'/api/ifttt/(.*)', ApiIftttSingleHandler,
+                dict(ifttt_rules_repository=container.ifttt_rules_repository(), rule_factory=container.rule_factory()),
                 name='api_rooms_single'
             ),
             url(
-                r'/api/actuator',
-                ApiActuatorHandler,
+                r'/api/actuator', ApiActuatorHandler,
                 dict(async_actuator_commands=async_actuator_commands),
                 name='api_actuator'
             ),
             url(
-                r'/api/sensor/(.*)',
-                ApiSensorHandler,
+                r'/api/actuators', ApiActuatorsHandler,
+                dict(actuators_formatter=container.actuators_formatter()),
+                name='api_actuators'
+            ),
+            url(
+                r'/api/sensor/(.*)', ApiSensorHandler,
                 dict(sensors_formatter=container.sensors_formatter()),
                 name='api_sensor'
             ),
             url(r'/(.*)', StaticFileHandler, {
                 'path': general.web_server['static_path']
             }),
-        ], **settings)
+        ])
 
 app = make_app()
 app.listen(general.web_server['application_port'])
