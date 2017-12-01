@@ -10,11 +10,16 @@ import {
   CardHeader,
   CardBody,
   Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Table,
 } from 'reactstrap';
 
 
-const IftttList = ({rules_data, delete_rule}) => {
+const IftttList = ({rules_data, show_delete_confirm, close_modal, modal_status, delete_rule}) => {
+
     const StatusBadge = ({status}) => {
         const statusBadgeToClass = {
             true : 'success',
@@ -43,7 +48,7 @@ const IftttList = ({rules_data, delete_rule}) => {
                         <StatusBadge status={rule.active} />
                     </td>
                     <td>
-                        <Link to="/" onClick={delete_rule.bind(this, rule.id)}>Delete</Link>,
+                        <Link to="/" onClick={show_delete_confirm.bind(this, rule.id)}>Delete</Link>,
                         <Link to={"/ifttt-edit/" + rule.id}>Edit</Link>
                     </td>
                 </tr>
@@ -74,6 +79,16 @@ const IftttList = ({rules_data, delete_rule}) => {
                                     {iftttTable}
                                 </tbody>
                             </Table>
+                            <Modal isOpen={modal_status} className={'modal-warning'}>
+                                  <ModalHeader>You are about to delete a rule</ModalHeader>
+                                  <ModalBody>
+                                        Confirm delete rule ?
+                                  </ModalBody>
+                                  <ModalFooter>
+                                        <Button color="warning" onClick={delete_rule}>Delete</Button>{' '}
+                                        <Button color="secondary" onClick={close_modal}>Cancel</Button>
+                                  </ModalFooter>
+                            </Modal>
                         </CardBody>
                         <AddNewRule/>
                     </Card>
