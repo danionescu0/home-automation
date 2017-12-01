@@ -3,7 +3,7 @@ from web.BaseHandler import BaseHandler
 from web.security.secure import secure
 
 
-class ApiLocationHandler(BaseHandler):
+class LocationHandler(BaseHandler):
     @secure
     def post(self):
         latitude = float(self.get_argument('latitude', None, True))

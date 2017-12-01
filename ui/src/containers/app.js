@@ -27,6 +27,7 @@ class App extends Component {
                 <Route path="/main-page" name="MainPage" component={secure(MainPage)}/>
                 <Route path="/ifttt-list" name="IftttPage" component={secure(IftttList)}/>
                 <Route path="/ifttt-edit/:id" name="IftttAddeditPage" component={secure(IftttAddeditPage)}/>
+                <Route path="/ifttt-add" name="IftttAddeditPage" component={secure(IftttAddeditPage)}/>
                 <Route path="/display-sensor/:id" name="DisplaySensorPage" component={secure(DisplaySensorPage)}/>
                 <Route path="/login" name="Login" component={Login}/>
                 <Redirect from="/" to="/main-page"/>

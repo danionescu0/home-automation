@@ -5,7 +5,7 @@ from web.security.JwtTokenFactory import JwtTokenFactory
 from tools.Authentication import Authentication
 
 
-class ApiTokenAuthHandler(CorsHandler):
+class TokenAuthHandler(CorsHandler):
     @typechecked()
     def initialize(self, authentication: Authentication, jwt_token_factory: JwtTokenFactory):
         self.__authentication = authentication

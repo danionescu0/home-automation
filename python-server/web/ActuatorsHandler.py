@@ -7,7 +7,7 @@ from web.security.secure import secure
 from web.formatter.ActuatorsFormatter import ActuatorsFormatter
 
 
-class ApiActuatorsHandler(CorsHandler):
+class ActuatorsHandler(CorsHandler):
     @typechecked()
     def initialize(self, actuators_formatter: ActuatorsFormatter):
         self.__actuators_formatter = actuators_formatter

@@ -60,7 +60,7 @@ class SensorsRepository(AbstractRepository):
     def __set(self, sensor: Sensor):
         sensors = self.get(self.REDIS_SENSORS_KEY)
         for redis_sensor in sensors:
-            if redis_sensor['type'] == sensor.type and redis_sensor['location'] == sensor.location:
+            if redis_sensor['id'] == sensor.id:
                 redis_sensor['value'] = sensor.value
                 redis_sensor['last_updated'] = self.current_timestamp
 

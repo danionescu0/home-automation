@@ -1,4 +1,5 @@
 from typing import List
+import time
 
 from typeguard import typechecked
 
@@ -9,9 +10,13 @@ from model.Rule import RuleCommand
 class RuleFactory:
     @typechecked()
     def from_request_data(self, data: dict) -> Rule:
-        if 'id' not in data or 'name' not in data or 'text' not in data or 'active' not in data:
+        if 'name' not in data or 'text' not in data or 'active' not in data:
             raise Exception('Request data must contain id, name, text and active keys')
-        rule = Rule(data['id'], data['name'], data['text'], data['active'])
+        if 'id' not in data:
+            id = str(time.time())
+        else:
+            id = data['id']
+        rule = Rule(id, data['name'], data['text'], data['active'])
         rule.add_commands(self.__get_rule_commands(data))
 
         return rule

@@ -7,7 +7,7 @@ from web.security.secure import secure
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 
 
-class ApiActuatorHandler(CorsHandler):
+class ActuatorHandler(CorsHandler):
     @typechecked()
     def initialize(self, async_actuator_commands: AsyncActuatorCommands):
         self.__async_actuator_commands = async_actuator_commands

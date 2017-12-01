@@ -10,18 +10,19 @@ import {postJson} from "../utils/fetch";
 
 class IftttAddeditPage extends Component {
     constructor(props) {
-      super(props);
-      this.state = {
-          'actuators' : [],
-          'rule' : {
-              'name' : 'Loading',
-              'text': 'Loading',
-              'active': true,
-              'actuator_state': '',
-              'actuator_id': '',
-              'voice_text': ''
-          }
-      };
+          super(props);
+          this.state = {
+              'edit' : true,
+              'actuators' : [],
+              'rule' : {
+                  'name' : '',
+                  'text': '',
+                  'active': true,
+                  'actuator_state': '',
+                  'actuator_id': '',
+                  'voice_text': ''
+              }
+          };
     }
 
     componentDidMount() {
@@ -30,15 +31,27 @@ class IftttAddeditPage extends Component {
 
     loadData() {
         const ruleId = this.props.match.params.id;
-        getJson(`/api/ifttt`).then(data => {
+        console.log(ruleId);
+        if (ruleId) {
+            this.setState({edit : true});
+            this.loadRuleData(ruleId);
+        } else {
+            this.setState({edit : false});
+        }
+
+        getJson(`/api/actuators`).then(data => {
+            data.push({'id' : '', 'name': 'Select actuator'});
+            this.setState({'actuators' : data});
+        });
+    }
+
+    loadRuleData(ruleId) {
+        getJson(`/api/ifttt-list`).then(data => {
             data.map((rule, index) => {
                 if (rule.id == ruleId) {
                     this.setState({rule: rule});
                 }
             });
-        });
-        getJson(`/api/actuators`).then(data => {
-            this.setState({'actuators' : data});
         });
     }
 
@@ -49,19 +62,24 @@ class IftttAddeditPage extends Component {
         }
         var rule = {...this.state.rule};
         rule[field] = value;
-        console.log(field, value);
         this.setState({rule});
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state.rule);
         const ruleId = this.props.match.params.id;
-        postJson(`/api/ifttt/${ruleId}`, this.state.rule).then(() => {
-            console.log('success');
-        }, e => {
-            console.log('failde');
-        });
+        var method = this.state.edit ? 'POST' : 'PUT';
+        var url = this.state.edit ? `/api/ifttt/${ruleId}` : '/api/ifttt';
+        postJson(url, this.state.rule, method)
+            .then(() => {
+                this.submitSuccess();
+            }, e => {
+                console.log('failed');
+            });
+    }
+
+    submitSuccess() {
+        this.props.history.push('/ifttt-list');
     }
 
     render() {

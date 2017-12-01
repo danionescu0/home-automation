@@ -7,7 +7,7 @@ from web.security.secure import secure
 from web.formatter.RoomsFormatter import RoomsFormatter
 
 
-class ApiRoomsHandler(CorsHandler):
+class RoomsHandler(CorsHandler):
     @typechecked()
     def initialize(self, rooms_formatter: RoomsFormatter):
         self.__rooms_formatter = rooms_formatter

@@ -29,7 +29,7 @@ const IftttAddedit = ({rule, actuators, handleChange, handleSubmit}) => {
           <Col xs="12" md="12">
             <Card>
               <CardHeader>
-                <strong>Edit Rule</strong>
+                <strong>Rule</strong>
               </CardHeader>
 
               <CardBody>
@@ -113,7 +113,7 @@ const IftttAddedit = ({rule, actuators, handleChange, handleSubmit}) => {
               </CardBody>
               <CardFooter>
                 <Button onClick={handleSubmit.bind(this)} type="submit" size="sm" color="primary">
-                    <i className="fa fa-dot-circle-o"></i> Modify
+                    <i className="fa fa-dot-circle-o"></i> Apply
                 </Button>
               </CardFooter>
             </Card>

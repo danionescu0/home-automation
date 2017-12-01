@@ -74,7 +74,6 @@ class SerialBluetooth(BaseSerial):
     def __connnect_to_bluetooth(self, id, ch):
         connection = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         connection.settimeout(None)
-        print('connecting to:' + id)
         connection.connect((id, ch))
         connection.setblocking(False)
 

@@ -4,11 +4,8 @@ import {API_ENDPOINT} from "../../config"
 export const postJson = (path, body, method) => {
     return new Promise((resolve, reject) => {
         doFetch(path, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `bearer ${Auth.getToken()}`
-            },
+            method: method ? method : 'POST',
+            headers: getAuthHeaders(),
             body: JSON.stringify(body)
         }).then(response => {
             if (!response.ok) {
@@ -21,14 +18,27 @@ export const postJson = (path, body, method) => {
     });
 };
 
+export const remove = (path) => {
+    return new Promise((resolve, reject) => {
+        doFetch(path, {
+            method: 'DELETE',
+            headers: getAuthHeaders(),
+        }).then(response => {
+            if (!response.ok) {
+                return false;
+            }
+            return true;
+        }).then(token => {
+            resolve(token);
+        }).catch(e => reject(e));
+    });
+};
+
 export const getJson = (path) => {
     return new Promise((resolve, reject) => {
         doFetch(path, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `bearer ${Auth.getToken()}`,
-            },
+            headers: getAuthHeaders(),
         }).then(response => {
             if (!response.ok) {
                 reject(response.statusText);
@@ -39,6 +49,13 @@ export const getJson = (path) => {
             resolve(token);
         });
     });
+};
+
+const getAuthHeaders = () => {
+    return {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${Auth.getToken()}`,
+            };
 };
 
 export const doFetch = (path, request) => {

@@ -5,7 +5,7 @@ from tools.VoiceCommands import VoiceCommands
 from web.security.secure import secure
 
 
-class ApiVoiceCommandHandler(BaseHandler):
+class VoiceCommandHandler(BaseHandler):
     @typechecked()
     def initialize(self, voice_commands: VoiceCommands):
         self.__voice_commands = voice_commands

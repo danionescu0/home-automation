@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom'
 
 import {
   Row,
@@ -8,12 +9,12 @@ import {
   Badge,
   CardHeader,
   CardBody,
+  Button,
   Table,
 } from 'reactstrap';
 
 
-const IftttList = ({rules_data}) => {
-
+const IftttList = ({rules_data, delete_rule}) => {
     const StatusBadge = ({status}) => {
         const statusBadgeToClass = {
             true : 'success',
@@ -27,6 +28,12 @@ const IftttList = ({rules_data}) => {
             <Badge color={statusBadgeToClass[status]}>{statusText[status]}</Badge>
         )
     };
+    const AddNewRule = withRouter(({ history }) => (
+        <Button onClick={() => { history.push('/ifttt-add') }} size="sm" color="primary">
+            <i className="fa fa-dot-circle-o"></i> Add new rule
+        </Button>
+    ));
+
     var iftttTable = rules_data.map((rule, index) => {
         return (
                 <tr key = {index}>
@@ -35,7 +42,8 @@ const IftttList = ({rules_data}) => {
                     <td>
                         <StatusBadge status={rule.active} />
                     </td>
-                    <td>Delete,
+                    <td>
+                        <Link to="/" onClick={delete_rule.bind(this, rule.id)}>Delete</Link>,
                         <Link to={"/ifttt-edit/" + rule.id}>Edit</Link>
                     </td>
                 </tr>
@@ -60,13 +68,14 @@ const IftttList = ({rules_data}) => {
                                         <th>Content</th>
                                         <th>Status</th>
                                         <th>Actions</th>
-                                        </tr>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {iftttTable}
                                 </tbody>
                             </Table>
                         </CardBody>
+                        <AddNewRule/>
                     </Card>
                 </Col>
             </Row>

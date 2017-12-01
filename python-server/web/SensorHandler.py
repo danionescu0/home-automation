@@ -7,7 +7,7 @@ from web.security.secure import secure
 from web.formatter.SensorsFormatter import SensorsFormatter
 
 
-class ApiSensorHandler(CorsHandler):
+class SensorHandler(CorsHandler):
     @typechecked()
     def initialize(self, sensors_formatter: SensorsFormatter):
         self.__sensors_formatter = sensors_formatter

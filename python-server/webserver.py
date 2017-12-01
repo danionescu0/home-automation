@@ -3,15 +3,15 @@ from tornado.web import Application, url, StaticFileHandler
 
 from config import general
 
-from web.ApiTokenAuthHandler import ApiTokenAuthHandler
-from web.ApiLocationHandler import ApiLocationHandler
-from web.ApiVoiceCommandHandler import ApiVoiceCommandHandler
-from web.ApiRoomsHandler import ApiRoomsHandler
-from web.ApiActuatorHandler import ApiActuatorHandler
-from web.ApiActuatorsHandler import ApiActuatorsHandler
-from web.ApiSensorHandler import ApiSensorHandler
-from web.ApiIftttMultipleHandler import ApiIftttMultipleHandler
-from web.ApiIftttSingleHandler import ApiIftttSingleHandler
+from web.TokenAuthHandler import TokenAuthHandler
+from web.LocationHandler import LocationHandler
+from web.VoiceCommandHandler import VoiceCommandHandler
+from web.RoomsHandler import RoomsHandler
+from web.ActuatorHandler import ActuatorHandler
+from web.ActuatorsHandler import ActuatorsHandler
+from web.SensorHandler import SensorHandler
+from web.IftttListHandler import IftttListHandler
+from web.IftttHandler import IftttHandler
 from container import Container
 
 container = Container()
@@ -34,43 +34,48 @@ def make_app():
     return Application([
             url(
                 r'/api/user/token',
-                ApiTokenAuthHandler,
+                TokenAuthHandler,
                 dict(authentication=authentication, jwt_token_factory=container.jwt_token_factory()),
                 name='api_token_login'
             ),
-            url(r'/api/location', ApiLocationHandler, name='api_location'),
+            url(r'/api/location', LocationHandler, name='api_location'),
             url(
                 r'/api/voice-command',
-                ApiVoiceCommandHandler,
+                VoiceCommandHandler,
                 dict(voice_commands=container.voice_commands()),
                 name='api_voice_command'
             ),
             url(
-                r'/api/rooms', ApiRoomsHandler,
+                r'/api/rooms', RoomsHandler,
                 dict(rooms_formatter=container.rooms_formatter()), name='api_rooms'
             ),
             url(
-                r'/api/ifttt', ApiIftttMultipleHandler,
+                r'/api/ifttt-list', IftttListHandler,
                 dict(ifttt_formatter=container.ifttt_formatter()),
-                name='api_rooms_multiple'
+                name='api_ifttt_list'
             ),
             url(
-                r'/api/ifttt/(.*)', ApiIftttSingleHandler,
+                r'/api/ifttt', IftttHandler,
                 dict(ifttt_rules_repository=container.ifttt_rules_repository(), rule_factory=container.rule_factory()),
-                name='api_rooms_single'
+                name='api_ifttt_add'
             ),
             url(
-                r'/api/actuator', ApiActuatorHandler,
+                r'/api/ifttt/(.*)', IftttHandler,
+                dict(ifttt_rules_repository=container.ifttt_rules_repository(), rule_factory=container.rule_factory()),
+                name='api_ifttt'
+            ),
+            url(
+                r'/api/actuator', ActuatorHandler,
                 dict(async_actuator_commands=async_actuator_commands),
                 name='api_actuator'
             ),
             url(
-                r'/api/actuators', ApiActuatorsHandler,
+                r'/api/actuators', ActuatorsHandler,
                 dict(actuators_formatter=container.actuators_formatter()),
                 name='api_actuators'
             ),
             url(
-                r'/api/sensor/(.*)', ApiSensorHandler,
+                r'/api/sensor/(.*)', SensorHandler,
                 dict(sensors_formatter=container.sensors_formatter()),
                 name='api_sensor'
             ),
