@@ -128,7 +128,7 @@ conf = [
         'location': 'bedroom',
     },
     {
-        'id': '0184f904.4.30.1.0',
+        'id': '0184f904.4.71.1.2',
         'type': 'presence',
         'value': 0,
         'location': 'bedroom',

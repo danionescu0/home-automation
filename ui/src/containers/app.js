@@ -11,6 +11,7 @@ import MainPage from './main-page';
 import DisplaySensorPage from './display-sensor-page'
 import IftttList from './ifttt-list-page'
 import IftttAddeditPage from './ifttt-addedit-page'
+import ActuatorsPage from  './actuators-page'
 
 
 class App extends Component {
@@ -25,6 +26,7 @@ class App extends Component {
             <Container fluid>
               <Switch>
                 <Route path="/main-page" name="MainPage" component={secure(MainPage)}/>
+                <Route path="/actuators" name="IftttPage" component={secure(ActuatorsPage)}/>
                 <Route path="/ifttt-list" name="IftttPage" component={secure(IftttList)}/>
                 <Route path="/ifttt-edit/:id" name="IftttAddeditPage" component={secure(IftttAddeditPage)}/>
                 <Route path="/ifttt-add" name="IftttAddeditPage" component={secure(IftttAddeditPage)}/>

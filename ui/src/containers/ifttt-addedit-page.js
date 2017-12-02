@@ -31,7 +31,6 @@ class IftttAddeditPage extends Component {
 
     loadData() {
         const ruleId = this.props.match.params.id;
-        console.log(ruleId);
         if (ruleId) {
             this.setState({edit : true});
             this.loadRuleData(ruleId);

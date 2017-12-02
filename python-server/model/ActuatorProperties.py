@@ -17,6 +17,9 @@ class ActuatorProperties:
 
         return self.__properties[name]
 
+    def get_all(self):
+        return self.__properties
+
     def __repr__(self) -> str:
         description = "ActuatorProperties:"
         for key, value in self.__properties.items():

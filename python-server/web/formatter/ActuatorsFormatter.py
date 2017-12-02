@@ -19,4 +19,5 @@ class ActuatorsFormatter:
             'type' : actuator.type,
             'room' : actuator.room,
             'device_type' : actuator.device_type,
+            'properties' : actuator.properties.get_all()
         } for id, actuator in actuators.items()]

@@ -13,7 +13,7 @@ class ActuatorHandler(CorsHandler):
         self.__async_actuator_commands = async_actuator_commands
 
     @secure
-    def post(self):
+    def post(self, id):
         data = json.loads(self.request.body.decode("utf-8"))
-        self.__async_actuator_commands.change_actuator(data['id'], data['value'])
+        self.__async_actuator_commands.change_actuator(id, data['value'])
         self.set_status(200)

@@ -21,7 +21,7 @@ export default {
             },
             {
               name: 'Actuators',
-              url: '/actuators-list',
+              url: '/actuators',
               icon: 'fa-cubes'
             },
             {

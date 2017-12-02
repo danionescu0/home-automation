@@ -65,13 +65,13 @@ def make_app():
                 name='api_ifttt'
             ),
             url(
-                r'/api/actuator', ActuatorHandler,
+                r'/api/actuator/(.*)', ActuatorHandler,
                 dict(async_actuator_commands=async_actuator_commands),
                 name='api_actuator'
             ),
             url(
                 r'/api/actuators', ActuatorsHandler,
-                dict(actuators_formatter=container.actuators_formatter()),
+                dict(actuators_formatter=container.actuators_formatter(), actuators_repository=actuators_repo),
                 name='api_actuators'
             ),
             url(

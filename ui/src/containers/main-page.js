@@ -28,7 +28,7 @@ class MainPage extends Component {
             'id' : id,
             'value': value
         };
-        postJson(`/api/actuator`, postData).then(() => {
+        postJson(`/api/actuator/${id}`, postData).then(() => {
             console.log('changed');
         }, e => {
             console.log('error');

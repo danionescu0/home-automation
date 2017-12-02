@@ -1,8 +1,9 @@
-# Questions
+# FAQ
 * Q: Why python?
 
   A: It integrates well with raspberry pi and other development boards, 
-  easy to code 
+  easy to code. Also a lot of low level libraries are already written in python like 
+  ZWave, WeMo etc etc :) 
 
 * Q: Why python 3.5 with type hinting?
 
@@ -16,11 +17,14 @@
      
 * Q: What is the best way of communicating between devices?
   
-  A: There is no best way. I've started with simple 433 MHZ receivers & transmitters 
-  , migrated to bluetooth and then added HC-12 serial module and IOT devices. 
-  All devices have strong and week points, it's up to you to decide what suits best.
-  In the communication part of the project i've tried to abstract things away, so anyonce
-  can write a communication adapter for an IOT device or a custom one.
+  A: There is no best way. I've started with simple 433 MHZ receivers/transmitters 
+  , migrated to bluetooth, then to HC-12 serial module and finally IOT devices like ZWave 
+   Wemo and others.
+   
+   Bluetooth has the limitation of 7 devices connected simoultaneous, 433Mhz receivers
+    are easily clonned, IOT devices can be expensive.  
+   
+  I've tried to abstract the communication part so any device and now be integrated. 
 
 * Q: Why using redis of all the databases out there?
 
@@ -70,8 +74,8 @@ python /home-automation_path/python-server/webserver.py
 # Configuration 
 
 * config/general.py : you'll find comments inside
-* config/actuators.py : actuators config, it will be moved to the ui
-* config/sensors.py : actuators config, it will be moved to the ui
+* config/sensors.py : sensors config file, it will be moved to the ui like the actuators
+* in the UI settings/actuators to define actuators
 
 ## bluetooth
 To pair a bluetooth device:
@@ -131,6 +135,14 @@ class SomeListener:
         # do something usefull 
 ````
 
+** Integrate a new device type, example Zwave **
+
+* define all classes in the container.py
+* define an actuator strategy inside communication/actuator/ZWaveStrategy
+* define a class or more to implement the low level protocol: communication/ZwaveDevice
+* define a thread for listening to incomming communication and update sensors and actuators
+/communication/IncommingZwaveCommunicationThread
+* register the thread in background.py
 
 # Unit tests
 Unittests are using [nose2](http://nose2.readthedocs.io/en/latest/index.html)
@@ -140,4 +152,3 @@ In console run with:
 cd python_server
 nose2
 ````
-
