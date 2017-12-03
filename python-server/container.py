@@ -16,7 +16,6 @@ from communication.actuator.ZWaveStrategy import ZWaveStrategy
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from communication.encriptors.AesEncriptor import AesEncriptor
 from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
-from config import actuators
 from config import general
 from config import sensors
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
@@ -97,7 +96,7 @@ class Container:
 
     @singleton
     def actuators_repository(self) -> ActuatorsRepository:
-        return ActuatorsRepository(general.redis_config, actuators.conf)
+        return ActuatorsRepository(general.redis_config)
 
     @singleton
     def sensors_repository(self) -> SensorsRepository:
@@ -163,7 +162,7 @@ class Container:
         actuator_strategies.add_strategy(SerialSendStrategy(self.serial_communicator_registry(),
                                                             self.actuators_repository(), self.aes_encriptor()))
         actuator_strategies.add_strategy(WemoSwitchStrategy(self.actuators_repository(), self.wemo_switch()))
-        actuator_strategies.add_strategy(GroupStrategy(self.actuators_repository(), self.async_actuator_commands()))
+        actuator_strategies.add_strategy(GroupStrategy(self.actuators_repository(), self.async_actuator_commands(), self.root_logger()))
         actuator_strategies.add_strategy(ZWaveStrategy(self.actuators_repository(), self.zwave_device()))
 
         return actuator_strategies

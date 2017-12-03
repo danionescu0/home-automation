@@ -14,12 +14,12 @@ class ZWaveStrategy(BaseStrategy):
         self.__actuators_repo = actuators_repo
 
     @typechecked()
-    def supports(self, actuator_name: str) -> bool:
-        return self.__actuators_repo.get_actuators()[actuator_name].device_type == Actuator.DeviceType.ZWAVE.value
+    def supports(self, id: str) -> bool:
+        return self.__actuators_repo.get_actuator(id).device_type == Actuator.DeviceType.ZWAVE.value
 
     @typechecked()
-    def set_state(self, actuator_name: str, state) -> bool:
-        actuator = self.__actuators_repo.get_actuators()[actuator_name]
+    def set_state(self, id: str, state) -> bool:
+        actuator = self.__actuators_repo.get_actuator(id)
         send_to_device = actuator.properties.get(ActuatorProperties.SEND_TO_DEVICE)
         if actuator.type == Actuator.ActuatorType.SWITCH.value:
             return self.__zwave_device.change_switch(send_to_device, state)

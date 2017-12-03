@@ -4,6 +4,8 @@ class ActuatorProperties:
     COMMAND = 'command'
     ENCRIPTION = 'encription'
     MAX_VALUE = 'max_value'
+    GROUP_ACTUATORS = 'actuators'
+    GROUP_FUTURE_STATE = 'future_state'
 
     def __init__(self) -> None:
         self.__properties = {}

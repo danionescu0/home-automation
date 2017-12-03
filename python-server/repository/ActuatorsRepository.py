@@ -13,10 +13,11 @@ class ActuatorsRepository(AbstractRepository):
     __REDIS_KEY = 'actuators'
 
     @typechecked()
-    def __init__(self, redis_configuration: dict, actuators_config: dict):
+    def __init__(self, redis_configuration: dict):
         AbstractRepository.__init__(self, redis_configuration)
-        self.keys = {self.__REDIS_KEY: actuators_config}
+        self.keys = {self.__REDIS_KEY: {}}
 
+    @typechecked()
     def get_actuators(self) -> Dict[str, Actuator]:
         actuators_data = self.get(self.__REDIS_KEY)
         actuators = {}
@@ -26,6 +27,10 @@ class ActuatorsRepository(AbstractRepository):
             actuators[id] = actuator
 
         return collections.OrderedDict(sorted(actuators.items()))
+
+    @typechecked()
+    def get_actuator(self, id: str) -> Actuator:
+        return self.get_actuators()[id]
 
     @typechecked()
     def set_actuator_state(self, name: str, value) -> None:

@@ -31,9 +31,10 @@ class ActuatorCommands:
 
         return success
 
-    def __get_strategy(self, actuator_name):
+    def __get_strategy(self, id):
         strategies = self.__actuator_strategies.get_strategies()
         try:
-            return [strategy for strategy in strategies if strategy.supports(actuator_name)][0]
+            return [strategy for strategy in strategies if strategy.supports(id)][0]
         except IndexError:
-            raise NotImplementedError('Actuator {0} does not have a strategy associated. Check "device_type"'.format(actuator_name))
+            raise NotImplementedError('Actuator {0} does not have a strategy associated. Check "device_type"'
+                                      .format(id))

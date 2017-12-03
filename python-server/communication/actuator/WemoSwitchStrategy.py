@@ -14,13 +14,14 @@ class WemoSwitchStrategy(BaseStrategy):
         self.__actuators_repo = actuators_repo
 
     @typechecked()
-    def supports(self, actuator_name: str) -> bool:
-        actuator = self.__actuators_repo.get_actuators()[actuator_name]
+    def supports(self, id: str) -> bool:
+        actuator = self.__actuators_repo.get_actuator(id)
 
-        return actuator.device_type == Actuator.DeviceType.WEMO.value and actuator.type == Actuator.ActuatorType.SWITCH.value
+        return actuator.device_type == Actuator.DeviceType.WEMO.value \
+               and actuator.type == Actuator.ActuatorType.SWITCH.value
 
     @typechecked()
-    def set_state(self, actuator_name: str, state) -> bool:
+    def set_state(self, id: str, state) -> bool:
         return self.__wemo_switch.change_state(
-            self.__actuators_repo.get_actuators()[actuator_name].properties.get(ActuatorProperties.SEND_TO_DEVICE), state
+            self.__actuators_repo.get_actuators()[id].properties.get(ActuatorProperties.SEND_TO_DEVICE), state
         )

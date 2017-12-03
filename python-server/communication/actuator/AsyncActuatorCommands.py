@@ -25,8 +25,8 @@ class AsyncActuatorCommands:
         callback(json.loads(message['data'].decode('utf-8')))
 
     @typechecked()
-    def change_actuator(self, name: str, value) -> None:
-        self.__add_job(json.dumps({'actuator': name, 'value': value}))
+    def change_actuator(self, id: str, value) -> None:
+        self.__add_job(json.dumps({'actuator': id, 'value': value}))
 
     def __add_job(self, job_description):
         self.client.publish(self.__CHANNEL_NAME, job_description)

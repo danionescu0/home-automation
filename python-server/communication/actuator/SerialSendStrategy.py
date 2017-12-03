@@ -19,15 +19,15 @@ class SerialSendStrategy(BaseStrategy):
         self.__encriptor = encriptor
 
     @typechecked()
-    def supports(self, actuator_name: str) -> bool:
-        actuator = self.__actuators_repo.get_actuators()[actuator_name]
+    def supports(self, id: str) -> bool:
+        actuator = self.__actuators_repo.get_actuator(id)
 
         return actuator.device_type == Actuator.DeviceType.SERIAL.value \
                and actuator.type in [Actuator.ActuatorType.SWITCH.value, Actuator.ActuatorType.PUSHBUTTON.value]
 
     @typechecked()
-    def set_state(self, actuator_name: str, state):
-        actuator = self.__actuators_repo.get_actuators()[actuator_name]
+    def set_state(self, id: str, state):
+        actuator = self.__actuators_repo.get_actuator(id)
         command = self.__encrypt(self.__calculate_actuator_command(actuator, state), actuator)
         send_to_device = actuator.properties.get(ActuatorProperties.SEND_TO_DEVICE)
         communicator = actuator.properties.get(ActuatorProperties.COMMUNICATOR)
