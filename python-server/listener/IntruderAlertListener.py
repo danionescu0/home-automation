@@ -4,7 +4,7 @@ from blinker import signal
 from repository.ActuatorsRepository import ActuatorsRepository
 from tools.EmailNotifier import EmailNotifier
 from event.SensorUpdateEvent import SensorUpdateEvent
-from model.SensorType import SensorType
+from model.Sensor import Sensor
 from locking.HomeAlarmLock import HomeAlarmLock
 
 
@@ -24,11 +24,10 @@ class IntruderAlertListener:
         self.__email_notificator.send_alert("Alert", "Somebody entered the house")
         self.__home_alarm_lock.set_lock()
 
-    def __should_send_alert(self, sensor_update):
+    def __should_send_alert(self, sensor_update: Sensor):
         if self.__home_alarm_lock.has_lock():
             return False
         actuators = self.__actuators_repo.get_actuators()
-        sensor_type = sensor_update.get_type()
-        sensor_value = sensor_update.get_new_value()
 
-        return actuators['homeAlarm'].value == True and sensor_type == SensorType.PRESENCE.value and sensor_value == 1
+        return actuators['homeAlarm'].value == True \
+               and sensor_update.type == Sensor.SensorType.PRESENCE.value and sensor_update.value == 1

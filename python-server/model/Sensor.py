@@ -1,7 +1,21 @@
 from typing import Tuple
+from enum import Enum
 
 
 class Sensor:
+    class SensorType(Enum):
+        HUMIDITY = 'humidity'
+        TEMPERATURE = 'temperature'
+        AIR_PRESSURE = 'airPressure'
+        LIGHT = 'light'
+        VOLTAGE = 'voltage'
+        RAIN = 'rain'
+        PRESENCE = 'presence'
+        AIR_POLLUTION = 'airPollution'
+        FINGERPRINT = 'fingerprint'
+        PHONE_IS_HOME = 'phoneIsHome'
+        POWER = 'power'
+
     def __init__(self, id: str, type: str, location: str, value) -> None:
         self.id = id
         self.type = type

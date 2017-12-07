@@ -13,3 +13,4 @@ pydispatch
 typeguard
 pybluez
 python-openzwave
+nose2

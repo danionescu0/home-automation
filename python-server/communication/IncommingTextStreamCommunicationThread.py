@@ -42,4 +42,4 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
 
         for sensor in sensors:
             self.__sensors_repo.set_sensor(sensor)
-            self.__sensor_update_event.send(sensor.type, sensor.location, sensor.value)
+            self.__sensor_update_event.send(sensor)

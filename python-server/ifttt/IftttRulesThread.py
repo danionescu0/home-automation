@@ -7,7 +7,6 @@ from typeguard import typechecked
 from ifttt.parser.ExpressionBuilder import ExpressionBuilder
 from ifttt.parser.Tokenizer import Tokenizer
 from ifttt.interpretter.InterpretterContext import InterpretterContext
-from ifttt.parser.ParseException import ParseException
 from ifttt.command.CommandExecutor import CommandExecutor
 from repository.IftttRulesRepository import IftttRulesRepository
 
@@ -47,8 +46,8 @@ class IftttRulesThread(threading.Thread):
         expression_builder.set_text(rule)
         try:
             expression_builder.build()
-        except ParseException as e:
-            self.__logging.debug('Error parsing rule: {0}' + e.message)
+        except Exception as e:
+            self.__logging.debug('Error building rule: {0}' + e.message)
             return False
         statement = expression_builder.get_expression()
         statement.interpret(context)

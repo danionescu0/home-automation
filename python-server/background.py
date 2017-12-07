@@ -1,10 +1,10 @@
 import signal
 
 from communication.IncommingTextStreamCommunicationThread import IncommingTextStreamCommunicationThread
-from tools.HomeDefenceThread import HomeDefenceThread
-from tools.IftttRulesThread import IftttRulesThread
-from tools.AsyncJobsThread import AsyncJobsThread
 from container import Container
+from ifttt.IftttRulesThread import IftttRulesThread
+from tools.AsyncJobsThread import AsyncJobsThread
+from tools.HomeDefenceThread import HomeDefenceThread
 
 container = Container()
 root_logger = container.root_logger()

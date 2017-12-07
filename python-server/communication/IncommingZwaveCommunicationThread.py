@@ -32,4 +32,4 @@ class IncommingZwaveCommunicationThread(threading.Thread):
         self.__logger.debug(sensor)
         sensor.value = round(value, 3)
         self.__sensors_repository.set_sensor(sensor)
-        self.__sensor_update_event.send(sensor.type, sensor.location, sensor.value)
+        self.__sensor_update_event.send(sensor)
