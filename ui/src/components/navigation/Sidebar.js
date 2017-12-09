@@ -13,7 +13,8 @@ class Sidebar extends Component {
   }
 
   activeRoute(routeName, props) {
-    return props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open' : 'nav-item nav-dropdown';
+    return props.location.pathname.indexOf(routeName) > -1 ? 'nav-item nav-dropdown open'
+        : 'nav-item nav-dropdown';
   }
 
   render() {
@@ -28,7 +29,9 @@ class Sidebar extends Component {
       }
     };
 
-    const wrapper = item => { return (item.wrapper && item.wrapper.element ? (React.createElement(item.wrapper.element, item.wrapper.attributes, item.name)): item.name ) };
+    const wrapper = item => { return (item.wrapper && item.wrapper.element
+        ? (React.createElement(item.wrapper.element, item.wrapper.attributes, item.name)): item.name )
+    };
 
     const title =  (title, key) => {
       const classes = classNames( "nav-title", title.class);
@@ -41,8 +44,9 @@ class Sidebar extends Component {
       const classes = classNames( item.class )
       const isExternal = (url) => {
         return url.substring(0, 4) === 'http' ? true : false
-      }
+      };
       const variant = classNames( "nav-link", item.variant ? `nav-link-${item.variant}` : "");
+
       return (
         <NavItem key={key} className={classes}>
           { isExternal(item.url) ?

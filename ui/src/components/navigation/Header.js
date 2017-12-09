@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import Auth from '../../utils/auth'
+import {withRouter} from 'react-router-dom'
 
 import {
   Nav,
@@ -28,6 +30,11 @@ class Header extends Component {
     document.body.classList.toggle('sidebar-mobile-show');
   }
 
+  logout(e) {
+      e.preventDefault();
+      Auth.deAuthenticateUser();
+      this.props.history.push("/login");
+  }
 
   render() {
     return (
@@ -46,7 +53,7 @@ class Header extends Component {
             <Link to="/ifttt-list">Rules</Link>
           </NavItem>
           <NavItem className="px-3">
-            Logout
+            <Link to="" onClick={this.logout.bind(this)}>Logout</Link>
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>

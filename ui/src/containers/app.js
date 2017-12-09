@@ -18,10 +18,9 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <Header />
+        <Header {...this.props} />
         <div className="app-body">
-          <Sidebar {...this.props}/>
-
+          <Sidebar {...this.props} />
           <main className="main">
             <Container fluid>
               <Switch>
