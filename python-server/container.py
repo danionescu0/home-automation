@@ -133,7 +133,7 @@ class Container:
     @singleton
     def incomming_zwave_communication_thread(self) -> IncommingZwaveCommunicationThread:
         return IncommingZwaveCommunicationThread(self.sensor_update_event(), self.sensors_repository(),
-                                                 self.zwave_device(), self.root_logger())
+                                                 self.actuators_repository(), self.zwave_device(), self.root_logger())
 
     @singleton
     def jwt_token_factory(self) -> JwtTokenFactory:

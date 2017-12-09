@@ -4,17 +4,21 @@ from logging import RootLogger
 from typeguard import typechecked
 
 from repository.SensorsRepository import SensorsRepository
+from repository.ActuatorsRepository import ActuatorsRepository
 from event.SensorUpdateEvent import SensorUpdateEvent
 from communication.ZWaveDevice import ZWaveDevice
+from model.Sensor import Sensor
+from model.Actuator import Actuator
 
 
 class IncommingZwaveCommunicationThread(threading.Thread):
     @typechecked()
     def __init__(self, sensor_update_event: SensorUpdateEvent, sensors_repository: SensorsRepository,
-                 zwave_device: ZWaveDevice, logger: RootLogger):
+                 actuators_repository: ActuatorsRepository, zwave_device: ZWaveDevice, logger: RootLogger):
         threading.Thread.__init__(self)
         self.__sensor_update_event = sensor_update_event
         self.__sensors_repository = sensors_repository
+        self.__actuators_repository = actuators_repository
         self.__zwave_device = zwave_device
         self.__logger = logger
         self.shutdown = False
@@ -22,14 +26,23 @@ class IncommingZwaveCommunicationThread(threading.Thread):
     def run(self) -> None:
         self.__zwave_device.attach_state_change_callback(self.__receive_zwave_device_update)
 
-    def __receive_zwave_device_update(self, id: str, value: float):
+    @typechecked()
+    def __receive_zwave_device_update(self, id: str, value):
+        self.__logger.debug('Checking device with id {0} and value : {1}'.format(id, value))
         sensors = self.__sensors_repository.get_sensors()
         filtered = [sensor for sensor in sensors if sensor.id == id]
-        if 0 == len(filtered):
-            self.__logger.debug('device with id {0} not found'.format(id))
-            return
-        sensor = filtered[0]
-        self.__logger.debug(sensor)
+        if len(filtered) > 0:
+            self.__logger.debug('Sensor is {0}'.format(sensors[0]))
+            self.__process_sensor(sensors[0], value)
+        actuator = self.__actuators_repository.get_actuator(id)
+        self.__logger.debug('Actuator is {0}'.format(actuator))
+        if actuator != None:
+            self.__process_actuator(actuator, value)
+
+    def __process_sensor(self, sensor: Sensor, value):
         sensor.value = round(value, 3)
         self.__sensors_repository.set_sensor(sensor)
         self.__sensor_update_event.send(sensor)
+
+    def __process_actuator(self, actuator: Actuator, value):
+        self.__actuators_repository.set_actuator_state(actuator.id, value)

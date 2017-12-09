@@ -42,6 +42,11 @@ class SensorsRepository(AbstractRepository):
 
         return sensors
 
+    #@todo implement this and replace it in code
+    @typechecked()
+    def get_sensor(self, id: str):
+        pass
+
     @typechecked()
     def set_sensor(self, sensor: Sensor) -> None:
         self.current_timestamp = calendar.timegm(datetime.now().timetuple())

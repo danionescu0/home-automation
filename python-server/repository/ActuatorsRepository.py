@@ -1,6 +1,7 @@
 import collections
 import json
 from typing import Dict
+from typing import Optional
 
 from typeguard import typechecked
 
@@ -29,12 +30,12 @@ class ActuatorsRepository(AbstractRepository):
         return collections.OrderedDict(sorted(actuators.items()))
 
     @typechecked()
-    def get_actuator(self, id: str) -> Actuator:
-        return self.get_actuators()[id]
+    def get_actuator(self, id: str) -> Optional[Actuator]:
+        return self.get_actuators().get(id)
 
     @typechecked()
-    def set_actuator_state(self, name: str, value) -> None:
-        return self.__set(self.__REDIS_KEY, name, value)
+    def set_actuator_state(self, id: str, value) -> None:
+        return self.__set(self.__REDIS_KEY, id, value)
 
     # this is a temporary method and will be replaced with a set actuator method
     @typechecked()
@@ -42,9 +43,9 @@ class ActuatorsRepository(AbstractRepository):
         indexes_by_id = {actuator['id']: actuator for actuator in actuators}
         self.client.set(self.__REDIS_KEY, json.dumps(indexes_by_id))
 
-    def __set(self, key, name, value):
+    def __set(self, key, id, value):
         data = self.get(key)
-        data[name]['value'] = value
+        data[id]['value'] = value
         self.client.set(key, json.dumps(data))
 
     def __get_actuator_properties(self, properties: dict) -> ActuatorProperties:

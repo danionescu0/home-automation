@@ -1,4 +1,5 @@
 from typing import Callable
+from typing import Any
 from logging import RootLogger
 
 from typeguard import typechecked
@@ -35,7 +36,7 @@ class ZWaveDevice(DeviceLifetimeCycles):
         self.__network.stop()
 
     @typechecked()
-    def attach_state_change_callback(self, callback: Callable[[str, float], None]):
+    def attach_state_change_callback(self, callback: Callable[[str, Any], None]):
         self.__state_change_callback = callback
 
     @typechecked()

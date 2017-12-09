@@ -17,17 +17,17 @@ class ActuatorCommands:
         self.__actuators = None
 
     @typechecked()
-    def change_actuator(self, actuator_name: str, state):
+    def change_actuator(self, id: str, state):
         self.__actuators = self.__actuators_repo.get_actuators()
-        self.__actuators_repo.set_actuator_state(actuator_name, state)
+        self.__actuators_repo.set_actuator_state(id, state)
         #todo remove this return hack
-        if self.__actuators[actuator_name].device_type == Actuator.DeviceType.ACTION.value:
+        if self.__actuators[id].device_type == Actuator.DeviceType.ACTION.value:
             return
 
-        strategy = self.__get_strategy(actuator_name)
-        success = strategy.set_state(actuator_name, state)
-        if not success and self.__actuators[actuator_name].type == Actuator.ActuatorType.SWITCH.value:
-            self.__actuators_repo.set_actuator_state(actuator_name, not state)
+        strategy = self.__get_strategy(id)
+        success = strategy.set_state(id, state)
+        if not success and self.__actuators[id].type == Actuator.ActuatorType.SWITCH.value:
+            self.__actuators_repo.set_actuator_state(id, not state)
 
         return success
 
