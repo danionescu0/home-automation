@@ -30,4 +30,4 @@ class IntruderAlertListener:
         actuators = self.__actuators_repo.get_actuators()
 
         return actuators['homeAlarm'].value == True \
-               and sensor_update.type == Sensor.SensorType.PRESENCE.value and sensor_update.value == 1
+               and sensor_update.sensor.type == Sensor.SensorType.PRESENCE.value and sensor_update.sensor.value == 1
