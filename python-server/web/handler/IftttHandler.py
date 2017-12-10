@@ -2,10 +2,10 @@ import json
 
 from typeguard import typechecked
 
-from web.CorsHandler import CorsHandler
-from web.security.secure import secure
-from web.factory.RuleFactory import RuleFactory
 from repository.IftttRulesRepository import IftttRulesRepository
+from web.factory.RuleFactory import RuleFactory
+from web.handler.CorsHandler import CorsHandler
+from web.security.secure import secure
 
 
 class IftttHandler(CorsHandler):

@@ -2,10 +2,11 @@ import json
 
 from typeguard import typechecked
 
-from web.CorsHandler import CorsHandler
-from web.security.secure import secure
-from web.formatter.ActuatorsFormatter import ActuatorsFormatter
 from repository.ActuatorsRepository import ActuatorsRepository
+from web.formatter.ActuatorsFormatter import ActuatorsFormatter
+from web.handler.CorsHandler import CorsHandler
+from web.security.secure import secure
+
 
 class ActuatorsHandler(CorsHandler):
     @typechecked()
@@ -22,8 +23,8 @@ class ActuatorsHandler(CorsHandler):
         raw_data = self.request.body.decode("utf-8").replace('\\n', '')
         data = json.loads(raw_data)
         try:
-            actuators = json.loads(data['actuators'])
-            self.__actuators_repository.set_actuators(actuators)
+            components = json.loads(data['components'])
+            self.__actuators_repository.set_actuators(components)
             self.set_status(200)
         except Exception as e:
             print(e)

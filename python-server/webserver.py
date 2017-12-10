@@ -2,17 +2,17 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
 
 from config import general
-
-from web.TokenAuthHandler import TokenAuthHandler
-from web.LocationHandler import LocationHandler
-from web.VoiceCommandHandler import VoiceCommandHandler
-from web.RoomsHandler import RoomsHandler
-from web.ActuatorHandler import ActuatorHandler
-from web.ActuatorsHandler import ActuatorsHandler
-from web.SensorHandler import SensorHandler
-from web.IftttListHandler import IftttListHandler
-from web.IftttHandler import IftttHandler
 from container import Container
+from web.handler.ActuatorHandler import ActuatorHandler
+from web.handler.ActuatorsHandler import ActuatorsHandler
+from web.handler.IftttHandler import IftttHandler
+from web.handler.IftttListHandler import IftttListHandler
+from web.handler.LocationHandler import LocationHandler
+from web.handler.RoomsHandler import RoomsHandler
+from web.handler.SensorHandler import SensorHandler
+from web.handler.SensorsHandler import SensorsHandler
+from web.handler.TokenAuthHandler import TokenAuthHandler
+from web.handler.VoiceCommandHandler import VoiceCommandHandler
 
 container = Container()
 
@@ -72,6 +72,11 @@ def make_app():
             url(
                 r'/api/actuators', ActuatorsHandler,
                 dict(actuators_formatter=container.actuators_formatter(), actuators_repository=actuators_repo),
+                name='api_actuators'
+            ),
+            url(
+                r'/api/sensors', SensorsHandler,
+                dict(sensors_formatter=container.sensors_formatter(), sensors_repository=sensors_repo),
                 name='api_actuators'
             ),
             url(

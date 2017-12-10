@@ -1,5 +1,5 @@
 from event.LocationEvent import LocationEvent
-from web.BaseHandler import BaseHandler
+from web.handler.BaseHandler import BaseHandler
 from web.security.secure import secure
 
 

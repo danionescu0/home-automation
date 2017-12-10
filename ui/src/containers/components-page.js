@@ -14,17 +14,22 @@ import {
   CardBody,
   Form,
   FormGroup,
+  FormText,
   Label,
   Input,
 } from 'reactstrap';
 
 
-class ActuatorsPage extends Component {
+class ComponentsPage extends Component {
     constructor(props) {
-          super(props);
-          this.state = {
-              'actuators' : [],
-          };
+        super(props);
+        this.paths = {'actuators' : '/api/actuators', 'sensors' : '/api/sensors'};
+        this.pageName = {'actuators' : 'Actuators view', 'sensors' : 'Sensors view'};
+        this.state = {
+          'components' : [],
+          'type' : 'actuators',
+          'success' : null
+        };
     }
 
     componentDidMount() {
@@ -32,53 +37,55 @@ class ActuatorsPage extends Component {
     }
 
     loadData() {
-        getJson(`/api/actuators`).then(data => {
-            this.setState({'actuators' : JSON.stringify(data, null, 4)});
+        var type = this.props.location.pathname == '/actuators' ? 'actuators' : 'sensors';
+        this.setState({'type': type}, function () {
+            getJson(this.paths[this.state.type]).then(data => {
+                this.setState({'components' : JSON.stringify(data, null, 4)});
+            });
         });
     }
 
     handleChange(event) {
         var value = event.target.value;
-        this.setState({actuators: value});
+        this.setState({components: value});
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        postJson('/api/actuators', {'actuators': this.state.actuators})
+        postJson(this.paths[this.state.type], {'components': this.state.components})
             .then(() => {
-                console.log('success');
+                this.setState({'success' : true});
             }, e => {
-                console.log('failed');
+                this.setState({'success' : false});
             });
     }
 
     render() {
+        var success = this.state.success ?
+            (<FormText color="#FF0D45">Edit succesfull</FormText>) : (<FormText color="red">Edit failed</FormText> );
         return (
               <div className="animated fadeIn">
                   <Col xs="12" md="12">
                     <Card>
                       <CardHeader>
-                        <strong>Actuators</strong>
+                        <strong>{this.pageName[this.state.type]}</strong>
                       </CardHeader>
 
                       <CardBody>
                         <Form method="post" className="form-horizontal">
                           <FormGroup row>
-                            <Col md="3">
-                              <Label htmlFor="textarea-input">Actuators</Label>
-                            </Col>
                             <Col xs="12" md="9">
                               <Input type="textarea" name="textarea-input" id="textarea-input" rows="30"
-                                     placeholder="Rule body" value={this.state.actuators}
+                                     placeholder="Rule body" value={this.state.components}
                                      onChange={this.handleChange.bind(this)}  />
+                                {success}
                             </Col>
                           </FormGroup>
-
                         </Form>
                       </CardBody>
                       <CardFooter>
                         <Button onClick={this.handleSubmit.bind(this)} type="submit" size="sm" color="primary">
-                            <i className="fa fa-dot-circle-o"></i> Apply
+                            <i className="fa fa-dot-circle-o"></i> Apply changes
                         </Button>
                       </CardFooter>
                     </Card>
@@ -88,4 +95,4 @@ class ActuatorsPage extends Component {
         }
 }
 
-export default withRouter(ActuatorsPage);
+export default withRouter(ComponentsPage);

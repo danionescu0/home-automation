@@ -2,9 +2,9 @@ import json
 
 from typeguard import typechecked
 
-from web.CorsHandler import CorsHandler
-from web.security.secure import secure
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
+from web.handler.CorsHandler import CorsHandler
+from web.security.secure import secure
 
 
 class ActuatorHandler(CorsHandler):

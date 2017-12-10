@@ -1,7 +1,7 @@
 from typeguard import typechecked
 
-from web.BaseHandler import BaseHandler
 from tools.VoiceCommands import VoiceCommands
+from web.handler.BaseHandler import BaseHandler
 from web.security.secure import secure
 
 

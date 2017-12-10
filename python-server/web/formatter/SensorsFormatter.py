@@ -24,3 +24,12 @@ class SensorsFormatter:
             formatted.append({'date' : datetime_text, 'value': datapoint.value})
 
         return formatted
+
+    def get_all(self):
+        return [{
+                'id'  : sensor.id,
+                'type': sensor.type,
+                'value': sensor.value,
+                'location' : sensor.location,
+                'communication_code' : sensor.communication_code
+            } for sensor in self.__sensors_repository.get_sensors()]

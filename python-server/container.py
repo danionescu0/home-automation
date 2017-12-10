@@ -17,7 +17,6 @@ from communication.actuator.strategies.WemoSwitchStrategy import WemoSwitchStrat
 from communication.actuator.strategies.ZWaveStrategy import ZWaveStrategy
 from communication.encriptors.AesEncriptor import AesEncriptor
 from config import general
-from config import sensors
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
 from ifttt.ExpressionValidator import ExpressionValidator
@@ -101,7 +100,7 @@ class Container:
 
     @singleton
     def sensors_repository(self) -> SensorsRepository:
-        return SensorsRepository(general.redis_config, sensors.conf)
+        return SensorsRepository(general.redis_config)
 
     @singleton
     def ifttt_rules_repository(self) -> IftttRulesRepository:

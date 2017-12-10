@@ -74,8 +74,8 @@ python /home-automation_path/python-server/webserver.py
 # Configuration 
 
 * config/general.py : you'll find comments inside
-* config/sensors.py : sensors config file, it will be moved to the ui like the actuators
-* in the UI settings/actuators to define actuators
+* in the UI settings/actuators to define actuators configuration
+* in the UI settings/actuators to define sensors configuration
 
 ## bluetooth
 To pair a bluetooth device:

@@ -2,9 +2,9 @@ import json
 
 from typeguard import typechecked
 
-from web.CorsHandler import CorsHandler
-from web.security.secure import secure
 from web.formatter.RoomsFormatter import RoomsFormatter
+from web.handler.CorsHandler import CorsHandler
+from web.security.secure import secure
 
 
 class RoomsHandler(CorsHandler):

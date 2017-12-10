@@ -26,7 +26,7 @@ export default {
             },
             {
               name: 'Sensors',
-              url: '/sensors-list',
+              url: '/sensors',
               icon: 'fa-cubes'
             }
         ]

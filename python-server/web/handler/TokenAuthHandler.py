@@ -1,8 +1,8 @@
 from typeguard import typechecked
 
-from web.CorsHandler import CorsHandler
-from web.security.JwtTokenFactory import JwtTokenFactory
 from tools.Authentication import Authentication
+from web.handler.CorsHandler import CorsHandler
+from web.security.JwtTokenFactory import JwtTokenFactory
 
 
 class TokenAuthHandler(CorsHandler):
