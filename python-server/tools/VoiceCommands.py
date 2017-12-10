@@ -47,7 +47,7 @@ class VoiceCommands:
         command = self.__normalize_command(command)
         for intent in self.__engine.determine_intent(command):
             if intent and intent.get('confidence') > 0:
-                self.__logging.debug(intent)
+                self.__logging.info(intent)
                 command = self.__get_matching_command(intent)
                 self.__run_command(command, intent)
 
@@ -65,7 +65,7 @@ class VoiceCommands:
         if None == command:
             return
         actuator_state = (False, True)[intent[self.ACTIONS] == 'on']
-        self.__logging.debug('Changin actuator {0} value: {1}'.format(command['actuator'], actuator_state))
+        self.__logging.info('Changin actuator {0} value: {1}'.format(command['actuator'], actuator_state))
         self.__job_controll.change_actuator(command['actuator'], actuator_state)
 
     def __normalize_command(self, command):

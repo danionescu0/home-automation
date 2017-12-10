@@ -13,7 +13,7 @@ class LoggingConfig():
         self.__max_bytes = max_bytes
 
     @typechecked()
-    def get_logger(self) -> RootLogger:
+    def get_logger(self, level : int) -> RootLogger:
         formatter = logging.Formatter(fmt='%(levelname)s (%(threadName)-10s) :%(name)s: %(message)s '
                                   '(%(asctime)s; %(filename)s:%(lineno)d)',
                               datefmt="%Y-%m-%d %H:%M:%S")
@@ -25,11 +25,11 @@ class LoggingConfig():
             logging.StreamHandler()
         ]
         self.__root_logger = logging.getLogger()
-        self.__root_logger.setLevel(logging.DEBUG)
-        for h in handlers:
-            h.setFormatter(formatter)
-            h.setLevel(logging.DEBUG)
-            self.__root_logger.addHandler(h)
+        self.__root_logger.setLevel(level)
+        for handler in handlers:
+            handler.setFormatter(formatter)
+            handler.setLevel(level)
+            self.__root_logger.addHandler(handler)
 
         return self.__root_logger
 

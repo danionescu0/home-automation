@@ -36,13 +36,9 @@ class Serial(BaseSerial):
         received_data = self.__serial.read().decode('utf-8')
         if received_data == False or received_data == '':
             return
-        self.get_logger().debug("Senzors data received from serial: {0}".format(received_data))
+        self.get_logger().info("Senzors data received from serial: {0}".format(received_data))
         self.__message_buffer += received_data
         if not complete_message_callback(self.__message_buffer):
             return
         receive_message_callback(self.__message_buffer)
         self.__message_buffer = ''
-
-    @typechecked()
-    def __get_endpoint(self) -> str:
-        return self.__endpoint

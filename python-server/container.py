@@ -1,6 +1,7 @@
 import sys
 from logging import RootLogger
 from typing import Callable
+import logging
 
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
@@ -75,7 +76,7 @@ class Container:
         logging_config = LoggingConfig(general.logging['log_file'], general.logging['log_entries'])
         sys.excepthook = logging_config.set_error_hadler
 
-        return logging_config.get_logger()
+        return logging_config.get_logger(logging.INFO)
 
     @singleton
     def serial_communicator_registry(self) -> SerialCommunicatorRegistry:

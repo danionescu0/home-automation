@@ -32,7 +32,7 @@ class ZWaveDevice(DeviceLifetimeCycles):
         self.__network.start()
 
     def disconnect(self) -> None:
-        self.__root_logger.debug('Disconnectiong Zwave device')
+        self.__root_logger.info('Disconnectiong Zwave device')
         self.__network.stop()
 
     @typechecked()
@@ -61,12 +61,12 @@ class ZWaveDevice(DeviceLifetimeCycles):
     def __get_node(self, actuator_name: str, type: str):
         for node in self.__network.nodes:
             for val in self.__get_device_by_type(self.__network.nodes[node], type):
-                self.__root_logger.debug('Zwave node: {0}'.format(
+                self.__root_logger.info('Zwave node: {0}'.format(
                     self.__network.nodes[node].values[val].id_on_network)
                 )
                 if self.__network.nodes[node].values[val].id_on_network != actuator_name:
                     continue
-                self.__root_logger.debug('Changing zwave switch: {0}'.format(actuator_name))
+                self.__root_logger.info('Changing zwave switch: {0}'.format(actuator_name))
                 return self.__network.nodes[node], val
 
         raise Exception('Zwave node with id {0} not found'.format(actuator_name))
@@ -79,13 +79,13 @@ class ZWaveDevice(DeviceLifetimeCycles):
             return node.get_dimmers()
 
     def __network_failed(self, network):
-        self.__root_logger.debug('Zwave network failed loading')
+        self.__root_logger.info('Zwave network failed loading')
 
     def __network_ready(self, network):
-        self.__root_logger.debug('Zwave network ready, contoller name: {0}'.format(network.controller))
+        self.__root_logger.info('Zwave network ready, contoller name: {0}'.format(network.controller))
 
     def __value_update(self, network, node, value):
-        self.__root_logger.debug('Id {0} for value: {1}'.format(value.id_on_network, value.data))
+        self.__root_logger.info('Id {0} for value: {1}'.format(value.id_on_network, value.data))
         if None == self.__state_change_callback:
             return
         self.__state_change_callback(value.id_on_network, value.data)

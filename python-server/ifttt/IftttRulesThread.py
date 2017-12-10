@@ -33,7 +33,7 @@ class IftttRulesThread(threading.Thread):
         rules = self.__ifttt_rules.get_all()
         for name, rule in rules.items():
             should_execute = self.__check_rule(rule.text)
-            self.__logging.debug('Checking rule: {0}, status is: {1}'
+            self.__logging.info('Checking rule: {0}, status is: {1}'
                                  .format(rule.text, {True: 'Ok', False: 'Not ok'}[should_execute]))
             if not rule.active or not should_execute:
                 continue
@@ -47,7 +47,7 @@ class IftttRulesThread(threading.Thread):
         try:
             expression_builder.build()
         except Exception as e:
-            self.__logging.debug('Error building rule: {0}' + e.message)
+            self.__logging.info('Error building rule: {0}' + e.message)
             return False
         statement = expression_builder.get_expression()
         statement.interpret(context)
