@@ -2,7 +2,7 @@ from typing import List
 
 from typeguard import typechecked
 
-from communication.actuator.BaseStrategy import BaseStrategy
+from communication.actuator.strategies.BaseStrategy import BaseStrategy
 
 
 class ActuatorStrategies():

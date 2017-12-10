@@ -2,20 +2,20 @@ import sys
 from logging import RootLogger
 from typing import Callable
 
+from communication.DeviceLifetimeManager import DeviceLifetimeManager
+from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
 from communication.SerialCommunicatorRegistry import SerialCommunicatorRegistry
 from communication.TextSensorDataParser import TextSensorDataParser
+from communication.WemoSwitch import WemoSwitch
+from communication.ZWaveDevice import ZWaveDevice
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
-from communication.WemoSwitch import WemoSwitch
-from communication.ZWaveDevice import ZWaveDevice
-from communication.actuator.SerialSendStrategy import SerialSendStrategy
-from communication.actuator.WemoSwitchStrategy import WemoSwitchStrategy
-from communication.actuator.GroupStrategy import GroupStrategy
-from communication.actuator.ZWaveStrategy import ZWaveStrategy
-from communication.DeviceLifetimeManager import DeviceLifetimeManager
+from communication.actuator.strategies.GroupStrategy import GroupStrategy
+from communication.actuator.strategies.SerialSendStrategy import SerialSendStrategy
+from communication.actuator.strategies.WemoSwitchStrategy import WemoSwitchStrategy
+from communication.actuator.strategies.ZWaveStrategy import ZWaveStrategy
 from communication.encriptors.AesEncriptor import AesEncriptor
-from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
 from config import general
 from config import sensors
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
@@ -40,8 +40,8 @@ from locking.TimedLock import TimedLock
 from repository.ActuatorsRepository import ActuatorsRepository
 from repository.IftttRulesRepository import IftttRulesRepository
 from repository.LocationTrackerRepository import LocationTrackerRepository
-from repository.SensorsRepository import SensorsRepository
 from repository.RoomsRepository import RoomsRepository
+from repository.SensorsRepository import SensorsRepository
 from sound.RemoteSpeaker import RemoteSpeaker
 from sound.SoundApi import SoundApi
 from tools.Authentication import Authentication
@@ -49,12 +49,13 @@ from tools.EmailNotifier import EmailNotifier
 from tools.HomeDefence import HomeDefence
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
+from web.factory.RuleFactory import RuleFactory
+from web.formatter.ActuatorsFormatter import ActuatorsFormatter
+from web.formatter.IftttFormatter import IftttFormatter
 from web.formatter.RoomsFormatter import RoomsFormatter
 from web.formatter.SensorsFormatter import SensorsFormatter
-from web.formatter.IftttFormatter import IftttFormatter
-from web.formatter.ActuatorsFormatter import ActuatorsFormatter
 from web.security.JwtTokenFactory import JwtTokenFactory
-from web.factory.RuleFactory import RuleFactory
+from model.Actuator import Actuator
 
 
 def singleton(function: Callable):
@@ -159,17 +160,17 @@ class Container:
     @singleton
     def actuator_strategies(self) -> ActuatorStrategies:
         actuator_strategies = ActuatorStrategies()
-        actuator_strategies.add_strategy(SerialSendStrategy(self.serial_communicator_registry(),
-                                                            self.actuators_repository(), self.aes_encriptor()))
-        actuator_strategies.add_strategy(WemoSwitchStrategy(self.actuators_repository(), self.wemo_switch()))
-        actuator_strategies.add_strategy(GroupStrategy(self.actuators_repository(), self.async_actuator_commands(), self.root_logger()))
-        actuator_strategies.add_strategy(ZWaveStrategy(self.actuators_repository(), self.zwave_device()))
+        actuator_strategies.add_strategy(SerialSendStrategy(self.serial_communicator_registry(), self.aes_encriptor()))
+        actuator_strategies.add_strategy(WemoSwitchStrategy(self.wemo_switch()))
+        actuator_strategies.add_strategy(GroupStrategy(self.async_actuator_commands(), self.root_logger()))
+        actuator_strategies.add_strategy(ZWaveStrategy(self.zwave_device()))
 
         return actuator_strategies
 
     @singleton
     def actuator_commands(self) -> ActuatorCommands:
-        return ActuatorCommands(self.actuator_strategies(), self.actuators_repository(), self.root_logger())
+        return ActuatorCommands(self.actuator_strategies(), self.actuators_repository(),
+                                [Actuator.DeviceType.ACTION.value])
 
     @singleton
     def async_actuator_commands(self) -> AsyncActuatorCommands:

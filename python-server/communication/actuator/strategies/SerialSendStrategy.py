@@ -2,32 +2,26 @@ import time
 
 from typeguard import typechecked
 
-from .BaseStrategy import BaseStrategy
 from communication.SerialCommunicatorRegistry import SerialCommunicatorRegistry
-from repository.ActuatorsRepository import ActuatorsRepository
+from communication.actuator.strategies.BaseStrategy import BaseStrategy
+from communication.encriptors.AesEncriptor import AesEncriptor
 from model.Actuator import Actuator
 from model.ActuatorProperties import ActuatorProperties
-from communication.encriptors.AesEncriptor import AesEncriptor
 
 
 class SerialSendStrategy(BaseStrategy):
     @typechecked()
-    def __init__(self, communicator_registry: SerialCommunicatorRegistry, actuators_repo: ActuatorsRepository,
-                 encriptor: AesEncriptor):
+    def __init__(self, communicator_registry: SerialCommunicatorRegistry, encriptor: AesEncriptor):
         self.__communicator_registry = communicator_registry
-        self.__actuators_repo = actuators_repo
         self.__encriptor = encriptor
 
     @typechecked()
-    def supports(self, id: str) -> bool:
-        actuator = self.__actuators_repo.get_actuator(id)
-
+    def supports(self, actuator: Actuator) -> bool:
         return actuator.device_type == Actuator.DeviceType.SERIAL.value \
                and actuator.type in [Actuator.ActuatorType.SWITCH.value, Actuator.ActuatorType.PUSHBUTTON.value]
 
     @typechecked()
-    def set_state(self, id: str, state):
-        actuator = self.__actuators_repo.get_actuator(id)
+    def set_state(self, actuator: Actuator, state):
         command = self.__encrypt(self.__calculate_actuator_command(actuator, state), actuator)
         send_to_device = actuator.properties.get(ActuatorProperties.SEND_TO_DEVICE)
         communicator = actuator.properties.get(ActuatorProperties.COMMUNICATOR)
