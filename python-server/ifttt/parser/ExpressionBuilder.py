@@ -1,4 +1,5 @@
 from typeguard import typechecked
+from logging import RootLogger
 
 from ifttt.parser.ParseException import ParseException
 from ifttt.interpretter.EqualsExpression import EqualsExpression
@@ -17,9 +18,10 @@ class ExpressionBuilder:
     current_token_index = 0
 
     @typechecked()
-    def __init__(self, tokenizer: Tokenizer):
+    def __init__(self, tokenizer: Tokenizer, logger: RootLogger):
         self.__tokenizer = tokenizer
         self.__current_token_index = 0
+        self.__logger = logger
 
     @typechecked()
     def set_text(self, text: str) -> None:
@@ -30,6 +32,7 @@ class ExpressionBuilder:
         ExpressionBuilder.current_token_index = 0
         self.__tokens = self.__tokenizer.tokenize(self.__text)
         self.__expression = self.__evaluate()
+        [self.__logger.info(token) for token in self.__tokens]
 
     @typechecked()
     def get_expression(self) -> Expression:
@@ -37,11 +40,11 @@ class ExpressionBuilder:
 
     def __evaluate(self):
         token = self.__get_current_token()
-        token_type = token.get_type()
+        token_type = token.type
         self.__next_token()
         if token_type in [Token.TYPE_LITERAL_BOOLEAN, Token.TYPE_LITERAL_INT, Token.TYPE_LITERAL_TIME,
                           Token.TYPE_ACTUATOR_STATE, Token.TYPE_SENSOR, Token.TYPE_ACTUATOR, Token.TYPE_CURRENT_TIME]:
-            return LiteralExpression(token.get_value())
+            return LiteralExpression(token.value)
 
         left_expr = self.__evaluate()
         right_expr = self.__evaluate()

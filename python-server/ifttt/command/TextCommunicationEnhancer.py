@@ -27,4 +27,4 @@ class TextCommunicationEnhancer:
     def __replace(self, original, text_to_be_replaced):
         token = self.__tokenizer.tokenize(text_to_be_replaced)[0]
 
-        return original.replace(text_to_be_replaced, str(token.get_value()))
+        return original.replace(text_to_be_replaced, str(token.value))

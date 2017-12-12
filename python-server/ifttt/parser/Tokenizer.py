@@ -46,7 +46,7 @@ class Tokenizer:
             if not found_matches:
                 continue
 
-            return Token(token_rule[1], self.__get_token_value(token_rule[1], found_matches[0]))
+            return Token(token_text, token_rule[1], self.__get_token_value(token_rule[1], found_matches[0]))
 
         raise ParseException('Cannot parse token symbol: {0}'.format(token_text))
 
@@ -57,7 +57,7 @@ class Tokenizer:
             return token_raw_value
         token_converter = token_converter[0]
         value = token_converter.get_value(token_raw_value)
-        self.__root_logger.info('Value of token converter ({0}) for token raw value ({1}) is ({2})'
+        self.__root_logger.debug('Value of token converter ({0}) for token raw value ({1}) is ({2})'
                                  . format(type(token_converter), token_raw_value, value))
 
         return value

@@ -42,12 +42,12 @@ class IftttRulesThread(threading.Thread):
 
     def __check_rule(self, rule: str) -> bool:
         context = InterpretterContext()
-        expression_builder = ExpressionBuilder(self.__tokenizer)
+        expression_builder = ExpressionBuilder(self.__tokenizer, self.__logging)
         expression_builder.set_text(rule)
         try:
             expression_builder.build()
         except Exception as e:
-            self.__logging.info('Error building rule: {0}' + e.message)
+            self.__logging.debug('Error building rule: {0}'.format(e.message))
             return False
         statement = expression_builder.get_expression()
         statement.interpret(context)

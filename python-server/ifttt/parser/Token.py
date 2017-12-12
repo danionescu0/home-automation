@@ -17,13 +17,11 @@ class Token:
     TYPE_ACTUATOR = 'actuator'
 
     @typechecked()
-    def __init__(self, type: str, value):
-        self.__type = type
-        self.__value = value
+    def __init__(self, raw_value: str, type: str, value):
+        self.raw_value = raw_value
+        self.type = type
+        self.value = value
 
-    @typechecked()
-    def get_type(self) -> str:
-        return self.__type
-
-    def get_value(self):
-        return self.__value
+    def __repr__(self) -> str:
+        return 'Token(raw_value: {0}, type: {1}, value: {2}, type_of_value: {3})'\
+                .format(self.raw_value, self.type, self.value, type(self.value))
