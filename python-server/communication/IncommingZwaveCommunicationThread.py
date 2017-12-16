@@ -29,13 +29,12 @@ class IncommingZwaveCommunicationThread(threading.Thread):
     @typechecked()
     def __receive_zwave_device_update(self, id: str, value):
         self.__logger.info('Checking device with id {0} and value : {1}'.format(id, value))
-        sensors = self.__sensors_repository.get_sensors()
-        filtered = [sensor for sensor in sensors if sensor.id == id]
-        if len(filtered) > 0:
-            self.__logger.debug('Sensor is {0}'.format(sensors[0]))
-            self.__process_sensor(sensors[0], value)
+        sensor = self.__sensors_repository.get_sensor(id)
+        if None is not sensor:
+            self.__logger.debug('Sensor is {0}'.format(sensor))
+            self.__process_sensor(sensor, value)
         actuator = self.__actuators_repository.get_actuator(id)
-        if actuator != None:
+        if None is not actuator:
             self.__logger.info('Actuator is {0}'.format(actuator))
             self.__process_actuator(actuator, value)
 

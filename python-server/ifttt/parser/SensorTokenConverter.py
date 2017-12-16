@@ -9,11 +9,8 @@ class SensorTokenConverter(TokenConverter):
         self.__sensors_repository = sensors_repository
 
     def get_value(self, token_raw_value: str):
-        sensors = self.__sensors_repository.get_sensors()
-        for sensor in sensors:
-            if sensor.id != token_raw_value:
-                continue
-
+        sensor = self.__sensors_repository.get_sensor(token_raw_value)
+        if None is not sensor:
             return sensor.value
 
         raise ParseException("Sensor with id {0} not found".format(token_raw_value))

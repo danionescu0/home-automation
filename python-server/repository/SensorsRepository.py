@@ -3,6 +3,7 @@ import json
 import math
 from datetime import datetime
 from typing import List
+from typing import Optional
 
 from typeguard import typechecked
 
@@ -30,6 +31,8 @@ class SensorsRepository(AbstractRepository):
         sensors = []
         for sensor_data in sensors_data:
             sensor = Sensor(sensor_data['id'], sensor_data['type'], sensor_data['location'], sensor_data['value'])
+            if 'name' in sensor_data:
+                sensor.name = sensor_data['name']
             if 'communication_code' in sensor_data:
                 sensor.communication_code = sensor_data['communication_code']
             else:
@@ -42,10 +45,14 @@ class SensorsRepository(AbstractRepository):
 
         return sensors
 
-    #@todo implement this and replace it in code
     @typechecked()
-    def get_sensor(self, id: str):
-        pass
+    def get_sensor(self, id: str) -> Optional[Sensor]:
+        sensors = self.get_sensors()
+        sensor = [sensor for sensor in sensors if sensor.id == id]
+        if len(sensor) == 1:
+            return sensor[0]
+
+        return None
 
     @typechecked()
     def set_sensor(self, sensor: Sensor) -> None:

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
+
 const SENSOR_TYPES_TO_IMAGE = {
     power: (<img src="../img/sensors/power.png" />),
     temperature: (<i className="fa fa-thermometer-full fa-lg mt-4"></i>),
@@ -17,17 +18,24 @@ const SENSOR_TYPES_TO_IMAGE = {
 
 
 
-const Sensors = ({sensors}) => {
-    return sensors.map((sensor, index) => {
-        return (
-            <span key = {index}>
-                <Link to={`/display-sensor/${sensor.id}`}>
-                    {SENSOR_TYPES_TO_IMAGE[sensor.type]}
-                </Link>
-                {sensor.value}&nbsp;&nbsp;
-            </span>
-        )
-    });
-};
+class Sensors extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return this.props.sensors.map((sensor, index) => {
+            return (
+                <span key = {index}>
+                    <Link to={`/display-sensor/${sensor.id}`} title={sensor.name ? sensor.name : ''}>
+                        {SENSOR_TYPES_TO_IMAGE[sensor.type]}
+                    </Link>
+                    {sensor.value}&nbsp;&nbsp;
+                </span>
+
+            )
+        });
+    }
+}
 
 export default Sensors;

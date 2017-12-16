@@ -48,8 +48,11 @@ class RoomsFormatter:
             formatted.append({
                 'type' : sensor.type,
                 'id' : sensor.id,
-                'name' : sensor.type + ' ' + sensor.location,
+                'name' : self.__get_formatted_sensor_name(sensor),
                 'value' : sensor.value
             })
 
         return formatted
+
+    def __get_formatted_sensor_name(self, sensor: Sensor) -> str:
+        return sensor.name if not None == Sensor.name else '{0} {1}'.format(sensor.type, sensor.location)

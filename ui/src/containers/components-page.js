@@ -61,8 +61,11 @@ class ComponentsPage extends Component {
     }
 
     render() {
-        var success = this.state.success ?
-            (<FormText color="#FF0D45">Edit succesfull</FormText>) : (<FormText color="red">Edit failed</FormText> );
+        var success = "";
+        if (null != this.state.success) {
+            success = this.state.success ?
+                (<FormText color="#FF0D45">Edit succesfull</FormText>) : (<FormText color="red">Edit failed</FormText> );
+        }
         return (
               <div className="animated fadeIn">
                   <Col xs="12" md="12">
