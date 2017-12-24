@@ -14,3 +14,4 @@ typeguard
 pybluez
 python-openzwave
 nose2
+jsonpickle

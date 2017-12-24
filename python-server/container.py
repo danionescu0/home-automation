@@ -42,6 +42,7 @@ from repository.IftttRulesRepository import IftttRulesRepository
 from repository.LocationTrackerRepository import LocationTrackerRepository
 from repository.RoomsRepository import RoomsRepository
 from repository.SensorsRepository import SensorsRepository
+from repository.FeaturesConfigurationRepository import FeaturesConfigurationRepository
 from sound.RemoteSpeaker import RemoteSpeaker
 from sound.SoundApi import SoundApi
 from tools.Authentication import Authentication
@@ -102,6 +103,10 @@ class Container:
     @singleton
     def sensors_repository(self) -> SensorsRepository:
         return SensorsRepository(general.redis_config)
+
+    @singleton
+    def features_configuration_repository(self) -> FeaturesConfigurationRepository:
+        return FeaturesConfigurationRepository(general.redis_config)
 
     @singleton
     def ifttt_rules_repository(self) -> IftttRulesRepository:
