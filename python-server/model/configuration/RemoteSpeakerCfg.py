@@ -11,6 +11,7 @@ class RemoteSpeakerCfg(BaseConfig, metaclass=abc.ABCMeta):
         self.host = host
         self.user = user
         self.password = password
+        super(RemoteSpeakerCfg, self).__init__()
 
     @typechecked()
     def main_description(self) -> str:

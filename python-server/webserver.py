@@ -11,6 +11,7 @@ from web.handler.LocationHandler import LocationHandler
 from web.handler.RoomsHandler import RoomsHandler
 from web.handler.SensorHandler import SensorHandler
 from web.handler.SensorsHandler import SensorsHandler
+from web.handler.ConfigurationHandler import ConfigurationHandler
 from web.handler.TokenAuthHandler import TokenAuthHandler
 from web.handler.VoiceCommandHandler import VoiceCommandHandler
 
@@ -83,6 +84,11 @@ def make_app():
                 r'/api/sensor/(.*)', SensorHandler,
                 dict(sensors_formatter=container.sensors_formatter()),
                 name='api_sensor'
+            ),
+            url(
+                r'/api/configuration', ConfigurationHandler,
+                dict(configuration_formatter=container.configuration_formatter()),
+                name='api_configuration'
             ),
             url(r'/(.*)', StaticFileHandler, {
                 'path': general.web_server['static_path']

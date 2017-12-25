@@ -10,6 +10,7 @@ class EmailCfg(BaseConfig, metaclass=abc.ABCMeta):
     def __init__(self, sender_address: str, password: str) -> None:
         self.sender_address = sender_address
         self.password = password
+        super(EmailCfg, self).__init__()
 
     @typechecked()
     def main_description(self) -> str:

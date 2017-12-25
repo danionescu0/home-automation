@@ -42,7 +42,7 @@ from repository.IftttRulesRepository import IftttRulesRepository
 from repository.LocationTrackerRepository import LocationTrackerRepository
 from repository.RoomsRepository import RoomsRepository
 from repository.SensorsRepository import SensorsRepository
-from repository.FeaturesConfigurationRepository import FeaturesConfigurationRepository
+from repository.ConfigurationRepository import ConfigurationRepository
 from sound.RemoteSpeaker import RemoteSpeaker
 from sound.SoundApi import SoundApi
 from tools.Authentication import Authentication
@@ -55,6 +55,7 @@ from web.formatter.ActuatorsFormatter import ActuatorsFormatter
 from web.formatter.IftttFormatter import IftttFormatter
 from web.formatter.RoomsFormatter import RoomsFormatter
 from web.formatter.SensorsFormatter import SensorsFormatter
+from web.formatter.ConfigurationFormatter import ConfigurationFormatter
 from web.security.JwtTokenFactory import JwtTokenFactory
 from model.Actuator import Actuator
 
@@ -105,8 +106,8 @@ class Container:
         return SensorsRepository(general.redis_config)
 
     @singleton
-    def features_configuration_repository(self) -> FeaturesConfigurationRepository:
-        return FeaturesConfigurationRepository(general.redis_config)
+    def configuration_repository(self) -> ConfigurationRepository:
+        return ConfigurationRepository(general.redis_config)
 
     @singleton
     def ifttt_rules_repository(self) -> IftttRulesRepository:
@@ -131,6 +132,10 @@ class Container:
     @singleton
     def actuators_formatter(self) -> ActuatorsFormatter:
         return ActuatorsFormatter(self.actuators_repository())
+
+    @singleton
+    def configuration_formatter(self) -> ConfigurationFormatter:
+        return ConfigurationFormatter(self.configuration_repository())
 
     @singleton
     def rule_factory(self) -> RuleFactory:

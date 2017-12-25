@@ -10,6 +10,7 @@ class ZwaveCommunicationCfg(BaseConfig, metaclass=abc.ABCMeta):
     def __init__(self, port: str, openzwave_config_path: str) -> None:
         self.port = port
         self.openzwave_config_path = openzwave_config_path
+        super(ZwaveCommunicationCfg, self).__init__()
 
     @typechecked()
     def main_description(self) -> str:

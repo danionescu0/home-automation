@@ -11,6 +11,7 @@ class HomeDefenceCfg(BaseConfig, metaclass=abc.ABCMeta):
         self.alarm_lock_seconds = alarm_lock_seconds
         self.burgler_lights_switches = burgler_lights_switches
         self.burgler_time_between_actions = burgler_time_between_actions
+        super(HomeDefenceCfg, self).__init__()
 
     @typechecked()
     def main_description(self) -> str:

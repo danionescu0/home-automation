@@ -10,6 +10,7 @@ class SerialCommunicationCfg(BaseConfig, metaclass=abc.ABCMeta):
     def __init__(self, port: str, baud_rate: str) -> None:
         self.port = port
         self.baud_rate = baud_rate
+        super(SerialCommunicationCfg, self).__init__()
 
     @typechecked()
     def main_description(self) -> str:
