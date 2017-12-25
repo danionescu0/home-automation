@@ -12,6 +12,7 @@ import DisplaySensorPage from './display-sensor-page'
 import IftttList from './ifttt-list-page'
 import IftttAddeditPage from './ifttt-addedit-page'
 import ComponentsPage from  './components-page'
+import ConfigurationPage from  './configuration-page'
 
 
 class App extends Component {
@@ -31,6 +32,7 @@ class App extends Component {
                 <Route path="/ifttt-edit/:id" name="IftttAddeditPage" component={secure(IftttAddeditPage)}/>
                 <Route path="/ifttt-add" name="IftttAddeditPage" component={secure(IftttAddeditPage)}/>
                 <Route path="/display-sensor/:id" name="DisplaySensorPage" component={secure(DisplaySensorPage)}/>
+                <Route path="/configuration" name="Configuration" component={secure(ConfigurationPage)}/>
                 <Route path="/login" name="Login" component={Login}/>
                 <Redirect from="/" to="/main-page"/>
               </Switch>

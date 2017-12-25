@@ -15,8 +15,8 @@ export default {
       icon: 'fa-cubes',
       children: [
             {
-              name: 'General',
-              url: '/general-settings',
+              name: 'Configuration',
+              url: '/configuration',
               icon: 'fa-cubes'
             },
             {
