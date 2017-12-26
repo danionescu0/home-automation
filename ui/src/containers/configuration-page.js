@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import update from 'immutability-helper';
 import {withRouter} from 'react-router-dom';
 
 
@@ -22,31 +23,36 @@ class ConfigurationPage extends Component {
 
     loadData() {
         getJson(`/api/configuration`).then(data => {
-            data.push({'id' : '', 'name': 'Select actuator'});
-            this.setState({'actuators' : data});
+            console.log(data);
+            this.setState({'configuration' : data});
         });
     }
 
-    handleChange(field, event) {
-        var value = event.target.value;
-        // var rule = {...this.state.rule};
-        // rule[field] = value;
-        // this.setState({rule});
+    handleChange(arrayIndex, property, event) {
+        let newValue = event.target.value;
+        console.log(arrayIndex, property);
+        let newConfiguration = this.state.configuration.map((element, index) => {
+            if (index == arrayIndex) {
+                return update(element,
+                    {properties: {[property]: {$set: newValue}}}
+                )
+            }
+
+            return Object.assign({}, element);
+        });
+        this.setState({configuration : newConfiguration});
     }
+
 
     handleSubmit(e) {
         e.preventDefault();
-        // postJson(url, this.state.rule, method)
-        //     .then(() => {
-        //         this.submitSuccess();
-        //     }, e => {
-        //         console.log('failed');
-        //     });
+        postJson('/api/configuration', this.state.configuration, 'POST')
+            .then(() => {
+                console.log('success');
+            }, e => {
+                console.log('failed');
+            });
     }
-
-    // submitSuccess() {
-    //     this.props.history.push('/ifttt-list');
-    // }
 
     render() {
         return (

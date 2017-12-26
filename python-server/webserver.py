@@ -87,7 +87,9 @@ def make_app():
             ),
             url(
                 r'/api/configuration', ConfigurationHandler,
-                dict(configuration_formatter=container.configuration_formatter()),
+                dict(configuration_formatter=container.configuration_formatter(),
+                     configuration_factory=container.configuration_factory(),
+                     configuration_repository=container.configuration_repository()),
                 name='api_configuration'
             ),
             url(r'/(.*)', StaticFileHandler, {

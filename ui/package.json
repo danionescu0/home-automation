@@ -43,7 +43,8 @@
     "reactstrap": "^5.0.0-alpha.3",
     "simple-line-icons": "^2.4.1",
     "rc-slider": "^8.4.0",
-    "react-history": "^0.18.2"
+    "react-history": "^0.18.2",
+    "immutability-helper": "^2.6.2"
   },
   "scripts": {
     "dev": "webpack -d --progress --watch --profile --json > compilation-stats.json --env.dev",

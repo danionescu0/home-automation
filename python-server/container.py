@@ -51,6 +51,7 @@ from tools.HomeDefence import HomeDefence
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
 from web.factory.RuleFactory import RuleFactory
+from web.factory.ConfigurationFactory import ConfigurationFactory
 from web.formatter.ActuatorsFormatter import ActuatorsFormatter
 from web.formatter.IftttFormatter import IftttFormatter
 from web.formatter.RoomsFormatter import RoomsFormatter
@@ -140,6 +141,10 @@ class Container:
     @singleton
     def rule_factory(self) -> RuleFactory:
         return RuleFactory()
+
+    @singleton
+    def configuration_factory(self) -> ConfigurationFactory:
+        return ConfigurationFactory()
 
     @singleton
     def incomming_zwave_communication_thread(self) -> IncommingZwaveCommunicationThread:
