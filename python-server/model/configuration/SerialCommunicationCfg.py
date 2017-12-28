@@ -7,7 +7,7 @@ from model.configuration.BaseConfig import BaseConfig
 
 class SerialCommunicationCfg(BaseConfig, metaclass=abc.ABCMeta):
     @typechecked()
-    def __init__(self, port: str, baud_rate: str) -> None:
+    def __init__(self, port: str, baud_rate: int) -> None:
         self.port = port
         self.baud_rate = baud_rate
         super(SerialCommunicationCfg, self).__init__()

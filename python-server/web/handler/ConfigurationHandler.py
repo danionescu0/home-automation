@@ -23,7 +23,7 @@ class ConfigurationHandler(CorsHandler):
 
     @secure
     def post(self):
-        request_data = json.loads(self.request.body.decode("utf-8"))
+        request_data = self.request.body.decode("utf-8")
         try:
             config_objects = self.__configuration_factory.from_request_data(request_data)
             self.__configuration_repository.set_all(config_objects)

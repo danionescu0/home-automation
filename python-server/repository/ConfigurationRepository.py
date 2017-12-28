@@ -48,6 +48,6 @@ class ConfigurationRepository(AbstractRepository):
             BluetoothCommunicationCfg.get_classname() : BluetoothCommunicationCfg({}),
             EmailCfg.get_classname() : EmailCfg('', ''),
             HomeDefenceCfg.get_classname() : HomeDefenceCfg(0, [], 0),
-            SerialCommunicationCfg.get_classname() : SerialCommunicationCfg('', ''),
+            SerialCommunicationCfg.get_classname() : SerialCommunicationCfg('', 0),
             ZwaveCommunicationCfg.get_classname() : ZwaveCommunicationCfg('', ''),
         }

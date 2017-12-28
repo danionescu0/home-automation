@@ -73,7 +73,7 @@ python /home-automation_path/python-server/webserver.py
 
 # Configuration 
 
-* config/general.py : you'll find comments inside
+* config/general.py : you'll find comments inside (soon a large portion of it will be replaced by the configuration UI page)
 * in the UI settings/actuators to define actuators configuration
 * in the UI settings/actuators to define sensors configuration
 

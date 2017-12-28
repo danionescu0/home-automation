@@ -38,6 +38,10 @@ IOT devices and other electronics.
  
 ![ifttt.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/onepageapp/login.png)
 
+ * Configuration 
+ 
+![ifttt.png](https://github.com/danionescu0/home-automation/blob/master/screenshots/onepageapp/configuration.png)
+
 
 
 **Feature list**

@@ -17,11 +17,17 @@ import {
 
 
 const Configuration = ({configuration, handleChange, handleSubmit}) => {
-    let FormSeparator = ({name}) => {
+    let FormSeparator = ({name, index, enabled}) => {
         return (
             <FormGroup row>
                 <Col md="3">
-                    <Label htmlFor="text-input">{name}</Label>
+                    <b><Label htmlFor="text-input">{name}</Label></b>
+                </Col>
+                <Col md="3">
+                  <Label check htmlFor="checkbox">
+                      <Input type="checkbox" name="checkbox" checked={enabled}
+                            onChange={handleChange.bind(this, index, "_enabled")}/> Enabled
+                  </Label>
                 </Col>
             </FormGroup>
         );
@@ -43,7 +49,8 @@ const Configuration = ({configuration, handleChange, handleSubmit}) => {
 
             return (
                     <div key={formGroupKey}>
-                        {separator ? (<FormSeparator name={config['name']} />): null}
+                        {separator ? (<FormSeparator name={config['name']} index={index}
+                                                     enabled={config['properties']['_enabled']} />): null}
                         <FormGroup row>
                             <Col md="3">
                               <Label htmlFor="text-input">{property}</Label>

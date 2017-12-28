@@ -23,14 +23,16 @@ class ConfigurationPage extends Component {
 
     loadData() {
         getJson(`/api/configuration`).then(data => {
-            console.log(data);
             this.setState({'configuration' : data});
         });
     }
 
     handleChange(arrayIndex, property, event) {
         let newValue = event.target.value;
-        console.log(arrayIndex, property);
+        if (event.target.type == 'checkbox') {
+            newValue = event.target.checked;
+        }
+
         let newConfiguration = this.state.configuration.map((element, index) => {
             if (index == arrayIndex) {
                 return update(element,
