@@ -19,11 +19,11 @@ class CommandExecutor:
 
     @typechecked()
     def execute(self, command: RuleCommand) -> None:
-        if None != command.voice_text and command.voice_text != '':
+        if None is not command.voice_text and command.voice_text is not '':
             enhanced_text = self.__text_communication_enhancer.enhance(command.voice_text)
             self.__sound_api.say(enhanced_text)
             self.__logging.info('Speaking text: {0}'.format(command.voice_text))
-        if None != command.actuator_id and command.actuator_id != '':
+        if None is not command.actuator_id and command.actuator_id is not '':
             self.__logging.info('Changing actuator: {0} to new value: {1}'
                                  .format(command.actuator_id, command.actuator_state))
             self.__change_actuator_request_event.send(command.actuator_id, command.actuator_state)

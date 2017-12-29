@@ -25,7 +25,6 @@ class SensorsHandler(CorsHandler):
         try:
             components = json.loads(data['components'])
             self.__sensors_repository.set_sensors(components)
-            print(components)
             self.set_status(200)
         except Exception as e:
             print(e)

@@ -59,6 +59,11 @@ from web.formatter.SensorsFormatter import SensorsFormatter
 from web.formatter.ConfigurationFormatter import ConfigurationFormatter
 from web.security.JwtTokenFactory import JwtTokenFactory
 from model.Actuator import Actuator
+from model.configuration.BluetoothCommunicationCfg import BluetoothCommunicationCfg
+from model.configuration.EmailCfg import EmailCfg
+from model.configuration.HomeDefenceCfg import HomeDefenceCfg
+from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
+from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
 
 
 def singleton(function: Callable):
@@ -91,7 +96,7 @@ class Container:
 
     @singleton
     def sound_api(self) -> SoundApi:
-        return  RemoteSpeaker(general.remote_speaker['host'], general.remote_speaker['user'],
+        return RemoteSpeaker(general.remote_speaker['host'], general.remote_speaker['user'],
                               general.remote_speaker['password'])
 
     @singleton
@@ -198,7 +203,8 @@ class Container:
     @singleton
     def home_defence(self) -> HomeDefence:
         return HomeDefence(self.actuator_commands(), self.sound_api(), self.actuators_repository(),
-                           general.home_defence['burgler_lights'], general.home_defence['burgler_time_between_actions'])
+                           self.configuration_repository().get_config(HomeDefenceCfg.get_classname()),
+                           self.root_logger())
 
     @singleton
     def authentication(self) -> Authentication:

@@ -19,9 +19,9 @@ class ActuatorCommands:
     @typechecked()
     def change_actuator(self, id: str, state):
         actuator = self.__actuators_repo.get_actuator(id)
+        self.__actuators_repo.set_actuator_state(id, state)
         if actuator.device_type in self.__excluded_actuator_device_types:
             return True
-        self.__actuators_repo.set_actuator_state(id, state)
         strategy = self.__get_strategy(actuator)
         success = strategy.set_state(actuator, state)
         if not success and actuator.type == Actuator.ActuatorType.SWITCH.value:
