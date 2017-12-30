@@ -1,17 +1,20 @@
+from logging import RootLogger
 from typing import Callable
 
 import bluetooth
 from typeguard import typechecked
 
 from .BaseSerial import BaseSerial
+from model.configuration.BluetoothCommunicationCfg import BluetoothCommunicationCfg
 
 
 class SerialBluetooth(BaseSerial):
     RESOURCE_TEMPORARILY_UNAVAILABLE = '11'
 
     @typechecked()
-    def __init__(self, endpoint: dict):
-        self.__endpoint = endpoint
+    def __init__(self, bluetooth_communication_cfg: BluetoothCommunicationCfg, logger: RootLogger):
+        self.__bluetooth_communication_cfg = bluetooth_communication_cfg
+        self.__logger = logger
 
     @typechecked()
     def send(self, which: str, value: bytes) -> bool:
@@ -44,21 +47,18 @@ class SerialBluetooth(BaseSerial):
     def __receive(self, which, size):
         try:
             received_data = self.__connections[which].recv(size).decode("utf-8")
-            self.get_logger().debug("Senzors data received: " + received_data)
+            self.__logger.debug("Senzors data received: " + received_data)
             return received_data
 
         except bluetooth.btcommon.BluetoothError:
             return False
 
-        return False
-
     def connect(self) -> None:
-        self.connection_mapping = self.__get_endpoint()
+        self.connection_mapping = self.__bluetooth_communication_cfg.connections
         self.__connections = {}
         for name, bluetooth_address in self.connection_mapping.items():
-            self.get_logger().debug("Connecting to {0} on address {1}".format(name, bluetooth_address))
             self.__connections[name] = self.__connnect_to_bluetooth(bluetooth_address, 1)
-        self.get_logger().debug("Connected to all devices")
+        self.__logger.info("Connected to all bluetooth devices")
         self.__message_buffer = self.__create_empty_message_buffer()
 
         return self
@@ -81,8 +81,5 @@ class SerialBluetooth(BaseSerial):
 
     @typechecked()
     def disconnect(self) -> None:
-        self.get_logger().debug("Disconnecting all bluetooth devices")
+        self.__logger.info("Disconnecting all bluetooth devices")
         [connection.close() for name, connection in self.__connections.items()]
-
-    def __get_endpoint(self):
-        return self.__endpoint

@@ -1,6 +1,5 @@
 import abc
 from typing import Callable
-from logging import RootLogger
 
 from typeguard import typechecked
 
@@ -30,11 +29,3 @@ class BaseSerial(DeviceLifetimeCycles, metaclass=abc.ABCMeta):
     @typechecked()
     def get_receive_message_callback(self) -> Callable[[str], None]:
         return self.__callback
-
-    @typechecked()
-    def set_logger(self, logger: RootLogger):
-        self.__logger = logger
-
-    @typechecked()
-    def get_logger(self) -> RootLogger:
-        return self.__logger

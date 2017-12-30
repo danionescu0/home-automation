@@ -13,8 +13,9 @@ class TimedLock:
     def set_lock(self, key: str, seconds: int) -> None:
         self.__get_client().set(key, "1", ex = seconds)
 
+    @typechecked()
     def has_lock(self, key: str) -> bool:
-        if None == self.__get_client().get(key):
+        if None is self.__get_client().get(key):
             return False
 
         return True

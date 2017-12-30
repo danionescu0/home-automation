@@ -1,20 +1,26 @@
+from logging import RootLogger
 from typing import Callable
 
 import serial
 from typeguard import typechecked
 
 from communication.BaseSerial import BaseSerial
+from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 
 
 class Serial(BaseSerial):
     @typechecked()
-    def __init__(self, endpoint: dict):
-        self.__endpoint = endpoint
+    def __init__(self, serial_communication_cfg: SerialCommunicationCfg, logger: RootLogger):
+        self.__serial_communication_cfg = serial_communication_cfg
         self.__message_buffer = ''
         self.__serial = None
+        self.__logger = logger
 
     def connect(self):
-        self.__serial = serial.Serial(self.__endpoint['port'], self.__endpoint['baud_rate'], timeout=0.5)
+        self.__logger.info("connection to:" + self.__serial_communication_cfg.port + ' ' + str(self.__serial_communication_cfg.baud_rate))
+        self.__serial = serial.Serial(self.__serial_communication_cfg.port,
+                                      self.__serial_communication_cfg.baud_rate,
+                                      timeout=0.5)
 
         return self
 
@@ -34,9 +40,9 @@ class Serial(BaseSerial):
     def listen(self, complete_message_callback: Callable[[str], bool],
                    receive_message_callback: Callable[[str], None]):
         received_data = self.__serial.read().decode('utf-8')
-        if received_data == False or received_data == '':
+        if received_data is False or received_data == '':
             return
-        self.get_logger().info("Senzors data received from serial: {0}".format(received_data))
+        self.__logger.info("Senzors data received from serial: {0}".format(received_data))
         self.__message_buffer += received_data
         if not complete_message_callback(self.__message_buffer):
             return

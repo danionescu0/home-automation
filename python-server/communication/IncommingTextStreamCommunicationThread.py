@@ -31,7 +31,6 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
             self.__communicator.listen(self.__text_sensor_data_parser.is_buffer_parsable,
                                        self.__sensor_callback)
             time.sleep(self.LISTEN_DELAY)
-        self.__communicator.disconnect()
 
     def __sensor_callback(self, message):
         try:

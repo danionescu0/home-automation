@@ -5,7 +5,6 @@ import logging
 
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
-from communication.SerialCommunicatorRegistry import SerialCommunicatorRegistry
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.WemoSwitch import WemoSwitch
 from communication.ZWaveDevice import ZWaveDevice
@@ -17,6 +16,8 @@ from communication.actuator.strategies.SerialSendStrategy import SerialSendStrat
 from communication.actuator.strategies.WemoSwitchStrategy import WemoSwitchStrategy
 from communication.actuator.strategies.ZWaveStrategy import ZWaveStrategy
 from communication.encriptors.AesEncriptor import AesEncriptor
+from communication.Serial import Serial
+from communication.SerialBluetooth import SerialBluetooth
 from config import general
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
 from event.SensorUpdateEvent import SensorUpdateEvent
@@ -87,12 +88,16 @@ class Container:
         return logging_config.get_logger(logging.INFO)
 
     @singleton
-    def serial_communicator_registry(self) -> SerialCommunicatorRegistry:
-        return SerialCommunicatorRegistry(general.communication, self.root_logger())
-
-    @singleton
     def wemo_switch(self) -> WemoSwitch:
         return WemoSwitch(self.root_logger())
+
+    def serial(self) -> Serial:
+        return Serial(self.configuration_repository().get_config(SerialCommunicationCfg.get_classname()),
+                      self.root_logger())
+
+    def bluetooth_serial(self) -> SerialBluetooth:
+        return SerialBluetooth(self.configuration_repository().get_config(BluetoothCommunicationCfg.get_classname()),
+                      self.root_logger())
 
     @singleton
     def sound_api(self) -> SoundApi:
@@ -180,7 +185,7 @@ class Container:
     @singleton
     def actuator_strategies(self) -> ActuatorStrategies:
         actuator_strategies = ActuatorStrategies()
-        actuator_strategies.add_strategy(SerialSendStrategy(self.serial_communicator_registry(), self.aes_encriptor()))
+        actuator_strategies.add_strategy(SerialSendStrategy(self.device_lifetime_manager(), self.aes_encriptor()))
         actuator_strategies.add_strategy(WemoSwitchStrategy(self.wemo_switch()))
         actuator_strategies.add_strategy(GroupStrategy(self.async_actuator_commands(), self.root_logger()))
         actuator_strategies.add_strategy(ZWaveStrategy(self.zwave_device()))
@@ -282,4 +287,7 @@ class Container:
 
     @singleton
     def home_alarm_lock(self) -> HomeAlarmLock:
-        return HomeAlarmLock(self.timed_lock(), general.home_defence['alarm_lock'])
+        alarm_lock_seconds = self.configuration_repository().\
+            get_config(HomeDefenceCfg.get_classname()).alarm_lock_seconds
+
+        return HomeAlarmLock(self.timed_lock(), alarm_lock_seconds)
