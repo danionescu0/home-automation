@@ -31,8 +31,7 @@ class ConfigurationRepository(AbstractRepository):
 
     @typechecked()
     def set_all(self, new_config: Dict[str, BaseConfig]):
-        old_config = self.__get()
-        config = {**old_config, **new_config}
+        config = {**self.__get(), **new_config}
 
         return self.client.set(self.__REDIS_KEY, jsonpickle.encode(config))
 
@@ -47,7 +46,7 @@ class ConfigurationRepository(AbstractRepository):
         return {
             BluetoothCommunicationCfg.get_classname() : BluetoothCommunicationCfg({}),
             EmailCfg.get_classname() : EmailCfg('', ''),
-            HomeDefenceCfg.get_classname() : HomeDefenceCfg(0, [], 0),
+            HomeDefenceCfg.get_classname() : HomeDefenceCfg(0, [], 0, ''),
             SerialCommunicationCfg.get_classname() : SerialCommunicationCfg('', 0),
             ZwaveCommunicationCfg.get_classname() : ZwaveCommunicationCfg('', ''),
         }

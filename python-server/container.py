@@ -167,7 +167,9 @@ class Container:
 
     @singleton
     def email_notificator(self) -> EmailNotifier:
-        return EmailNotifier(general.email['email'], general.email['password'], general.email['notifiedAddress'])
+        return EmailNotifier(self.configuration_repository().get_config(EmailCfg.get_classname()),
+                             self.configuration_repository().get_config(HomeDefenceCfg.get_classname()),
+                             self.root_logger())
 
     @singleton
     def aes_encriptor(self) -> AesEncriptor:
@@ -175,8 +177,8 @@ class Container:
 
     @singleton
     def zwave_device(self) -> ZWaveDevice:
-        return ZWaveDevice(self.root_logger(), general.communication['zwave']['port'],
-                           general.communication['zwave']['openzwave_config_path'])
+        return ZWaveDevice(self.configuration_repository().get_config(ZwaveCommunicationCfg.get_classname()),
+                           self.root_logger())
 
     @singleton
     def device_lifetime_manager(self) -> DeviceLifetimeManager:

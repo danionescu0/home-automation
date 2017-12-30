@@ -20,6 +20,12 @@ logging = {
 #home gps coordonates, used for determining if the user is near home or not
 home_coordonates = (22.4169649, 35.1542889) # replace this with your own
 
+remote_speaker = {
+    'host': 'http://ip',
+    'user': 'test_user',
+    'password' : 'test_pass'
+}
+
 # credentials for logging into the webapp
 credentials = [
     {
@@ -30,22 +36,5 @@ credentials = [
 ]
 
 communication = {
-    'bluetooth' : {
-        'connections' :
-            {
-                'holway' : '',
-                'fingerprint': ''
-            }
-    },
-
-    'serial' : {
-        'port' : '/dev/ttyACM0',
-        'baud_rate' : '9600'
-    },
-    'zwave' : {
-        'port' : '/dev/ttyUSB0',
-        'openzwave_config_path' : '/your/openzwave/config/path/here'
-    },
-
     'aes_key' : '' # 16 characters key
 }

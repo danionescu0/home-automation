@@ -8,19 +8,21 @@ from openzwave.option import ZWaveOption
 from pydispatch import dispatcher
 
 from communication.DeviceLifetimeCycles import DeviceLifetimeCycles
+from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
 
 
 class ZWaveDevice(DeviceLifetimeCycles):
     @typechecked()
-    def __init__(self, root_logger: RootLogger, port: str, openzwave_config_path: str) -> None:
+    def __init__(self, zwave_config: ZwaveCommunicationCfg, root_logger: RootLogger) -> None:
+        self.__zwave_config = zwave_config
         self.__root_logger = root_logger
-        self.__port = port
-        self.__openzwave_config_path = openzwave_config_path
         self.__network = None
         self.__state_change_callback = None
 
     def connect(self) -> None:
-        options = ZWaveOption(self.__port, config_path=self.__openzwave_config_path, user_path=".", cmd_line="")
+        options = ZWaveOption(self.__zwave_config.port,
+                              config_path=self.__zwave_config.openzwave_config_path,
+                              user_path=".", cmd_line="")
         options.set_console_output(False)
         options.set_save_log_level("None")
         options.set_logging(False)
@@ -86,6 +88,6 @@ class ZWaveDevice(DeviceLifetimeCycles):
 
     def __value_update(self, network, node, value):
         self.__root_logger.info('Id {0} for value: {1}'.format(value.id_on_network, value.data))
-        if None == self.__state_change_callback:
+        if None is self.__state_change_callback:
             return
         self.__state_change_callback(value.id_on_network, value.data)
