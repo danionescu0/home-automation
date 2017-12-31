@@ -1,13 +1,20 @@
 # Home automation project #
 
-This project will give you more controll over your house and you'll going to have fun building it.
+This project will give you more control over your house and you'll going to have fun building it :)
 It's strong points are easy integration of very custom hardware which you can build yourself and keep the price down and
-Integration with ready made devices like ZWave and WeMo.
+integration with ready made devices like ZWave and WeMo.
 
-Also a strong programming IFTTT interface that can trigger actuators and emit alerts. (see below)
+Also a strong visual rule IFTTT (if this than that) interface that can trigger actuators and emit alerts. (see below)
 
 It's a DIY project for makers and hacker and it's based on a raspberry pi (or another linux compatible board), arduino boards
 IOT devices and other electronics.
+
+
+If you find this project useful in any way i will appreciate it if you give it a star. Thanks.
+
+For those who want to donate something to my effort of developing free software, you can do so using this [ripple](https://ripple.com/) address: 
+rNVMinyJysATxyMiFK1Tfnv5mCEk1RAvbTAdvanced or using this [bitcoin](https://bitcoin.org/en/) address: 1B58XeAJQC3kxBW7DM4TwkoTggvbqTitKt
+
 
 
 **Summary**
@@ -15,9 +22,8 @@ IOT devices and other electronics.
 * Screenshots
 * Feature list
 * Project overview
-* IFTTT
-* Component prices
-* Technical overwiew
+* IFTTT (if this than that)
+* Estimative component prices
 
 
 **Screenshots** 
@@ -55,7 +61,7 @@ electric fan to get fresh air from outside
 * open / closes various types of electric curtains 
 * control remote wall sockets 
 * use a speaker to emit voice alerts
-* supports voice remote controll from the [android](https://github.com/danionescu0/android-home-automation-support) application
+* supports voice remote control from the [android](https://github.com/danionescu0/android-home-automation-support) application
 * open / close lights
 * monitor with different sensors: temperature, humidity, light level, air quality, PIR sensors, air pressure and more
 * power consumption monitoring for the house
@@ -65,9 +71,14 @@ electric fan to get fresh air from outside
 
 
 **Project overview:**
+This project uses the following technologies, concepts and tools: 
 
+python 3x with tornado web framework, reactJs, coreUI, arduino, redis, pubsub, raspberryPi, bluetooth, raspian (basic linux configuration),
+ arduino IDE, electronics
+
+To get started you'll need a background in programming, electronics and thinkering. 
 * First the [python server](https://github.com/danionescu0/home-automation/tree/master/python-server) (project brain) located in python-server.
-For more configuration of the server check the link.
+For more technical documentation check the links below.
 
 * Second the [arduino sketches](https://github.com/danionescu0/home-automation/tree/master/arduino-sketches) located in arduino-sketches. 
 The sketches are for custom devices that control various actuators and collect data from sensors.
@@ -100,7 +111,7 @@ block of text will announce the temperature and humidity outside
 
 
 
-**Component prices:**
+**Estimative component prices:**
 
 * The PI, case, SD card and power adapter will be around 70 dollars
 * Custom made. 
@@ -113,19 +124,3 @@ Each custom made  controller composed of arduino, case, bluetooth device or HC-1
 * A WeMo power socker is about 40$ [here](http://www.belkin.com/us/Products/home-automation/c/wemo-home-automation/) 
 * An electric roller blade will start from 50$ [here](http://www.ebay.com/sch/i.html?_odkw=electric+courtains&_osacat=0&_from=R40&_trksid=p2045573.m570.l1313.TR0.TRC0.H0.Xelectric+roller+blinds.TRS0&_nkw=electric+roller+blinds&_sacat=0)
 * Some Zwave devices prices [here](http://z-wavelab.com/)
-
-**Technical overwiew**
-
-This project uses the following technollogies, concepts and tools: 
-
-python 3x with tornado web framework, reactJs, coreUI, arduino, redis, pubsub, raspberryPi, bluetooth, raspian (basic linux configuration),
- arduino IDE, electronics
-
-To get started you'll need a background in programming, electronics and thinkering. 
-
-For more technical configuration please visit:
-[New onepageapp User Interface](https://github.com/danionescu0/home-automation/tree/master/ui) 
-[Python server](https://github.com/danionescu0/home-automation/tree/master/python-server)
-[Arduino sketches](https://github.com/danionescu0/home-automation/tree/master/arduino-sketches)
-[Remote speaker](https://github.com/danionescu0/home-automation/tree/master/remote-speaker)
-
