@@ -6,14 +6,19 @@ integration with ready made devices like ZWave and WeMo.
 
 Also a strong visual rule IFTTT (if this than that) interface that can trigger actuators and emit alerts. (see below)
 
-It's a DIY project for makers and hacker and it's based on a raspberry pi (or another linux compatible board), arduino boards
+It's a DIY project for makers and hackers and it's based on a raspberry pi (or another linux compatible board), arduino boards
 IOT devices and other electronics.
 
+Some youtube videos of how the project will look like:
+
+Controlling led strips with zwave [here](https://youtu.be/AjYH_NEiPWc)
+
+Automating electric shades [here](https://youtu.be/85ctap3Tpgk)
 
 If you find this project useful in any way i will appreciate it if you give it a star. Thanks.
 
 For those who want to donate something to my effort of developing free software, you can do so using this [ripple](https://ripple.com/) address: 
-rNVMinyJysATxyMiFK1Tfnv5mCEk1RAvbTAdvanced or using this [bitcoin](https://bitcoin.org/en/) address: 1B58XeAJQC3kxBW7DM4TwkoTggvbqTitKt
+rNVMinyJysATxyMiFK1Tfnv5mCEk1RAvbT or using this [bitcoin](https://bitcoin.org/en/) address: 1B58XeAJQC3kxBW7DM4TwkoTggvbqTitKt
 
 
 
