@@ -19,7 +19,7 @@ const IftttAddedit = ({rule, actuators, handleChange, handleSubmit}) => {
     var actuatorSelect = actuators.map((actuator, index) => {
           return (
               <option key={index} value={actuator['id']}>
-                  {actuator['name']}
+                  {actuator['room'] + ": " + actuator['name']}
               </option>
           );
         });
