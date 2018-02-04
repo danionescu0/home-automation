@@ -19,7 +19,6 @@ import {
 
 
 const IftttList = ({rules_data, show_delete_confirm, close_modal, modal_status, delete_rule}) => {
-
     const StatusBadge = ({status}) => {
         const statusBadgeToClass = {
             true : 'success',

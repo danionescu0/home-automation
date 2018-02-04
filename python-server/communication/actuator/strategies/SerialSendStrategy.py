@@ -22,7 +22,10 @@ class SerialSendStrategy(BaseStrategy):
 
     @typechecked()
     def set_state(self, actuator: Actuator, state):
-        command = self.__encrypt(self.__calculate_actuator_command(actuator, state), actuator)
+        try:
+            command = self.__encrypt(self.__calculate_actuator_command(actuator, state), actuator)
+        except:
+            return False
         send_to_device = actuator.properties.get(ActuatorProperties.SEND_TO_DEVICE)
         communicator = actuator.properties.get(ActuatorProperties.COMMUNICATOR)
         self.__device_lifetime_manager. \

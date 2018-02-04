@@ -101,18 +101,49 @@ Some sketches have skematics.
 
 With this module complex rules can be added in the web-interface to be executed by actuators or / and enable voice alerts.
 
-For example, if i want to open the courtains at 7:12 AM only if they are closed the following rule will do:
-"_and  ( eq(A[livingCourtains], On), eq(TIME, 07:12))_"
+Expressions:
+
+* Equality: eq(a,b) -> true if a == b
+* Greater than: gt(a,b) -> true if a > b
+* Less than: gt(a,b) -> true if a < b
+* Between: btw(x,a,b) => true if a <= x >= b
+* OR: or(a,b) => true if a is true or b is true
+* AND: and(a,b) => true if a is true and b is true
+* Current time: TIME => returns current time
+* Literal time: 14:25 => value of literal time
+* True: True => literal true
+* False: False => literal false
+* Actuator: A(actuator_id) => value of the actuator who's id is actuator_id
+* Sensor: A(sensor_id) => value of the sensor who's id is sensor_id
+* Literal int: some_int_value => literal int value
+
+Examples:
+
+* The courtains are open and the time is 7:12:
+````
+and  ( eq(A[livingCourtains], On), eq(TIME, 07:12))
+````
+
+* Phone is home sensor is True and pollution sensor is greater than 55.
+This can be used to emit a voice alert of the pollution danger.
+````
+and( eq(S[phoneIsHome], True), gt(S[airPollution_living], 55) )
+````
 
 Rules can be more complex than this, they can respond to sensors data, time and actuator states.
 
-For example the following rule(fictive) will check if the actuator "livingCourtains" is off, and one of the following: 
+* The following rule(fictive) will check if the actuator "livingCourtains" is off, and either 
 the time is greater than 8:45 or temperature in living is between 21 and 22 degreeds
-"_and  ( eq(A[livingCourtains], Off), or(gt(TIME, 08:45), btw(S[temperature:living], 21, 22) )_"
+````
+and  ( eq(A[livingCourtains], False), or(gt(TIME, 08:45), btw(S[temperature:living], 21, 22) )
 
-Voice alerts are text to speech blocks of text, beside that actuator and sensors values cand be mixer or the current time,
-for example : "Wake up sir, the temperature outside is S[temperature:outside] and humidity is S[humidity:outside]" this
-block of text will announce the temperature and humidity outside
+````
+
+In the following example i'm mixing a block of text with sensors values to announce some sensor data. 
+````
+Wake up sir, the temperature outside is S[id_of_outside_temp_sensor] and humidity is S[id_of_outside_humid_sensor] 
+
+````
 
 
 

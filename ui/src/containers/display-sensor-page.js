@@ -22,17 +22,19 @@ class DisplaySensorPage extends Component {
         const sensorId = this.props.match.params.id;
         this.setState({graphName:  this.props.match.params.id});
         getJson(`/api/sensor/${sensorId}`).then(data => {
-            this.setState({firstLineGraph: this.getGraphDetails(sensorId, data, 200)});
-            this.setState({secondLineGraph: this.getGraphDetails(sensorId, data, data.length)});
+            let lastDay = (Math.round(Date.now() / 1000)) - 3600 * 24;
+            let last7Days = (Math.round(Date.now() / 1000)) - 3600 * 24 * 7;
+            this.setState({firstLineGraph: this.getGraphDetails(sensorId, data, lastDay)});
+            this.setState({secondLineGraph: this.getGraphDetails(sensorId, data, last7Days)});
         });
     }
 
-    getGraphDetails(sensorId, data, showNr) {
-        data = data.slice(-showNr);
-        var newDatasetTemplate = Object.assign({}, datasetTemplate);
+    getGraphDetails(sensorId, data, fromTimestamp) {
+        data = data.filter(row => row.timestamp > fromTimestamp);
+        let newDatasetTemplate = Object.assign({}, datasetTemplate);
         newDatasetTemplate.label = sensorId;
         newDatasetTemplate.data = data.map(datapoint => datapoint.value);
-        var newLineGraph = Object.assign({}, lineGraph);
+        let newLineGraph = Object.assign({}, lineGraph);
         newLineGraph.datasets = [newDatasetTemplate];
         newLineGraph.labels = data.map(datapoint => datapoint.date);
 
@@ -46,8 +48,8 @@ class DisplaySensorPage extends Component {
                   <Card>
                     <CardHeader>
                         {this.state.graphName} last day
-                      <div className="card-actions">
-                      </div>
+                        <div className="card-actions">
+                        </div>
                     </CardHeader>
                     <CardBody>
                       <div className="chart-wrapper">
@@ -57,7 +59,7 @@ class DisplaySensorPage extends Component {
                   </Card>
                   <Card>
                     <CardHeader>
-                        {this.state.graphName} last 7 days
+                      {this.state.graphName} last 7 days
                       <div className="card-actions">
                       </div>
                     </CardHeader>
@@ -74,7 +76,6 @@ class DisplaySensorPage extends Component {
 }
 
 const datasetTemplate = {
-      label: 'My First dataset2',
       fill: false,
       lineTension: 0.1,
       backgroundColor: 'rgba(75,192,192,0.4)',
