@@ -8,8 +8,8 @@ class DisplaySensorPage extends Component {
         super(props);
         this.state = {
             errorMessage: null,
-            firstLineGraph: lineGraph,
-            secondLineGraph: lineGraph,
+            firstLineGraph: getDatasetTemplate("Loading...", [], []),
+            secondLineGraph: getDatasetTemplate("Loading...", [], []),
             graphName: null
         }
     }
@@ -30,15 +30,11 @@ class DisplaySensorPage extends Component {
     }
 
     getGraphDetails(sensorId, data, fromTimestamp) {
-        data = data.filter(row => row.timestamp > fromTimestamp);
-        let newDatasetTemplate = Object.assign({}, datasetTemplate);
-        newDatasetTemplate.label = sensorId;
-        newDatasetTemplate.data = data.map(datapoint => datapoint.value);
-        let newLineGraph = Object.assign({}, lineGraph);
-        newLineGraph.datasets = [newDatasetTemplate];
-        newLineGraph.labels = data.map(datapoint => datapoint.date);
+        const filteredData = data.filter(row => row.timestamp > fromTimestamp);
 
-        return newLineGraph;
+        return getDatasetTemplate(sensorId,
+            filteredData.map(datapoint => datapoint.value),
+            filteredData.map(datapoint => datapoint.date));
     }
 
     render() {
@@ -75,31 +71,32 @@ class DisplaySensorPage extends Component {
         }
 }
 
-const datasetTemplate = {
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: 'rgba(75,192,192,0.4)',
-      borderColor: 'rgba(75,192,192,1)',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: 'rgba(75,192,192,1)',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: ['1']
-    };
-
-const lineGraph = {
-  labels: ['Loading data'],
-  datasets: [datasetTemplate]
-};
+function getDatasetTemplate(title, values, labels) {
+    return {
+      labels: labels,
+      datasets: [{
+          fill: false,
+          label: title,
+          lineTension: 0.1,
+          backgroundColor: 'rgba(75,192,192,0.4)',
+          borderColor: 'rgba(75,192,192,1)',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: 'rgba(75,192,192,1)',
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+          pointHoverBorderColor: 'rgba(220,220,220,1)',
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: values
+        }]
+    }
+}
 
 
 export default DisplaySensorPage;
