@@ -82,7 +82,7 @@ def make_app():
             ),
             url(
                 r'/api/sensor/(.*)', SensorHandler,
-                dict(sensors_formatter=container.sensors_formatter()),
+                dict(sensors_formatter=container.sensors_formatter(), sensors_repository=sensors_repo),
                 name='api_sensor'
             ),
             url(

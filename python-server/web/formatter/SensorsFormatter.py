@@ -27,7 +27,7 @@ class SensorsFormatter:
 
     def get_all(self):
         return [{
-                'id'  : sensor.id,
+                'id' : sensor.id,
                 'name': sensor.name if None is not sensor.name else '',
                 'type': sensor.type,
                 'value': sensor.value,

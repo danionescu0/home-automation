@@ -20,12 +20,12 @@ class DisplaySensorPage extends Component {
 
     loadSensorData() {
         const sensorId = this.props.match.params.id;
-        this.setState({graphName:  this.props.match.params.id});
-        getJson(`/api/sensor/${sensorId}`).then(data => {
+        getJson(`/api/sensor/${sensorId}`).then(response => {
+            this.setState({graphName: response.name});
             let lastDay = (Math.round(Date.now() / 1000)) - 3600 * 24;
             let last7Days = (Math.round(Date.now() / 1000)) - 3600 * 24 * 7;
-            this.setState({firstLineGraph: this.getGraphDetails(sensorId, data, lastDay)});
-            this.setState({secondLineGraph: this.getGraphDetails(sensorId, data, last7Days)});
+            this.setState({firstLineGraph: this.getGraphDetails(response.name, response.data, lastDay)});
+            this.setState({secondLineGraph: this.getGraphDetails(response.name, response.data, last7Days)});
         });
     }
 
