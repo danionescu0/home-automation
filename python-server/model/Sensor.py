@@ -14,6 +14,7 @@ class Sensor:
         AIR_POLLUTION = 'airPollution'
         FINGERPRINT = 'fingerprint'
         PHONE_IS_HOME = 'phoneIsHome'
+        FLOOD = 'flood'
         POWER = 'power'
 
     def __init__(self, id: str, type: str, location: str, value) -> None:

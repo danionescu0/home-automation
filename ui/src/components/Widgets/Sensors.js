@@ -14,8 +14,8 @@ const SENSOR_TYPES_TO_IMAGE = {
     air_pollution: (<img src="../img/sensors/airPollution.png" />),
     fingerprint: (<img src="../img/sensors/fingerprint.png" />),
     phone_is_home: (<img src="../img/sensors/phoneIsHome.png" />),
+    flood: (<img src="../img/sensors/flood.png" />),
 };
-
 
 
 class Sensors extends Component {

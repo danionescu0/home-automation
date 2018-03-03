@@ -28,7 +28,7 @@ class IncommingZwaveCommunicationThread(threading.Thread):
 
     @typechecked()
     def __receive_zwave_device_update(self, id: str, value):
-        self.__logger.info('Checking device with id {0} and value : {1}'.format(id, value))
+        self.__logger.debug('Checking device with id {0} and value : {1}'.format(id, value))
         sensor = self.__sensors_repository.get_sensor(id)
         if None is not sensor:
             self.__logger.debug('Sensor is {0}'.format(sensor))
