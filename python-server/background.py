@@ -1,6 +1,7 @@
 import signal
 
 from communication.IncommingTextStreamCommunicationThread import IncommingTextStreamCommunicationThread
+from communication.SensorsPollingThread import SensorsPollingThread
 from container import Container
 from ifttt.IftttRulesThread import IftttRulesThread
 from tools.AsyncJobsThread import AsyncJobsThread
@@ -41,6 +42,7 @@ def main():
     threads.append(IftttRulesThread(container.ifttt_rules_repository(), container.command_executor(),
                                     container.tokenizer(), root_logger))
     threads.append(HomeDefenceThread(container.home_defence()))
+    threads.append(SensorsPollingThread(60, sensors_repo, container.sensor_update_event(), root_logger))
 
     def handler(signum, frame):
         for thread in threads:

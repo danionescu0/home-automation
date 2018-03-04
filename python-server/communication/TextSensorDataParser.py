@@ -6,7 +6,7 @@ from typeguard import typechecked
 from communication.SensorsParseException import SensorsParseException
 from repository.SensorsRepository import SensorsRepository
 from model.Sensor import Sensor
-
+from model.SensorProperties import SensorProperties
 
 class TextSensorDataParser:
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'
@@ -40,7 +40,10 @@ class TextSensorDataParser:
             location = sensor_components[1]
         value = sensor_components[2]
         for sensor in self.__sensors_repo.get_sensors():
-            if sensor.communication_code[0] == code and sensor.communication_code[1] == location:
+            communication_code = sensor.properties.get(SensorProperties.COMMUNICATOR_CODE)
+            if None is communication_code:
+                continue
+            if communication_code[0] == code and communication_code[1] == location:
                 try:
                     sensor.value = int(value)
                 except ValueError as e:

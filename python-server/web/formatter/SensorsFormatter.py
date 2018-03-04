@@ -28,9 +28,9 @@ class SensorsFormatter:
     def get_all(self):
         return [{
                 'id' : sensor.id,
-                'name': sensor.name if None is not sensor.name else '',
                 'type': sensor.type,
                 'value': sensor.value,
                 'location' : sensor.location,
-                'communication_code' : sensor.communication_code
+                'device_type': sensor.device_type,
+                'properties' : sensor.properties.get_all(),
             } for sensor in self.__sensors_repository.get_sensors()]

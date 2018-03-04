@@ -2,6 +2,7 @@ from typing import List
 
 from repository.RoomsRepository import RoomsRepository
 from model.Sensor import Sensor
+from model.SensorProperties import SensorProperties
 from model.Actuator import Actuator
 
 
@@ -13,11 +14,11 @@ class RoomsFormatter:
         raw_data = self.__rooms_repository.get_rooms()
         formatted = []
         for room in raw_data:
-            if room.sensors == None:
+            if room.sensors is None:
                 sensors = []
             else:
                 sensors = self.__get_formatted_sensors(room.sensors)
-            if room.actuators == None:
+            if room.actuators is None:
                 actuators = []
             else:
                 actuators = self.__get_formatted_actuators(room.actuators)
@@ -55,4 +56,8 @@ class RoomsFormatter:
         return formatted
 
     def __get_formatted_sensor_name(self, sensor: Sensor) -> str:
-        return sensor.name if not None == Sensor.name else '{0} {1}'.format(sensor.type, sensor.location)
+        sensor_name = sensor.properties.get(SensorProperties.NAME)
+        if None is not sensor_name:
+            return sensor_name
+
+        return '{0} {1}'.format(sensor.type, sensor.location)

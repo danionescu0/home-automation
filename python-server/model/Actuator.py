@@ -26,11 +26,6 @@ class Actuator:
         self.device_type = device_type
         self._properties = None
 
-        self._communicator = None
-        self._send_to_device = None
-        self._command = None
-        self._encription = None
-
     @property
     def properties(self) -> ActuatorProperties:
         return self._properties

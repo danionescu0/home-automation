@@ -5,6 +5,7 @@ from typeguard import typechecked
 
 from web.formatter.SensorsFormatter import SensorsFormatter
 from repository.SensorsRepository import SensorsRepository
+from model.SensorProperties import SensorProperties
 from web.handler.CorsHandler import CorsHandler
 from web.security.secure import secure
 
@@ -21,7 +22,7 @@ class SensorHandler(CorsHandler):
         start_date = datetime.today() - timedelta(days=nr_days_behind)
         end_date = datetime.today()
         output = {
-            'name' : self.__sensors_repository.get_sensor(id).name,
+            'name' : self.__sensors_repository.get_sensor(id).properties.get(SensorProperties.NAME),
             'data' : self.__sensors_formatter.get_sensor_values(id, start_date, end_date)
         }
         self.write(json.dumps(output))
