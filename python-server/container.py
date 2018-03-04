@@ -5,6 +5,7 @@ import logging
 
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
+from communication.SensorsPollingThread import SensorsPollingThread
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.WemoSwitch import WemoSwitch
 from communication.ZWaveDevice import ZWaveDevice
@@ -160,6 +161,11 @@ class Container:
     def incomming_zwave_communication_thread(self) -> IncommingZwaveCommunicationThread:
         return IncommingZwaveCommunicationThread(self.sensor_update_event(), self.sensors_repository(),
                                                  self.actuators_repository(), self.zwave_device(), self.root_logger())
+
+    @singleton
+    def sensors_polling_thread(self) -> SensorsPollingThread:
+        return SensorsPollingThread(60, self.sensors_repository(), self.zwave_device(), self.sensor_update_event(),
+                                    self.root_logger())
 
     @singleton
     def jwt_token_factory(self) -> JwtTokenFactory:

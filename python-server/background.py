@@ -42,7 +42,7 @@ def main():
     threads.append(IftttRulesThread(container.ifttt_rules_repository(), container.command_executor(),
                                     container.tokenizer(), root_logger))
     threads.append(HomeDefenceThread(container.home_defence()))
-    threads.append(SensorsPollingThread(60, sensors_repo, container.sensor_update_event(), root_logger))
+    threads.append(container.sensors_polling_thread())
 
     def handler(signum, frame):
         for thread in threads:

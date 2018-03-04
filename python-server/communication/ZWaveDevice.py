@@ -42,8 +42,8 @@ class ZWaveDevice(DeviceLifetimeCycles):
         self.__state_change_callback = callback
 
     @typechecked()
-    def change_switch(self, actuator_name: str, state: bool) -> bool:
-        node, val = self.__get_node(actuator_name, 'switch')
+    def change_switch(self, switch_id: str, state: bool) -> bool:
+        node, val = self.__get_node(switch_id, 'switch')
         try:
             node.set_switch(val, state)
         except Exception as e:
@@ -51,13 +51,21 @@ class ZWaveDevice(DeviceLifetimeCycles):
         return True
 
     @typechecked()
-    def change_dimmer(self, actuator_name: str, state: int) -> bool:
+    def change_dimmer(self, switch_id: str, state: int) -> bool:
         try:
-            node, val = self.__get_node(actuator_name, 'dimmer')
+            node, val = self.__get_node(switch_id, 'dimmer')
             node.set_dimmer(val, state)
         except Exception as e:
             return False
         return True
+
+    @typechecked()
+    def get_sensor_value(self, sensor_id: str):
+        try:
+            node, val = self.__get_node(sensor_id, 'sensor')
+            return node.get_sensor_value(val)
+        except Exception as e:
+            return None
 
     @typechecked()
     def __get_node(self, actuator_name: str, type: str):
@@ -77,6 +85,8 @@ class ZWaveDevice(DeviceLifetimeCycles):
     def __get_device_by_type(self, node, type: str):
         if type == 'switch':
             return node.get_switches()
+        elif type == 'sensor':
+            return node.get_sensors()
         elif type == 'dimmer':
             return node.get_dimmers()
 
@@ -84,10 +94,10 @@ class ZWaveDevice(DeviceLifetimeCycles):
         self.__root_logger.info('Zwave network failed loading')
 
     def __network_ready(self, network):
-        self.__root_logger.info('Zwave network ready, contoller name: {0}'.format(network.controller))
+        self.__root_logger.info('Zwave network ready, contoler name: {0}'.format(network.controller))
 
     def __value_update(self, network, node, value):
-        self.__root_logger.info('Id {0} for value: {1}'.format(value.id_on_network, value.data))
+        self.__root_logger.info('Updating zwave id {0} with new value: {1}'.format(value.id_on_network, value.data))
         if None is self.__state_change_callback:
             return
         self.__state_change_callback(value.id_on_network, value.data)
