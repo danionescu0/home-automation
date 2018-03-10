@@ -5,6 +5,7 @@ import serial
 from typeguard import typechecked
 
 from communication.BaseSerial import BaseSerial
+from communication.exception.SerialDecodeException import SerialDecodeException
 from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 
 
@@ -17,7 +18,6 @@ class Serial(BaseSerial):
         self.__logger = logger
 
     def connect(self):
-        self.__logger.info("connection to:" + self.__serial_communication_cfg.port + ' ' + str(self.__serial_communication_cfg.baud_rate))
         self.__serial = serial.Serial(self.__serial_communication_cfg.port,
                                       self.__serial_communication_cfg.baud_rate,
                                       timeout=0.5)
@@ -39,7 +39,10 @@ class Serial(BaseSerial):
     @typechecked()
     def listen(self, complete_message_callback: Callable[[str], bool],
                    receive_message_callback: Callable[[str], None]):
-        received_data = self.__serial.read().decode('utf-8')
+        try:
+            received_data = self.__serial.read().decode('utf-8')
+        except UnicodeDecodeError as e:
+            raise SerialDecodeException(e)
         if received_data is False or received_data == '':
             return
         self.__logger.info("Senzors data received from serial: {0}".format(received_data))

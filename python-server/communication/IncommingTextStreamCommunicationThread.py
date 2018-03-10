@@ -4,11 +4,12 @@ from logging import RootLogger
 
 from typeguard import typechecked
 
-from communication.TextSensorDataParser import TextSensorDataParser
 from communication.BaseSerial import BaseSerial
-from repository.SensorsRepository import SensorsRepository
+from communication.TextSensorDataParser import TextSensorDataParser
+from communication.exception.SensorsParseException import SensorsParseException
+from communication.exception.SerialDecodeException import SerialDecodeException
 from event.SensorUpdateEvent import SensorUpdateEvent
-from communication.SensorsParseException import SensorsParseException
+from repository.SensorsRepository import SensorsRepository
 
 
 class IncommingTextStreamCommunicationThread(threading.Thread):
@@ -28,8 +29,11 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
     @typechecked()
     def run(self) -> None:
         while not self.shutdown:
-            self.__communicator.listen(self.__text_sensor_data_parser.is_buffer_parsable,
-                                       self.__sensor_callback)
+            try:
+                self.__communicator.listen(self.__text_sensor_data_parser.is_buffer_parsable,
+                                           self.__sensor_callback)
+            except SerialDecodeException as e:
+                self.__logger.error("Could not parse incomming serial buffer" + e)
             time.sleep(self.LISTEN_DELAY)
 
     def __sensor_callback(self, message):

@@ -3,10 +3,11 @@ from typing import List
 
 from typeguard import typechecked
 
-from communication.SensorsParseException import SensorsParseException
-from repository.SensorsRepository import SensorsRepository
+from communication.exception.SensorsParseException import SensorsParseException
 from model.Sensor import Sensor
 from model.SensorProperties import SensorProperties
+from repository.SensorsRepository import SensorsRepository
+
 
 class TextSensorDataParser:
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'

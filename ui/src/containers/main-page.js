@@ -24,7 +24,7 @@ class MainPage extends Component {
   }
 
   actuatorHandler(id, value) {
-       var postData = {
+       let postData = {
             'id' : id,
             'value': value
         };

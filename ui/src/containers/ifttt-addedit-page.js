@@ -55,11 +55,11 @@ class IftttAddeditPage extends Component {
     }
 
     handleChange(field, event) {
-        var value = event.target.value;
+        let value = event.target.value;
         if (['true', 'false'].indexOf(value) != -1) {
             value = {'true': true, 'false': false}[value];
         }
-        var rule = {...this.state.rule};
+        let rule = {...this.state.rule};
         rule[field] = value;
         this.setState({rule});
     }
@@ -67,8 +67,8 @@ class IftttAddeditPage extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const ruleId = this.props.match.params.id;
-        var method = this.state.edit ? 'POST' : 'PUT';
-        var url = this.state.edit ? `/api/ifttt/${ruleId}` : '/api/ifttt';
+        const method = this.state.edit ? 'POST' : 'PUT';
+        const url = this.state.edit ? `/api/ifttt/${ruleId}` : '/api/ifttt';
         postJson(url, this.state.rule, method)
             .then(() => {
                 this.submitSuccess();
