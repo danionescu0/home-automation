@@ -75,7 +75,184 @@ python /home-automation_path/python-server/webserver.py
 
 1) config/general.py : you'll find comments inside the file
 2) in the UI settings/actuators to define actuators configuration
-3) in the UI settings/actuators to define sensors configuration
+
+*Add a zwave node example:*
+
+* "id" -> can be any unique id
+* "device_type" -> must be "zwave"
+* "any name" -> it will be used in the UI
+* "value" -> it's current value, it can be true/false for a switch, it will be updated automatically
+* "type" -> can be "switch" or "dimmer"
+* "properties" will contain "send_to_device": "the_zwave_node_id"
+   and for "dimmer" it will contain  "max_value": a value between 0 and 255
+* "room" -> room name
+
+Switch:
+````
+    {
+        "id": "whatever_id",
+        "device_type": "zwave",
+        "value": false,
+        "name": "Power socket (Fibaro ZWAVE)",
+        "type": "switch",
+        "properties": {
+            "send_to_device": "0184f904.7.25.1.0"
+        },
+        "room": "living"
+    },
+````
+Dimmer:
+````
+    {
+        "id": "fibaroWhite",
+        "device_type": "zwave",
+        "value": 0,
+        "name": "White color",
+        "type": "dimmer",
+        "properties": {
+            "max_value": 150,
+            "send_to_device": "0184f904.3.26.6.0"
+        },
+        "room": "living"
+    }
+````
+
+*Add a serial device example:*
+
+The serial device sends data over the serial line, where it will be sent by a HC-12 serial communication device,
+and will be interpretted by an arduino and perform some commands:
+
+* id, value, room are the same as for zwave switches
+* "device_type" -> must be "serial"
+* "type" -> can be "switch"
+* "name" -> it will be used in the UI
+* "properties" will contain:
+    - "communicator" -> "serial"
+    - "send_to_device" -> the device code (it will be picked up by the arduino with the corresponding code)
+    - "command" -> a dictinoary with commands to be send for the true/false states of the switch
+    the states will be interpretted by the arduino and perform the corresponding commands
+    - "encription" : will be "aes"
+
+````
+    {
+        "id": "some_unique_id",
+        "device_type": "serial",
+        "value": false,
+        "name": "Main light",
+        "type": "switch",
+        "properties": {
+            "communicator": "serial",
+            "send_to_device": "L1",
+            "command": {
+                "true": "3O|",
+                "false": "3C|"
+            },
+            "encription": "aes"
+        },
+        "room": "holway"
+    }
+````
+
+*Add a bluetooth device example:*
+
+Is the same as for serial with the following differences:
+
+* "device_type" -> must be "bluetooth"
+* does not have "encription" inside "properties"
+
+*Add a multiple actuator trigger swith:*
+
+It sets all actuators in a list with a value:
+
+Obs: All the actuators must be the same type (switches, pushbuttons)
+
+* "id" -> can be any unique id
+* "device_type" -> must be "group"
+* "value" -> it's current value
+* "type" -> can be "switch"
+* "properties" will contain:
+    - "actuators" -> with a list of actuator names that will be triggered
+    - "future_state" -> each actuator in the list will be set with this value
+
+* "room" -> room name
+
+````
+    {
+        "id": "some_id",
+        "device_type": "group",
+        "value": true,
+        "name": "Close all lights",
+        "type": "pushbutton",
+        "properties": {
+            "actuators": [
+                "livingLight",
+                "balconyLight"
+            ],
+            "future_state": false
+        },
+        "room": "general"
+    },
+````
+
+3) in the UI settings/sensors to define sensors configuration
+
+
+*Adding a Zwave sensor example:*
+
+
+* "id" -> the Zwave node id
+* "location" -> the room name 
+* "value" -> it's current value
+* "device_type" -> must be "zwave"
+* "type" -> can be "humidity", "temperature", "airPressure", "light", "voltage", "rain", "presence", "airPollution",
+    "fingerprint", "phoneIsHome", "flood", "power". Currently it's used in the UI 
+* "properties" contains:
+    - "name" -> A optional name for the actuator (for UI)
+    - "polling" -> If the actuator needs to be polled for values (it doesn't emit events) specify the polling interval
+* "room" -> room name
+
+````
+    {
+        "id": "0184f904.4.31.1.3",
+        "location": "bedroom",
+        "value": 0,
+        "device_type": "zwave",
+        "type": "light",
+        "properties": {
+            "name": "Light (bedroom)"
+            "polling: 60
+        }
+    }
+````
+
+*Adding a serial/bleutooth sensor example*
+
+* id, location, value, type, name are the same as for the zwave sensor
+* "device_type" must be "serial"
+* "properties" contains:
+    - "name" -> A optional name for the actuator (for UI)
+    - "communication_code" -> it contains a list with the first element is sensor type abbreviation "T", "H" etc
+    and the second element is it's code (number) 
+    The incomming communication from the arduino through serial or bluetooth will look like "T1:30|" which means
+    Temperature for sensor "1" is 30 degreeds
+
+````
+    {
+        "id": "some unique id",
+        "location": "holway",
+        "value": 0,
+        "device_type": "serial",
+        "type": "presence",
+        "properties": {
+            "communication_code": [
+                "P",
+                false
+            ],
+            "name": "Presence (holway)"
+        }
+    },
+````
+ 
 4) in the UI settings/configuration you can difine the following:
 - serial communication config: port, baud rate; these are used to communicate over serial with the attached HC-12 
 wireless serial device, on the other end there will be arduino boards listening and interpretting commands or transmitting
