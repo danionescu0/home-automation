@@ -10,6 +10,7 @@ from model.configuration.EmailCfg import EmailCfg
 from model.configuration.HomeDefenceCfg import HomeDefenceCfg
 from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
+from model.configuration.GeneralCfg import GeneralCfg
 
 
 class ConfigurationRepository(AbstractRepository):
@@ -22,11 +23,12 @@ class ConfigurationRepository(AbstractRepository):
     @typechecked()
     def get_config(self, name: str):
         config = self.__get()
-
-        return config[name] if name in config else None
+        print(self.__get_default_configurations()[name])
+        return config[name] if name in config else self.__get_default_configurations()[name]
 
     @typechecked()
     def get_all(self) -> Dict[str, BaseConfig]:
+        print({**self.__get_default_configurations(), **self.__get()})
         return {**self.__get_default_configurations(), **self.__get()}
 
     @typechecked()
@@ -49,4 +51,5 @@ class ConfigurationRepository(AbstractRepository):
             HomeDefenceCfg.get_classname() : HomeDefenceCfg(0, [], 0, ''),
             SerialCommunicationCfg.get_classname() : SerialCommunicationCfg('', 0),
             ZwaveCommunicationCfg.get_classname() : ZwaveCommunicationCfg('', ''),
+            GeneralCfg.get_classname() : GeneralCfg((0.0, 0.0), ''),
         }

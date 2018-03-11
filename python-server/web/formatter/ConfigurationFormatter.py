@@ -23,13 +23,16 @@ class ConfigurationFormatter:
             }
             formatted.append(attributes)
 
-
         return formatted
 
     def __get_formatted_properties(self, config: object):
         formatted = {}
         for name, value in vars(config).items():
             if isinstance(value, dict) or isinstance(value, list):
+                formatted.update({name: json.dumps(value)})
+            elif isinstance(value, tuple):
+                formatted.update({name: '({0}, {1})'.format(value[0], value[1])})
+            elif isinstance(value, str):
                 formatted.update({name: json.dumps(value)})
             else:
                 formatted.update({name: value})

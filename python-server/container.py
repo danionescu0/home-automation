@@ -66,6 +66,7 @@ from model.configuration.EmailCfg import EmailCfg
 from model.configuration.HomeDefenceCfg import HomeDefenceCfg
 from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
+from model.configuration.GeneralCfg import GeneralCfg
 
 
 def singleton(function: Callable):
@@ -169,7 +170,7 @@ class Container:
 
     @singleton
     def jwt_token_factory(self) -> JwtTokenFactory:
-        return JwtTokenFactory(general.web_server['api_token_secret'])
+        return JwtTokenFactory(general.web_server['api_token_secret'], general.web_server['token_validity_days'])
 
     @singleton
     def email_notificator(self) -> EmailNotifier:
@@ -179,7 +180,7 @@ class Container:
 
     @singleton
     def aes_encriptor(self) -> AesEncriptor:
-        return AesEncriptor(general.communication['aes_key'])
+        return AesEncriptor(self.configuration_repository().get_config(GeneralCfg.get_classname()).aes_key)
 
     @singleton
     def zwave_device(self) -> ZWaveDevice:
@@ -261,8 +262,9 @@ class Container:
 
     @singleton
     def set_phone_is_home_listener(self) -> SetPhoneIsHomeListener:
-        return SetPhoneIsHomeListener(general.home_coordonates, self.sensors_repository(),
-                                      self.location_tracker_repository())
+        return SetPhoneIsHomeListener(self.configuration_repository()
+                                      .get_config(GeneralCfg.get_classname()).home_coordonates,
+                                      self.sensors_repository(), self.location_tracker_repository())
 
     @singleton
     def change_actuator_request_event(self) -> ChangeActuatorRequestEvent:

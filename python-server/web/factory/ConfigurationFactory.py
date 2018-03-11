@@ -1,5 +1,6 @@
 import json
 from typing import Dict
+from ast import literal_eval
 
 from typeguard import typechecked
 
@@ -9,6 +10,7 @@ from model.configuration.EmailCfg import EmailCfg
 from model.configuration.HomeDefenceCfg import HomeDefenceCfg
 from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
+from model.configuration.GeneralCfg import GeneralCfg
 
 class ConfigurationFactory:
     @typechecked()
@@ -16,14 +18,14 @@ class ConfigurationFactory:
         decoded = json.loads(data)
         configuration = {}
         for object_properties in decoded:
-            configurationClass = globals()[object_properties['name']]
+            configuration_class = globals()[object_properties['name']]
             enabled = object_properties['properties']['_enabled']
             object_properties['properties'].pop('_enabled')
-            configurationInstance = configurationClass(
+            configuration_instance = configuration_class(
                 **self.__get_processed_properties(object_properties['properties'])
             )
-            configurationInstance.enabled = enabled
-            configuration[object_properties['name']] = configurationInstance
+            configuration_instance.enabled = enabled
+            configuration[object_properties['name']] = configuration_instance
 
         return configuration
 
@@ -31,9 +33,7 @@ class ConfigurationFactory:
         formatted = {}
         for name, value in properties.items():
             try:
-                formatted.update({name: json.loads(value)})
+                formatted.update({name: literal_eval(value)})
             except Exception as e:
-                print(value, e)
                 formatted.update({name: value})
-
         return formatted

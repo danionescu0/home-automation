@@ -1,7 +1,11 @@
+# These settings require that you start / stop the UI and the background service
+################################################################################
+
 web_server = {
-    'static_path' : '', # absolute path to static folder ex /home/pi/home-automation/python-server/public
+    'static_path' : '/path/to/static/files', # absolute path to static folder ex /home/pi/home-automation/python-server/public
     'application_port' : 8080,
-    'api_token_secret': '' # used for secure jwt token generation
+    'api_token_secret': 'some_secret_here', # used for secure jwt token generation
+    'token_validity_days' : 7 # keeps user authenticated in ui the specified days number
 }
 
 redis_config = {
@@ -10,15 +14,14 @@ redis_config = {
     'db': 0
 }
 
-timezone = 'Europe/Bucharest'
-
 logging = {
     'log_file': 'log.txt',
     'log_entries': 20000000
 }
 
-#home gps coordonates, used for determining if the user is near home or not
-home_coordonates = (22.4169649, 35.1542889) # replace this with your own
+#the settings below will be moved as the ui (/settings/configuration)
+
+timezone = 'Europe/Bucharest'
 
 remote_speaker = {
     'host': 'http://ip',
@@ -26,7 +29,7 @@ remote_speaker = {
     'password' : 'test_pass'
 }
 
-# credentials for logging into the webapp
+# credentials for logging into the UI
 credentials = [
     {
         'username' : '', # your username for web interface
@@ -34,7 +37,3 @@ credentials = [
         'fingerprint_code' : '' # your fingerprint code or False if none
     }
 ]
-
-communication = {
-    'aes_key' : '' # 16 characters key
-}
