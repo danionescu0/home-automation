@@ -22,6 +22,7 @@ class IftttFormatter:
                 'actuator_id': rule_command.actuator_id,
                 'actuator_state': rule_command.actuator_state,
                 'voice_text': rule_command.voice_text,
+                'email_text': rule_command.email_text
             }
             formatted.append(formatted_rule)
 

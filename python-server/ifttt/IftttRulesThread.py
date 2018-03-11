@@ -47,7 +47,7 @@ class IftttRulesThread(threading.Thread):
         try:
             expression_builder.build()
         except Exception as e:
-            self.__logging.debug('Error building rule: {0}'.format(e.message))
+            self.__logging.error('Error building rule: {0}'.format(e.message))
             return False
         statement = expression_builder.get_expression()
         statement.interpret(context)

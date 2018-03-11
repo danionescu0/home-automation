@@ -281,7 +281,7 @@ class Container:
     @singleton
     def command_executor(self) -> CommandExecutor:
         return CommandExecutor(self.change_actuator_request_event(), self.text_communication_enhancer(),
-                               self.sound_api(), self.root_logger())
+                               self.sound_api(), self.email_notificator(), self.root_logger())
 
     @singleton
     def expression_validator(self) -> ExpressionValidator:

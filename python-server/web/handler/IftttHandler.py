@@ -16,13 +16,13 @@ class IftttHandler(CorsHandler):
 
     @secure
     def post(self, id):
-        request_data = json.loads(self.request.body.decode("utf-8"))
-        rule = self.__rule_factory.from_request_data(request_data)
-        self.__ifttt_rules_repository.upsert(rule)
-        self.set_status(200)
+        self.__create_new_rule()
 
     @secure
     def put(self):
+        self.__create_new_rule()
+
+    def __create_new_rule(self):
         request_data = json.loads(self.request.body.decode("utf-8"))
         rule = self.__rule_factory.from_request_data(request_data)
         self.__ifttt_rules_repository.upsert(rule)

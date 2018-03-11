@@ -13,10 +13,10 @@ class RuleFactory:
         if 'name' not in data or 'text' not in data or 'active' not in data:
             raise Exception('Request data must contain id, name, text and active keys')
         if 'id' not in data:
-            id = str(time.time())
+            rule_id = str(time.time())
         else:
-            id = data['id']
-        rule = Rule(id, data['name'], data['text'], data['active'])
+            rule_id = data['id']
+        rule = Rule(rule_id, data['name'], data['text'], data['active'])
         rule.add_commands(self.__get_rule_commands(data))
 
         return rule
@@ -24,7 +24,10 @@ class RuleFactory:
     @typechecked()
     def __get_rule_commands(self, data: dict) -> List[RuleCommand]:
         commands = []
-        rule_command = RuleCommand(data['actuator_id'], data['actuator_state'], data['voice_text'])
+        email_text = None
+        if 'email_text' in data:
+            email_text = data['email_text']
+        rule_command = RuleCommand(data['actuator_id'], data['actuator_state'], data['voice_text'], email_text)
         commands.append(rule_command)
 
         return commands

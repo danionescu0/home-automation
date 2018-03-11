@@ -90,6 +90,18 @@ const IftttAddedit = ({rule, actuators, handleChange, handleSubmit}) => {
                   </FormGroup>
                   <FormGroup row>
                     <Col md="3">
+                      <Label htmlFor="text-input">Email notification</Label>
+                    </Col>
+                    <Col xs="12" md="9">
+                      <Input type="text" id="text-input" name="text-input" placeholder="Email notification"
+                            value={rule.email_text} onChange={handleChange.bind(this, 'email_text')}  />
+                      <FormText color="muted">
+                          Some text, sensors and actuators placeholders are permitted, ex: S[humidity_outside], A[door]
+                      </FormText>
+                    </Col>
+                  </FormGroup>
+                  <FormGroup row>
+                    <Col md="3">
                       <Label>Is rule active</Label>
                     </Col>
                     <Col md="9">

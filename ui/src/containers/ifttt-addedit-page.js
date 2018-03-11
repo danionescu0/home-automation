@@ -20,7 +20,8 @@ class IftttAddeditPage extends Component {
                   'active': true,
                   'actuator_state': '',
                   'actuator_id': '',
-                  'voice_text': ''
+                  'voice_text': '',
+                  'email_text': ''
               }
           };
     }
@@ -47,7 +48,7 @@ class IftttAddeditPage extends Component {
     loadRuleData(ruleId) {
         getJson(`/api/ifttt-list`).then(data => {
             data.map((rule, index) => {
-                if (rule.id == ruleId) {
+                if (rule.id === ruleId) {
                     this.setState({rule: rule});
                 }
             });

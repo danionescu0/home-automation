@@ -27,7 +27,8 @@ class IftttRulesRepository(AbstractRepository):
             'rule_commands': [
                 {'actuator_id' : command.actuator_id,
                  'actuator_state': command.actuator_state,
-                 'voice_text': command.voice_text}
+                 'voice_text': command.voice_text,
+                 'email_text' : command.email_text}
                 for command in rule.rule_commands]
         }
 
@@ -46,8 +47,12 @@ class IftttRulesRepository(AbstractRepository):
             return {}
         rules = {}
         for id, rule_data in rules_data.items():
-            commands = [RuleCommand(data['actuator_id'], data['actuator_state'], data['voice_text'])
-                        for data in rule_data['rule_commands']]
+            commands = []
+            for data in rule_data['rule_commands']:
+                email_text = None
+                if 'email_text' in data:
+                    email_text = data['email_text']
+                commands.append(RuleCommand(data['actuator_id'], data['actuator_state'], data['voice_text'], email_text))
             rule = Rule(rule_data['id'], rule_data['name'], rule_data['text'], rule_data['active'])
             rule.add_commands(commands)
             rules[id] = rule
