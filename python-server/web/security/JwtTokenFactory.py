@@ -18,4 +18,4 @@ class JwtTokenFactory:
             'exp': datetime.utcnow() + timedelta(days=self.__token_validity_days)
         }
 
-        return jwt.encode(payload, self.__secret, algorithm='HS256')
+        return jwt.encode(payload, self.__secret, algorithm='HS256').decode("utf-8")
