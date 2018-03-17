@@ -1,3 +1,4 @@
+import collections
 from typing import List
 
 from typeguard import typechecked
@@ -20,15 +21,22 @@ class RoomsRepository:
         rooms = []
         sensors_by_room = self.__group_sensors()
         actuators_by_room = self.__group_actuators()
-        room_names = set(list(sensors_by_room.keys()) + list(actuators_by_room.keys()))
-        room_names.add(Room.MOST_FREQUENTLY_USED_ROOM)
+        room_names = self.__get_room_names(sensors_by_room, actuators_by_room)
+
         for room_name in room_names:
             sensors = sensors_by_room[room_name] if room_name in sensors_by_room else []
             actuators = actuators_by_room[room_name] if room_name in actuators_by_room else []
-
             rooms.append(Room(room_name, room_name, sensors, actuators))
 
         return rooms
+
+    def __get_room_names(self, sensors_by_room, actuators_by_room):
+        room_names = collections.OrderedDict.fromkeys(
+            [Room.MOST_FREQUENTLY_USED_ROOM] + list(sensors_by_room.keys()) + list(actuators_by_room.keys())
+        )
+
+        return [key for key, value in room_names.items()]
+
 
     def __group_actuators(self):
         actuators = self.__actuators_repository.get_actuators()
