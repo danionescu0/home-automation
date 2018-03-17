@@ -85,6 +85,7 @@ python /home-automation_path/python-server/webserver.py
 * "type" -> can be "switch" or "dimmer"
 * "properties" will contain "send_to_device": "the_zwave_node_id"
    and for "dimmer" it will contain  "max_value": a value between 0 and 255
+   - if it conatins "shortcut" : true then it will be shown in the UI in the most frequently used
 * "room" -> room name
 
 Switch:
@@ -97,6 +98,7 @@ Switch:
         "type": "switch",
         "properties": {
             "send_to_device": "0184f904.7.25.1.0"
+            "shortcut": true
         },
         "room": "living"
     },
@@ -130,6 +132,7 @@ and will be interpretted by an arduino and perform some commands:
     - "communicator" -> "serial"
     - "send_to_device" -> the device code (it will be picked up by the arduino with the corresponding code)
     - "command" -> a dictinoary with commands to be send for the true/false states of the switch
+    - if it conatins "shortcut" : true then it will be shown in the UI in the most frequently used
     the states will be interpretted by the arduino and perform the corresponding commands
     - "encription" : will be "aes"
 

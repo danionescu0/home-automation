@@ -12,6 +12,7 @@ from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
 from model.configuration.GeneralCfg import GeneralCfg
 
+
 class ConfigurationFactory:
     @typechecked()
     def from_request_data(self, data: str) -> Dict[str, BaseConfig]:
@@ -36,4 +37,5 @@ class ConfigurationFactory:
                 formatted.update({name: literal_eval(value)})
             except Exception as e:
                 formatted.update({name: value})
+
         return formatted

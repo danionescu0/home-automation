@@ -9,3 +9,4 @@ class ActuatorProperties(BaseDeviceProperties):
     MAX_VALUE = 'max_value'
     GROUP_ACTUATORS = 'actuators'
     GROUP_FUTURE_STATE = 'future_state'
+    SHORTCUT = 'shortcut'

@@ -2,6 +2,8 @@ from typeguard import typechecked
 
 
 class Room:
+    MOST_FREQUENTLY_USED_ROOM = 'Shortcut'
+
     @typechecked()
     def __init__(self, id: str, name: str, sensors, actuators) -> None:
         self.id = id
