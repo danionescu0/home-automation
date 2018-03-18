@@ -212,6 +212,8 @@ Obs: All the actuators must be the same type (switches, pushbuttons)
 * "properties" contains:
     - "name" -> A optional name for the actuator (for UI)
     - "polling" -> If the actuator needs to be polled for values (it doesn't emit events) specify the polling interval
+    - if it conatins "shortcut" : true then it will be shown in the UI in the most frequently used (first room name Shortcut)
+
 * "room" -> room name
 
 ````
@@ -224,6 +226,7 @@ Obs: All the actuators must be the same type (switches, pushbuttons)
         "properties": {
             "name": "Light (bedroom)"
             "polling: 60
+            "shortcut" : true
         }
     }
 ````
@@ -235,9 +238,10 @@ Obs: All the actuators must be the same type (switches, pushbuttons)
 * "properties" contains:
     - "name" -> A optional name for the actuator (for UI)
     - "communication_code" -> it contains a list with the first element is sensor type abbreviation "T", "H" etc
-    and the second element is it's code (number) 
+    and the second element is it's code (number)     
     The incomming communication from the arduino through serial or bluetooth will look like "T1:30|" which means
     Temperature for sensor "1" is 30 degreeds
+    - if it conatins "shortcut" : true then it will be shown in the UI in the most frequently used (first room name Shortcut)
 
 ````
     {

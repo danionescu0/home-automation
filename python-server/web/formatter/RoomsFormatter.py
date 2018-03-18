@@ -4,6 +4,8 @@ from repository.RoomsRepository import RoomsRepository
 from model.Sensor import Sensor
 from model.SensorProperties import SensorProperties
 from model.Actuator import Actuator
+from model.Room import Room
+from model.ActuatorProperties import ActuatorProperties
 
 
 class RoomsFormatter:
@@ -21,27 +23,36 @@ class RoomsFormatter:
             if room.actuators is None:
                 actuators = []
             else:
-                actuators = self.__get_formatted_actuators(room.actuators)
+                actuators = self.__get_formatted_actuators(room, room.actuators)
             formatted.append({
                 'id' : room.id,
-                'name' : room.name[0].upper() + room.name[1:],
+                'name' : self.__get_room_name(room.name),
                 'actuators' : actuators,
                 'sensors' : sensors
             })
 
         return formatted
 
-    def __get_formatted_actuators(self, actuators: List[Actuator]) -> list :
+    def __get_room_name(self, unformatted_name):
+        return unformatted_name[0].upper() + unformatted_name[1:]
+
+    def __get_formatted_actuators(self, room: Room, actuators: List[Actuator]) -> list :
         formatted = []
         for actuator in actuators:
             formatted.append({
                 'type' : actuator.type,
                 'id' : actuator.id,
-                'name' : actuator.name,
+                'name' : self.__get_actuator_name(room, actuator),
                 'value' : actuator.value
             })
 
         return formatted
+
+    def __get_actuator_name(self, room: Room, actuator: Actuator):
+        if None is not actuator.properties.get(ActuatorProperties.SHORTCUT):
+            return '[{0}] {1}'.format(self.__get_room_name(actuator.room), actuator.name)
+
+        return actuator.name
 
     def __get_formatted_sensors(self, sensors: List[Sensor]) -> list:
         formatted = []

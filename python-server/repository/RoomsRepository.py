@@ -7,6 +7,7 @@ from repository.SensorsRepository import SensorsRepository
 from repository.ActuatorsRepository import ActuatorsRepository
 from model.Room import Room
 from model.ActuatorProperties import ActuatorProperties
+from model.SensorProperties import SensorProperties
 
 
 class RoomsRepository:
@@ -37,7 +38,6 @@ class RoomsRepository:
 
         return [key for key, value in room_names.items()]
 
-
     def __group_actuators(self):
         actuators = self.__actuators_repository.get_actuators()
         grouped_actuators = {}
@@ -62,6 +62,10 @@ class RoomsRepository:
             group_key = sensor.location
             if not group_key in grouped_sensors:
                 grouped_sensors[group_key] = []
+            if not Room.MOST_FREQUENTLY_USED_ROOM in grouped_sensors:
+                grouped_sensors[Room.MOST_FREQUENTLY_USED_ROOM] = []
             grouped_sensors[group_key].append(sensor)
+            if None is not sensor.properties.get(SensorProperties.SHORTCUT):
+                grouped_sensors[Room.MOST_FREQUENTLY_USED_ROOM].append(sensor)
 
         return grouped_sensors
