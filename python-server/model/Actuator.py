@@ -13,7 +13,6 @@ class Actuator:
     class DeviceType(Enum):
         SERIAL = 'serial'
         GROUP = 'group'
-        WEMO = 'wemo'
         ZWAVE = 'zwave'
         ACTION = 'action'
 

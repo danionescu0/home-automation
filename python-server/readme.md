@@ -3,7 +3,7 @@
 
   A: It integrates well with raspberry pi and other development boards, 
   easy to code. Also a lot of low level libraries are already written in python like 
-  ZWave, WeMo etc etc :) 
+  ZWave, bluetooth, serial etc etc :) 
 
 * Q: Why python 3.5 with type hinting?
 
@@ -19,7 +19,7 @@
   
   A: There is no best way. I've started with simple 433 MHZ receivers/transmitters 
   , migrated to bluetooth, then to HC-12 serial module and finally IOT devices like ZWave 
-   Wemo and others.
+   and others.
    
    Bluetooth has the limitation of 7 devices connected simoultaneous, 433Mhz receivers
     are easily clonned, IOT devices can be expensive.  

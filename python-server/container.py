@@ -7,14 +7,12 @@ from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
 from communication.SensorsPollingThread import SensorsPollingThread
 from communication.TextSensorDataParser import TextSensorDataParser
-from communication.WemoSwitch import WemoSwitch
 from communication.ZWaveDevice import ZWaveDevice
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 from communication.actuator.strategies.GroupStrategy import GroupStrategy
 from communication.actuator.strategies.SerialSendStrategy import SerialSendStrategy
-from communication.actuator.strategies.WemoSwitchStrategy import WemoSwitchStrategy
 from communication.actuator.strategies.ZWaveStrategy import ZWaveStrategy
 from communication.encriptors.AesEncriptor import AesEncriptor
 from communication.Serial import Serial
@@ -88,10 +86,6 @@ class Container:
         sys.excepthook = logging_config.set_error_hadler
 
         return logging_config.get_logger(logging.INFO)
-
-    @singleton
-    def wemo_switch(self) -> WemoSwitch:
-        return WemoSwitch(self.root_logger())
 
     def serial(self) -> Serial:
         return Serial(self.configuration_repository().get_config(SerialCommunicationCfg.get_classname()),
@@ -195,7 +189,6 @@ class Container:
     def actuator_strategies(self) -> ActuatorStrategies:
         actuator_strategies = ActuatorStrategies()
         actuator_strategies.add_strategy(SerialSendStrategy(self.device_lifetime_manager(), self.aes_encriptor()))
-        actuator_strategies.add_strategy(WemoSwitchStrategy(self.wemo_switch()))
         actuator_strategies.add_strategy(GroupStrategy(self.async_actuator_commands(), self.root_logger()))
         actuator_strategies.add_strategy(ZWaveStrategy(self.zwave_device()))
 

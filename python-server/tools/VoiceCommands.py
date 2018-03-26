@@ -22,7 +22,7 @@ class VoiceCommands:
         self.__engine = IntentDeterminationEngine()
         actions = ['on', 'off']
         self.__register_entity(actions, self.ACTIONS)
-        locations = ['living', 'kitchen', 'hollway', 'wemo']
+        locations = ['living', 'kitchen', 'hollway']
         self.__register_entity(locations, self.NAME)
         actuator_types = ['light', 'switch', 'courtains', 'door']
         self.__register_entity(actuator_types, self.ACTUATOR_TYPE)
@@ -37,7 +37,6 @@ class VoiceCommands:
             {'entities' : {'name' : 'living', 'type' : 'light'}, 'actuator' : 'livingLight'},
             {'entities' : {'name' : 'living', 'type' : 'courtains'}, 'actuator' : 'livingCourtains'},
             {'entities' : {'name' : 'hollway', 'type' : 'light'}, 'actuator' : 'holwayLight'},
-            {'entities' : {'name' : 'wemo', 'type' : 'switch'}, 'actuator' : 'wemoSwitch1'},
         ]
 
         return self
