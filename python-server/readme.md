@@ -3,7 +3,7 @@
 
   A: It integrates well with raspberry pi and other development boards, 
   easy to code. Also a lot of low level libraries are already written in python like 
-  ZWave, bluetooth, serial etc etc :) 
+  ZWave, bluetooth, serial etc etc 
 
 * Q: Why python 3.5 with type hinting?
 
@@ -22,9 +22,7 @@
    and others.
    
    Bluetooth has the limitation of 7 devices connected simoultaneous, 433Mhz receivers
-    are easily clonned, IOT devices can be expensive.  
-   
-  I've tried to abstract the communication part so any device and now be integrated. 
+    are easily clonned
 
 * Q: Why using redis of all the databases out there?
 
@@ -32,6 +30,7 @@
   the ordered sets (check this [link](https://redis.io/topics/data-types)) and the [pub-sub](https://redis.io/topics/pubsub) 
   to communicate from the web interface to the separate process that controlls 
   all the things. 
+  
   Also redis is very easy to install and configure, just apt-get and it's ready to go.
 
 # Requirements
@@ -39,36 +38,70 @@
 * redis server running
 * bluetooth configured
 
+
 # Install: 
-## virtual environment
+## clone the project and set up the virtual environment
 ````
+cd
+git clone https://github.com/danionescu0/home-automation.git
 virtualenv -p /path/to/python3/executable home
 source ./home/bin/activate
-pip install -r /home-automation_path/python-server/requirements.txt
+pip install -r /home/pi/home-automation/python-server/requirements.txt
 cd /home-automation_path/python-server/
 pip install -e git+https://github.com/mycroftai/adapt#egg=adapt-parser
 ````
 
 ## other 
-* clone open-zwave repository and modify config/general.py to point to the config path
+* clone open-zwave repository and change in the UI in settings/zwave the config path
 ````
 git clone https://github.com/OpenZWave/open-zwave.git
 ````
 
+* copy systemctl resources and enable them
+ 
+````
+sudo cp home-automation/python-server/systemctl/* /etc/systemd/system/
 
+sudo systemctl enable homeauto-background.service
+sudo systemctl enable homeauto-web.service
+
+````
+
+* check service status [optional]
+````
+sudo systemctl enable homeauto-background.service
+sudo systemctl enable homeauto-web.service
+````
+
+* debugging (this will show logs)
+````
+sudo journalctl  -u homeauto-background.service -b
+
+sudo journalctl  -u homeauto-web.service -b
+````
+
+If no errors are present the service should auto start on reboot, they can also be manually started or stopped ex:
+
+Warning: systemctl should taken into account redis database being available and bluetooth, you may need to manually start
+the services after reboot.
+
+````
+sudo systemctl start homeauto-background.service
+sudo systemctl stop homeauto-background.service
+````
 
 # Running the servers
 * Start Background process:
 ````
 virtualenv -p /path/to/python3/executable home
 source ./home/bin/activate
-python /home-automation_path/python-server/background.py
+python /home-automation/python-server/background.py
 ````
 * Start webserver process: 
 ````
 virtualenv -p /path/to/python3/executable home
 source ./home/bin/activate
-python /home-automation_path/python-server/webserver.py
+python /home-automation/python-server/webserver.py
 ````
 
 # Configuration 
@@ -261,6 +294,7 @@ Obs: All the actuators must be the same type (switches, pushbuttons)
 ````
  
 4) in the UI settings/configuration you can difine the following:
+
 - serial communication config: port, baud rate; these are used to communicate over serial with the attached HC-12 
 wireless serial device, on the other end there will be arduino boards listening and interpretting commands or transmitting
 sensors data. This can be deactivated if you don't use custom arduino devices with HC-12

@@ -1,0 +1,10 @@
+[Unit]
+Description=Starts home automation background service
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/home/bin/python "/home/pi/home-automation/python-server/background.py"
+
+[Install]
+WantedBy=multi-user.target
