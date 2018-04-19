@@ -1,7 +1,6 @@
 import signal
 
 from communication.IncommingTextStreamCommunicationThread import IncommingTextStreamCommunicationThread
-from communication.SensorsPollingThread import SensorsPollingThread
 from container import Container
 from ifttt.IftttRulesThread import IftttRulesThread
 from tools.AsyncJobsThread import AsyncJobsThread
@@ -13,9 +12,8 @@ async_actuator_commands = container.async_actuator_commands()
 sensors_repo = container.sensors_repository()
 
 
-change_actuator_listener = container.change_actuator_listener()
-fingerprint_door_unlock_listener = container.fingerprint_door_unlock_listener()
-intruder_alert_listener = container.intruder_alert_listener()
+listener_configurator = container.listener_configurator()
+listener_configurator.initialise()
 async_actuator_commands.connect()
 
 

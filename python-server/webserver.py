@@ -25,8 +25,8 @@ async_actuator_commands = container.async_actuator_commands()
 root_logger = container.root_logger()
 
 
-save_location_listener = container.save_location_listener()
-set_phone_is_home_listener = container.set_phone_is_home_listener()
+listener_configurator = container.listener_configurator()
+listener_configurator.initialise()
 async_actuator_commands.connect()
 
 

@@ -6,19 +6,22 @@ from tools.EmailNotifier import EmailNotifier
 from event.SensorUpdateEvent import SensorUpdateEvent
 from model.Sensor import Sensor
 from locking.HomeAlarmLock import HomeAlarmLock
+from listener.BaseListener import BaseListener
 
 
-class IntruderAlertListener:
+class IntruderAlertListener(BaseListener):
     @typechecked()
     def __init__(self, actuators_repo: ActuatorsRepository, email_notificator: EmailNotifier,
                  home_alarm_lock: HomeAlarmLock):
         self.__actuators_repo = actuators_repo
         self.__email_notificator = email_notificator
         self.__home_alarm_lock = home_alarm_lock
-        signal("sensor_update").connect(self.callback)
+
+    def connect(self):
+        signal("sensor_update").connect(self.listen)
 
     @typechecked()
-    def callback(self, sensor_update: SensorUpdateEvent) -> None:
+    def listen(self, sensor_update: SensorUpdateEvent) -> None:
         if False == self.__should_send_alert(sensor_update):
             return
         self.__email_notificator.send_alert("Alert", "Somebody entered the house")

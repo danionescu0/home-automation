@@ -35,6 +35,7 @@ from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
 from listener.SaveLocationListener import SaveLocationListener
 from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
+from listener.ListenerConfigurator import ListenerConfigurator
 from locking.HomeAlarmLock import HomeAlarmLock
 from locking.TimedLock import TimedLock
 from repository.ActuatorsRepository import ActuatorsRepository
@@ -258,6 +259,17 @@ class Container:
         return SetPhoneIsHomeListener(self.configuration_repository()
                                       .get_config(GeneralCfg.get_classname()).home_coordonates,
                                       self.sensors_repository(), self.location_tracker_repository())
+
+    @singleton
+    def listener_configurator(self) -> ListenerConfigurator:
+        configurator = ListenerConfigurator()
+        configurator.register_listener(self.change_actuator_listener())
+        configurator.register_listener(self.fingerprint_door_unlock_listener())
+        configurator.register_listener(self.intruder_alert_listener())
+        configurator.register_listener(self.save_location_listener())
+        configurator.register_listener(self.set_phone_is_home_listener())
+
+        return configurator
 
     @singleton
     def change_actuator_request_event(self) -> ChangeActuatorRequestEvent:

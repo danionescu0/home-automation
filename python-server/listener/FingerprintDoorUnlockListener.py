@@ -5,17 +5,20 @@ from communication.actuator.ActuatorCommands import ActuatorCommands
 from event.SensorUpdateEvent import SensorUpdateEvent
 from tools.Authentication import Authentication
 from model.Sensor import Sensor
+from listener.BaseListener import BaseListener
 
 
-class FingerprintDoorUnlockListener:
+class FingerprintDoorUnlockListener(BaseListener):
     @typechecked()
     def __init__(self, actuator_commands: ActuatorCommands, authentication: Authentication):
         self.__actuator_commands = actuator_commands
         self.__authentication = authentication
-        signal("sensor_update").connect(self.callback)
+
+    def connect(self):
+        signal("sensor_update").connect(self.listen)
 
     @typechecked()
-    def callback(self, sensor_update: SensorUpdateEvent) -> None:
+    def listen(self, sensor_update: SensorUpdateEvent) -> None:
         if self.__should_unlock_door(sensor_update):
             self.__actuator_commands.change_actuator('door', True)
             self.__actuator_commands.change_actuator('homeAlarm', False)
