@@ -29,5 +29,4 @@ class ConfigurationHandler(CorsHandler):
             self.__configuration_repository.set_all(config_objects)
             self.set_status(200)
         except Exception as e:
-            print(e)
             self.set_status(500)

@@ -58,8 +58,6 @@ class SensorsRepository(AbstractRepository):
 
     @typechecked()
     def set_sensors(self, sensors: list):
-        print(sensors)
-
         self.client.set(self.__REDIS_SENSORS_KEY, json.dumps(sensors))
 
     @typechecked()

@@ -27,5 +27,4 @@ class SensorsHandler(CorsHandler):
             self.__sensors_repository.set_sensors(components)
             self.set_status(200)
         except Exception as e:
-            print(e)
             self.set_status(500)

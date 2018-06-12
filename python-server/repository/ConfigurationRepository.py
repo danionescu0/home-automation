@@ -23,12 +23,10 @@ class ConfigurationRepository(AbstractRepository):
     @typechecked()
     def get_config(self, name: str):
         config = self.__get()
-        print(self.__get_default_configurations()[name])
         return config[name] if name in config else self.__get_default_configurations()[name]
 
     @typechecked()
     def get_all(self) -> Dict[str, BaseConfig]:
-        print({**self.__get_default_configurations(), **self.__get()})
         return {**self.__get_default_configurations(), **self.__get()}
 
     @typechecked()

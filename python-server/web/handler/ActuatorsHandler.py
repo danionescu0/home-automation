@@ -27,5 +27,4 @@ class ActuatorsHandler(CorsHandler):
             self.__actuators_repository.set_actuators(components)
             self.set_status(200)
         except Exception as e:
-            print(e)
             self.set_status(500)
