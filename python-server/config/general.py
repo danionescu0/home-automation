@@ -2,7 +2,7 @@
 ################################################################################
 
 web_server = {
-    'static_path' : '/path/to/static/files', # absolute path to static folder ex /home/pi/home-automation/python-server/public
+    'static_path' : '/path/to/static/files', # absolute path to static folder ex: /home/pi/home-automation/python-server/public
     'application_port' : 8080,
     'api_token_secret': 'some_secret_here', # used for secure jwt token generation
     'token_validity_days' : 7 # keeps user authenticated in ui the specified days number
@@ -18,8 +18,6 @@ logging = {
     'log_file': 'log.txt',
     'log_entries': 20000000
 }
-
-#the settings below will be moved as the ui (/settings/configuration)
 
 timezone = 'Europe/Bucharest'
 

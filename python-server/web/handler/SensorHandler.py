@@ -22,7 +22,6 @@ class SensorHandler(CorsHandler):
     @secure
     def get(self, id):
         date_interval = self.__get_date_interval()
-        print(date_interval)
         output = {
             'name': self.__sensors_repository.get_sensor(id).properties.get(SensorProperties.NAME),
             'data': self.__sensors_formatter.get_sensor_values(id, date_interval[0], date_interval[1])

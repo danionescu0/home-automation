@@ -1,0 +1,1 @@
+export const API_ENDPOINT = 'http://ip:8080';
