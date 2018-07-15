@@ -1,16 +1,16 @@
 import sys
-import pandas as pd
+
 import numpy
+import pandas as pd
 
-from ModelPreparator import ModelPreparator
+from data_extractor.ModelPreparator import ModelPreparator
 from learning import get_dnn_regressor, wx_input_fn
-
 
 file_name = sys.argv[1]
 
 model_preparator = ModelPreparator()
 original_dataframe = model_preparator.prepare(pd.read_csv(file_name))
-dataframe = original_dataframe.drop(['has_rain'], axis=1)
+dataframe = original_dataframe.drop(['rain_outside_max'], axis=1)
 regressor = get_dnn_regressor(dataframe)
 
 pred = regressor.predict(input_fn=wx_input_fn(dataframe, num_epochs=1, shuffle=False))
