@@ -19,6 +19,14 @@ Steps:
 
 1. Generate the basic data using data_extractor.py
 
-2. Generate the model using prepare_model.py
+For example:
 
-3.
+````
+python prepare_model.py -i weather.csv -p 10 -d 10
+````
+
+2. Generate the model using prepare_model.py and show also the test values
+
+````
+python training.py -i weather_model.csv
+````

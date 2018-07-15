@@ -4,9 +4,12 @@ import config
 
 
 class ModelPreparator:
+    def __init__(self, mean_rain_threshold = 0.5) -> None:
+        self.__mean_rain_threshold = mean_rain_threshold
+
     def prepare(self, dataframe, days_behind: int):
         dataframe = dataframe.set_index('date')
-        dataframe['has_rain'] = numpy.where(dataframe['rain_outside_mean'] > 1, 1, 0)
+        dataframe['has_rain'] = numpy.where(dataframe['rain_outside_mean'] > self.__mean_rain_threshold, 1, 0)
         dataframe = dataframe.drop(['rain_outside_mean', 'rain_outside_min', 'rain_outside_max'], axis=1)
         dataframe = dataframe[dataframe['temperature_outside_mean'] >= 0]
         for feature in dataframe.dtypes.index:

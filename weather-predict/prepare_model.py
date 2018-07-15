@@ -2,8 +2,8 @@ import os
 import argparse
 
 import pandas
+from sklearn.model_selection import train_test_split
 
-import config
 from data_source.ModelPreparator import ModelPreparator
 
 
@@ -16,8 +16,14 @@ argparse.add_argument("-d", "--day-behind", required=True, dest="days_behind", t
                       help="Days behind to be added for the model on each line")
 args = vars(argparse.parse_args())
 
+
 model_preparator = ModelPreparator()
 dataframe, input_data, output_data = model_preparator.prepare(pandas.read_csv(args['input_file']), args['days_behind'])
+main_data, test_data = train_test_split(dataframe, test_size=args['test_file_percent'] / 100)
 file_components = os.path.splitext(args['input_file'])
-new_data_file_name = '{0}_model{1}'.format(file_components[0], file_components[1])
-dataframe.to_csv(new_data_file_name)
+main_data_file_name = '{0}_model{1}'.format(file_components[0], file_components[1])
+main_data = main_data.sort_values(by=['date'])
+main_data.sort_values(by=['date']).to_csv(main_data_file_name)
+
+test_data_file_name = '{0}_model_test{1}'.format(file_components[0], file_components[1])
+test_data.sort_values(by=['date']).to_csv(test_data_file_name)
