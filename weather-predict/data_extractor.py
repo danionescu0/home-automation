@@ -18,10 +18,12 @@ args = vars(argparse.parse_args())
 extractor = BasicFormExtractor(config.url, config.sensors)
 
 extracted_data = []
+i = 0
 for day_behind in range(args['days_behind'], 0, -1):
     start_date = datetime.today() - timedelta(days=day_behind)
     print('Calculating for date: ' + start_date.strftime('%m-%d-%Y'))
     extracted_data = extracted_data + extractor.get_for(start_date, config.grouped_by_hours)
+    i+=1
 
 dataframe = pandas.DataFrame(extracted_data).set_index('date')
 pprint.pprint(dataframe.head())
