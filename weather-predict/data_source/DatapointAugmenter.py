@@ -1,32 +1,29 @@
-import numpy
-
 import config
 
 
-class ModelPreparator:
-    def __init__(self, mean_rain_threshold = 0.5) -> None:
-        self.__mean_rain_threshold = mean_rain_threshold
-
-    def prepare(self, dataframe, days_behind: int):
-        dataframe = dataframe.set_index('date')
-        dataframe['has_rain'] = numpy.where(dataframe['rain_outside_mean'] > self.__mean_rain_threshold, 1, 0)
-        dataframe = dataframe.drop(['rain_outside_mean', 'rain_outside_min', 'rain_outside_max'], axis=1)
-        dataframe = dataframe[dataframe['temperature_outside_mean'] >= 0]
+# For a given dataframe, add rows as column:
+# Ex: X  Y  Z
+#     1  2  1
+#     5  6  9
+#     2  3  3
+# Given 1 datapoint behind transformed to:
+# Ex: X  Y  Z X_1 Y_1 Z_1
+#     5  6  9 1   2   1
+#     2  3  3 5   6   9
+class DatapointAugmenter:
+    def prepare(self, dataframe, datapoints_behind: int, date_column: str):
+        dataframe = dataframe.set_index(date_column)
         for feature in dataframe.dtypes.index:
-            if feature == 'date':
+            if feature == date_column:
                 continue
-            for datapoint_nr_behind in range(1, days_behind + 1):
+            for datapoint_nr_behind in range(1, datapoints_behind + 1):
                 self.__derive_nth_datapoint_feature(dataframe, feature, datapoint_nr_behind)
 
         dataframe = dataframe.drop(dataframe.index[[0]])
         dataframe = dataframe.drop(dataframe.index[[0]])
         dataframe = dataframe.drop(dataframe.index[[0]])
-        dataframe = self.__exclude_current_predictions(dataframe)
 
-        input_data = dataframe[[col for col in dataframe.columns if col != 'has_rain']]
-        output_data = dataframe['has_rain']
-
-        return dataframe, input_data, output_data
+        return self.__exclude_current_predictions(dataframe)
 
     def __derive_nth_datapoint_feature(self, dataframe, feature, datapoint_nr_behind):
         rows = dataframe.shape[0]

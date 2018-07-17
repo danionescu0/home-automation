@@ -5,13 +5,11 @@ import math
 from datetime import datetime
 
 
-class BasicFormExtractor():
+class DataExtractor():
     def __init__(self, url: str, sensors: list) -> None:
         self.__url = url
         self.__sensors = sensors
 
-    # Gets data from a specified date grouped by hours
-    # The output format will be
     def get_for(self, date: datetime, grouped_by_hours: int):
         useful_data = []
         for sensor in self.__sensors:
