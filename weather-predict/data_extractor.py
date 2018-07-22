@@ -9,7 +9,7 @@ from data_source.home_automation.DataExtractor import DataExtractor
 
 
 argparse = argparse.ArgumentParser()
-argparse.add_argument("-o", "--output-file", required=True, dest="output_file",
+argparse.add_argument("-f", "--output-file", required=True, dest="output_file",
                       help="Output file for the csv")
 argparse.add_argument("-d", "--day-behind", required=True, dest="days_behind", type=int,
                       help="Days behind to be extracted in the file")
@@ -17,7 +17,7 @@ argparse.add_argument("-hg", "--hour-granularity", required=True, dest="hour_gra
                       help="Group by a day prediction number of hours")
 args = vars(argparse.parse_args())
 
-extractor = DataExtractor(config.url, config.sensors)
+extractor = DataExtractor(config.url, config.sensors, ['humidity_outside', 'airPressure_outside', 'temperature_outside'])
 
 extracted_data = []
 for day_behind in range(args['days_behind'], 0, -1):

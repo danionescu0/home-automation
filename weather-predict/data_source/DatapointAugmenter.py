@@ -11,6 +11,9 @@ import config
 #     5  6  9 1   2   1
 #     2  3  3 5   6   9
 class DatapointAugmenter:
+    def __init__(self, exclude_fields_from_prediction: list) -> None:
+        self.__exclude_fields_from_prediction = exclude_fields_from_prediction
+
     def prepare(self, dataframe, datapoints_behind: int, date_column: str):
         dataframe = dataframe.set_index(date_column)
         for feature in dataframe.dtypes.index:
@@ -35,10 +38,10 @@ class DatapointAugmenter:
     def __exclude_current_predictions(self, dataframe):
         to_exclude = []
         for sensor in config.sensors:
-            for suffix in ['min', 'max', 'mean']:
+            for suffix in ['min', 'max', 'mean', 'raise', 'fall', 'stdev']:
                 full_name = '{0}_{1}'.format(sensor, suffix)
-                if full_name in ['rain_outside_mean', 'rain_outside_min', 'rain_outside_max']:
+                if full_name in self.__exclude_fields_from_prediction:
                     continue
                 to_exclude.append(full_name)
 
-        return dataframe.drop(to_exclude, axis=1)
+        return dataframe.drop(to_exclude, axis=1, errors='ignore')
