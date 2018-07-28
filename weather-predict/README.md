@@ -13,9 +13,22 @@ The input data will previous information gathered locally from the weather stati
 
 - rain levels
 
+# Installation
+You could use anaconda for the installation:
+````
+conda create --name ml python=3.6.2
+conda activate ml
+pip install theano
+pip install tensorflow
+pip install keras
+pip install pandas
+pip install sklearn
+conda update --all
+````
+
 The output data will be prediction on rain levels for the next N hours
 
-Currently i've tested the model on 6 h and it has 80-82% accuracy
+Currently i've tested the model on 6 h and it has 83% accuracy
 
 Steps:
 

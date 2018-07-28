@@ -3,7 +3,6 @@ import argparse
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 from machine_learning.ModelBuilder import ModelBuilder
@@ -30,17 +29,15 @@ def read_from_csv(path: str) -> tuple:
     return X, y
 
 X, y = read_from_csv(args['input_file'])
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
-X_test = sc.transform(X_test)
+X = sc.fit_transform(X)
 
 if args['mode'] == 'grid':
-    print(grid_search.search(X_train, y_train))
+    print(grid_search.search(X, y))
     sys.exit()
 
 classifier = model_builder.build(X.shape[1], 'adam')
-classifier.fit(X_train, y_train, batch_size=3, nb_epoch=25)
+classifier.fit(X, y, batch_size=1, nb_epoch=20)
 XX, yy = read_from_csv(args['test_file'])
 i = good = 0
 

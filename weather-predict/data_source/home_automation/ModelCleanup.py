@@ -14,6 +14,5 @@ class ModelCleanup:
         dataframe = dataframe.drop(self.__exclude_fields_from_prediction, axis=1, errors='ignore')
         for exclusion in self.__exclude_fields_from_prediction:
             dataframe.filter(like=exclusion, axis=1)
-        # dataframe = dataframe.filter(self.__exclude_fields_from_prediction, axis=1, errors='ignore')
 
         return dataframe[dataframe['temperature_outside_mean'] >= 0]

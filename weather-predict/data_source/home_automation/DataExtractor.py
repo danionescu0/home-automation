@@ -26,8 +26,8 @@ class DataExtractor():
                 last_group[sensor + '_min'], last_group[sensor + '_max'], last_group[sensor + '_mean'] = \
                     self.__get_keypoints(hour_data)
                 last_group[sensor + '_stdev'] = statistics.stdev(datapoint['value'] for datapoint in hour_data)
-                # if sensor in self.__add_rise_fall_data_to_sensors:
-                #     last_group[sensor + '_rise'], last_group[sensor + '_fall'] = self.__get_rise_fall(hour_data)
+                if sensor in self.__add_rise_fall_data_to_sensors:
+                    last_group[sensor + '_rise'], last_group[sensor + '_fall'] = self.__get_rise_fall(hour_data)
                 useful_data.append(last_group)
 
         last_process = {}
