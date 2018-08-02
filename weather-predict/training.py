@@ -36,17 +36,18 @@ if args['mode'] == 'grid':
     print(grid_search.search(X, y))
     sys.exit()
 
-classifier = model_builder.build(X.shape[1], 'adam')
-classifier.fit(X, y, batch_size=1, nb_epoch=20)
-XX, yy = read_from_csv(args['test_file'])
+classifier = model_builder.build(X.shape[1], 'adam', 0.1)
+classifier.fit(X, y, batch_size=3, nb_epoch=10)
+X_test, y_test = read_from_csv(args['test_file'])
 i = good = 0
 
-for test_data in XX:
+for test_data in X_test:
     y_pred = classifier.predict(sc.transform(np.array([test_data])))
-    will_rain = (y_pred > 0.5)
-    if (will_rain == True and yy[i] == 1) or (will_rain == False and yy[i] == 0):
+    actual_rain = True if y_test[i] == 1 else False
+    predicted_rain = (y_pred > 0.5)
+    if (predicted_rain == True and y_test[i] == 1) or (predicted_rain == False and y_test[i] == 0):
         good += 1
-    print("Index: {0}, Actual: {1}, Predicted  {2}". format(i, yy[i], will_rain))
+    print("Index: {0}, Actual, Predicted: {1}|{2}". format(i, actual_rain, predicted_rain))
     i += 1
 
-print ('Total: {0}, Good: {1}, Percent accuracy: {2} ', i, good, good * 100 / i)
+print ('Total: {0}, Good: {1}, Percent accuracy: {2} '.format(i, good, good * 100 / i))

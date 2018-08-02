@@ -10,7 +10,8 @@ class GridSearch:
         self.__parameters = {
             'batch_size': [1, 2, 3, 10],
             'nb_epoch': [7, 10, 20, 100],
-            'optimizer': ['adam', 'rmsprop']
+            'optimizer': ['adam', 'rmsprop'],
+            'dropout': [0.7, 1, 1.5, 1.7]
         }
 
     def search(self, X_train, y_train) -> tuple:

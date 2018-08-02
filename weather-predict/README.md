@@ -23,7 +23,9 @@ pip install tensorflow
 pip install keras
 pip install pandas
 pip install sklearn
+pip install requests
 conda update --all
+conda activate ml
 ````
 
 The output data will be prediction on rain levels for the next N hours
