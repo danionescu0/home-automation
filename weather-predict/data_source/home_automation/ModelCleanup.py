@@ -15,4 +15,4 @@ class ModelCleanup:
         for exclusion in self.__exclude_fields_from_prediction:
             dataframe.filter(like=exclusion, axis=1)
 
-        return dataframe[dataframe['temperature_outside_mean'] >= 0]
+        return dataframe[dataframe['temperature_outside_min'] >= 0]

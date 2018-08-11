@@ -64,9 +64,12 @@ temperatures below zero means rain will turn into snow, and the weather station 
 3. Train the model
 
 ````
-python training.py --input-file file_name --test-file test_file_name --mode [grid|test]
+python training.py --input-file file_name --mode [grid|train]
 ````
 
 For mode grid it will make a grid search with the parameters wich are best
 
-For test mode it will use the test_file_name to load data and calculate predictions 
+4. Predict batch
+````
+python predict_batch.py --test-file test_file_name 
+````

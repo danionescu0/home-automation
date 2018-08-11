@@ -1,5 +1,4 @@
 import os
-import sys
 import argparse
 
 import pandas
@@ -26,6 +25,7 @@ model_cleanup = ModelCleanup(0.1, config.exclude_fields_from_prediction, 'rain_o
 dataframe = model_cleanup.get_cleanned(pandas.read_csv(args['input_file']))
 dataframe = model_preparator.prepare(dataframe, args['datapoints_behind'], 'date')
 main_data, test_data = train_test_split(dataframe, test_size=args['test_file_percent'] / 100)
+
 file_components = os.path.splitext(args['input_file'])
 main_data_file_name = '{0}_model{1}'.format(file_components[0], file_components[1])
 main_data = main_data.sort_values(by=['date'])
