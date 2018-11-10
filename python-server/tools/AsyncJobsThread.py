@@ -3,6 +3,7 @@ import time
 from logging import RootLogger
 
 from typeguard import typechecked
+from pydispatch import dispatcher
 
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
@@ -12,11 +13,9 @@ class AsyncJobsThread(threading.Thread):
     LISTEN_DELAY = 0.03
 
     @typechecked()
-    def __init__(self, async_jobs: AsyncActuatorCommands, change_actuator_request_event: ChangeActuatorRequestEvent,
-                 logging: RootLogger):
+    def __init__(self, async_jobs: AsyncActuatorCommands, logging: RootLogger):
         threading.Thread.__init__(self)
         self.__async_jobs = async_jobs
-        self.__change_actuator_request_event = change_actuator_request_event
         self.__logging = logging
         self.shutdown = False
 
@@ -27,4 +26,5 @@ class AsyncJobsThread(threading.Thread):
 
     def __job_callback(self, job_data):
         self.__logging.info('Incomming job data: {0}' .format(job_data))
-        self.__change_actuator_request_event.send(job_data["actuator"], job_data["value"])
+        dispatcher.send(ChangeActuatorRequestEvent.NAME,
+                        event=ChangeActuatorRequestEvent(job_data["actuator"], job_data["value"]))

@@ -1,4 +1,4 @@
-from blinker import signal
+from pydispatch import dispatcher
 from typeguard import typechecked
 
 from communication.actuator.ActuatorCommands import ActuatorCommands
@@ -12,10 +12,9 @@ class ChangeActuatorListener(BaseListener):
         self.__actuator_commands = actuator_commands
 
     def connect(self):
-        signal("change_actuator_request").connect(self.listen)
+        dispatcher.connect(self.listen, signal=ChangeActuatorRequestEvent.NAME, sender=dispatcher.Any)
 
-    @typechecked()
-    def listen(self, change_actuator_request: ChangeActuatorRequestEvent) -> None:
+    def listen(self, event: ChangeActuatorRequestEvent) -> None:
         self.__actuator_commands.change_actuator(
-            change_actuator_request.get_name(), change_actuator_request.get_new_state()
+            event.get_name(), event.get_new_state()
         )

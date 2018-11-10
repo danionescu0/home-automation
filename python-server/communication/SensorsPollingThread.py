@@ -3,6 +3,7 @@ import time
 from logging import RootLogger
 
 from typeguard import typechecked
+from pydispatch import dispatcher
 
 from repository.SensorsRepository import SensorsRepository
 from model.Sensor import Sensor
@@ -14,12 +15,11 @@ from communication.ZWaveDevice import ZWaveDevice
 class SensorsPollingThread(threading.Thread):
     @typechecked()
     def __init__(self, polling_interval: int, sensors_repo: SensorsRepository, zwave_device: ZWaveDevice,
-                 sensor_update_event: SensorUpdateEvent, logger: RootLogger):
+                 logger: RootLogger):
         threading.Thread.__init__(self)
         self.__polling_interval = polling_interval
         self.__sensors_repo = sensors_repo
         self.__zwave_device = zwave_device
-        self.__sensor_update_event = sensor_update_event
         self.__logger = logger
         self.shutdown = False
 
@@ -43,4 +43,4 @@ class SensorsPollingThread(threading.Thread):
         if None is not new_value:
             sensor.value = round(new_value, 1)
             self.__sensors_repo.set_sensor(sensor)
-            self.__sensor_update_event.send(sensor)
+            dispatcher.send(SensorUpdateEvent.NAME, event=SensorUpdateEvent(sensor))

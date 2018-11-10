@@ -1,12 +1,11 @@
-from blinker import signal
 from typeguard import typechecked
 
 from model.Sensor import Sensor
 
 
 class SensorUpdateEvent:
+    NAME = 'sensor_update'
+
     @typechecked()
-    def send(self, sensor: Sensor):
-        event = signal("sensor_update")
+    def __init__(self, sensor: Sensor):
         self.sensor = sensor
-        event.send(self)

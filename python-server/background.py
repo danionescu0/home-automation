@@ -31,11 +31,11 @@ device_lifetime_manager\
 def main():
     threads = []
     threads.append(IncommingTextStreamCommunicationThread(container.text_sensor_data_parser(), sensors_repo,
-                                                          container.sensor_update_event(), bluetooth, root_logger))
+                                                          bluetooth, root_logger))
     threads.append(IncommingTextStreamCommunicationThread(container.text_sensor_data_parser(), sensors_repo,
-                                                          container.sensor_update_event(), serial, root_logger))
+                                                         serial, root_logger))
     threads.append(container.incomming_zwave_communication_thread())
-    threads.append(AsyncJobsThread(async_actuator_commands, container.change_actuator_request_event(), root_logger))
+    threads.append(AsyncJobsThread(async_actuator_commands, root_logger))
     threads.append(IftttRulesThread(container.ifttt_rules_repository(), container.command_executor(),
                                     container.tokenizer(), root_logger))
     threads.append(HomeDefenceThread(container.home_defence()))

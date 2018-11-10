@@ -1,7 +1,6 @@
 pytz==2017.2
 pycrypto==2.6.1
 astral==1.4
-blinker==1.4
 python_dateutil==2.6.0
 geopy==1.11.0
 PyJWT==1.5.0

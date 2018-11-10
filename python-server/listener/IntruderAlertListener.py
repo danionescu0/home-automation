@@ -1,5 +1,5 @@
 from typeguard import typechecked
-from blinker import signal
+from pydispatch import dispatcher
 
 from repository.ActuatorsRepository import ActuatorsRepository
 from tools.EmailNotifier import EmailNotifier
@@ -18,16 +18,15 @@ class IntruderAlertListener(BaseListener):
         self.__home_alarm_lock = home_alarm_lock
 
     def connect(self):
-        signal("sensor_update").connect(self.listen)
+        dispatcher.connect(self.listen, signal=SensorUpdateEvent.NAME, sender=dispatcher.Any)
 
-    @typechecked()
-    def listen(self, sensor_update: SensorUpdateEvent) -> None:
-        if False == self.__should_send_alert(sensor_update):
+    def listen(self, event: SensorUpdateEvent) -> None:
+        if False == self.__should_send_alert(event):
             return
         self.__email_notificator.send_alert("Alert", "Somebody entered the house")
         self.__home_alarm_lock.set_lock()
 
-    def __should_send_alert(self, sensor_update: Sensor):
+    def __should_send_alert(self, sensor_update: SensorUpdateEvent):
         if self.__home_alarm_lock.has_lock():
             return False
         actuators = self.__actuators_repo.get_actuators()

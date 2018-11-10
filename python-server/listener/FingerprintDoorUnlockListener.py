@@ -1,5 +1,5 @@
 from typeguard import typechecked
-from blinker import signal
+from pydispatch import dispatcher
 
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from event.SensorUpdateEvent import SensorUpdateEvent
@@ -15,11 +15,10 @@ class FingerprintDoorUnlockListener(BaseListener):
         self.__authentication = authentication
 
     def connect(self):
-        signal("sensor_update").connect(self.listen)
+        dispatcher.connect(self.listen, signal=SensorUpdateEvent.NAME, sender=dispatcher.Any)
 
-    @typechecked()
-    def listen(self, sensor_update: SensorUpdateEvent) -> None:
-        if self.__should_unlock_door(sensor_update):
+    def listen(self, event: SensorUpdateEvent) -> None:
+        if self.__should_unlock_door(event):
             self.__actuator_commands.change_actuator('door', True)
             self.__actuator_commands.change_actuator('homeAlarm', False)
 

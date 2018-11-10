@@ -3,6 +3,7 @@ import time
 from logging import RootLogger
 
 from typeguard import typechecked
+from pydispatch import dispatcher
 
 from communication.BaseSerial import BaseSerial
 from communication.TextSensorDataParser import TextSensorDataParser
@@ -17,11 +18,10 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
 
     @typechecked()
     def __init__(self, text_sensor_data_parser: TextSensorDataParser, sensors_repo: SensorsRepository,
-                 sensor_update_event: SensorUpdateEvent, communicator: BaseSerial, logger: RootLogger):
+                 communicator: BaseSerial, logger: RootLogger):
         threading.Thread.__init__(self)
         self.__text_sensor_data_parser = text_sensor_data_parser
         self.__sensors_repo = sensors_repo
-        self.__sensor_update_event = sensor_update_event
         self.__communicator = communicator
         self.__logger = logger
         self.shutdown = False
@@ -45,4 +45,4 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
 
         for sensor in sensors:
             self.__sensors_repo.set_sensor(sensor)
-            self.__sensor_update_event.send(sensor)
+            dispatcher.send(SensorUpdateEvent.NAME, event=SensorUpdateEvent(sensor))

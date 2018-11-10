@@ -1,5 +1,5 @@
 from typeguard import typechecked
-from blinker import signal
+from pydispatch import dispatcher
 from typing import Tuple
 from geopy.distance import vincenty
 
@@ -21,11 +21,10 @@ class SetPhoneIsHomeListener(BaseListener):
         self.__sensors_repo = sensors_repo
 
     def connect(self):
-        signal("location").connect(self.listen)
+        dispatcher.connect(self.listen, signal=LocationEvent.NAME, sender=dispatcher.Any)
 
-    @typechecked()
-    def listen(self, location: LocationEvent) -> None:
-        current_coordonates = (location.get_latitude(), location.get_longitude())
+    def listen(self, event: LocationEvent) -> None:
+        current_coordonates = (event.get_latitude(), event.get_longitude())
         distance_from_home = vincenty(self.__home_coordonates, current_coordonates).km
         phone_is_home = distance_from_home < self.HOME_RADIUS
         sensor = Sensor('phoneIsHome', Sensor.SensorType.PHONE_IS_HOME.value, False,

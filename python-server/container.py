@@ -18,8 +18,6 @@ from communication.encriptors.AesEncriptor import AesEncriptor
 from communication.Serial import Serial
 from communication.SerialBluetooth import SerialBluetooth
 from config import general
-from event.ChangeActuatorRequestEvent import ChangeActuatorRequestEvent
-from event.SensorUpdateEvent import SensorUpdateEvent
 from ifttt.ExpressionValidator import ExpressionValidator
 from ifttt.command.CommandExecutor import CommandExecutor
 from ifttt.command.TextCommunicationEnhancer import TextCommunicationEnhancer
@@ -155,13 +153,12 @@ class Container:
 
     @singleton
     def incomming_zwave_communication_thread(self) -> IncommingZwaveCommunicationThread:
-        return IncommingZwaveCommunicationThread(self.sensor_update_event(), self.sensors_repository(),
+        return IncommingZwaveCommunicationThread(self.sensors_repository(),
                                                  self.actuators_repository(), self.zwave_device(), self.root_logger())
 
     @singleton
     def sensors_polling_thread(self) -> SensorsPollingThread:
-        return SensorsPollingThread(60, self.sensors_repository(), self.zwave_device(), self.sensor_update_event(),
-                                    self.root_logger())
+        return SensorsPollingThread(60, self.sensors_repository(), self.zwave_device(), self.root_logger())
 
     @singleton
     def jwt_token_factory(self) -> JwtTokenFactory:
@@ -272,20 +269,12 @@ class Container:
         return configurator
 
     @singleton
-    def change_actuator_request_event(self) -> ChangeActuatorRequestEvent:
-        return ChangeActuatorRequestEvent()
-
-    @singleton
-    def sensor_update_event(self) -> SensorUpdateEvent:
-        return SensorUpdateEvent()
-
-    @singleton
     def text_communication_enhancer(self) -> TextCommunicationEnhancer:
         return TextCommunicationEnhancer(self.tokenizer())
 
     @singleton
     def command_executor(self) -> CommandExecutor:
-        return CommandExecutor(self.change_actuator_request_event(), self.text_communication_enhancer(),
+        return CommandExecutor(self.text_communication_enhancer(),
                                self.sound_api(), self.email_notificator(), self.root_logger())
 
     @singleton

@@ -2,6 +2,7 @@ import threading
 from logging import RootLogger
 
 from typeguard import typechecked
+from pydispatch import dispatcher
 
 from repository.SensorsRepository import SensorsRepository
 from repository.ActuatorsRepository import ActuatorsRepository
@@ -13,10 +14,9 @@ from model.Actuator import Actuator
 
 class IncommingZwaveCommunicationThread(threading.Thread):
     @typechecked()
-    def __init__(self, sensor_update_event: SensorUpdateEvent, sensors_repository: SensorsRepository,
+    def __init__(self, sensors_repository: SensorsRepository,
                  actuators_repository: ActuatorsRepository, zwave_device: ZWaveDevice, logger: RootLogger):
         threading.Thread.__init__(self)
-        self.__sensor_update_event = sensor_update_event
         self.__sensors_repository = sensors_repository
         self.__actuators_repository = actuators_repository
         self.__zwave_device = zwave_device
@@ -41,7 +41,7 @@ class IncommingZwaveCommunicationThread(threading.Thread):
     def __process_sensor(self, sensor: Sensor, value):
         sensor.value = round(value, 3)
         self.__sensors_repository.set_sensor(sensor)
-        self.__sensor_update_event.send(sensor)
+        dispatcher.send(SensorUpdateEvent.NAME, event=SensorUpdateEvent(sensor))
 
     def __process_actuator(self, actuator: Actuator, value):
         self.__actuators_repository.set_actuator_state(actuator.id, value)

@@ -370,7 +370,7 @@ methods multiple times only the same instance will be returned
 the events are located in /events folder
 * first create a file in /listener folder, the file name should end up in "Listener"
 the file name should describe what the listener does not on what it subscribes
-* events listner uses "blinker" so we should use the import statement: "from blinker import signal"
+* events listner uses "pydispatch" so we should use the import statement: "from pydispatch import dispatcher"
 * define a class, and in the constructor inject all dependencies needed ex: "actuator_commands"
 * in the constructor subscribe to the event like this "signal("sensor_update").connect(self.callback)"
 in this exampled we subscribed to "sensor_update" event and we'll receive the event in the "callback" method
@@ -378,19 +378,17 @@ inside the class
 ````
 # Example:
 
-from typeguard import typechecked
-from blinker import signal
+from pydispatch import dispatcher
 
 from event.SensorUpdateEvent import SensorUpdateEvent
 
 class SomeListener:
-    @typechecked()
-    def __init__(self):
-        signal("sensor_update").connect(self.callback)
-
-    @typechecked()
-    def callback(self, sensor_update: SensorUpdateEvent) -> None:
-        # do something usefull 
+    def connect(self):
+        dispatcher.connect(self.listen, signal=SensorUpdateEvent.NAME, sender=dispatcher.Any)
+        
+    def listen(self, event: SensorUpdateEvent) -> None:
+        # do stuff here     
+        
 ````
 
 
