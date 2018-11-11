@@ -11,10 +11,11 @@ from model.Actuator import Actuator
 class ActuatorCommands:
     @typechecked()
     def __init__(self, actuator_strategies: ActuatorStrategies, actuators_repo: ActuatorsRepository,
-                 excluded_actuator_device_types: List[str]):
+                 excluded_actuator_device_types: List[str], logger):
         self.__actuator_strategies = actuator_strategies
         self.__actuators_repo = actuators_repo
         self.__excluded_actuator_device_types = excluded_actuator_device_types
+        self.__logger = logger
 
     @typechecked()
     def change_actuator(self, id: str, state):

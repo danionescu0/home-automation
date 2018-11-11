@@ -14,6 +14,7 @@ class Actuator:
         SERIAL = 'serial'
         GROUP = 'group'
         ZWAVE = 'zwave'
+        BROADLINK = 'broadlink'
         ACTION = 'action'
 
     def __init__(self, id: str, name: str, value, type: str, room: str, device_type: str) -> None:
@@ -35,5 +36,5 @@ class Actuator:
 
     def __repr__(self) -> str:
         return "Actuator: id({0}), name({1}), value({2}), type({3}), room({4})," \
-               " communicator({5}), properties({6})".\
+               " device_type({5}), properties({6})".\
                 format(self.id, self.name, self.value, self.type, self.room, self.device_type, self.properties)

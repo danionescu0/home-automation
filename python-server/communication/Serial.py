@@ -21,7 +21,6 @@ class Serial(BaseSerial):
         self.__serial = serial.Serial(self.__serial_communication_cfg.port,
                                       self.__serial_communication_cfg.baud_rate,
                                       timeout=0.5)
-
         return self
 
     @typechecked()

@@ -11,9 +11,10 @@ from model.ActuatorProperties import ActuatorProperties
 
 class SerialSendStrategy(BaseStrategy):
     @typechecked()
-    def __init__(self, device_lifetime_manager: DeviceLifetimeManager, encriptor: AesEncriptor):
+    def __init__(self, device_lifetime_manager: DeviceLifetimeManager, encriptor: AesEncriptor, logger):
         self.__device_lifetime_manager = device_lifetime_manager
         self.__encriptor = encriptor
+        self.__logger = logger
 
     @typechecked()
     def supports(self, actuator: Actuator) -> bool:
@@ -22,9 +23,8 @@ class SerialSendStrategy(BaseStrategy):
 
     @typechecked()
     def set_state(self, actuator: Actuator, state):
-        try:
-            command = self.__encrypt(self.__calculate_actuator_command(actuator, state), actuator)
-        except:
+        command = self.__encrypt(self.__calculate_actuator_command(actuator, state), actuator)
+        if command is False:
             return False
         send_to_device = actuator.properties.get(ActuatorProperties.SEND_TO_DEVICE)
         communicator = actuator.properties.get(ActuatorProperties.COMMUNICATOR)
@@ -43,7 +43,7 @@ class SerialSendStrategy(BaseStrategy):
         elif actuator_type == Actuator.ActuatorType.PUSHBUTTON.value:
             return actuator_command['true']
         else:
-            raise Exception('Unimplemented actuator type: %s'.format(actuator_type))
+            return False
 
     def __encrypt(self, text: str, actuator: Actuator):
         encription = actuator.properties.get(ActuatorProperties.ENCRIPTION)

@@ -25,6 +25,7 @@ device_lifetime_manager\
     .add_device('serial', serial)\
     .add_device('bluetooth', bluetooth) \
     .add_device('zwave', container.zwave_device()) \
+    .add_device('broadlink', container.broadlink_device()) \
     .connect()
 
 

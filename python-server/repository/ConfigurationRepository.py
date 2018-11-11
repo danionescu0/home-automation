@@ -12,6 +12,7 @@ from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
 from model.configuration.RemoteSpeakerCfg import RemoteSpeakerCfg
 from model.configuration.GeneralCfg import GeneralCfg
+from model.configuration.BroadlinkCfg import BroadlinkCfg
 
 
 class ConfigurationRepository(AbstractRepository):
@@ -52,4 +53,5 @@ class ConfigurationRepository(AbstractRepository):
             ZwaveCommunicationCfg.get_classname(): ZwaveCommunicationCfg('', ''),
             GeneralCfg.get_classname(): GeneralCfg((0.0, 0.0), ''),
             RemoteSpeakerCfg.get_classname(): RemoteSpeakerCfg('192.168.0.1', 'some_user', 'some_password'),
+            BroadlinkCfg.get_classname(): BroadlinkCfg('192.168.0.1', 'MAC_ADDR'),
         }

@@ -11,12 +11,14 @@ from communication.Serial import Serial
 from communication.SerialBluetooth import SerialBluetooth
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.ZWaveDevice import ZWaveDevice
+from communication.BroadlinkDevice import BroadlinkDevice
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
 from communication.actuator.strategies.GroupStrategy import GroupStrategy
 from communication.actuator.strategies.SerialSendStrategy import SerialSendStrategy
 from communication.actuator.strategies.ZWaveStrategy import ZWaveStrategy
+from communication.actuator.strategies.BroadlinkStrategy import BroadlinkStrategy
 from communication.encriptors.AesEncriptor import AesEncriptor
 from ifttt.ExpressionValidator import ExpressionValidator
 from ifttt.command.CommandExecutor import CommandExecutor
@@ -44,6 +46,7 @@ from model.configuration.GeneralCfg import GeneralCfg
 from model.configuration.HomeDefenceCfg import HomeDefenceCfg
 from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
+from model.configuration.BroadlinkCfg import BroadlinkCfg
 from repository.ActuatorsRepository import ActuatorsRepository
 from repository.ConfigurationRepository import ConfigurationRepository
 from repository.IftttRulesRepository import IftttRulesRepository
@@ -180,22 +183,28 @@ class Container:
                            self.root_logger())
 
     @singleton
+    def broadlink_device(self) -> BroadlinkDevice:
+        return BroadlinkDevice(self.configuration_repository().get_config(BroadlinkCfg.get_classname()),
+                           self.root_logger())
+
+    @singleton
     def device_lifetime_manager(self) -> DeviceLifetimeManager:
         return DeviceLifetimeManager()
 
     @singleton
     def actuator_strategies(self) -> ActuatorStrategies:
         actuator_strategies = ActuatorStrategies()
-        actuator_strategies.add_strategy(SerialSendStrategy(self.device_lifetime_manager(), self.aes_encriptor()))
+        actuator_strategies.add_strategy(SerialSendStrategy(self.device_lifetime_manager(), self.aes_encriptor(), self.root_logger()))
         actuator_strategies.add_strategy(GroupStrategy(self.async_actuator_commands(), self.root_logger()))
         actuator_strategies.add_strategy(ZWaveStrategy(self.zwave_device()))
+        actuator_strategies.add_strategy(BroadlinkStrategy(self.broadlink_device()))
 
         return actuator_strategies
 
     @singleton
     def actuator_commands(self) -> ActuatorCommands:
         return ActuatorCommands(self.actuator_strategies(), self.actuators_repository(),
-                                [Actuator.DeviceType.ACTION.value])
+                                [Actuator.DeviceType.ACTION.value], self.root_logger())
 
     @singleton
     def async_actuator_commands(self) -> AsyncActuatorCommands:

@@ -13,9 +13,7 @@ class AesEncriptor:
         if len(text) > 16:
             raise RuntimeError("Aes encription does not handle more than 16 characters")
         padded_text = text.ljust(16, ' ')
-        encripted = self.__get_encriptor().encrypt(padded_text)
-
-        return encripted
+        return self.__get_encriptor().encrypt(padded_text.encode())
 
     @typechecked()
     def decrypt(self, text: str) -> str:
@@ -29,4 +27,4 @@ class AesEncriptor:
         if None != self.__encriptor:
             return self.__encriptor
         else:
-            return AES.new(self.__key, AES.MODE_CBC, IV=self.__key)
+            return AES.new(self.__key.encode(), AES.MODE_CBC, IV=self.__key.encode())

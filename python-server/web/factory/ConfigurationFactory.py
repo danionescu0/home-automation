@@ -12,6 +12,7 @@ from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
 from model.configuration.GeneralCfg import GeneralCfg
 from model.configuration.RemoteSpeakerCfg import RemoteSpeakerCfg
+from model.configuration.BroadlinkCfg import BroadlinkCfg
 
 
 class ConfigurationFactory:
