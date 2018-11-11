@@ -264,7 +264,7 @@ Obs: All the actuators must be the same type (switches, pushbuttons)
     }
 ````
 
-*Adding a serial/bleutooth sensor example*
+*Adding a serial/bluetooth sensor example*
 
 * id, location, value, type, name are the same as for the zwave sensor
 * "device_type" must be "serial"
@@ -293,6 +293,29 @@ Obs: All the actuators must be the same type (switches, pushbuttons)
     },
 ````
  
+*Adding a broadlink pushbutton example*
+
+* id: some unique id
+* "device_type" must be "broadlink"
+* "value" must be "True"
+* "type" the only supported actuatory type is "pushbutton"
+* "location": "room_name"
+* "properties" contains:
+    - "command" -> "a string which contains the encoded signal, check below for how to obtain codes"
+
+````
+    {
+        "id": "some unique id",
+        "type" : "pushbutton",
+        "location": "holway",
+        "value": True,
+        "device_type": "broadlink",
+        "properties": {
+            "command": "260092000001289317111711163517341712161116121611161215121711153518111611161216121512161215121612151216351735171017111611171116111735171018341711171017351710170002901611161216111513151215131513151215131512141513141314143714141413141414141314141414131513161117111611171116111735171116111711161117000d05000000000000",
+        }        
+    },
+```` 
+ 
 4) in the UI settings/configuration you can difine the following:
 
 - serial communication config: port, baud rate; these are used to communicate over serial with the attached HC-12 
@@ -305,7 +328,8 @@ sensors data. This can be deactivated if you don't use custom arduino devices wi
 - zwave communication config: port, openzwave config path; if you are using zwave devices enable this
 - home defence config: notified email address, alarm lock seconds (how often you'll get an alert of type intrusion),
 burgler light switches (what switches will be toggled on/off), burgler time between actions (how much max time between light toggle)
-
+- remote speaker config: host, username and password for the remote speaker (https://create.arduino.cc/projecthub/danionescu/how-to-build-a-text-to-speech-iot-speaker-59cf87)
+- broadlink configuration: host and mac address, for more documentation check this github repo: https://github.com/mjg59/python-broadlink
 
 ## bluetooth (optional)
 To pair a bluetooth device:
@@ -333,6 +357,20 @@ sudo /etc/init.d/bluetooth restart
 
 sudo hciconfig hci0 up
 ````
+
+## broadlink getting learned codes
+* power on the device
+* install the android app (http://www.ibroadlink.com/app/)
+* follow the instructions to pair the device with the phone http://www.digmtechnology.com/manual/RM-PRO_user_manual.pdf
+* from your router interface get the device IP and MAC address
+* download this library: https://github.com/mjg59/python-broadlink
+* run the following commands
+````
+cd library_folder
+chmod +x ./cli/broadlink_cli
+./cli/broadlink_cli --host=the_device_ip --mac the_device_mac_address --learn
+````
+And you'll get a nice code that you'll paste properties/command under the "Adding a broadlink pushbutton example" section
 
 # Extending the code
 
