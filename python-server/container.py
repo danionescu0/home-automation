@@ -1,11 +1,14 @@
+import logging
 import sys
 from logging import RootLogger
 from typing import Callable
-import logging
 
+import config
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
 from communication.SensorsPollingThread import SensorsPollingThread
+from communication.Serial import Serial
+from communication.SerialBluetooth import SerialBluetooth
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.ZWaveDevice import ZWaveDevice
 from communication.actuator.ActuatorCommands import ActuatorCommands
@@ -15,9 +18,6 @@ from communication.actuator.strategies.GroupStrategy import GroupStrategy
 from communication.actuator.strategies.SerialSendStrategy import SerialSendStrategy
 from communication.actuator.strategies.ZWaveStrategy import ZWaveStrategy
 from communication.encriptors.AesEncriptor import AesEncriptor
-from communication.Serial import Serial
-from communication.SerialBluetooth import SerialBluetooth
-from config import general
 from ifttt.ExpressionValidator import ExpressionValidator
 from ifttt.command.CommandExecutor import CommandExecutor
 from ifttt.command.TextCommunicationEnhancer import TextCommunicationEnhancer
@@ -31,17 +31,25 @@ from ifttt.parser.Tokenizer import Tokenizer
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
 from listener.IntruderAlertListener import IntruderAlertListener
+from listener.ListenerConfigurator import ListenerConfigurator
 from listener.SaveLocationListener import SaveLocationListener
 from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
-from listener.ListenerConfigurator import ListenerConfigurator
 from locking.HomeAlarmLock import HomeAlarmLock
 from locking.TimedLock import TimedLock
+from model.Actuator import Actuator
+from model.configuration.BluetoothCommunicationCfg import BluetoothCommunicationCfg
+from model.configuration.RemoteSpeakerCfg import RemoteSpeakerCfg
+from model.configuration.EmailCfg import EmailCfg
+from model.configuration.GeneralCfg import GeneralCfg
+from model.configuration.HomeDefenceCfg import HomeDefenceCfg
+from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
+from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
 from repository.ActuatorsRepository import ActuatorsRepository
+from repository.ConfigurationRepository import ConfigurationRepository
 from repository.IftttRulesRepository import IftttRulesRepository
 from repository.LocationTrackerRepository import LocationTrackerRepository
 from repository.RoomsRepository import RoomsRepository
 from repository.SensorsRepository import SensorsRepository
-from repository.ConfigurationRepository import ConfigurationRepository
 from sound.RemoteSpeaker import RemoteSpeaker
 from sound.SoundApi import SoundApi
 from tools.Authentication import Authentication
@@ -49,21 +57,14 @@ from tools.EmailNotifier import EmailNotifier
 from tools.HomeDefence import HomeDefence
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
-from web.factory.RuleFactory import RuleFactory
 from web.factory.ConfigurationFactory import ConfigurationFactory
+from web.factory.RuleFactory import RuleFactory
 from web.formatter.ActuatorsFormatter import ActuatorsFormatter
+from web.formatter.ConfigurationFormatter import ConfigurationFormatter
 from web.formatter.IftttFormatter import IftttFormatter
 from web.formatter.RoomsFormatter import RoomsFormatter
 from web.formatter.SensorsFormatter import SensorsFormatter
-from web.formatter.ConfigurationFormatter import ConfigurationFormatter
 from web.security.JwtTokenFactory import JwtTokenFactory
-from model.Actuator import Actuator
-from model.configuration.BluetoothCommunicationCfg import BluetoothCommunicationCfg
-from model.configuration.EmailCfg import EmailCfg
-from model.configuration.HomeDefenceCfg import HomeDefenceCfg
-from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
-from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
-from model.configuration.GeneralCfg import GeneralCfg
 
 
 def singleton(function: Callable):
@@ -81,7 +82,7 @@ def singleton(function: Callable):
 class Container:
     @singleton
     def root_logger(self) -> RootLogger:
-        logging_config = LoggingConfig(general.logging['log_file'], general.logging['log_entries'])
+        logging_config = LoggingConfig(config.logging['log_file'], config.logging['log_entries'])
         sys.excepthook = logging_config.set_error_hadler
 
         return logging_config.get_logger(logging.INFO)
@@ -96,28 +97,27 @@ class Container:
 
     @singleton
     def sound_api(self) -> SoundApi:
-        return RemoteSpeaker(general.remote_speaker['host'], general.remote_speaker['user'],
-                              general.remote_speaker['password'])
+        return RemoteSpeaker(self.configuration_repository().get_config(RemoteSpeakerCfg.get_classname()))
 
     @singleton
     def location_tracker_repository(self) -> LocationTrackerRepository:
-        return LocationTrackerRepository(general.redis_config)
+        return LocationTrackerRepository(config.redis_config)
 
     @singleton
     def actuators_repository(self) -> ActuatorsRepository:
-        return ActuatorsRepository(general.redis_config)
+        return ActuatorsRepository(config.redis_config)
 
     @singleton
     def sensors_repository(self) -> SensorsRepository:
-        return SensorsRepository(general.redis_config)
+        return SensorsRepository(config.redis_config)
 
     @singleton
     def configuration_repository(self) -> ConfigurationRepository:
-        return ConfigurationRepository(general.redis_config)
+        return ConfigurationRepository(config.redis_config)
 
     @singleton
     def ifttt_rules_repository(self) -> IftttRulesRepository:
-        return IftttRulesRepository(general.redis_config)
+        return IftttRulesRepository(config.redis_config)
 
     @singleton
     def rooms_repository(self) -> RoomsRepository:
@@ -162,7 +162,7 @@ class Container:
 
     @singleton
     def jwt_token_factory(self) -> JwtTokenFactory:
-        return JwtTokenFactory(general.web_server['api_token_secret'], general.web_server['token_validity_days'])
+        return JwtTokenFactory(config.web_server['api_token_secret'], config.web_server['token_validity_days'])
 
     @singleton
     def email_notificator(self) -> EmailNotifier:
@@ -199,7 +199,7 @@ class Container:
 
     @singleton
     def async_actuator_commands(self) -> AsyncActuatorCommands:
-        return AsyncActuatorCommands(general.redis_config)
+        return AsyncActuatorCommands(config.redis_config)
 
     @singleton
     def text_sensor_data_parser(self) -> TextSensorDataParser:
@@ -213,7 +213,7 @@ class Container:
 
     @singleton
     def authentication(self) -> Authentication:
-        return Authentication(general.credentials)
+        return Authentication(config.credentials)
 
     @singleton
     def actuator_token_converter(self) -> ActuatorTokenConverter:
@@ -287,7 +287,7 @@ class Container:
 
     @singleton
     def timed_lock(self) -> TimedLock:
-        return TimedLock(general.redis_config)
+        return TimedLock(config.redis_config)
 
     @singleton
     def home_alarm_lock(self) -> HomeAlarmLock:

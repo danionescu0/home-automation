@@ -1,17 +1,17 @@
 from tornado.ioloop import IOLoop
 from tornado.web import Application, url, StaticFileHandler
 
-from config import general
+import config
 from container import Container
 from web.handler.ActuatorHandler import ActuatorHandler
 from web.handler.ActuatorsHandler import ActuatorsHandler
+from web.handler.ConfigurationHandler import ConfigurationHandler
 from web.handler.IftttHandler import IftttHandler
 from web.handler.IftttListHandler import IftttListHandler
 from web.handler.LocationHandler import LocationHandler
 from web.handler.RoomsHandler import RoomsHandler
 from web.handler.SensorHandler import SensorHandler
 from web.handler.SensorsHandler import SensorsHandler
-from web.handler.ConfigurationHandler import ConfigurationHandler
 from web.handler.TokenAuthHandler import TokenAuthHandler
 from web.handler.VoiceCommandHandler import VoiceCommandHandler
 
@@ -93,10 +93,10 @@ def make_app():
                 name='api_configuration'
             ),
             url(r'/(.*)', StaticFileHandler, {
-                'path': general.web_server['static_path']
+                'path': config.web_server['static_path']
             }),
         ])
 
 app = make_app()
-app.listen(general.web_server['application_port'])
+app.listen(config.web_server['application_port'])
 IOLoop.current().start()

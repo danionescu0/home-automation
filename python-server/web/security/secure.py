@@ -1,6 +1,6 @@
 import jwt
 
-from config import general
+import config
 
 
 def secure(method):
@@ -15,7 +15,7 @@ def secure(method):
             return invalid_auth(self, "Invalid authorization header")
         token = auth_header[1]
         try:
-            jwt.decode(token, general.web_server['api_token_secret'], algorithm='HS256')
+            jwt.decode(token, config.web_server['api_token_secret'], algorithm='HS256')
         except Exception as e:
             invalid_auth(self, "Invalid token")
 

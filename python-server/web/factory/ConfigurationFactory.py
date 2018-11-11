@@ -11,6 +11,7 @@ from model.configuration.HomeDefenceCfg import HomeDefenceCfg
 from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
 from model.configuration.GeneralCfg import GeneralCfg
+from model.configuration.RemoteSpeakerCfg import RemoteSpeakerCfg
 
 
 class ConfigurationFactory:

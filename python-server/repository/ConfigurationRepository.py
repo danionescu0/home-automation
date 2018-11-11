@@ -10,6 +10,7 @@ from model.configuration.EmailCfg import EmailCfg
 from model.configuration.HomeDefenceCfg import HomeDefenceCfg
 from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
+from model.configuration.RemoteSpeakerCfg import RemoteSpeakerCfg
 from model.configuration.GeneralCfg import GeneralCfg
 
 
@@ -44,10 +45,11 @@ class ConfigurationRepository(AbstractRepository):
 
     def __get_default_configurations(self) -> Dict[str, BaseConfig]:
         return {
-            BluetoothCommunicationCfg.get_classname() : BluetoothCommunicationCfg({}),
-            EmailCfg.get_classname() : EmailCfg('', ''),
-            HomeDefenceCfg.get_classname() : HomeDefenceCfg(0, [], 0, ''),
-            SerialCommunicationCfg.get_classname() : SerialCommunicationCfg('', 0),
-            ZwaveCommunicationCfg.get_classname() : ZwaveCommunicationCfg('', ''),
-            GeneralCfg.get_classname() : GeneralCfg((0.0, 0.0), ''),
+            BluetoothCommunicationCfg.get_classname(): BluetoothCommunicationCfg({}),
+            EmailCfg.get_classname(): EmailCfg('', ''),
+            HomeDefenceCfg.get_classname(): HomeDefenceCfg(0, [], 0, ''),
+            SerialCommunicationCfg.get_classname(): SerialCommunicationCfg('', 0),
+            ZwaveCommunicationCfg.get_classname(): ZwaveCommunicationCfg('', ''),
+            GeneralCfg.get_classname(): GeneralCfg((0.0, 0.0), ''),
+            RemoteSpeakerCfg.get_classname(): RemoteSpeakerCfg('192.168.0.1', 'some_user', 'some_password'),
         }

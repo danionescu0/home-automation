@@ -21,12 +21,6 @@ logging = {
 
 timezone = 'Europe/Bucharest'
 
-remote_speaker = {
-    'host': 'http://ip',
-    'user': 'test_user',
-    'password' : 'test_pass'
-}
-
 # credentials for logging into the UI
 credentials = [
     {
