@@ -24,6 +24,7 @@ class IftttRulesRepository(AbstractRepository):
             'name' : rule.name,
             'text' : rule.text,
             'active': rule.active,
+            'lock_after_activation': rule.lock_after_activation,
             'rule_commands': [
                 {'actuator_id' : command.actuator_id,
                  'actuator_state': command.actuator_state,
@@ -53,7 +54,10 @@ class IftttRulesRepository(AbstractRepository):
                 if 'email_text' in data:
                     email_text = data['email_text']
                 commands.append(RuleCommand(data['actuator_id'], data['actuator_state'], data['voice_text'], email_text))
-            rule = Rule(rule_data['id'], rule_data['name'], rule_data['text'], rule_data['active'])
+            if 'lock_after_activation' not in rule_data:
+                rule_data['lock_after_activation'] = 60
+            rule = Rule(rule_data['id'], rule_data['name'], rule_data['text'], rule_data['active'],
+                        int(rule_data['lock_after_activation']))
             rule.add_commands(commands)
             rules[id] = rule
 

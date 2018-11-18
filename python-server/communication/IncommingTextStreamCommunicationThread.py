@@ -33,7 +33,7 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
                 self.__communicator.listen(self.__text_sensor_data_parser.is_buffer_parsable,
                                            self.__sensor_callback)
             except SerialDecodeException as e:
-                self.__logger.error("Could not parse incomming serial buffer" + e)
+                self.__logger.error("Could not parse incomming serial buffer: " + str(e))
             time.sleep(self.LISTEN_DELAY)
 
     def __sensor_callback(self, message):
@@ -42,7 +42,6 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
         except SensorsParseException as e:
             self.__logger.error(str(e))
             return
-
         for sensor in sensors:
             self.__sensors_repo.set_sensor(sensor)
             dispatcher.send(SensorUpdateEvent.NAME, event=SensorUpdateEvent(sensor))

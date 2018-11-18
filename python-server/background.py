@@ -2,7 +2,6 @@ import signal
 
 from communication.IncommingTextStreamCommunicationThread import IncommingTextStreamCommunicationThread
 from container import Container
-from ifttt.IftttRulesThread import IftttRulesThread
 from tools.AsyncJobsThread import AsyncJobsThread
 from tools.HomeDefenceThread import HomeDefenceThread
 
@@ -37,8 +36,7 @@ def main():
                                                          serial, root_logger))
     threads.append(container.incomming_zwave_communication_thread())
     threads.append(AsyncJobsThread(async_actuator_commands, root_logger))
-    threads.append(IftttRulesThread(container.ifttt_rules_repository(), container.command_executor(),
-                                    container.tokenizer(), root_logger))
+    threads.append(container.iftt_rules_thread())
     threads.append(HomeDefenceThread(container.home_defence()))
     threads.append(container.sensors_polling_thread())
 

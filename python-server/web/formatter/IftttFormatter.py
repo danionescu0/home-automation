@@ -19,6 +19,7 @@ class IftttFormatter:
                 'name': rule.name,
                 'text': rule.text,
                 'active' : rule.active,
+                'lock_after_activation' : rule.lock_after_activation,
                 'actuator_id': rule_command.actuator_id,
                 'actuator_state': rule_command.actuator_state,
                 'voice_text': rule_command.voice_text,

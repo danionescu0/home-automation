@@ -4,11 +4,12 @@ from model.RuleCommand import RuleCommand
 
 
 class Rule:
-    def __init__(self, id: str, name: str, text: str, active: bool) -> None:
+    def __init__(self, id: str, name: str, text: str, active: bool, lock_after_activation: int) -> None:
         self.id = id
         self.name = name
         self.text = text
         self.active = active
+        self.lock_after_activation = lock_after_activation
         self._rule_commands = []
 
     def add_command(self, command: RuleCommand):

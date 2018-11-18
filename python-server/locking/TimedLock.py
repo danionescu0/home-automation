@@ -23,7 +23,6 @@ class TimedLock:
     def __get_client(self):
         if (None != self.client):
             return self.client
-
         self.client = redis.StrictRedis(**self.__configuration)
 
         return self.client

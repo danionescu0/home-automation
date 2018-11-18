@@ -2,9 +2,9 @@ import time
 
 from typeguard import typechecked
 
-from communication.actuator.strategies.BaseStrategy import BaseStrategy
-from communication.encriptors.AesEncriptor import AesEncriptor
+from communication.AesEncriptor import AesEncriptor
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
+from communication.actuator.strategies.BaseStrategy import BaseStrategy
 from model.Actuator import Actuator
 from model.ActuatorProperties import ActuatorProperties
 

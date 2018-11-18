@@ -54,7 +54,16 @@ const IftttAddedit = ({rule, actuators, handleChange, handleSubmit}) => {
                       <FormText color="muted">Example: and  ( eq(A[livingCourtains], On), eq(TIME, 07:03))</FormText>
                     </Col>
                   </FormGroup>
-
+                  <FormGroup row>
+                    <Col md="3">
+                      <Label htmlFor="selectSm">Lock time after activation (in seconds)</Label>
+                    </Col>
+                    <Col xs="12" md="9">
+                      <Input type="text" name="selectSm" id="loclAfterActivation" size="sm" value={rule.lock_after_activation}
+                          onChange={handleChange.bind(this, 'lock_after_activation')} >
+                      </Input>
+                    </Col>
+                  </FormGroup>
                   <FormGroup row>
                     <Col md="3">
                       <Label htmlFor="selectSm">Actuator name</Label>

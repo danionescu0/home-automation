@@ -18,6 +18,7 @@ class IftttAddeditPage extends Component {
                   'name' : '',
                   'text': '',
                   'active': true,
+                  'lock_after_activation': 60,
                   'actuator_state': '',
                   'actuator_id': '',
                   'voice_text': '',

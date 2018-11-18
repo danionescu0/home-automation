@@ -4,6 +4,8 @@ from logging import RootLogger
 from typing import Callable
 
 import config
+from communication.AesEncriptor import AesEncriptor
+from communication.BroadlinkDevice import BroadlinkDevice
 from communication.DeviceLifetimeManager import DeviceLifetimeManager
 from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommunicationThread
 from communication.SensorsPollingThread import SensorsPollingThread
@@ -11,16 +13,15 @@ from communication.Serial import Serial
 from communication.SerialBluetooth import SerialBluetooth
 from communication.TextSensorDataParser import TextSensorDataParser
 from communication.ZWaveDevice import ZWaveDevice
-from communication.BroadlinkDevice import BroadlinkDevice
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from communication.actuator.ActuatorStrategies import ActuatorStrategies
 from communication.actuator.AsyncActuatorCommands import AsyncActuatorCommands
+from communication.actuator.strategies.BroadlinkStrategy import BroadlinkStrategy
 from communication.actuator.strategies.GroupStrategy import GroupStrategy
 from communication.actuator.strategies.SerialSendStrategy import SerialSendStrategy
 from communication.actuator.strategies.ZWaveStrategy import ZWaveStrategy
-from communication.actuator.strategies.BroadlinkStrategy import BroadlinkStrategy
-from communication.encriptors.AesEncriptor import AesEncriptor
 from ifttt.ExpressionValidator import ExpressionValidator
+from ifttt.IftttRulesThread import IftttRulesThread
 from ifttt.command.CommandExecutor import CommandExecutor
 from ifttt.command.TextCommunicationEnhancer import TextCommunicationEnhancer
 from ifttt.parser.ActuatorStateTokenConverter import ActuatorStateTokenConverter
@@ -37,16 +38,17 @@ from listener.ListenerConfigurator import ListenerConfigurator
 from listener.SaveLocationListener import SaveLocationListener
 from listener.SetPhoneIsHomeListener import SetPhoneIsHomeListener
 from locking.HomeAlarmLock import HomeAlarmLock
+from locking.RuleLock import RuleLock
 from locking.TimedLock import TimedLock
 from model.Actuator import Actuator
 from model.configuration.BluetoothCommunicationCfg import BluetoothCommunicationCfg
-from model.configuration.RemoteSpeakerCfg import RemoteSpeakerCfg
+from model.configuration.BroadlinkCfg import BroadlinkCfg
 from model.configuration.EmailCfg import EmailCfg
 from model.configuration.GeneralCfg import GeneralCfg
 from model.configuration.HomeDefenceCfg import HomeDefenceCfg
+from model.configuration.RemoteSpeakerCfg import RemoteSpeakerCfg
 from model.configuration.SerialCommunicationCfg import SerialCommunicationCfg
 from model.configuration.ZwaveCommunicationCfg import ZwaveCommunicationCfg
-from model.configuration.BroadlinkCfg import BroadlinkCfg
 from repository.ActuatorsRepository import ActuatorsRepository
 from repository.ConfigurationRepository import ConfigurationRepository
 from repository.IftttRulesRepository import IftttRulesRepository
@@ -158,6 +160,11 @@ class Container:
     def incomming_zwave_communication_thread(self) -> IncommingZwaveCommunicationThread:
         return IncommingZwaveCommunicationThread(self.sensors_repository(),
                                                  self.actuators_repository(), self.zwave_device(), self.root_logger())
+
+    @singleton
+    def iftt_rules_thread(self) -> IftttRulesThread:
+        return IftttRulesThread(self.ifttt_rules_repository(), self.command_executor(),
+                                self.tokenizer(), self.rule_lock(), self.root_logger())
 
     @singleton
     def sensors_polling_thread(self) -> SensorsPollingThread:
@@ -297,6 +304,10 @@ class Container:
     @singleton
     def timed_lock(self) -> TimedLock:
         return TimedLock(config.redis_config)
+
+    @singleton
+    def rule_lock(self) -> RuleLock:
+        return RuleLock(self.timed_lock())
 
     @singleton
     def home_alarm_lock(self) -> HomeAlarmLock:

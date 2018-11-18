@@ -16,7 +16,7 @@ class RuleFactory:
             rule_id = str(time.time())
         else:
             rule_id = data['id']
-        rule = Rule(rule_id, data['name'], data['text'], data['active'])
+        rule = Rule(rule_id, data['name'], data['text'], data['active'], data['lock_after_activation'])
         rule.add_commands(self.__get_rule_commands(data))
 
         return rule
