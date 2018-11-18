@@ -36,7 +36,8 @@
 # Requirements
 * python 3.5
 * redis server running
-* bluetooth configured
+* bluetooth configured (optional)
+* integrate remote speaker (optional) https://github.com/danionescu0/home-automation/tree/master/remote-speaker
 
 
 # Install: 
@@ -165,6 +166,7 @@ and will be interpretted by an arduino and perform some commands:
     - "communicator" -> "serial"
     - "send_to_device" -> the device code (it will be picked up by the arduino with the corresponding code)
     - "command" -> a dictinoary with commands to be send for the true/false states of the switch
+                -> you can check the arduino sketches folder for more details: https://github.com/danionescu0/home-automation/tree/master/arduino-sketches
     - if it conatins "shortcut" : true then it will be shown in the UI in the most frequently used
     the states will be interpretted by the arduino and perform the corresponding commands
     - "encription" : will be "aes"
@@ -316,7 +318,7 @@ Obs: All the actuators must be the same type (switches, pushbuttons)
     },
 ```` 
  
-4) in the UI settings/configuration you can difine the following:
+4) in the UI settings/configuration you can define the following:
 
 - serial communication config: port, baud rate; these are used to communicate over serial with the attached HC-12 
 wireless serial device, on the other end there will be arduino boards listening and interpretting commands or transmitting
@@ -331,7 +333,11 @@ burgler light switches (what switches will be toggled on/off), burgler time betw
 - remote speaker config: host, username and password for the remote speaker (https://create.arduino.cc/projecthub/danionescu/how-to-build-a-text-to-speech-iot-speaker-59cf87)
 - broadlink configuration: host and mac address, for more documentation check this github repo: https://github.com/mjg59/python-broadlink
 
-## bluetooth (optional)
+5) Configure a remote speaker
+- Build, configure and install the speaker. Check more details about the speaker here: https://github.com/danionescu0/home-automation/tree/master/remote-speaker
+- in the settings/configuration configure "remote speaker"
+
+## Bluetooth pairing (optional)
 To pair a bluetooth device:
 ```` 
 bluetoothctl
@@ -358,7 +364,7 @@ sudo /etc/init.d/bluetooth restart
 sudo hciconfig hci0 up
 ````
 
-## broadlink getting learned codes
+## Broadlink learned codes 
 * power on the device
 * install the android app (http://www.ibroadlink.com/app/)
 * follow the instructions to pair the device with the phone http://www.digmtechnology.com/manual/RM-PRO_user_manual.pdf

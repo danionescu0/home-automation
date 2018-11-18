@@ -1,44 +1,54 @@
-// HTU21D library: https://github.com/adafruit/Adafruit_HTU21DF_Library
+// BME680 library: https://github.com/adafruit/Adafruit_BME680.git
+// Adafruit sensor library: https://github.com/adafruit/Adafruit_Sensor.git
 // BH1750 library: https://github.com/claws/BH1750
-// RCSwitch library: https://github.com/sui77/rc-switch
 // AESLib library: https://github.com/DavyLandman/AESLib
 // Livolo library will inside arduino-sketches folder
 
 #include <SoftwareSerial.h>
 #include <Wire.h>
-#include "HTU21D.h"
+#include <SPI.h>
+#include <Adafruit_Sensor.h>
+#include "Adafruit_BME680.h"
 #include <BH1750.h>
 #include <Livolo.h>
-#include <RCSwitch.h>
 #include <AESLib.h>
 #include <EncryptedSoftwareSerial.h>
 
 const int transmitPin = 8;
 const int lightsOffCode = 106;
 const int lightsToggleCode = 120;
-const String DEVICE_CODE = "L1";// this will be used to identify incomming commands
+const String DEVICE_CODE = "L1";
 const long transmitInterval = 60000;
-const int airQualitySenzorPin = A3;
 
-HTU21D tempHumid;
+
 BH1750 lightMeter;
+Adafruit_BME680 bme; // I2C
 Livolo livolo(transmitPin); // transmitter connected to pin #8
-RCSwitch mySwitch = RCSwitch();
-int switches[7] = {0, 6400, 6410, 6420, 6430, 6440, 6450};
+
 uint8_t key[] = {48, 48, 48 , 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48};
-int i;
 long timeLastTransmitted;
-boolean movementDetected = false;
 
 EncryptedSoftwareSerial encryptedCommunicator = EncryptedSoftwareSerial(6, 5, 9600, key, DEVICE_CODE);
 
 void setup() 
 {
     Serial.begin(9600);
-    tempHumid.begin();
+    Serial.print("Initializing..");
+    if (!bme.begin()) {
+      Serial.println("Could not find a valid BME680 sensor, check wiring!");
+      while (1000);
+    }    
     lightMeter.begin();
+    bme.setTemperatureOversampling(BME680_OS_8X);
+    bme.setHumidityOversampling(BME680_OS_2X);
+    bme.setPressureOversampling(BME680_OS_4X);
+    bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
+    bme.setGasHeater(320, 150); // 320*C for 150 ms    
     timeLastTransmitted = millis();
-    mySwitch.enableTransmit(transmitPin);
+    for (int i=0;i<=10;i++) {
+      bme.performReading();
+    }
+
     Serial.println("Finish init");
 }
 
@@ -46,85 +56,39 @@ void loop()
 {
     if (encryptedCommunicator.parseIncomming()) {
         String command = encryptedCommunicator.getDecrypted();
-        Serial.println(command);
-        Serial.print("decripted:");Serial.println(command);
+        Serial.print("Decripted:");Serial.println(command);
         computeSwitches(command);
     }
-
-    if (millis() - timeLastTransmitted >= transmitInterval) {      
-        int humd = tempHumid.readHumidity();
-        int temp = tempHumid.readTemperature();
+  
+    if (millis() - timeLastTransmitted >= transmitInterval) {    
+        bme.performReading();
+        int humd = bme.humidity;
+        int temp = bme.temperature;
         int light = lightMeter.readLightLevel();
-        int airQuality = analogRead(airQualitySenzorPin);
-        airQuality = map(airQuality, 0, 1024, 0, 100);      
+        int airQuality = bme.gas_resistance / 1000.0;     
         transmitData(humd, temp, light, airQuality);
-        movementDetected = false;
         timeLastTransmitted = millis();
     }         
 }
 
-void powerSocket(byte switchNr, boolean state) 
+void lightSwitch(int lightNr, boolean state)
 {
-    switch (switchNr) {
-        case 8:
-            if (state) {
-                mySwitch.send(1381717, 24);      
-            } else {
-                mySwitch.send(1381716, 24);
-            }
-            break;
-        case 9:
-            if (state) {
-                mySwitch.send(1397845, 24);      
-            } else {
-                mySwitch.send(1397844, 24);
-            }
-            break;            
-    }
-}
-
-void lightSwitch(byte lightNr, boolean state)
-{
-    int remoteCode = switches[lightNr];
-    int sendCode = lightsToggleCode;
-    livolo.sendButton(remoteCode, lightsOffCode);
+    livolo.sendButton(lightNr, lightsOffCode);
     delay(500);    
     if (state) {    
-        livolo.sendButton(remoteCode, lightsToggleCode);
+        livolo.sendButton(lightNr, lightsToggleCode);
     }     
-    delay(100);
+    delay(500);
 }
 
 void computeSwitches(String command)
 {
-    byte nr = getNumber(command);
-    boolean state = getState(command);
-    Serial.print("nr:");Serial.println(nr);
-    if (state) {
-      Serial.print("state:");Serial.println("TRUE");
-    } else {
-      Serial.print("state:");Serial.println("FALSE");
-    }
-    
-    if (nr < 8) {
-        lightSwitch(nr, state);
-    } else {
-        powerSocket(nr, state);
-    }
+    int nr = command.substring(0, command.length() - 1).toInt();
+    boolean state = command.substring(command.length() - 1, command.length()) == "O" ? true : false;
+    Serial.print("Nr:");Serial.println(nr);
+    Serial.print("State:");Serial.println(state == true ? "TRUE" : "FALSE");
+    lightSwitch(nr, state);
 }
-
-byte getNumber(String command)
-{
-    return command.substring(0, command.length() - 1).toInt();
-}
-
-boolean getState(String command)
-{
-    String state = command.substring(command.length() - 1, command.length());
-
-    return state == "O" ? true : false;
-}
-
 
 void transmitData(int humd, int temp, int light, int airQuality)
 {
