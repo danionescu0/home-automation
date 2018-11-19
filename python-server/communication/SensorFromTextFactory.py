@@ -1,4 +1,6 @@
 import re
+import calendar
+from datetime import datetime
 from typing import List
 
 from typeguard import typechecked
@@ -50,6 +52,7 @@ class TextSensorDataParser:
                 except ValueError as e:
                     raise SensorsParseException(
                         'Badly formatted sensor value: {0}, error: {1})'.format(value, e.message))
+                sensor.last_updated = calendar.timegm(datetime.now().timetuple())
                 return sensor
 
         raise SensorsParseException('Sensor with code: {0} and location {1} not found!'.format(code, location))
