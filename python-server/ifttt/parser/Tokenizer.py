@@ -13,6 +13,7 @@ class Tokenizer:
     __token_rules = [
         ('A\[([0-9a-zA-Z\._]*)\]', Token.TYPE_ACTUATOR),
         ('S\[([0-9a-zA-Z\._]*)\]', Token.TYPE_SENSOR),
+        ('SL\[([0-9a-zA-Z\._]*)\]', Token.TYPE_SENSOR_LAST_UPDATED),
         ('TIME', Token.TYPE_CURRENT_TIME),
         ('gt', Token.TYPE_EXPR_GREATER),
         ('lt', Token.TYPE_EXPR_LESS),

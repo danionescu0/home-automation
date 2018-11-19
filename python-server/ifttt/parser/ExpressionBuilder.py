@@ -41,10 +41,8 @@ class ExpressionBuilder:
         token = self.__get_current_token()
         token_type = token.type
         self.__next_token()
-        if token_type in [Token.TYPE_LITERAL_BOOLEAN, Token.TYPE_LITERAL_INT, Token.TYPE_LITERAL_TIME,
-                          Token.TYPE_ACTUATOR_STATE, Token.TYPE_SENSOR, Token.TYPE_ACTUATOR, Token.TYPE_CURRENT_TIME]:
+        if Token.is_literal(token_type):
             return LiteralExpression(token.value)
-
         left_expr = self.__evaluate()
         right_expr = self.__evaluate()
         if token_type == Token.TYPE_EXPR_BETWEEN:

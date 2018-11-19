@@ -37,10 +37,7 @@ class SensorFromTextFactory:
 
     def __get_sensor(self, sensor_components) -> Sensor:
         code = sensor_components[0]
-        if sensor_components[1] == '':
-            location = False
-        else:
-            location = sensor_components[1]
+        location = False if sensor_components[1] == '' else sensor_components[1]
         value = sensor_components[2]
         for sensor in self.__sensors_repo.get_sensors():
             communication_code = sensor.properties.get(SensorProperties.COMMUNICATOR_CODE)

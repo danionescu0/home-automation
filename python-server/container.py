@@ -30,6 +30,7 @@ from ifttt.parser.BooleanTokenConverter import BooleanTokenConverter
 from ifttt.parser.CurrentTimeTokenConverter import CurrentTimeTokenConverter
 from ifttt.parser.IntTokenConverter import IntTokenConverter
 from ifttt.parser.SensorTokenConverter import SensorTokenConverter
+from ifttt.parser.SensorLastUpdTokenConverter import SensorLastUpdTokenConverter
 from ifttt.parser.Tokenizer import Tokenizer
 from listener.ChangeActuatorListener import ChangeActuatorListener
 from listener.FingerprintDoorUnlockListener import FingerprintDoorUnlockListener
@@ -240,10 +241,15 @@ class Container:
         return SensorTokenConverter(self.sensors_repository())
 
     @singleton
+    def sensors_last_updated_token_converter(self) -> SensorLastUpdTokenConverter:
+        return SensorLastUpdTokenConverter(self.sensors_repository())
+
+    @singleton
     def tokenizer(self) -> Tokenizer:
         tokenizer = Tokenizer(self.root_logger())
         tokenizer.add_token_converter(self.actuator_token_converter())
         tokenizer.add_token_converter(self.sensors_token_converter())
+        tokenizer.add_token_converter(self.sensors_last_updated_token_converter())
         tokenizer.add_token_converter(CurrentTimeTokenConverter())
         tokenizer.add_token_converter(ActuatorStateTokenConverter())
         tokenizer.add_token_converter(BooleanTokenConverter())

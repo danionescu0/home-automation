@@ -14,7 +14,7 @@ from model.Rule import Rule
 
 
 class IftttRulesThread(threading.Thread):
-    ITERATE_INTERVAL = 30
+    ITERATE_INTERVAL = 5
 
     @typechecked()
     def __init__(self, ifttt_rules: IftttRulesRepository, command_executor: CommandExecutor,
@@ -40,6 +40,7 @@ class IftttRulesThread(threading.Thread):
                                  .format(rule.text, {True: 'Ok', False: 'Not ok'}[should_execute]))
             if not rule.active or not should_execute:
                 continue
+            self.__rule_lock.set_lock(rule)
             for command in rule.rule_commands:
                 self.__command_executor.execute(command)
 
@@ -56,6 +57,5 @@ class IftttRulesThread(threading.Thread):
             return False
         statement = expression_builder.get_expression()
         statement.interpret(context)
-        self.__rule_lock.set_lock(rule)
 
         return context.lookup(statement)
