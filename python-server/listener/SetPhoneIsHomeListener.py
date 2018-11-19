@@ -1,3 +1,6 @@
+import calendar
+from datetime import datetime
+
 from typeguard import typechecked
 from pydispatch import dispatcher
 from typing import Tuple
@@ -28,5 +31,5 @@ class SetPhoneIsHomeListener(BaseListener):
         distance_from_home = vincenty(self.__home_coordonates, current_coordonates).km
         phone_is_home = distance_from_home < self.HOME_RADIUS
         sensor = Sensor('phoneIsHome', Sensor.SensorType.PHONE_IS_HOME.value, False,
-                        phone_is_home, Sensor.DeviceType.ACTION.value)
+                        phone_is_home, Sensor.DeviceType.ACTION.value, calendar.timegm(datetime.now().timetuple()))
         self.__sensors_repo.set_sensor(sensor)

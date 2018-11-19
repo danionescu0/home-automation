@@ -11,7 +11,7 @@ from model.SensorProperties import SensorProperties
 from repository.SensorsRepository import SensorsRepository
 
 
-class TextSensorDataParser:
+class SensorFromTextFactory:
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'
     SENSOR_SEPARATOR = '|'
 
@@ -20,11 +20,11 @@ class TextSensorDataParser:
         self.__sensors_repo = sensors_repo
 
     @typechecked()
-    def is_buffer_parsable(self, buffer: str) -> bool:
-        return buffer.endswith(self.SENSOR_SEPARATOR)
+    def can_create(self, text: str) -> bool:
+        return text.endswith(self.SENSOR_SEPARATOR)
 
     @typechecked()
-    def parse(self, text_buffer: str) -> List[Sensor]:
+    def create(self, text_buffer: str) -> List[Sensor]:
         text_buffer = text_buffer[:-1]
         sensors = []
         for sensor in text_buffer.split('|'):

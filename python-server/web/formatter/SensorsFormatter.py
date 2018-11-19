@@ -1,6 +1,5 @@
-from datetime import datetime
 from dateutil import tz
-
+from datetime import datetime
 from typeguard import typechecked
 
 from tools.DateUtils import DateUtils

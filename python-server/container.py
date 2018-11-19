@@ -11,7 +11,7 @@ from communication.IncommingZwaveCommunicationThread import IncommingZwaveCommun
 from communication.SensorsPollingThread import SensorsPollingThread
 from communication.Serial import Serial
 from communication.SerialBluetooth import SerialBluetooth
-from communication.TextSensorDataParser import TextSensorDataParser
+from communication.SensorFromTextFactory import SensorFromTextFactory
 from communication.ZWaveDevice import ZWaveDevice
 from communication.actuator.ActuatorCommands import ActuatorCommands
 from communication.actuator.ActuatorStrategies import ActuatorStrategies
@@ -218,8 +218,8 @@ class Container:
         return AsyncActuatorCommands(config.redis_config)
 
     @singleton
-    def text_sensor_data_parser(self) -> TextSensorDataParser:
-        return TextSensorDataParser(self.sensors_repository())
+    def text_sensor_data_parser(self) -> SensorFromTextFactory:
+        return SensorFromTextFactory(self.sensors_repository())
 
     @singleton
     def home_defence(self) -> HomeDefence:

@@ -1,5 +1,7 @@
-import threading
 import time
+import calendar
+import threading
+from datetime import datetime
 from logging import RootLogger
 
 from typeguard import typechecked
@@ -42,5 +44,6 @@ class SensorsPollingThread(threading.Thread):
         self.__logger.info("New value for sensor with id {0} is {1}: ".format(sensor.id, new_value))
         if None is not new_value:
             sensor.value = round(new_value, 1)
+            sensor.last_updated = calendar.timegm(datetime.now().timetuple())
             self.__sensors_repo.set_sensor(sensor)
             dispatcher.send(SensorUpdateEvent.NAME, event=SensorUpdateEvent(sensor))

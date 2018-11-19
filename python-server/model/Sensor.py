@@ -23,12 +23,13 @@ class Sensor:
         ZWAVE = 'zwave'
         ACTION = 'action'
 
-    def __init__(self, id: str, type: str, location: str, value, device_type: str) -> None:
+    def __init__(self, id: str, type: str, location: str, value, device_type: str, last_updated: int) -> None:
         self.id = id
         self.type = type
         self.location = location
         self.value = value
         self.device_type = device_type
+        self.last_updated = last_updated
         self._properties = None
 
     @property
@@ -41,5 +42,5 @@ class Sensor:
 
     def __repr__(self) -> str:
         return "Sensor: id({0}), type({1}), location({2}), value({3}), device_type({4})," \
-               " properties({5})".format(self.id, self.type, self.location, self.value,
-                                         self.device_type, self._properties)
+               " properties({5}), last_updated({6})".format(self.id, self.type, self.location, self.value,
+                                         self.device_type, self._properties, self.last_updated)

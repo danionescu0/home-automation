@@ -31,8 +31,10 @@ class SensorsRepository(AbstractRepository):
         sensors_data = self.get(self.__REDIS_SENSORS_KEY)
         sensors = []
         for sensor_data in sensors_data:
+            # todo remove this hack after all sensors are updated
+            last_updated = sensor_data['last_updated'] if 'last_updated' in sensor_data else 0
             sensor = Sensor(sensor_data['id'], sensor_data['type'], sensor_data['location'],
-                            sensor_data['value'], sensor_data['device_type'])
+                            sensor_data['value'], sensor_data['device_type'], last_updated)
             if 'properties' in sensor_data:
                 sensor.properties = self.__get_sensor_properties(sensor_data['properties'])
             else:
@@ -52,6 +54,7 @@ class SensorsRepository(AbstractRepository):
 
     @typechecked()
     def set_sensor(self, sensor: Sensor) -> None:
+        # @todo this current_timestamp is fishy, please investigate
         self.current_timestamp = calendar.timegm(datetime.now().timetuple())
         self.__set(sensor)
         self.__add_last_sensor_averages_in_history(sensor)
@@ -74,6 +77,7 @@ class SensorsRepository(AbstractRepository):
         for redis_sensor in sensors:
             if redis_sensor['id'] == sensor.id:
                 redis_sensor['value'] = sensor.value
+                redis_sensor['last_updated'] = sensor.last_updated
 
         self.client.set(self.__REDIS_SENSORS_KEY, json.dumps(sensors))
 

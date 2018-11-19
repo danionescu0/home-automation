@@ -1,3 +1,5 @@
+import calendar
+from datetime import datetime
 import threading
 from logging import RootLogger
 
@@ -40,6 +42,7 @@ class IncommingZwaveCommunicationThread(threading.Thread):
 
     def __process_sensor(self, sensor: Sensor, value):
         sensor.value = round(value, 3)
+        sensor.last_updated = calendar.timegm(datetime.now().timetuple())
         self.__sensors_repository.set_sensor(sensor)
         dispatcher.send(SensorUpdateEvent.NAME, event=SensorUpdateEvent(sensor))
 

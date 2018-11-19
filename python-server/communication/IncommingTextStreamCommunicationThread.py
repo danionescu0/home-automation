@@ -6,7 +6,7 @@ from typeguard import typechecked
 from pydispatch import dispatcher
 
 from communication.BaseSerial import BaseSerial
-from communication.TextSensorDataParser import TextSensorDataParser
+from communication.SensorFromTextFactory import SensorFromTextFactory
 from communication.exception.SensorsParseException import SensorsParseException
 from communication.exception.SerialDecodeException import SerialDecodeException
 from event.SensorUpdateEvent import SensorUpdateEvent
@@ -17,10 +17,10 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
     LISTEN_DELAY = 0.01
 
     @typechecked()
-    def __init__(self, text_sensor_data_parser: TextSensorDataParser, sensors_repo: SensorsRepository,
+    def __init__(self, sensor_from_text_factory: SensorFromTextFactory, sensors_repo: SensorsRepository,
                  communicator: BaseSerial, logger: RootLogger):
         threading.Thread.__init__(self)
-        self.__text_sensor_data_parser = text_sensor_data_parser
+        self.__sensor_from_text_factory = sensor_from_text_factory
         self.__sensors_repo = sensors_repo
         self.__communicator = communicator
         self.__logger = logger
@@ -30,15 +30,14 @@ class IncommingTextStreamCommunicationThread(threading.Thread):
     def run(self) -> None:
         while not self.shutdown:
             try:
-                self.__communicator.listen(self.__text_sensor_data_parser.is_buffer_parsable,
-                                           self.__sensor_callback)
+                self.__communicator.listen(self.__sensor_from_text_factory.can_create, self.__sensor_callback)
             except SerialDecodeException as e:
                 self.__logger.error("Could not parse incomming serial buffer: " + str(e))
             time.sleep(self.LISTEN_DELAY)
 
     def __sensor_callback(self, message):
         try:
-            sensors = self.__text_sensor_data_parser.parse(message)
+            sensors = self.__sensor_from_text_factory.create(message)
         except SensorsParseException as e:
             self.__logger.error(str(e))
             return
