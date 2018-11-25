@@ -31,6 +31,8 @@ class ExpressionBuilder:
     def build(self):
         ExpressionBuilder.current_token_index = 0
         self.__tokens = self.__tokenizer.tokenize(self.__text)
+        # for token in self.__tokens:
+        #     self.__logger.info(token)
         self.__expression = self.__evaluate()
 
     @typechecked()

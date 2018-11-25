@@ -18,8 +18,8 @@ import {
 } from 'reactstrap';
 
 
-const IftttList = ({rules_data, show_delete_confirm, close_modal, modal_status, delete_rule}) => {
-    const StatusBadge = ({status}) => {
+const IftttList = ({rules_data, show_delete_confirm, close_modal, modal_status, delete_rule, toggle_rule}) => {
+    const StatusBadge = ({rule}) => {
         const statusBadgeToClass = {
             true : 'success',
             false : 'warning'
@@ -29,9 +29,12 @@ const IftttList = ({rules_data, show_delete_confirm, close_modal, modal_status, 
             false: 'Inactive'
         };
         return (
-            <Badge color={statusBadgeToClass[status]}>{statusText[status]}</Badge>
+            <Link to="#" onClick={toggle_rule.bind(this, rule.id, rule.active)}>
+                <Badge color={statusBadgeToClass[rule.active]}>{statusText[rule.active]}</Badge>
+            </Link>
         )
     };
+
     const AddNewRule = withRouter(({ history }) => (
         <Button onClick={() => { history.push('/ifttt-add') }} size="sm" color="primary">
             <i className="fa fa-dot-circle-o"></i> Add new rule
@@ -44,7 +47,7 @@ const IftttList = ({rules_data, show_delete_confirm, close_modal, modal_status, 
                     <td>{rule.name}</td>
                     <td>{rule.text}</td>
                     <td>
-                        <StatusBadge status={rule.active} />
+                        <StatusBadge rule={rule} />
                     </td>
                     <td>
                         <Link to="/" onClick={show_delete_confirm.bind(this, rule.id)}>Delete</Link>,
