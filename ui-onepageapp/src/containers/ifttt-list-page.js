@@ -4,7 +4,6 @@ import IftttList from '../components/Widgets/IftttList'
 import {getJson} from '../utils/fetch'
 import {postJson} from "../utils/fetch";
 import {remove} from '../utils/fetch'
-import update from 'immutability-helper';
 
 
 class IftttListPage extends Component {

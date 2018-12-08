@@ -23,7 +23,7 @@ class App extends Component {
         <div className="app-body">
           <Sidebar {...this.props} />
           <main className="main">
-            <Container fluid>
+            <Container>
               <Switch>
                 <Route path="/main-page" name="MainPage" component={secure(MainPage)}/>
                 <Route path="/actuators" name="ActuatorsPage" component={secure(ComponentsPage)}/>
