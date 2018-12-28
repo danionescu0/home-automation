@@ -24,6 +24,7 @@ pip install keras
 pip install pandas
 pip install sklearn
 pip install requests
+pip install pymongo
 conda update --all
 conda activate ml
 ````
