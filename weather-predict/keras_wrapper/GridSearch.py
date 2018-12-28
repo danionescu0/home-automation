@@ -1,7 +1,7 @@
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import GridSearchCV
 
-from machine_learning.ModelBuilder import ModelBuilder
+from keras_wrapper.ModelBuilder import ModelBuilder
 
 
 class GridSearch:

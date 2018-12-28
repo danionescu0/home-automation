@@ -14,10 +14,17 @@ class DatapointsRepository:
 
     def update(self, date, sensor_name: str, value: float):
         self.__mongo_client.update(
-            {'_id' : date.strftime('%d_%Y_%H_%M')},
+            {'_id' : date.strftime('%m_%d_%Y_%H_%M')},
             {'$set' : {sensor_name : value, 'date' : date}},
             upsert=True
         )
 
     def get(self, start_date, end_date) -> List[Datapoint]:
-        pass
+        cursor = self.__mongo_client.find(
+            {'$and' : [
+                {'date' : {'$gte' : start_date}},
+                {'date' : {'$lte' : end_date}}
+            ]}
+        )
+
+        return list(cursor)
