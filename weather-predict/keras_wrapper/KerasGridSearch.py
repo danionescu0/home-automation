@@ -1,15 +1,15 @@
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import GridSearchCV
 
-from keras_wrapper.ModelBuilder import ModelBuilder
+from keras_wrapper.KerasModelBuilder import KerasModelBuilder
 
 
-class GridSearch:
-    def __init__(self, model_builder: ModelBuilder) -> None:
+class KerasGridSearch:
+    def __init__(self, model_builder: KerasModelBuilder) -> None:
         self.__model_builder = model_builder
         self.__parameters = {
             'batch_size': [1, 2, 3, 10],
-            'nb_epoch': [7, 10, 20],
+            'epoch': [7, 10, 20],
             'optimizer': ['adam', 'rmsprop'],
             'dropout': [0.1, 0.05, 0.15]
         }

@@ -31,29 +31,27 @@ conda activate ml
 
 The output data will be prediction on rain levels for the next N hours
 
-Currently i've tested the model on 6 h and it has 83% accuracy
+Currently i've tested the model on 6 h and it has over 85% accuracy
 
 Steps:
 
-1. Generate the basic data using data_extractor.py
+1. Import data
 
 For example:
 
 ````
-python data_extractor.py --output-file some_file.csv --day-behind nr_days --hour-granularity granularity <= 24
+python import_from_home_automation.py --day-behind nr_days
 ````
 
-This will extract data from the home automation repository and save it in a csv format.
+This will extract data from the home automation repository and save it into the local mongoDb database
 
 
-2. Generate the model using data_enhancer.py and show also the test values
-
+2. Generate the model 
 ````
-python data_enhancer.py --input-file weather.csv --test-file-percent 6 --datapoints-behind 10
+python train.py -d 600 -p 10 -dp 6 -hg 6
 ````
-This will enhance the generated model and split it in two files a main file and a test file
 
-The enhancements are:
+
 
 - days with mean temperatures below 0 are excluded. The exclusions happen because
 temperatures below zero means rain will turn into snow, and the weather station doesn't detect snow
@@ -61,12 +59,6 @@ temperatures below zero means rain will turn into snow, and the weather station 
 - a boolean 0/1 has_rain is includen in the columns based on average rain
 
 - the N previous rows are added for every row for model consistency
-
-3. Train the model
-
-````
-python training.py --input-file file_name --mode [grid|train]
-````
 
 For mode grid it will make a grid search with the parameters wich are best
 

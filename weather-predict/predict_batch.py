@@ -4,8 +4,8 @@ import numpy as np
 from sklearn.externals import joblib
 from keras.models import load_model
 
-from data_source.FileDataProvider import FileDataProvider
 import config
+from data_source.FileDataProvider import FileDataProvider
 
 
 argparse = argparse.ArgumentParser()
@@ -20,14 +20,20 @@ classifier = load_model(config.model['keras_model_file_name'])
 
 X_test, y_test = file_data_provider.get(args['test_file'])
 i = good = 0
+j = good2 = 0
 
 for test_data in X_test:
-    y_pred = classifier.predict(scaler.transform(np.array([test_data])))
+    y_pred = classifier.predict_classes(scaler.transform(np.array([test_data])))
     actual_rain = True if y_test[i] == 1 else False
-    predicted_rain = (y_pred > 0.5)
+    predicted_rain = (y_pred > 0)
+    if actual_rain == True:
+        j += 1
+        if actual_rain == predicted_rain:
+            good2 += 1
     if (predicted_rain == True and y_test[i] == 1) or (predicted_rain == False and y_test[i] == 0):
         good += 1
     print("Index: {0}, Actual, Predicted: {1}|{2}". format(i, actual_rain, predicted_rain))
     i += 1
 
-print ('Total: {0}, Good: {1}, Percent accuracy: {2} '.format(i, good, good * 100 / i))
+print ('Standard: Total: {0}, Good: {1}, Percent accuracy: {2} '.format(i, good, good * 100 / i))
+print ('False negatives penalty: Total: {0}, Good: {1}, Percent accuracy: {2} '.format(j, good2, good2 * 100 / j))

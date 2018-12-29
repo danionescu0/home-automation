@@ -4,11 +4,13 @@ import pandas
 from operator import itemgetter
 
 from data_processing.BaseProcessor import BaseProcessor
+from model.DataFeatures import DataFeatures
 
 
 class HourGroupStatsProcessor(BaseProcessor):
-    def __init__(self, group_by_hours: int) -> None:
+    def __init__(self, group_by_hours: int, sensor_names: list) -> None:
         self.__group_by_hours = group_by_hours
+        self.__sensor_names = sensor_names
 
     def process(self, dataframe):
         dataframe_dict = {}
@@ -19,9 +21,8 @@ class HourGroupStatsProcessor(BaseProcessor):
             else:
                 dataframe_dict[hour_group].append(row.to_dict())
         final_data = []
-        sensor_names = ['light', 'rain', 'temperature', 'pressure', 'humidity']
         for key, items in dataframe_dict.items():
-            final_data.append(self.__get_important_attributes(key, items, sensor_names))
+            final_data.append(self.__get_important_attributes(key, items, self.__sensor_names))
 
         return pandas.DataFrame(final_data).set_index('_id').sort_values('date')
 
@@ -31,20 +32,24 @@ class HourGroupStatsProcessor(BaseProcessor):
             '_id' : key,
         }
         for sensor in sensor_names:
-            attributes[sensor + '_min'] = min(map(itemgetter(sensor), items))
-            attributes[sensor + '_max'] = max(map(itemgetter(sensor), items))
+            attributes[sensor + '_' + DataFeatures.MIN.value] = min(map(itemgetter(sensor), items))
+            attributes[sensor + '_' + DataFeatures.MAX.value] = max(map(itemgetter(sensor), items))
             mean = statistics.mean(map(itemgetter(sensor), items))
             #try a fix for this
-            attributes[sensor + '_avg'] = mean if not math.isnan(mean) else 0
-            rise = fall = last_value = 0
+            attributes[sensor + '_' + DataFeatures.AVERAGE.value] = mean if not math.isnan(mean) else 0
+            # attributes[sensor + '_' + DataFeatures.STDEV.value] = statistics.stdev(map(itemgetter(sensor), items))
+            rise = fall = steady = last_value = 0
             for item in items:
                 if item[sensor] > last_value:
                     rise += 1
                 elif item[sensor] < last_value:
                     fall += 1
+                else:
+                    steady += 1
                 last_value = item[sensor]
-                attributes[sensor + '_rise'] = rise
-                attributes[sensor + '_fall'] = fall
+                attributes[sensor + '_' + DataFeatures.RISE.value] = rise
+                attributes[sensor + '_' + DataFeatures.FALL.value] = fall
+                attributes[sensor + '_' + DataFeatures.STEADY.value] = steady
 
         return attributes
 
