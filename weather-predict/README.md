@@ -48,7 +48,7 @@ This will extract data from the home automation repository and save it into the 
 
 2. Generate the model 
 ````
-python train.py -d 600 -p 10 -dp 6 -hg 6
+python train.py --days_behind 600 --test-file-percent 10 --datapoints-behind 6 --hour-granularity 6
 ````
 
 

@@ -2,6 +2,7 @@ import statistics
 import math
 import pandas
 from operator import itemgetter
+import numpy
 
 from data_processing.BaseProcessor import BaseProcessor
 from model.DataFeatures import DataFeatures
@@ -34,10 +35,11 @@ class HourGroupStatsProcessor(BaseProcessor):
         for sensor in sensor_names:
             attributes[sensor + '_' + DataFeatures.MIN.value] = min(map(itemgetter(sensor), items))
             attributes[sensor + '_' + DataFeatures.MAX.value] = max(map(itemgetter(sensor), items))
-            mean = statistics.mean(map(itemgetter(sensor), items))
-            #try a fix for this
-            attributes[sensor + '_' + DataFeatures.AVERAGE.value] = mean if not math.isnan(mean) else 0
-            # attributes[sensor + '_' + DataFeatures.STDEV.value] = statistics.stdev(map(itemgetter(sensor), items))
+            attributes[sensor + '_' + DataFeatures.AVERAGE.value] = statistics.mean(map(itemgetter(sensor), items))
+            attributes[sensor + '_' + DataFeatures.PERCENTILE70.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 70)
+            attributes[sensor + '_' + DataFeatures.PERCENTILE90.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 90)
+            # attributes[sensor + '_' + DataFeatures.PERCENTILE30.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 30)
+            # attributes[sensor + '_' + DataFeatures.PERCENTILE10.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 10)
             rise = fall = steady = last_value = 0
             for item in items:
                 if item[sensor] > last_value:
