@@ -37,8 +37,6 @@ Steps:
 
 1. Import data
 
-For example:
-
 ````
 python import_from_home_automation.py --day-behind nr_days
 ````

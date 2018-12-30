@@ -37,6 +37,7 @@ class FinalDataProvider:
         dataframe.insert(loc=1, column='has_rain',
                          value=numpy.where(dataframe['rain_avg'] > self.MINIMUM_RAIN_TRHRESHOLD, 1, 0))
         dataframe = cleanup_processor.process(dataframe)
+        dataframe.loc['last'] = [0 for n in range(len(dataframe.columns))]
         dataframe = datapoint_augmenter_processor.process(dataframe)
         dataframe = dataframe.iloc[datapoints_behind:]
 

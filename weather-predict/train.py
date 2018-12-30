@@ -25,11 +25,10 @@ container = Container()
 dataframe = container.final_data_provider().get(args['days_behind'], args['datapoints_behind'], args['hour_granularity'])
 main_data, test_data = train_test_split(dataframe, test_size=args['test_file_percent'] / 100)
 
+dataframe.to_csv('sample_data/all_data.csv')
 main_data.to_csv('sample_data/main_data.csv')
 test_data.to_csv('sample_data/test_data.csv')
-
 print_headline('Training neural net')
-
 
 X = main_data.iloc[:, 1:].values
 y = main_data.iloc[:, 0].values
@@ -41,7 +40,7 @@ if args['grid_search']:
 
 model_builder = container.keras_model_builder()
 classifier = model_builder.build(X.shape[1], 'rmsprop', 0.05)
-classifier.fit(X, y, batch_size=1, epochs=50)
+classifier.fit(X, y, batch_size=1, epochs=20)
 
 classifier.save(config.model['keras_model_file_name'])
 joblib.dump(scaler, config.model['sklearn_scaler_file_name'])
