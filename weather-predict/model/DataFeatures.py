@@ -10,8 +10,8 @@ class DataFeatures(Enum):
    MAX = 'max'
    PERCENTILE70 = '70percentile'
    PERCENTILE90 = '90percentile'
-   # PERCENTILE10 = '10percentile'
-   # PERCENTILE30 = '30percentile'
+   PERCENTILE10 = '10percentile'
+   PERCENTILE30 = '30percentile'
 
    @staticmethod
    def list():

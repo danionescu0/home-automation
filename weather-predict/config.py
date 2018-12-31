@@ -16,6 +16,7 @@ mongodb = {
 }
 
 model = {
-    'keras_model_file_name' : 'weather.h5',
-    'sklearn_scaler_file_name' : 'scaler.save'
+    'keras_model_file_name' : 'sample_data/weather.h5',
+    'sklearn_scaler_file_name' : 'sample_data/scaler.save',
+    'test_data_file' : 'sample_data/test_data.csv'
 }

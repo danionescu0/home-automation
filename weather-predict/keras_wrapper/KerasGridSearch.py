@@ -8,10 +8,10 @@ class KerasGridSearch:
     def __init__(self, model_builder: KerasModelBuilder) -> None:
         self.__model_builder = model_builder
         self.__parameters = {
-            'batch_size': [1, 2, 3, 10],
-            'epoch': [7, 10, 20],
+            'batch_size': [1, 2, 10],
+            'nb_epoch': [7, 10, 50],
             'optimizer': ['adam', 'rmsprop'],
-            'dropout': [0.1, 0.05, 0.15]
+            'dropout': [0.1, 0.05, 0.2]
         }
 
     def search(self, X_train, y_train) -> tuple:

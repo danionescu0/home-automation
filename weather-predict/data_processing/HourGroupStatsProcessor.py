@@ -38,8 +38,8 @@ class HourGroupStatsProcessor(BaseProcessor):
             attributes[sensor + '_' + DataFeatures.AVERAGE.value] = statistics.mean(map(itemgetter(sensor), items))
             attributes[sensor + '_' + DataFeatures.PERCENTILE70.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 70)
             attributes[sensor + '_' + DataFeatures.PERCENTILE90.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 90)
-            # attributes[sensor + '_' + DataFeatures.PERCENTILE30.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 30)
-            # attributes[sensor + '_' + DataFeatures.PERCENTILE10.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 10)
+            attributes[sensor + '_' + DataFeatures.PERCENTILE30.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 30)
+            attributes[sensor + '_' + DataFeatures.PERCENTILE10.value] = numpy.percentile(numpy.array(list(map(itemgetter(sensor), items))), 10)
             rise = fall = steady = last_value = 0
             for item in items:
                 if item[sensor] > last_value:

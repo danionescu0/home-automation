@@ -1,11 +1,12 @@
+import sys
 import argparse
+
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.externals import joblib
 
 import config
-from utils import print_headline
 from container import Container
 
 
@@ -25,10 +26,8 @@ container = Container()
 dataframe = container.final_data_provider().get(args['days_behind'], args['datapoints_behind'], args['hour_granularity'])
 main_data, test_data = train_test_split(dataframe, test_size=args['test_file_percent'] / 100)
 
-dataframe.to_csv('sample_data/all_data.csv')
-main_data.to_csv('sample_data/main_data.csv')
-test_data.to_csv('sample_data/test_data.csv')
-print_headline('Training neural net')
+main_data.to_csv('sample_data/training_data.csv')
+test_data.to_csv(config.model['test_data_file'])
 
 X = main_data.iloc[:, 1:].values
 y = main_data.iloc[:, 0].values
@@ -37,10 +36,11 @@ X = scaler.fit_transform(X)
 
 if args['grid_search']:
     print(container.keras_grid_search().search(X, y))
+    sys.exit()
 
 model_builder = container.keras_model_builder()
 classifier = model_builder.build(X.shape[1], 'rmsprop', 0.05)
-classifier.fit(X, y, batch_size=1, epochs=20)
+classifier.fit(X, y, batch_size=1, epochs=50)
 
 classifier.save(config.model['keras_model_file_name'])
 joblib.dump(scaler, config.model['sklearn_scaler_file_name'])
