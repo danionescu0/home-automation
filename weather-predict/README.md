@@ -25,6 +25,7 @@ pip install pandas
 pip install sklearn
 pip install requests
 pip install pymongo
+pip install serial
 conda update --all
 conda activate ml
 ````
@@ -37,8 +38,17 @@ Steps:
 
 1. Import data
 
+a) from the example data i provided:
+
 ````
-python import_from_home_automation.py --day-behind nr_days
+mongoimport -d weather -c datapoints_bk --file sample_data/datapoints.json
+````
+
+
+b) from home-automation project (if exists)
+
+````
+python home_automation/import.py  --day-behind nr_days
 ````
 
 This will extract data from the home automation repository and save it into the local mongoDb database

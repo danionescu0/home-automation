@@ -9,6 +9,7 @@ from repository.DatapointsRepository import DatapointsRepository
 from data_source.FinalDataProvider import FinalDataProvider
 from model.Sensors import Sensors
 from model.DataFeatures import DataFeatures
+from device_communication.Serial import Serial
 
 
 def singleton(function: Callable):
@@ -43,3 +44,7 @@ class Container:
     @singleton
     def final_data_provider(self) -> FinalDataProvider:
         return FinalDataProvider(self.datapoints_repository(), Sensors.list(), DataFeatures.list())
+
+    @singleton
+    def serial(self) -> Serial:
+        return Serial(config.serial['port'], config.serial['baud_rate'])
