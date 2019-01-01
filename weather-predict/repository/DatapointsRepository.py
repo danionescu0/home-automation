@@ -2,16 +2,12 @@ from typing import List
 
 from pymongo import MongoClient
 
-from model.Datapoint import Datapoint
 from model.Sensor import Sensor
 
 
 class DatapointsRepository:
     def __init__(self, mongo_client: MongoClient) -> None:
         self.__mongo_client = mongo_client
-
-    def add(self, datapoint: Datapoint):
-        pass
 
     def update(self, date, sensors: List[Sensor]):
         set_data = {sensor.type : sensor.value for sensor in sensors}
@@ -22,7 +18,7 @@ class DatapointsRepository:
             upsert=True
         )
 
-    def get(self, start_date, end_date) -> List[Datapoint]:
+    def get(self, start_date, end_date) -> list:
         cursor = self.__mongo_client.find(
             {'$and' : [
                 {'date' : {'$gte' : start_date}},
