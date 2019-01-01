@@ -9,7 +9,7 @@ from sklearn.externals import joblib
 import config
 from container import Container
 
-
+# python train.py -d 610 -p 10 -dp 8 -hg 6
 argparse = argparse.ArgumentParser()
 argparse.add_argument("-d", "--days-behind", required=True, dest="days_behind", type=int,
                       help="Days behind to be taken into account")

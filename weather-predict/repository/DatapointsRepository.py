@@ -3,6 +3,7 @@ from typing import List
 from pymongo import MongoClient
 
 from model.Datapoint import Datapoint
+from model.Sensor import Sensor
 
 
 class DatapointsRepository:
@@ -12,10 +13,12 @@ class DatapointsRepository:
     def add(self, datapoint: Datapoint):
         pass
 
-    def update(self, date, sensor_name: str, value: float):
+    def update(self, date, sensors: List[Sensor]):
+        set_data = {sensor.type : sensor.value for sensor in sensors}
+        set_data['date'] = date
         self.__mongo_client.update(
             {'_id' : date.strftime('%m_%d_%Y_%H_%M')},
-            {'$set' : {sensor_name : value, 'date' : date}},
+            {'$set' : set_data},
             upsert=True
         )
 

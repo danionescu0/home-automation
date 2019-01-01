@@ -33,3 +33,5 @@ print ('Standard: Total: {0}, Good: {1}, Percent accuracy: {2} '.
        format(total, predicted_good_total, predicted_good_total * 100 / total))
 print ('False negatives penalty: Total: {0}, Good: {1}, Percent accuracy: {2} '.
        format(nr_rainy_days, predicted_good_rainy_days, predicted_good_rainy_days * 100 / nr_rainy_days))
+
+print(classifier.evaluate(X, y, verbose=1))

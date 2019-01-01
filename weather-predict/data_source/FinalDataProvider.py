@@ -13,15 +13,15 @@ from repository.DatapointsRepository import DatapointsRepository
 class FinalDataProvider:
     MINIMUM_RAIN_TRHRESHOLD = 0.1
 
-    def __init__(self, datapoits_repository: DatapointsRepository, sensors: list, datafeatures) -> None:
+    def __init__(self, datapoits_repository: DatapointsRepository, sensor_types: list, datafeatures) -> None:
         self.__datapoints_repository = datapoits_repository
-        self.__sensors = sensors
+        self.__sensor_types = sensor_types
         self.__datafeatures = datafeatures
 
     def get(self, days_behind: int, datapoints_behind: int, hour_granularity: int):
-        hour_group_stats = HourGroupStatsProcessor(hour_granularity, self.__sensors)
+        hour_group_stats = HourGroupStatsProcessor(hour_granularity, self.__sensor_types)
         cleanup_processor = CleanupProcessor()
-        remove_current_processor = RemoveCurrentProcessor(self.__sensors, self.__datafeatures)
+        remove_current_processor = RemoveCurrentProcessor(self.__sensor_types, self.__datafeatures)
         datapoint_augmenter_processor = DatapointAugmenterProcessor(datapoints_behind)
         extracted_data = []
 

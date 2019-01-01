@@ -7,9 +7,10 @@ from keras_wrapper.KerasModelBuilder import KerasModelBuilder
 from keras_wrapper.KerasGridSearch import KerasGridSearch
 from repository.DatapointsRepository import DatapointsRepository
 from data_source.FinalDataProvider import FinalDataProvider
-from model.Sensors import Sensors
+from model.SensorTypes import SensorTypes
 from model.DataFeatures import DataFeatures
 from device_communication.Serial import Serial
+from device_communication.SensorBuilder import SensorBuilder
 
 
 def singleton(function: Callable):
@@ -43,8 +44,12 @@ class Container:
 
     @singleton
     def final_data_provider(self) -> FinalDataProvider:
-        return FinalDataProvider(self.datapoints_repository(), Sensors.list(), DataFeatures.list())
+        return FinalDataProvider(self.datapoints_repository(), SensorTypes.list(), DataFeatures.list())
 
     @singleton
     def serial(self) -> Serial:
         return Serial(config.serial['port'], config.serial['baud_rate'])
+
+    @singleton
+    def sensor_builder(self) -> SensorBuilder:
+        return SensorBuilder()

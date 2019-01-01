@@ -7,6 +7,7 @@ from pymongo import MongoClient
 import config
 
 from repository.DatapointsRepository import DatapointsRepository
+from model.Sensor import Sensor
 
 
 argparse = argparse.ArgumentParser()
@@ -31,4 +32,5 @@ for day_behind in range(args['days_behind'], 0, -1):
             continue
         for sensor_data in sensors_data:
             date = datetime.fromtimestamp(sensor_data['timestamp'])
-            datapoint_repository.update(date, sensor_name, float(sensor_data['value']))
+            sensor = Sensor(sensor_name, float(sensor_data['value']))
+            datapoint_repository.update(date, [sensor])

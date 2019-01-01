@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Sensors(Enum):
+class SensorTypes(Enum):
    TEMPERATURE = 'temperature'
    HUMIDITY = 'humidity'
    PRESSURE = 'pressure'
@@ -10,4 +10,4 @@ class Sensors(Enum):
 
    @staticmethod
    def list():
-       return list(map(lambda c: c.value, Sensors))
+       return list(map(lambda c: c.value, SensorTypes))

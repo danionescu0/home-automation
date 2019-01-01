@@ -1,7 +1,9 @@
 ## Weather prediction using machine learning (keras with tensorflow) and local weather data from the weather station
 
 
-The input data will previous information gathered locally from the weather station on the following sensors:
+This project will attempt to forecast rain on the next few hours using historical data gathered from a local weather station.
+
+The data contains datapoints every 10 minutes gathered from the following sensors:
 
 - temperature 
 
@@ -13,7 +15,20 @@ The input data will previous information gathered locally from the weather stati
 
 - rain levels
 
+Rain forecast will be attempted using neural networks (Keras library)
+
+# Technollogies involved
+MongoDb https://www.mongodb.com/
+Python https://www.python.org/
+Keras https://keras.io/
+Pandas https://pandas.pydata.org/
+Sklearn https://scikit-learn.org/stable/
+
+
 # Installation
+
+Python environment:
+
 You could use anaconda for the installation:
 ````
 conda create --name ml python=3.6.2
@@ -30,22 +45,38 @@ conda update --all
 conda activate ml
 ````
 
+Other:
+
+- Install mongoDb, version > 3.0
+
+# Configuration
+MongoDb, serial, and default file model locations are in config.py
+
+You can change
+
+- mongoDb host and por
+- serial port and baud rate
+- keras model
+- sklearn model
+- test file path
+
+
 The output data will be prediction on rain levels for the next N hours
 
 Currently i've tested the model on 6 h and it has over 85% accuracy
 
 Steps:
 
-1. Import data
+1. Import data / gather data from your own station
 
-a) from the example data i provided:
+A. Import
+- from the example data i provided:
 
 ````
 mongoimport -d weather -c datapoints_bk --file sample_data/datapoints.json
 ````
 
-
-b) from home-automation project (if exists)
+- from home-automation project (if exists)
 
 ````
 python home_automation/import.py  --day-behind nr_days
@@ -53,6 +84,15 @@ python home_automation/import.py  --day-behind nr_days
 
 This will extract data from the home automation repository and save it into the local mongoDb database
 
+B. Gather data from local weather station
+
+You can find information about the weathe station here: https://github.com/danionescu0/home-automation/tree/master/arduino-sketches
+
+````
+python serial_listener.py
+````
+
+This script will listen to the serial interface and insert sensor data into the mongoDb collection
 
 2. Generate the model 
 ````
@@ -116,7 +156,7 @@ python predict.py --datapoints-behind 6 --hour-granularity 6
 7. first "datapoints-behind" rows from the whole dartaframe are dropped because will conain incomplete values
 8. "pressure", "pressure_min" .. "pressure_avg".. are dropped, because we need to predict if it's going to rain without knowing the current temperature, pressure etc.
 
-All we'll know is's the previous datapoints embeded in the row.
+All we'll know it's the previous datapoints embeded in the row.
 
 - the dataframe is scaled using sklearn StandardScaler
 - after the dataframe is complete the Keras model is compiled built, and trained
