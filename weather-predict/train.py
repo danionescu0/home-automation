@@ -27,6 +27,7 @@ dataframe = container.final_data_provider().get(args['days_behind'], args['datap
 main_data, test_data = train_test_split(dataframe, test_size=args['test_file_percent'] / 100)
 
 main_data.to_csv('sample_data/training_data.csv')
+main_data.to_csv('sample_data/training_data.csv')
 test_data.to_csv(config.model['test_data_file'])
 
 X = main_data.iloc[:, 1:].values

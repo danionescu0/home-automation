@@ -40,7 +40,7 @@ class Container:
 
     @singleton
     def datapoints_repository(self) -> DatapointsRepository:
-        return DatapointsRepository(self.mongo_client())
+        return DatapointsRepository(self.mongo_client(), SensorTypes.list())
 
     @singleton
     def final_data_provider(self) -> FinalDataProvider:
