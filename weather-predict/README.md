@@ -33,6 +33,13 @@ You could use anaconda for the installation:
 ````
 conda create --name ml python=3.6.2
 conda activate ml
+pip install -r requirements.txt
+````
+
+Or to have the latest version installed (maby some new features and maby it won't work). Use this with some risk:
+````
+conda create --name ml python=3.6.2
+conda activate ml
 pip install theano
 pip install tensorflow
 pip install keras
@@ -42,7 +49,6 @@ pip install requests
 pip install pymongo
 pip install serial
 conda update --all
-conda activate ml
 ````
 
 Other:
@@ -54,7 +60,7 @@ MongoDb, serial, and default file model locations are in config.py
 
 You can change
 
-- mongoDb host and por
+- mongoDb host and port
 - serial port and baud rate
 - keras model
 - sklearn model
@@ -121,8 +127,16 @@ python predict_batch.py
 
 5. Predict if it will rain in the next few hours
 
+The "datapoints-behind" and "hour-granularity" parameters should be the same as the ones used in the "train.py"
+
 ````
 python predict.py --datapoints-behind 6 --hour-granularity 6
+````
+
+6. Plot the sensors data on some nice graphs (optional)
+
+````
+python graphs --dats-behing nr_of_days_to_see_in_the_past
 ````
 
 # How does it work
