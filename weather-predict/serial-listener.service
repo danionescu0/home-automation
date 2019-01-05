@@ -1,0 +1,10 @@
+[Unit]
+Description=Starts weather service for gathering data
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/source/to/anaconda/python/executable "/source_to_project/serial_listener.py"
+
+[Install]
+WantedBy=multi-user.target

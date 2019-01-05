@@ -2,21 +2,18 @@ import argparse
 from datetime import datetime, timedelta
 
 import requests
-from pymongo import MongoClient
 
 import config
-
-from repository.DatapointsRepository import DatapointsRepository
 from model.Sensor import Sensor
+from container import Container
 
 
 argparse = argparse.ArgumentParser()
 argparse.add_argument("-d", "--days-behind", required=True, dest="days_behind", type=int, help="Days behind")
 args = vars(argparse.parse_args())
 
-
-mongo_client = MongoClient(config.mongodb['host'], config.mongodb['port']).weather.datapoints
-datapoint_repository = DatapointsRepository(mongo_client)
+container = Container()
+datapoint_repository = container.datapoints_repository()
 start_date = datetime.today() - timedelta(days=args['days_behind'])
 
 for day_behind in range(args['days_behind'], 0, -1):

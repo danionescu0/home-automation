@@ -15,6 +15,7 @@ while True:
     serial_device.listen(sensor_builder.add_text)
     if sensor_builder.is_complete():
         sensors = sensor_builder.build()
+        print(sensors)
         datapoint_repository.update(datetime.datetime.now(), sensors)
 
     time.sleep(0.1)

@@ -9,11 +9,11 @@
  * Adafruit BME280 library: https://github.com/adafruit/Adafruit_BME280_Library
  */
 #include "LowPower.h"
-#include <SoftwareSerial.h>
-#include <Wire.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_BME280.h>
-#include <BH1750.h>
+#include "SoftwareSerial.h"
+#include "Wire.h"
+#include "Adafruit_Sensor.h"
+#include "Adafruit_BME280.h"
+#include "BH1750.h"
 
 SoftwareSerial serialComm(4, 5); // RX, TX
 Adafruit_BME280 bme; 

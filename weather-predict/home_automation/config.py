@@ -1,5 +1,5 @@
 # replace url with your own ip or url
-url = "http://host/api/sensor/{0}?start_date={1}&end_date={2}"
+url = "http://danionescu0.go.ro:8080/api/sensor/{0}?start_date={1}&end_date={2}"
 
 # replace sensors names with your own
 home_automation_sensor_mapping = {

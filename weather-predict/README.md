@@ -31,8 +31,8 @@ Python environment:
 
 You could use anaconda for the installation:
 ````
-conda create --name ml python=3.6.2
-conda activate ml
+conda create --name weather python=3.6.2
+conda activate weather
 pip install -r requirements.txt
 ````
 
@@ -79,7 +79,7 @@ A. Import
 - from the example data i provided:
 
 ````
-mongoimport -d weather -c datapoints_bk --file sample_data/datapoints.json
+mongoimport -d weather -c datapoints --file sample_data/datapoints.json
 ````
 
 - from home-automation project (if exists)
