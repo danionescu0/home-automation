@@ -17,6 +17,9 @@ The data contains datapoints every 10 minutes gathered from the following sensor
 
 Rain forecast will be attempted using neural networks (Keras library)
 
+![diagram.png](https://raw.githubusercontent.com/danionescu0/home-automation/master/weather-predict/media_resources/diagram.jpg)
+
+
 # Technollogies involved
 MongoDb https://www.mongodb.com/
 Python https://www.python.org/

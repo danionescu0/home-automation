@@ -25,6 +25,8 @@ args = vars(argparse.parse_args())
 container = Container()
 dataframe = container.final_data_provider().get(args['days_behind'], args['datapoints_behind'], args['hour_granularity'])
 main_data, test_data = train_test_split(dataframe, test_size=args['test_file_percent'] / 100)
+print(main_data)
+print(main_data.describe())
 
 main_data.to_csv('sample_data/training_data.csv')
 main_data.to_csv('sample_data/training_data.csv')
