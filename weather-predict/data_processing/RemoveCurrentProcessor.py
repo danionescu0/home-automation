@@ -9,4 +9,4 @@ class RemoveCurrentProcessor(BaseProcessor):
     def process(self, dataframe):
         to_remove = [sensor + '_' + feature for sensor in self.__sensor_names for feature in self.__feature_names]
 
-        return dataframe.drop(to_remove, axis=1)
+        return dataframe.drop(to_remove, axis=1, errors='ignore')

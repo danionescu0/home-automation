@@ -133,8 +133,9 @@ python predict_batch.py
 The "datapoints-behind" and "hour-granularity" parameters should be the same as the ones used in the "train.py"
 
 ````
-python predict.py --datapoints-behind 6 --hour-granularity 6
+python predict.py --datapoints-behind 6 --hour-granularity 6 --from-addr a_gmail_address --from-password gmail_password --to-addr a_email_destination
 ````
+For this to work you need to enable less secure apps from gmail (https://myaccount.google.com/lesssecureapps)
 
 6. Plot the sensors data on some nice graphs (optional)
 

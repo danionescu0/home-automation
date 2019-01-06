@@ -11,6 +11,7 @@ from model.SensorTypes import SensorTypes
 from model.DataFeatures import DataFeatures
 from device_communication.Serial import Serial
 from device_communication.SensorBuilder import SensorBuilder
+from utils.EmailNotifier import EmailNotifier
 
 
 def singleton(function: Callable):
@@ -53,3 +54,7 @@ class Container:
     @singleton
     def sensor_builder(self) -> SensorBuilder:
         return SensorBuilder()
+
+    @singleton
+    def email_notifier(self) -> EmailNotifier:
+        return EmailNotifier()

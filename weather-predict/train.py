@@ -9,7 +9,6 @@ from sklearn.externals import joblib
 import config
 from container import Container
 
-# python train.py -d 610 -p 10 -dp 8 -hg 6
 argparse = argparse.ArgumentParser()
 argparse.add_argument("-d", "--days-behind", required=True, dest="days_behind", type=int,
                       help="Days behind to be taken into account")
@@ -25,10 +24,8 @@ args = vars(argparse.parse_args())
 container = Container()
 dataframe = container.final_data_provider().get(args['days_behind'], args['datapoints_behind'], args['hour_granularity'])
 main_data, test_data = train_test_split(dataframe, test_size=args['test_file_percent'] / 100)
-print(main_data)
-print(main_data.describe())
 
-main_data.to_csv('sample_data/training_data.csv')
+dataframe.to_csv('sample_data/all.csv')
 main_data.to_csv('sample_data/training_data.csv')
 test_data.to_csv(config.model['test_data_file'])
 
@@ -43,7 +40,7 @@ if args['grid_search']:
 
 model_builder = container.keras_model_builder()
 classifier = model_builder.build(X.shape[1], 'rmsprop', 0.05)
-classifier.fit(X, y, batch_size=1, epochs=50)
+classifier.fit(X, y, batch_size=2, epochs=50)
 
 classifier.save(config.model['keras_model_file_name'])
 joblib.dump(scaler, config.model['sklearn_scaler_file_name'])

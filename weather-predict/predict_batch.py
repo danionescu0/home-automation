@@ -9,9 +9,9 @@ import config
 scaler = joblib.load(config.model['sklearn_scaler_file_name'])
 classifier = load_model(config.model['keras_model_file_name'])
 
-dataset = pandas.read_csv(config.model['test_data_file']).set_index('_id')
-X = dataset.iloc[:, 1:].values
-y = dataset.iloc[:, 0].values
+dataframe = pandas.read_csv(config.model['test_data_file']).set_index('_id')
+X = dataframe.iloc[:, 1:].values
+y = dataframe.iloc[:, 0].values
 
 total = predicted_good_total = 0
 nr_rainy_days = predicted_good_rainy_days = 0

@@ -41,4 +41,7 @@ class FinalDataProvider:
         dataframe = datapoint_augmenter_processor.process(dataframe)
         dataframe = dataframe.iloc[datapoints_behind:]
 
+        cols = [col_name for col_name in dataframe.columns if 'rain' not in col_name or col_name == 'has_rain']
+        dataframe = dataframe[cols]
+
         return remove_current_processor.process(dataframe)
