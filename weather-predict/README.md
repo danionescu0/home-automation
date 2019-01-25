@@ -39,22 +39,7 @@ conda activate weather
 pip install -r requirements.txt
 ````
 
-Or to have the latest version installed (maby some new features and maby it won't work). Use this with some risk:
-````
-conda create --name ml python=3.6.2
-conda activate ml
-pip install theano
-pip install tensorflow
-pip install keras
-pip install pandas
-pip install sklearn
-pip install requests
-pip install pymongo
-pip install serial
-conda update --all
-````
-
-Other:
+Database:
 
 - Install mongoDb, version > 3.0
 
@@ -82,7 +67,7 @@ A. Import
 - from the example data i provided:
 
 ````
-mongoimport -d weather -c datapoints --file sample_data/datapoints.json
+mongoimport -d weather -c weather_station --file sample_data/weather_station.json
 ````
 
 - from home-automation project (if exists)
@@ -143,6 +128,13 @@ For this to work you need to enable less secure apps from gmail (https://myaccou
 python graphs --dats-behing nr_of_days_to_see_in_the_past
 ````
 
+7. [Optional] create a mongodb index for the "date"
+````
+mongo
+use weather
+db.weather_station.createIndex({"date" : 1})
+````
+
 # How does it work
 
 - raw data that is coming from the weather station is stored in a mongoDb database
@@ -178,4 +170,4 @@ All we'll know it's the previous datapoints embeded in the row.
 
 - the dataframe is scaled using sklearn StandardScaler
 - after the dataframe is complete the Keras model is compiled built, and trained
-- the keras model and StandardScaler are saved in files so they can be reused
+- the keras model and StandardScaler are saved in files so they can be reused for predictions

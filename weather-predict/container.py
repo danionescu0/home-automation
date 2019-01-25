@@ -6,12 +6,12 @@ import config
 from keras_wrapper.KerasModelBuilder import KerasModelBuilder
 from keras_wrapper.KerasGridSearch import KerasGridSearch
 from repository.DatapointsRepository import DatapointsRepository
-from data_source.FinalDataProvider import FinalDataProvider
-from model.SensorTypes import SensorTypes
+from utils.PreparedDataProvider import PreparedDataProvider
 from model.DataFeatures import DataFeatures
 from device_communication.Serial import Serial
 from device_communication.SensorBuilder import SensorBuilder
 from utils.EmailNotifier import EmailNotifier
+from utils.SensorTypeDatasourceMap import SensorTypeDatasourceMap
 
 
 def singleton(function: Callable):
@@ -37,15 +37,15 @@ class Container:
 
     @singleton
     def mongo_client(self) -> MongoClient:
-        return MongoClient(config.mongodb['host'], config.mongodb['port']).weather.datapoints
+        return MongoClient(config.mongodb['host'], config.mongodb['port'])
 
     @singleton
     def datapoints_repository(self) -> DatapointsRepository:
-        return DatapointsRepository(self.mongo_client(), SensorTypes.list())
+        return DatapointsRepository(self.mongo_client(), self.sensor_type_datasource_map())
 
     @singleton
-    def final_data_provider(self) -> FinalDataProvider:
-        return FinalDataProvider(self.datapoints_repository(), SensorTypes.list(), DataFeatures.list())
+    def prepared_data_provider(self) -> PreparedDataProvider:
+        return PreparedDataProvider(self.datapoints_repository(), self.sensor_type_datasource_map(), DataFeatures.list())
 
     @singleton
     def serial(self) -> Serial:
@@ -58,3 +58,7 @@ class Container:
     @singleton
     def email_notifier(self) -> EmailNotifier:
         return EmailNotifier()
+
+    @singleton
+    def sensor_type_datasource_map(self) -> SensorTypeDatasourceMap:
+        return SensorTypeDatasourceMap()

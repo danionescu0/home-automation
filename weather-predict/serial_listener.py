@@ -2,6 +2,7 @@ import time
 import datetime
 
 from container import Container
+from model.DataSource import DataSource
 
 
 container = Container()
@@ -16,7 +17,7 @@ while True:
     if sensor_builder.is_complete():
         sensors = sensor_builder.build()
         print(sensors)
-        datapoint_repository.update(datetime.datetime.now(), sensors)
+        datapoint_repository.update(DataSource.WEATHER_STATION.value, datetime.datetime.now(), sensors)
 
     time.sleep(0.1)
 

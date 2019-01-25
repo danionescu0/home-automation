@@ -9,9 +9,11 @@ class KerasModelBuilder:
         inner_nodes = int(input_dimensions / 2)
         model.add(Dense(inner_nodes, kernel_initializer='uniform', activation='relu', input_dim=input_dimensions))
         model.add(Dropout(rate=dropout))
+        model.add(Dense(inner_nodes, kernel_initializer='uniform', activation='sigmoid'))
+        model.add(Dropout(rate=dropout))
         model.add(Dense(inner_nodes, kernel_initializer='uniform', activation='relu'))
         model.add(Dropout(rate=dropout))
         model.add(Dense(1, kernel_initializer='uniform', activation='sigmoid'))
-        model.compile(optimizer=optimizer, loss='mean_absolute_error', metrics=['accuracy'])
+        model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
         return model

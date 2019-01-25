@@ -7,6 +7,11 @@ class SensorTypes(Enum):
    PRESSURE = 'pressure'
    RAIN = 'rain'
    LIGHT = 'light'
+   WIND_SPEED = 'wind_speed'
+   WIND_GUST = 'wind_gust'
+   UV_INDEX = 'uv_index'
+   VISIBILITY = 'visibility'
+
 
    @staticmethod
    def list():

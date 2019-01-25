@@ -19,19 +19,19 @@ nr_rainy_days = predicted_good_rainy_days = 0
 for test_data in X:
     y_pred = classifier.predict_classes(scaler.transform(numpy.array([test_data])))
     actual_rain = True if y[total] == 1 else False
-    predicted_rain = y_pred > 0
+    predicted_rain = (y_pred > 0)[0][0]
     if actual_rain is True:
         nr_rainy_days += 1
         predicted_good_rainy_days += 1 if actual_rain == predicted_rain else 0
     predicted_good_total += 1 if predicted_rain == actual_rain else 0
     mark_predicted_badly = '#' if actual_rain != predicted_rain else ''
     print("Index: {0}, Actual / Predicted: {1}{2} / {3}{4}". format(total, mark_predicted_badly, actual_rain,
-                                                                     predicted_rain[0][0], mark_predicted_badly))
+                                                                     predicted_rain, mark_predicted_badly))
     total += 1
 
-print ('Standard: Total: {0}, Good: {1}, Percent accuracy: {2} '.
+print('Total: {0}, Good: {1}, Percent accuracy: {2} '.
        format(total, predicted_good_total, predicted_good_total * 100 / total))
-print ('False negatives penalty: Total: {0}, Good: {1}, Percent accuracy: {2} '.
+print('Accounting just the days when it rained: Total: {0}, Good: {1}, Percent accuracy: {2} '.
        format(nr_rainy_days, predicted_good_rainy_days, predicted_good_rainy_days * 100 / nr_rainy_days))
 
 print(classifier.evaluate(X, y, verbose=1))

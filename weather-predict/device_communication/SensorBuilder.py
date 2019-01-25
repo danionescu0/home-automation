@@ -2,9 +2,18 @@ import re
 from typing import List
 
 from model.Sensor import Sensor
+from model.SensorTypes import SensorTypes
 
 
 class SensorBuilder:
+    SENSOR_TYPE_MAPPING = {
+        'T': SensorTypes.TEMPERATURE.value,
+        'H': SensorTypes.HUMIDITY.value,
+        'PS': SensorTypes.PRESSURE.value,
+        'L': SensorTypes.LIGHT.value,
+        'R': SensorTypes.RAIN.value
+    }
+
     SENSOR_REGEX = '([A-Z]{1,2})(\d{1,2})?\:([\d\-\.]{1,4})'
     SENSOR_SEPARATOR = '|'
     SENSOR_TYPE_SKIP = 'V'
@@ -34,12 +43,12 @@ class SensorBuilder:
 
     def __get_sensor(self, sensor_components: list) -> Sensor:
         code, location, value = sensor_components
-        if code not in Sensor.SENSOR_TYPE_MAPPING:
+        if code not in self.SENSOR_TYPE_MAPPING:
             raise RuntimeError('Code with {0} not mapped with any sensor'.format(code))
         if code == self.SENSOR_TYPE_SKIP:
             return None
         try:
-            return Sensor(Sensor.SENSOR_TYPE_MAPPING[code], float(value))
+            return Sensor(self.SENSOR_TYPE_MAPPING[code], float(value))
         except ValueError as e:
             raise RuntimeError(
                 'Badly formatted sensor value: {0}, error: {1})'.format(value, e.message))

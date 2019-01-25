@@ -5,6 +5,7 @@ import pandas
 import matplotlib.pyplot as plt
 
 from container import Container
+from model.DataSource import DataSource
 
 
 argparse = argparse.ArgumentParser()
@@ -16,7 +17,7 @@ container = Container()
 datapoints_repository = container.datapoints_repository()
 start_date = datetime.today() - timedelta(days=args['days_behind'])
 end_date = datetime.today()
-extracted_data = datapoints_repository.get(start_date, end_date)
+extracted_data = datapoints_repository.get(DataSource.WEATHER_STATION.value, start_date, end_date)
 dataframe = pandas.DataFrame(extracted_data).set_index('_id')
 
 
