@@ -41,14 +41,14 @@ pip install -r requirements.txt
 
 Database:
 
-- Install mongoDb, version > 3.0
+- Install MongoDb, version > 3.0
 
 # Configuration
 MongoDb, serial, and default file model locations are in config.py
 
 You can change
 
-- mongoDb host and port
+- MongoDb host and port
 - serial port and baud rate
 - keras model
 - sklearn model
@@ -73,10 +73,10 @@ mongoimport -d weather -c weather_station --file sample_data/weather_station.jso
 - from home-automation project (if exists)
 
 ````
-python home_automation/import.py  --day-behind nr_days
+python home_automation/import.py --day-behind nr_days
 ````
 
-This will extract data from the home automation repository and save it into the local mongoDb database
+This will extract data from the home automation repository and save it into the local MongoDb database
 
 B. Gather data from local weather station
 
@@ -86,11 +86,11 @@ You can find information about the weathe station here: https://github.com/danio
 python serial_listener.py
 ````
 
-This script will listen to the serial interface and insert sensor data into the mongoDb collection
+This script will listen to the serial interface and insert sensor data into the MongoDb collection
 
 2. Generate the model 
 ````
-python train.py --days_behind 600 --test-file-percent 10 --datapoints-behind 6 --hour-granularity 6
+python train.py --days_behind 600 --test-file-percent 10 --datapoints-behind 6 --hour-granularity 6 --data-source weather_station
 ````
 
 Parameters:
@@ -102,6 +102,8 @@ Parameters:
 --datapoints-behind : each entry in the training data will contain historical data (a few datapoints from the past)
 
 --hour-granularity : each datapoint of traiing data will be created from a defined amount of hours grouped togeather
+
+--data-source : can be weather_station (default) or darksky (if you're building your own weather station leave it default)
 
 [optional] --grid-search : if set this parameter will trigger a "grid search" to find the optimal parameters for our dataset
 It will try diffrerent options for: batch_size, nb_epoch, optimizer and dropout
@@ -117,8 +119,12 @@ python predict_batch.py
 
 The "datapoints-behind" and "hour-granularity" parameters should be the same as the ones used in the "train.py"
 
+The from-addr, from-password and to-addr must be filled in with your email data (sender and destination)
+
+The data source parameter data-source : can be weather_station (default) or darksky (if you're building your own weather station leave it default)
+
 ````
-python predict.py --datapoints-behind 6 --hour-granularity 6 --from-addr a_gmail_address --from-password gmail_password --to-addr a_email_destination
+python predict.py --datapoints-behind 6 --hour-granularity 6 --from-addr a_gmail_address --from-password gmail_password --to-addr a_email_destination --data-source weather_station
 ````
 For this to work you need to enable less secure apps from gmail (https://myaccount.google.com/lesssecureapps)
 
@@ -128,7 +134,7 @@ For this to work you need to enable less secure apps from gmail (https://myaccou
 python graphs --dats-behing nr_of_days_to_see_in_the_past
 ````
 
-7. [Optional] create a mongodb index for the "date"
+7. [Optional] create a MongoDb index for the "date"
 ````
 mongo
 use weather
@@ -137,8 +143,8 @@ db.weather_station.createIndex({"date" : 1})
 
 # How does it work
 
-- raw data that is coming from the weather station is stored in a mongoDb database
-- when the model is generated, data is exported from mongoDb into a pandas dataframe and it's augmented like this:
+- raw data that is coming from the weather station is stored in a MongoDb database
+- when the model is generated, data is exported from MongoDb into a pandas dataframe and it's augmented like this:
 1. nan values are dropped
 2. the data is grouped and aditional metrics are constructed along the way. 
 ````
