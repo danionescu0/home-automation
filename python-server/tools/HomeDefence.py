@@ -30,24 +30,19 @@ class HomeDefence:
         currentTime = datetime.datetime.now(timezone(DateUtils.get_timezone())).time()
         log_debug_message = 'Iterating burgler mode:'
         if self.__should_random_skip_iteration() or not self.__is_alarm_set():
-            self.__logging.info(log_debug_message + ' Skipping iteration randomly')
             return
-
         log_debug_message += log_debug_message + ' Playing some sounds, '
-        self.__play_random_sound()
+        self.__play_random_voice()
         if currentTime > datetime.time(22, 30, 00):
             self.__logging.info(log_debug_message)
             return
-
         log_debug_message += log_debug_message + ' Toggling lights'
         if DateUtils.is_over_sunset():
             self.__logging.info(log_debug_message)
             self.__toggle_lights()
 
     def __should_random_skip_iteration(self):
-        burgler_time_between_actions = self.__config.burgler_time_between_actions
-
-        return random.randint(0, burgler_time_between_actions) != burgler_time_between_actions
+        return random.randint(0, self.__config.burgler_time_between_actions) != self.__config.burgler_time_between_actions
 
     def __is_alarm_set(self):
         return self.__actuators_repo.get_actuator('homeAlarm').value is True
@@ -61,7 +56,7 @@ class HomeDefence:
             self.__last_burgler_light = burgler_lights[random.randint(0, len(burgler_lights) - 1)]
             self.__actuator_commands.change_actuator(self.__last_burgler_light, True)
 
-    def __play_random_sound(self):
+    def __play_random_voice(self):
         sounds = [
             'Whay are you dooing now'
             'What is the time'

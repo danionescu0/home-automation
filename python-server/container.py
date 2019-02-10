@@ -63,6 +63,7 @@ from tools.EmailNotifier import EmailNotifier
 from tools.HomeDefence import HomeDefence
 from tools.LoggingConfig import LoggingConfig
 from tools.VoiceCommands import VoiceCommands
+from tools.RetryPattern import RetryPattern
 from web.factory.ConfigurationFactory import ConfigurationFactory
 from web.factory.RuleFactory import RuleFactory
 from web.formatter.ActuatorsFormatter import ActuatorsFormatter
@@ -93,6 +94,10 @@ class Container:
 
         return logging_config.get_logger(logging.INFO)
 
+    @singleton
+    def retry_pattern(self) -> RetryPattern:
+        return RetryPattern(self.root_logger())
+
     def serial(self) -> Serial:
         return Serial(self.configuration_repository().get_config(SerialCommunicationCfg.get_classname()),
                       self.root_logger())
@@ -111,11 +116,11 @@ class Container:
 
     @singleton
     def actuators_repository(self) -> ActuatorsRepository:
-        return ActuatorsRepository(config.redis_config)
+        return ActuatorsRepository(config.redis_config, self.retry_pattern())
 
     @singleton
     def sensors_repository(self) -> SensorsRepository:
-        return SensorsRepository(config.redis_config)
+        return SensorsRepository(config.redis_config, self.retry_pattern())
 
     @singleton
     def configuration_repository(self) -> ConfigurationRepository:

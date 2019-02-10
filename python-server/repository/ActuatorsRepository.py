@@ -8,14 +8,16 @@ from typeguard import typechecked
 from repository.AbstractRepository import AbstractRepository
 from model.Actuator import Actuator
 from model.ActuatorProperties import ActuatorProperties
+from tools.RetryPattern import RetryPattern
 
 
 class ActuatorsRepository(AbstractRepository):
     __REDIS_KEY = 'actuators'
 
     @typechecked()
-    def __init__(self, redis_configuration: dict):
+    def __init__(self, redis_configuration: dict, retry_pattern: RetryPattern):
         AbstractRepository.__init__(self, redis_configuration)
+        self.__retry_pattern = retry_pattern
         self.keys = {self.__REDIS_KEY: {}}
 
     @typechecked()
@@ -35,7 +37,9 @@ class ActuatorsRepository(AbstractRepository):
 
     @typechecked()
     def set_actuator_state(self, id: str, value) -> None:
-        return self.__set(self.__REDIS_KEY, id, value)
+        def wrapper():
+            return self.__set(self.__REDIS_KEY, id, value)
+        return self.__retry_pattern.run(wrapper, 3)
 
     # this is a temporary method and will be replaced with a set actuator method
     @typechecked()

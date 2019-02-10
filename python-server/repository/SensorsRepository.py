@@ -11,6 +11,7 @@ from repository.AbstractRepository import AbstractRepository
 from model.Sensor import Sensor
 from model.SensorDataPoint import SensorDataPoint
 from model.SensorProperties import SensorProperties
+from tools.RetryPattern import RetryPattern
 
 
 class SensorsRepository(AbstractRepository):
@@ -19,8 +20,9 @@ class SensorsRepository(AbstractRepository):
     __SENSORS_UPDATE_INTERVAL_IN_HISTORY = 300
 
     @typechecked()
-    def __init__(self, redis_configuration: dict):
+    def __init__(self, redis_configuration: dict, retry_pattern: RetryPattern):
         AbstractRepository.__init__(self, redis_configuration)
+        self.__retry_pattern = retry_pattern
         self.keys = {self.__REDIS_SENSORS_KEY: {}}
         self.last_averages = {}
         self.sensors_last_updated = {}
@@ -78,8 +80,9 @@ class SensorsRepository(AbstractRepository):
             if redis_sensor['id'] == sensor.id:
                 redis_sensor['value'] = sensor.value
                 redis_sensor['last_updated'] = sensor.last_updated
-
-        self.client.set(self.__REDIS_SENSORS_KEY, json.dumps(sensors))
+        def wrapper():
+            self.client.set(self.__REDIS_SENSORS_KEY, json.dumps(sensors))
+        self.__retry_pattern.run(wrapper, 3)
 
     def __add_last_sensor_averages_in_history(self, sensor: Sensor):
         name = self.__get_sensor_key(sensor.id)
