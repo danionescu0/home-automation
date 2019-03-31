@@ -23,5 +23,4 @@ class AbstractRepository:
         result = self.client.get(key)
         if (not result):
             return self.keys[key]
-
         return json.loads(result.decode("utf-8"))

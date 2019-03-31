@@ -1,0 +1,65 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "command home",
+            "intents": [
+                {
+                    "name": "MyCommandIsIntent",
+                    "slots": [
+                        {
+                            "name": "Command",
+                            "type": "LIST_OF_COMMANDS"
+                        }
+                    ],
+                    "samples": [
+                        "execute command {Command}",
+                        "do {Command}",
+                        "execute {Command}"
+                    ]
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                }
+            ],
+            "types": [
+                {
+                    "name": "LIST_OF_COMMANDS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "living courtains off"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "living courtains on"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hollway door on"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

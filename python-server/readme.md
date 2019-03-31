@@ -445,6 +445,12 @@ class SomeListener:
 /communication/IncommingZwaveCommunicationThread
 * register the thread in background.py
 
+# Alexa echo dot integration
+
+Tutorial: https://developer.amazon.com/alexa-skills-kit/alexa-skill-python-tutorial
+
+Check files inside alexa folders, you'll find the json skil and the lambda function
+
 # Unit tests
 Unittests are using [nose2](http://nose2.readthedocs.io/en/latest/index.html)
 

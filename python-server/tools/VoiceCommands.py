@@ -34,15 +34,17 @@ class VoiceCommands:
             .build()
         self.__engine.register_intent_parser(actuator_intent)
         self.__commands_map = [
-            {'entities' : {'name' : 'living', 'type' : 'light'}, 'actuator' : 'livingLight'},
-            {'entities' : {'name' : 'living', 'type' : 'courtains'}, 'actuator' : 'livingCourtains'},
-            {'entities' : {'name' : 'hollway', 'type' : 'light'}, 'actuator' : 'holwayLight'},
+            {'entities': {'name': 'living', 'type': 'light'}, 'actuator': 'livingLight'},
+            {'entities': {'name': 'living', 'type': 'courtains'}, 'actuator': 'livingCourtains'},
+            {'entities': {'name': 'hollway', 'type': 'light'}, 'actuator': 'holwayLight'},
+            {'entities': {'name': 'hollway', 'type': 'door'}, 'actuator': 'door'},
         ]
 
         return self
 
     @typechecked()
     def execute(self, command: str) -> None:
+        print(command)
         command = self.__normalize_command(command)
         for intent in self.__engine.determine_intent(command):
             if intent and intent.get('confidence') > 0:
@@ -68,7 +70,8 @@ class VoiceCommands:
         self.__job_controll.change_actuator(command['actuator'], actuator_state)
 
     def __normalize_command(self, command):
-        replaces = [('life', 'light'), ('leaving', 'living'), ('hallway', 'hollway'), ('quarters', 'courtains')]
+        replaces = [('curtains', 'courtains'), ('life', 'light'), ('leaving', 'living'),
+                    ('hallway', 'hollway'), ('quarters', 'courtains')]
         for replace in replaces:
             command = re.sub(replace[0], replace[1], command)
 
