@@ -18,6 +18,22 @@
                     ]
                 },
                 {
+                    "name": "QuestionsIntent",
+                    "slots": [
+                        {
+                            "name": "sensor",
+                            "type": "SENSOR_TYPES"
+                        },
+                        {
+                            "name": "location",
+                            "type": "LOCATIONS"
+                        }
+                    ],
+                    "samples": [
+                        "what is the {sensor} {location}"
+                    ]
+                },
+                {
                     "name": "AMAZON.FallbackIntent",
                     "samples": []
                 },
@@ -55,6 +71,42 @@
                         {
                             "name": {
                                 "value": "hollway door on"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "SENSOR_TYPES",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "humidity"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "temperature"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "LOCATIONS",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "outside",
+                                "synonyms": [
+                                    "out"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "inside",
+                                "synonyms": [
+                                    "in"
+                                ]
                             }
                         }
                     ]

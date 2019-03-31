@@ -1,3 +1,4 @@
+import json
 import logging
 import requests
 
@@ -12,11 +13,14 @@ from ask_sdk_model.ui import SimpleCard
 from ask_sdk_model import Response
 
 
-API_ENDPOINT = "http://your_url:8080/api/voice-command"
+API_ENDPOINT = "http://host:8080"
+VOICE_COMMAND_API = "/api/voice-command"
+GET_SENSORS_API = "/api/sensor"
 # temporary storing the token inside the skil, will be replaced with some auth logic
-API_AUTH_TOKEN = "your_home_automation_token"
+API_AUTH_TOKEN = ""
 SKILL_NAME = "command home"
-HELP_MESSAGE = "You can say do some command, replacing some command with the actual command"
+HELP_MESSAGE = "You can say do some command, replacing some command with the actual command." \
+               "Or ask waht is the temperature and humidity"
 HELP_REPROMPT = "What can I help you with?"
 LAUNCH_MESSAGE = "Tell me your command"
 STOP_MESSAGE = "Goodbye!"
@@ -39,6 +43,29 @@ class LaunchRequestHandler(AbstractRequestHandler):
         return handler_input.response_builder.response
 
 
+class QuestionsIntent(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return (is_intent_name("QuestionsIntent")(handler_input))
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("In QuestionsIntent")
+        sensors_map = {"inside": "living", "outside": "outside"}
+        sensor = handler_input.request_envelope.request.intent.slots["sensor"].value
+        location = handler_input.request_envelope.request.intent.slots["location"].value
+        try:
+            url = API_ENDPOINT + GET_SENSORS_API + "/" + sensor + "_" + sensors_map[location]
+            response = requests.get(url=url, headers=get_auth_header())
+            sensor_value = json.loads(response.text)["data"][0]["value"]
+            speech = "The {0} is {1}".format(sensor, sensor_value)
+        except Exception as e:
+            logger.error(str(e))
+
+        handler_input.response_builder.speak(speech).ask("hmm should reprompt")
+
+        return handler_input.response_builder.response
+
 class MyCommandIsHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
@@ -48,7 +75,7 @@ class MyCommandIsHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         logger.info("In MyCommandIsHandler")
         given_command = handler_input.request_envelope.request.intent.slots["Command"].value
-        requests.post(url=API_ENDPOINT, data={'command': given_command}, headers={'Authorization': 'Bearer ' + API_AUTH_TOKEN})
+        requests.post(url=API_ENDPOINT + VOICE_COMMAND_API, data={'command': given_command}, headers=get_auth_header())
         speech = "Sending your command: {0}".format(given_command)
         handler_input.response_builder.speak(speech).ask("hmm should reprompt")
 
@@ -143,10 +170,13 @@ class ResponseLogger(AbstractResponseInterceptor):
         # type: (HandlerInput, Response) -> None
         logger.debug("Alexa Response: {}".format(response))
 
+def get_auth_header():
+    return {'Authorization': 'Bearer ' + API_AUTH_TOKEN}
 
 # Register intent handlers
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(MyCommandIsHandler())
+sb.add_request_handler(QuestionsIntent())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
