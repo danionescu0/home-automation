@@ -446,10 +446,63 @@ class SomeListener:
 * register the thread in background.py
 
 # Alexa echo dot integration
-
 Tutorial: https://developer.amazon.com/alexa-skills-kit/alexa-skill-python-tutorial
 
-Check files inside alexa folders, you'll find the json skil and the lambda function
+Steps: 
+
+* Create an amazon aws account: https://console.aws.amazon.com
+
+* Create an amazon developer account: https://developer.amazon.com
+
+* Connect your echo dot speaker
+
+* Install the alexa application and log in with the same account as your amazon developer account
+
+* Follow steps to configure speaker
+
+* Create a skil here: https://developer.amazon.com/alexa/console/ask
+
+* Copy the json provided in /alexa/skil.json in Json Editor
+
+* Save and build the model
+
+* Create a lambda function here : https://console.aws.amazon.com/lambda/
+
+* Select Author from scratch, pyton 3.7, and choose a name
+
+* Choose an execution role
+
+* Select "Alexa skil kit" trigger, disable verification for it
+
+* Modify alexa/lambda_function.py and replace API_ENDPOINT with your own also generate a token using the rest API
+and set it in API_AUTH_TOKEN variable
+
+* Then upload a zip file with the code run the following in console
+
+````
+cd python_server/alexa
+pip install -r requirements.txt -t skill_env
+cp lambda_function.py skill_env
+cd skill_env
+zip -r code.zip ./
+````
+
+* increase timeout to 10 seconds for lambda function
+
+* copy the ARN (right upper cornet)
+
+* paste the ARN into te developer console https://developer.amazon.com/alexa/console/ask Endpoint section (default region)
+
+
+How to use it on echo dot device:
+
+To start the app: "Alexa open command home"
+
+Commands: "What is the temperature inside / outside ?"
+
+Commands: "Hollway door on"
+
+Commands: "Living courtains on / off"
 
 # Unit tests
 Unittests are using [nose2](http://nose2.readthedocs.io/en/latest/index.html)

@@ -13,7 +13,7 @@ from ask_sdk_model.ui import SimpleCard
 from ask_sdk_model import Response
 
 
-API_ENDPOINT = "http://host:8080"
+API_ENDPOINT = ""
 VOICE_COMMAND_API = "/api/voice-command"
 GET_SENSORS_API = "/api/sensor"
 # temporary storing the token inside the skil, will be replaced with some auth logic
@@ -185,7 +185,6 @@ sb.add_request_handler(SessionEndedRequestHandler())
 # Register exception handlers
 sb.add_exception_handler(CatchAllExceptionHandler())
 
-# TODO: Uncomment the following lines of code for request, response logs.
 sb.add_global_request_interceptor(RequestLogger())
 sb.add_global_response_interceptor(ResponseLogger())
 
