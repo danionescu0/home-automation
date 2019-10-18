@@ -105,7 +105,7 @@ Expressions:
 
 * Equality: eq(a,b) -> true if a == b
 * Greater than: gt(a,b) -> true if a > b
-* Less than: gt(a,b) -> true if a < b
+* Less than: lt(a,b) -> true if a < b
 * Between: btw(x,a,b) => true if a <= x >= b
 * OR: or(a,b) => true if a is true or b is true
 * AND: and(a,b) => true if a is true and b is true
