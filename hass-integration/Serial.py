@@ -1,5 +1,6 @@
 import serial
 
+
 class Serial:
     MESSAGE_TERMINATOR = "|"
 
@@ -14,7 +15,7 @@ class Serial:
         self.__receive_message_callback = receive_message_callback
 
     def connect(self):
-        self.__serial = serial.Serial(self.__port, self.__baud_rate,timeout=0.5, writeTimeout=0.5)
+        self.__serial = serial.Serial(self.__port, self.__baud_rate, timeout=0.1, writeTimeout=0.1)
 
     def disconnect(self):
         self.__serial.close()
@@ -24,12 +25,11 @@ class Serial:
 
     def loop(self):
         if self.__receive_message_callback is None:
-            raise Exception("Please define message callback")
+            raise Exception("Please define a message callback")
         received_data = self.__serial.read()
         if received_data.decode() is False or received_data.decode() == '':
             return
         self.__message_buffer += received_data.decode()
-        print(self.__message_buffer)
         if not self.__has_received_full_message():
             return
         self.__receive_message_callback(self.__message_buffer)

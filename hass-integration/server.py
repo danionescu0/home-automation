@@ -1,30 +1,22 @@
-import json
 from time import sleep
 
 import config
 from MqttConnection import MqttConnection
+from Multisensor import Multisensor
 from Serial import Serial
 
 
+mqtt_topic = 'ha/weather-station'
 serial = Serial(config.serial['port'], config.serial['baud_rate'])
-mqtt_connection = MqttConnection(config.mqtt['host'])
+mqtt = MqttConnection(config.mqtt['host'])
+multisensor = Multisensor(mqtt_topic, mqtt)
+weather_station_data = {}
 
-def incoming_serial(data):
-    message_components = data[:-1].split(":")
-    print(message_components)
-    if message_components[0] not in config.weather_station_mappings:
-        return
-    message = json.dumps(
-        {config.weather_station_mappings[message_components[0]]: float(message_components[1])}
-    )
-    print(message)
-    mqtt_connection.send(MqttConnection.CHANNEL, message)
-
-serial.add_callback(incoming_serial)
+serial.add_callback(multisensor.process_sensor)
 serial.connect()
-mqtt_connection.connect()
-
+mqtt.connect()
 
 while True:
     serial.loop()
+    mqtt.loop()
     sleep(0.05)

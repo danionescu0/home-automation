@@ -15,10 +15,11 @@ Controlling led strips with zwave [here](https://youtu.be/AjYH_NEiPWc)
 
 Automating electric shades [here](https://youtu.be/85ctap3Tpgk)
 
-If you find this project useful in any way i will appreciate it if you give it a star. Thanks.
 
-For those who want to donate something to my effort of developing free software, you can do so using this [ripple](https://ripple.com/) address: 
-rNVMinyJysATxyMiFK1Tfnv5mCEk1RAvbT or using this [bitcoin](https://bitcoin.org/en/) address: 1B58XeAJQC3kxBW7DM4TwkoTggvbqTitKt
+NOTE: The python-server project is discontinued, it is replaced by https://www.home-assistant.io/ and i'm currently working
+on integrations for some components like the weatherStation
+
+For the weatherStation integration use [this link to hass-integration](https://github.com/danionescu0/home-automation/tree/master/hass-integration)
 
 
 
