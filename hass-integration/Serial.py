@@ -20,7 +20,7 @@ class Serial:
     def disconnect(self):
         self.__serial.close()
 
-    def send(self, value: str):
+    def send(self, value):
         self.__serial.write(value)
 
     def loop(self):
@@ -30,6 +30,7 @@ class Serial:
         if received_data.decode() is False or received_data.decode() == '':
             return
         self.__message_buffer += received_data.decode()
+        print(self.__message_buffer)
         if not self.__has_received_full_message():
             return
         self.__receive_message_callback(self.__message_buffer)

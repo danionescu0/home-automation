@@ -1,6 +1,7 @@
 serial = {
     'port': '/dev/ttyACM0',
-    'baud_rate': '9600'
+    'baud_rate': '9600',
+    'aes_key': '0000000000000000'
 }
 
 mqtt = {
@@ -13,4 +14,12 @@ weather_station_mappings = {
     'PS1': 'pressure',
     'V1': 'voltage',
     'R1': 'rain',
+}
+
+mqtt_serial_integration = {
+    'balcony_courtains': {
+        'device': 'L2',
+        'on': 'C10|',
+        'off': 'O10|'
+    }
 }
