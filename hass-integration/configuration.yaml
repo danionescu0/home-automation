@@ -1,0 +1,56 @@
+default_config:
+
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+#replace usb_path with your own
+zwave:
+  usb_path: /dev/ttyUSB0
+
+mqtt:
+  broker: your_mqtt_ip
+  discovery: true
+  discovery_prefix: ha
+
+switch:
+  - platform: mqtt
+    name: "Courtains switch"
+    unique_id: "courtains_switch"
+    command_topic: "command/courtains"
+    payload_on: '{"id": "balcony_courtains", "state": "on"}'
+    payload_off: '{"id": "balcony_courtains", "state": "off"}'
+    state_on: "ON"
+    state_off: "OFF"
+    optimistic: false
+    retain: false
+
+sensor:
+  - platform: mqtt
+    name: "Outside temperature"
+    unique_id: "outside_temperature"
+    state_topic: "ha/weather-station"
+    unit_of_measurement: '°C'
+    value_template: "{{ value_json.temperature }}"
+  - platform: mqtt
+    name: "Outside humidity"
+    state_topic: "ha/weather-station"
+    unit_of_measurement: '%'
+    unique_id: "outside_humidity"
+    value_template: "{{ value_json.humidity }}"
+  - platform: mqtt
+    name: "Outside rain"
+    state_topic: "ha/weather-station"
+    unit_of_measurement: '%'
+    unique_id: "outside_rain"
+    value_template: "{{ value_json.rain }}"
+  - platform: mqtt
+    name: "Outside pressure"
+    state_topic: "ha/weather-station"
+    unit_of_measurement: 'bar'
+    unique_id: "outside_pressure"
+    value_template: "{{ value_json.pressure }}"
