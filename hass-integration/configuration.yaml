@@ -1,5 +1,12 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Text to speech
 tts:
   - platform: google_translate
 
@@ -8,14 +15,18 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
-#replace usb_path with your own
 zwave:
   usb_path: /dev/ttyUSB0
 
 mqtt:
-  broker: your_mqtt_ip
+  broker: 192.168.1.33
   discovery: true
   discovery_prefix: ha
+  
+remote:
+  - platform: broadlink
+    host: 192.168.1.173
+    mac: '34:ea:34:43:02:fd'
 
 switch:
   - platform: mqtt
@@ -28,8 +39,36 @@ switch:
     state_off: "OFF"
     optimistic: false
     retain: false
+  - platform: broadlink
+    host: 192.168.1.173
+    mac: "34:ea:34:43:02:fd"
+    retry: 5
+    switches:
+      living_ac_heat_24:
+        friendly_name: "Living AC unit heat 24"
+        command_on: 'JgCSAAABKpEYEBcQGDQXNRc0FzUXNBcRFxAXERcQGDQXERcQFxEXEBcRFxAXERcQFxEXNRc1FhEXEBcRFxAXERc1FxAXNBgQFxEXNBcRFwACjxc1FxAXERcQGBAXERcQFxEXEBcRFxAXERcQFzUXEBgQFxEXEBcRFxAXERcQFxEXEBcRFxAYEBc1FxAXERcQFxEXAA0FAAAAAAAA'
+        command_off: 'JgCSAAABKZIWERcRFjUXERY1FzUXNRYRFxEWERcRFjUXERYSFhEWEhYRFxEWERcRFhEXNRY1FxEWEhYRFxEWERc1FhEXNRcQFxEWNRcRFwACjxg0FxEWERcRFhEXERYRFxEWERcRFhIWERYSFjUXERYRFxEWERcRFhEXERYSFhEWEhYRFxEWERc1FhEXERYRFzUWAA0FAAAAAAAA='        
+      living_tv_toggle:
+        friendly_name: "Living TV toggle"
+        command_on: 'JgCkAZSTFDUUNRU1FBEUERQRFBEUERU1FDUUNRURFBEUERQRFBEUERQ1FREUERQRFBEUERQRFDYUERQ1FDUUNhQ1FDYUNRQABfmVkhU1FDUUNRURFBEUERQRFBEUNRU1FDUUERQRFREUERQRFBEUNRQRFBEUEhQRFBEUERQ1FBEUNhQ1FDUUNhQ1FDUVAAX5lZIUNRQ2FDUUERQRFBEUEhQRFDUUNRQ2FBEUERQRFBEUERQRFDYUERQRFBEUERQRFBEVNRQRFDUUNhQ1FDUUNhQ1FAAF+ZWSFTUUNRQ1FREUERQRFBEUERQ1FTUUNRQRFBEVERQRFBEUERQ1FBEUERURFBEUERQRFDUUERQ2FDUUNRU1FDUUNRUABfmVkhQ2FDUUNRQRFREUERQRFBEUNRQ2FDUUERQRFBEUERURFBEUNRQRFBEUERQRFREUERQ1FBEUNRU1FDUUNRU1FDUUAAX6lZIUNRQ2FDUUERQRFBEVEBURFDUUNRQ2FBEUERQRFBEUERQRFDYUERQRFBEUERQRFBEVNRQRFDUUNRU1FDUUNhQ1FAANBQAAAAA='
+        command_off: 'JgCkAZSTFDUUNRU1FBEUERQRFBEUERU1FDUUNRURFBEUERQRFBEUERQ1FREUERQRFBEUERQRFDYUERQ1FDUUNhQ1FDYUNRQABfmVkhU1FDUUNRURFBEUERQRFBEUNRU1FDUUERQRFREUERQRFBEUNRQRFBEUEhQRFBEUERQ1FBEUNhQ1FDUUNhQ1FDUVAAX5lZIUNRQ2FDUUERQRFBEUEhQRFDUUNRQ2FBEUERQRFBEUERQRFDYUERQRFBEUERQRFBEVNRQRFDUUNhQ1FDUUNhQ1FAAF+ZWSFTUUNRQ1FREUERQRFBEUERQ1FTUUNRQRFBEVERQRFBEUERQ1FBEUERURFBEUERQRFDUUERQ2FDUUNRU1FDUUNRUABfmVkhQ2FDUUNRQRFREUERQRFBEUNRQ2FDUUERQRFBEUERURFBEUNRQRFBEUERQRFREUERQ1FBEUNRU1FDUUNRU1FDUUAAX6lZIUNRQ2FDUUERQRFBEVEBURFDUUNRQ2FBEUERQRFBEUERQRFDYUERQRFBEUERQRFBEVNRQRFDUUNRU1FDUUNhQ1FAANBQAAAAA=='        
+      living_tv_volume:
+        friendly_name: "Living TV volume"
+        command_on: 'JgCMAJaSFDYUNhQ3ExEUERQRFBEUERQ1FTYUNRQRFRAUERQRFBEUNhQ2FDUVEBUQFRAVEBUQFBEUERQRFDYUNhQ2FDUVNRUABgWXkhU1FDYUNhQRFBEUERQRFBAVNRU1FDYUERQRFBEUERQRFDYUNRU1FRAVEBQRFBEUERQRFBEUERQ2FDUVNRU1FTUUAA0FAAAAAAAAAAAAAAAA+ZWSFTUUNRQ1FREUERQRFBEUERQ1FTUUNRQRFBEVERQRFBEUERQ1FBEUERURFBEUERQRFDUUERQ2FDUUNRU1FDUUNRUABfmVkhQ2FDUUNRQRFREUERQRFBEUNRQ2FDUUERQRFBEUERURFBEUNRQRFBEUERQRFREUERQ1FBEUNRU1FDUUNRU1FDUUAAX6lZIUNRQ2FDUUERQRFBEVEBURFDUUNRQ2FBEUERQRFBEUERQRFDYUERQRFBEUERQRFBEVNRQRFDUUNRU1FDUUNhQ1FAANBQAAAAA='
+        command_off: 'JgCMAJaTFDYUNhM3ExITEhMSExITEhM2FDYUNhQRFBEUERQRExITNxM3ExITNxMSExITERQRFBEUERQ2FBEUNhQ2EzcTNxMABgaXkxQ1FDYUNhQRFBEUERMSExITNxM2FDYUERQRFBEUERQRFDYTNxMSEzcTEhMRFBEUERQRFBEUNhMSEzcTNxM2FDYUAA0FAAAAAAAAAAAAAAAA'
+      living_tv_mute:
+        friendly_name: "Living TV mute"
+        command_on: 'JgBGAJeSFTUUNhQ2FBEUERQRFBEUERQ1FTUVNRQRFBEUERQRFBEUNxM2FDUVNhQQFRAUERQRFBEUERQRFBEUNhQ1FTUVNhQADQUAAA=='
+        command_off: 'JgBGAJeSFTUUNhQ2FBEUERQRFBEUERQ1FTUVNRQRFBEUERQRFBEUNxM2FDUVNhQQFRAUERQRFBEUERQRFBEUNhQ1FTUVNhQADQUAAA=='
 
 sensor:
+  - platform: version
+  - platform: mqtt
+    name: "Radiation"
+    state_topic: "ha/radiation"
+    unit_of_measurement: 'uSv'
+    unique_id: "radiation"
+    value_template: "{{ value_json.radiation }}"  
   - platform: mqtt
     name: "Outside temperature"
     unique_id: "outside_temperature"
@@ -47,10 +86,17 @@ sensor:
     state_topic: "ha/weather-station"
     unit_of_measurement: '%'
     unique_id: "outside_rain"
-    value_template: "{{ value_json.rain }}"
+    value_template: "{{ value_json.rain }}"    
   - platform: mqtt
     name: "Outside pressure"
     state_topic: "ha/weather-station"
     unit_of_measurement: 'bar'
     unique_id: "outside_pressure"
     value_template: "{{ value_json.pressure }}"
+  - platform: mqtt
+    name: "Outside weather station voltage"
+    state_topic: "ha/weather-station"
+    unit_of_measurement: 'V'
+    unique_id: "outside_voltage"
+    value_template: "{{ value_json.voltage }}"    
+    
