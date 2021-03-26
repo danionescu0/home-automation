@@ -19,7 +19,7 @@ weather_station_mappings = {
 mqtt_serial_integration = {
     'balcony_courtains': {
         'device': 'L2',
-        'on': 'C10|',
-        'off': 'O10|'
+        'on': 'C20|',
+        'off': 'O30|'
     }
 }
