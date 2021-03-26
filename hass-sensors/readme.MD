@@ -11,6 +11,8 @@ On the other side home asistant listens to the topic and updates sensors data in
 
 2. A serial actuator (DC motor courtains) using AES encription and this sketch: https://github.com/danionescu0/home-automation/tree/master/arduino-sketches/DCMotorCourtains
 
+MQTT switch: https://www.home-assistant.io/integrations/switch.mqtt/
+
 Instalation:
 
 - install Mosquitto server: https://mosquitto.org/
