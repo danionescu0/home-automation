@@ -11,14 +11,17 @@ parser.add_argument('serial_port')
 parser.add_argument('mqtt_host')
 args = parser.parse_args()
 
+serial_baud = 9600
+message_terminator = "|"
 
-serial = Serial(args.serial_port, 9600)
+
+serial = Serial(args.serial_port, serial_baud, message_terminator)
 mqtt = MqttConnection(args.mqtt_host)
 multisensor = Multisensor(mqtt)
 serial.add_callback(multisensor.process_sensor)
 serial.connect()
 mqtt.connect()
-
+multisensor.init_discovery()
 
 while True:
     serial.loop()

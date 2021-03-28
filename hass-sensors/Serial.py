@@ -2,11 +2,10 @@ import serial
 
 
 class Serial:
-    MESSAGE_TERMINATOR = "|"
-
-    def __init__(self, port: str, baud_rate: str):
+    def __init__(self, port: str, baud_rate: str, message_terminator: str):
         self.__port = port
         self.__baud_rate = baud_rate
+        self.__message_terminator = message_terminator
         self.__message_buffer = ''
         self.__serial = None
         self.__receive_message_callback = None
@@ -37,4 +36,4 @@ class Serial:
         self.__message_buffer = ''
 
     def __has_received_full_message(self):
-        return True if self.__message_buffer[-1] == self.MESSAGE_TERMINATOR else False
+        return True if self.__message_buffer[-1] == self.__message_terminator else False
