@@ -11,4 +11,6 @@ WORKDIR /usr/local/bin/home-automation/hass-sensors
 
 RUN pip install -qr requirements.txt
 
-CMD [ "python", "./server.py", "/dev/ttyUSB0", "$MQTT_SERVER"]
+ENV MQTT_SERVER=localhost
+
+CMD  python ./server.py /dev/ttyUSB0 ${MQTT_SERVER}
