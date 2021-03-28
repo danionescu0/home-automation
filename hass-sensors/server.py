@@ -1,3 +1,4 @@
+import atexit
 import argparse
 from time import sleep
 
@@ -22,6 +23,13 @@ serial.add_callback(multisensor.process_sensor)
 serial.connect()
 mqtt.connect()
 multisensor.init_discovery()
+
+
+def exit_handler():
+    serial.disconnect()
+
+atexit.register(exit_handler)
+
 
 while True:
     serial.loop()

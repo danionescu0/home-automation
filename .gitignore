@@ -1,3 +1,4 @@
 \.idea
 *.pyc
 python-server/alexa/skill_env/
+temp/
