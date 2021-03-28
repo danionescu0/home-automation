@@ -1,23 +1,22 @@
+import argparse
 from time import sleep
-from Crypto.Cipher import AES
 
-import config
 from MqttConnection import MqttConnection
-from SerialAESDevice import SerialAESDevice
 from Multisensor import Multisensor
 from Serial import Serial
 
 
-weather_station_mqtt_topic = 'ha/weather-station'
+parser = argparse.ArgumentParser()
+parser.add_argument('serial_port')
+parser.add_argument('mqtt_host')
+args = parser.parse_args()
 
-serial = Serial(config.serial['port'], config.serial['baud_rate'])
-mqtt = MqttConnection(config.mqtt['host'])
-multisensor = Multisensor(weather_station_mqtt_topic, mqtt)
-serial_aes_device = SerialAESDevice(config.serial['aes_key'], serial, config.mqtt_serial_integration)
 
+serial = Serial(args.serial_port, 9600)
+mqtt = MqttConnection(args.mqtt_host)
+multisensor = Multisensor(mqtt)
 serial.add_callback(multisensor.process_sensor)
 serial.connect()
-mqtt.listen([('command/courtains', 0)], serial_aes_device.incomming_message)
 mqtt.connect()
 
 
