@@ -1,6 +1,6 @@
 import atexit
 import argparse
-from time import sleep
+import time
 
 from MqttConnection import MqttConnection
 from Multisensor import Multisensor
@@ -36,4 +36,4 @@ atexit.register(exit_handler)
 while True:
     serial.loop()
     mqtt.loop()
-    sleep(0.05)
+    time.sleep(0.1)

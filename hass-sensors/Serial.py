@@ -31,7 +31,7 @@ class Serial:
         if received_data.decode() is False or received_data.decode() == '':
             return
         self.__message_buffer += received_data.decode()
-        print(self.__message_buffer)
+        self.__logger.info("Message bufferis {0}".format(self.__message_buffer))
         if not self.__has_received_full_message():
             return
         self.__receive_message_callback(self.__message_buffer)
