@@ -5,6 +5,7 @@ from time import sleep
 from MqttConnection import MqttConnection
 from Multisensor import Multisensor
 from Serial import Serial
+from LoggingConfig import LoggingConfig
 
 
 parser = argparse.ArgumentParser()
@@ -15,10 +16,11 @@ args = parser.parse_args()
 serial_baud = 9600
 message_terminator = "|"
 
-
-serial = Serial(args.serial_port, serial_baud, message_terminator)
-mqtt = MqttConnection(args.mqtt_host)
-multisensor = Multisensor(mqtt)
+logging_config = LoggingConfig()
+logger = logging_config.get_logger()
+serial = Serial(args.serial_port, serial_baud, message_terminator, logger)
+mqtt = MqttConnection(args.mqtt_host, logger)
+multisensor = Multisensor(mqtt, logger)
 serial.add_callback(multisensor.process_sensor)
 serial.connect()
 mqtt.connect()

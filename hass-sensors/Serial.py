@@ -1,11 +1,13 @@
 import serial
+from logging import RootLogger
 
 
 class Serial:
-    def __init__(self, port: str, baud_rate: str, message_terminator: str):
+    def __init__(self, port: str, baud_rate: str, message_terminator: str, logger: RootLogger):
         self.__port = port
         self.__baud_rate = baud_rate
         self.__message_terminator = message_terminator
+        self.__logger = logger
         self.__message_buffer = ''
         self.__serial = None
         self.__receive_message_callback = None

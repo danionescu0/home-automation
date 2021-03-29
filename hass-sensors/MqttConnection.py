@@ -1,5 +1,6 @@
-from typing import Callable
 import codecs
+from typing import Callable
+from logging import RootLogger
 
 import paho.mqtt.client as mqtt
 
@@ -7,8 +8,9 @@ import paho.mqtt.client as mqtt
 class MqttConnection:
     PORT = 1883
 
-    def __init__(self, host: str, user: str = None, password: str = None):
+    def __init__(self, host: str, logger: RootLogger, user: str = None, password: str = None):
         self.__host = host
+        self.__logger = logger
         self.__user = user
         self.__password = password
         self.__callback = None
@@ -16,26 +18,13 @@ class MqttConnection:
         self.__topics = []
 
     def connect(self):
-        self.__client = mqtt.Client()
-        def on_connect(client, userdata, flags, rc):
-            self.__client.subscribe(self.__topics)
-
-        def on_message(client, userdata, msg):
-            if self.__callback is not None:
-                self.__callback(msg.payload)
-
-        self.__client.on_connect = on_connect
-        self.__client.on_message = on_message
-        if self.__user != None:
-            self.__client.username_pw_set(self.__user, self.__password)
-        self.__client.connect(self.__host, self.PORT, 60)
+        self.__client = mqtt.Client("weather-station-client")
+        print(self.__client.connect(self.__host, self.PORT, 60))
 
     def loop(self):
         self.__client.loop()
 
-    def listen(self, topics: list, callback: Callable[[codecs.StreamReader], None]):
-        self.__topics = topics
-        self.__callback = callback
-
     def send(self, channel: str, message: str):
-        self.__client.publish(topic=channel, payload=message, qos=1)
+        result = self.__client.publish(channel, message, qos=2)
+        self.__logger.info("Mqtt message published with result: {0}".format(result))
+
