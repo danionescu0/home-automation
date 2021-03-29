@@ -19,7 +19,7 @@ class Multisensor:
         if len(self.__sensors) == len(config.weather_station_mappings):
             for sensor_id, sensor_value in self.__sensors.items():
                 sensor_data = config.weather_station_mappings[sensor_id]
-                self.__logger.info(sensor_data['state_topic'], sensor_value)
+                self.__logger.info("Publishing {0} to topic {1}".format(sensor_data['state_topic'], sensor_value))
                 self.__mqtt_connection.send(sensor_data['state_topic'], sensor_value)
             self.__sensors = {}
 
