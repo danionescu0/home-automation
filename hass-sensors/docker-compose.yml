@@ -1,0 +1,14 @@
+version: '3.7'
+
+# replace your_server with your mqtt server ip
+# replace /dev/ttyACM0 with the port for your serial HC-12 device
+services:
+    weather-station:
+        container_name: weatherstation
+        image: danionescu/hass-weather-station:latest
+        environment:
+          - MQTT_SERVER=your_server
+          - SERIAL_PORT=/dev/ttyACM0
+        devices:
+          - /dev/ttyACM0
+        restart: on-failure:3

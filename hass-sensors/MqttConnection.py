@@ -27,6 +27,6 @@ class MqttConnection:
         self.__client.loop()
 
     def send(self, channel: str, message: str):
-        result = self.__client.publish(channel, message, qos=2)
+        result = self.__client.publish(channel, message, qos=2, retain=True)
         self.__logger.info("Mqtt message published with result: {0}".format(result))
 
