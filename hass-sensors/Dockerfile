@@ -13,4 +13,6 @@ RUN pip install -qr requirements.txt
 
 ENV MQTT_SERVER=localhost
 
-CMD python ./server.py /dev/ttyUSB0 ${MQTT_SERVER}
+ENV SERIAL_PORT=/dev/ttyUSB0
+
+CMD python ./server.py ${SERIAL_PORT} ${MQTT_SERVER}
