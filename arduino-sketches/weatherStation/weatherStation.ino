@@ -1,25 +1,36 @@
 /*
  * This sketch uses: 
- * - BME280 sensor for pressure, temperature, and humidity
+ * - BME280 sensor for pressure, temperature, and humidity OR BME680 sensor for pressure, temperature, humidity and air quality
  * - a light senzor
+ * Include Adafruit_BME280 or Adafruit_BME680 and The sketch will autodetect rest of the sketch will configure itself
  * It transmits data over serial using SoftwareSerial library, to be picked up by the HC-12 module
  * BH1750 library: https://github.com/claws/BH1750
  * LowPower library: https://github.com/rocketscream/Low-Power
  * Adafruit Sensor library: https://github.com/adafruit/Adafruit_Sensor
  * Adafruit BME280 library: https://github.com/adafruit/Adafruit_BME280_Library
+ * Adafruit BME680 library: https://github.com/adafruit/Adafruit_BME680
  */
 #include "LowPower.h"
 #include "SoftwareSerial.h"
 #include "Wire.h"
 #include "Adafruit_Sensor.h"
 #include "Adafruit_BME280.h"
+//#include "Adafruit_BME680.h"
 #include "BH1750.h"
 
 SoftwareSerial serialComm(4, 5); // RX, TX
-Adafruit_BME280 bme; 
+
+#if defined(__BME680_H__)
+  Adafruit_BME680 bme;
+#else
+  Adafruit_BME280 bme; 
+#endif
+
+
 BH1750 lightMeter;
 const byte rainPin = A0;
 
+// weather station id, it will be appended to every sensor value
 byte sensorsCode = 1;
 /**
  * voltage level that will pun the microcontroller in deep sleep instead of regular sleep
@@ -35,6 +46,7 @@ struct sensorData
       int temperature;
       byte rain;
       int  pressure;
+      int airQuality;
       long voltage;
       int light;
   };
@@ -45,9 +57,11 @@ void setup()
 {  
     Serial.begin(9600);
     serialComm.begin(9600);
+    Serial.println("Initialization started");
     pinMode(peripherialsPowerPin, OUTPUT);
     digitalWrite(peripherialsPowerPin, HIGH);
     delay(500);
+    Serial.println("Initialization checking BME280");
     if (!bme.begin()) {
         Serial.println("Could not find a valid BME280 sensor, check wiring!");
         while (1) {
@@ -73,10 +87,13 @@ void updateSenzors()
     delay(300);
     sensors.temperature = bme.readTemperature();
     sensors.pressure = bme.readPressure() / 100.0F;
-    sensors.humidity = bme.readHumidity();
+    sensors.humidity = bme.readHumidity();    
     sensors.light = lightMeter.readLightLevel();
     sensors.voltage = readVcc();
     sensors.rain = readRain();
+    #if defined(__BME680_H__)
+      sensors.airQuality = bme.gas_resistance / 1000.0;
+    #endif
 }
 
 void transmitData()
@@ -88,12 +105,18 @@ void transmitData()
     Serial.print("Light:");Serial.println(sensors.light);
     Serial.print("Voltage:");Serial.println(sensors.voltage);
     Serial.print("Rain:");Serial.println(sensors.rain);
+    #if defined(__BME680_H__)
+      Serial.print("Air quality:");Serial.println(sensors.airQuality);
+    #endif      
     transmitSenzorData("T", sensors.temperature);
     transmitSenzorData("H", sensors.humidity);
     transmitSenzorData("PS", sensors.pressure);
     transmitSenzorData("L", sensors.light);
     transmitSenzorData("V", sensors.voltage);
     transmitSenzorData("R", sensors.rain);
+    #if defined(__BME680_H__)
+      transmitSenzorData("AQ", sensors.airQuality);
+    #endif    
 }
 
 void emptyIncommingSerialBuffer()
